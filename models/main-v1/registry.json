@@ -1,0 +1,262 @@
+{
+  "active_working_main": "WCPP-MAIN-1.0",
+  "role": "NEW_MAIN_RESEARCH",
+  "formal_champion_retained": "V21.5",
+  "permanent_lambda_modified": false,
+  "formal_preregistration_500_plus_200": false,
+  "formal_kpi_added": 0,
+  "targets_proven": false,
+  "context_numeric_enabled": false,
+  "market_numeric_enabled": false,
+  "entrypoint": "runtime/v4/cli.py",
+  "timezone": "Asia/Shanghai",
+  "cohorts": {
+    "EPL": {
+      "selected_recipe": "strength180",
+      "execution_recipe": "baseline",
+      "acceptance": {
+        "top1_difference": -0.004219409282700426,
+        "date_cluster_bootstrap95": [
+          -0.014953370876268073,
+          0.004651162790697674
+        ],
+        "acceptance_gate_passed": false,
+        "draws": 2000,
+        "rule": "positive lower Top1 interval, nonworse score log loss and WDL Brier; no test-based reselection",
+        "formal_promotion": false
+      },
+      "split": {
+        "initial": {
+          "n": 1547,
+          "start": "2020-09-12",
+          "end": "2024-08-31"
+        },
+        "selection": {
+          "n": 259,
+          "start": "2024-09-01",
+          "end": "2025-03-15"
+        },
+        "test": {
+          "n": 474,
+          "start": "2025-03-16",
+          "end": "2026-05-24"
+        }
+      },
+      "dataset_hash": "2172dfb10db01e583eeb6718e29c1807364fbddb4fedac8529a16f48090be50f",
+      "code_hash": "1983533126c457524c44eab284af35972e18dbdc9dfee4e287407bb6c979e03e",
+      "dataset_rows": 2280,
+      "test": {
+        "baseline": {
+          "n": 474,
+          "primary_hits": 57,
+          "top1": 0.12025316455696203,
+          "score_log_loss": 2.891314840236465,
+          "wdl_hits": 231,
+          "wdl_accuracy": 0.4873417721518987,
+          "wdl_brier": 0.6142197357476943,
+          "diagnostic_fixed_2_5_hits": 263,
+          "diagnostic_fixed_2_5_accuracy": 0.5548523206751055,
+          "diagnostic_fixed_2_5_brier": 0.2517707039718065,
+          "unseen_team_matches": 3
+        },
+        "strength180": {
+          "n": 474,
+          "primary_hits": 55,
+          "top1": 0.1160337552742616,
+          "score_log_loss": 2.891428843027255,
+          "wdl_hits": 231,
+          "wdl_accuracy": 0.4873417721518987,
+          "wdl_brier": 0.6142553168219905,
+          "diagnostic_fixed_2_5_hits": 259,
+          "diagnostic_fixed_2_5_accuracy": 0.5464135021097046,
+          "diagnostic_fixed_2_5_brier": 0.251499911051588,
+          "unseen_team_matches": 3
+        }
+      },
+      "report_file_sha256": "32f34355e7aac700e335638ba14006005ee5c6636d8cd8ea0c62ab413de081e9",
+      "artifact_file_sha256": "f5d555295eabd4ee419b6a391fc3ca03d1cb0db45f87a0844d97970ca0c738f1"
+    },
+    "uefa.nations": {
+      "selected_recipe": "baseline",
+      "execution_recipe": "baseline",
+      "acceptance": {
+        "top1_difference": 0.0,
+        "date_cluster_bootstrap95": [
+          0.0,
+          0.0
+        ],
+        "acceptance_gate_passed": false,
+        "draws": 2000,
+        "rule": "positive lower Top1 interval, nonworse score log loss and WDL Brier; no test-based reselection",
+        "formal_promotion": false
+      },
+      "split": {
+        "initial": {
+          "n": 310,
+          "start": "2022-03-24",
+          "end": "2024-11-18"
+        },
+        "selection": {
+          "n": 34,
+          "start": "2024-11-19",
+          "end": "2026-03-26"
+        },
+        "test": {
+          "n": 106,
+          "start": "2026-03-31",
+          "end": "2026-10-06"
+        }
+      },
+      "dataset_hash": "00fd835d0620b719e6175e7d4537cf1f4d78b30c2d40acbef5239b9354e814ba",
+      "code_hash": "1983533126c457524c44eab284af35972e18dbdc9dfee4e287407bb6c979e03e",
+      "dataset_rows": 450,
+      "test": {
+        "baseline": {
+          "n": 106,
+          "primary_hits": 13,
+          "top1": 0.12264150943396226,
+          "score_log_loss": 2.999153954712689,
+          "wdl_hits": 40,
+          "wdl_accuracy": 0.37735849056603776,
+          "wdl_brier": 0.6712393594362774,
+          "diagnostic_fixed_2_5_hits": 56,
+          "diagnostic_fixed_2_5_accuracy": 0.5283018867924528,
+          "diagnostic_fixed_2_5_brier": 0.25029592423749236,
+          "unseen_team_matches": 0
+        }
+      },
+      "report_file_sha256": "7dcc5b6e117b4f4f4fee0fca9ccbf81f0614b47c5c4612544f51a803c71cff2a",
+      "artifact_file_sha256": "cc87c40f2991f55511e84d3dc40d4121ca00b8eb7ea7fbeba3192ede7aaa0fd8"
+    },
+    "fifa.friendly": {
+      "selected_recipe": "dc365",
+      "execution_recipe": "baseline",
+      "acceptance": {
+        "top1_difference": -0.006423982869379022,
+        "date_cluster_bootstrap95": [
+          -0.02331321022727273,
+          0.008772702001482575
+        ],
+        "acceptance_gate_passed": false,
+        "draws": 2000,
+        "rule": "positive lower Top1 interval, nonworse score log loss and WDL Brier; no test-based reselection",
+        "formal_promotion": false
+      },
+      "split": {
+        "initial": {
+          "n": 977,
+          "start": "2022-01-02",
+          "end": "2025-03-06"
+        },
+        "selection": {
+          "n": 118,
+          "start": "2025-03-09",
+          "end": "2025-09-05"
+        },
+        "test": {
+          "n": 467,
+          "start": "2025-09-06",
+          "end": "2026-10-07"
+        }
+      },
+      "dataset_hash": "a3bc66f502c4d96463e259fc815ea59a03675e284c9247a69fc9b8196a230c77",
+      "code_hash": "1983533126c457524c44eab284af35972e18dbdc9dfee4e287407bb6c979e03e",
+      "dataset_rows": 1562,
+      "test": {
+        "baseline": {
+          "n": 467,
+          "primary_hits": 38,
+          "top1": 0.08137044967880086,
+          "score_log_loss": 3.1971589514344445,
+          "wdl_hits": 234,
+          "wdl_accuracy": 0.5010706638115632,
+          "wdl_brier": 0.6154664827893034,
+          "diagnostic_fixed_2_5_hits": 241,
+          "diagnostic_fixed_2_5_accuracy": 0.5160599571734475,
+          "diagnostic_fixed_2_5_brier": 0.2501742716978626,
+          "unseen_team_matches": 8
+        },
+        "dc365": {
+          "n": 467,
+          "primary_hits": 35,
+          "top1": 0.07494646680942184,
+          "score_log_loss": 3.1727472788135764,
+          "wdl_hits": 235,
+          "wdl_accuracy": 0.5032119914346895,
+          "wdl_brier": 0.6057851756018067,
+          "diagnostic_fixed_2_5_hits": 250,
+          "diagnostic_fixed_2_5_accuracy": 0.5353319057815846,
+          "diagnostic_fixed_2_5_brier": 0.24748944781452556,
+          "unseen_team_matches": 8
+        }
+      },
+      "report_file_sha256": "6fd733e033acee7c0a7d0a1f4c8fc1c4929853cb63f9a0e44b85e0ab428dcbe1",
+      "artifact_file_sha256": "866c7f1e7b2cf93241eb63aa134a646d60039804202eabab26cbb8af3be11ded"
+    },
+    "usa.1": {
+      "selected_recipe": "form180",
+      "execution_recipe": "baseline",
+      "acceptance": {
+        "top1_difference": -0.006224066390041499,
+        "date_cluster_bootstrap95": [
+          -0.02235886195419999,
+          0.00976658241421568
+        ],
+        "acceptance_gate_passed": false,
+        "draws": 2000,
+        "rule": "positive lower Top1 interval, nonworse score log loss and WDL Brier; no test-based reselection",
+        "formal_promotion": false
+      },
+      "split": {
+        "initial": {
+          "n": 1745,
+          "start": "2022-02-26",
+          "end": "2025-05-28"
+        },
+        "selection": {
+          "n": 229,
+          "start": "2025-05-29",
+          "end": "2025-09-24"
+        },
+        "test": {
+          "n": 482,
+          "start": "2025-09-25",
+          "end": "2026-10-07"
+        }
+      },
+      "dataset_hash": "d9556d3cdacc7457b1bdb80e449c03bb96d68dbb5c41e3808dca99229774eb9b",
+      "code_hash": "1983533126c457524c44eab284af35972e18dbdc9dfee4e287407bb6c979e03e",
+      "dataset_rows": 2456,
+      "test": {
+        "baseline": {
+          "n": 482,
+          "primary_hits": 51,
+          "top1": 0.10580912863070539,
+          "score_log_loss": 3.1457556246817764,
+          "wdl_hits": 242,
+          "wdl_accuracy": 0.5020746887966805,
+          "wdl_brier": 0.6294756382460673,
+          "diagnostic_fixed_2_5_hits": 297,
+          "diagnostic_fixed_2_5_accuracy": 0.6161825726141079,
+          "diagnostic_fixed_2_5_brier": 0.2311382331972498,
+          "unseen_team_matches": 0
+        },
+        "form180": {
+          "n": 482,
+          "primary_hits": 48,
+          "top1": 0.0995850622406639,
+          "score_log_loss": 3.1490003379938734,
+          "wdl_hits": 241,
+          "wdl_accuracy": 0.5,
+          "wdl_brier": 0.6293328455231206,
+          "diagnostic_fixed_2_5_hits": 293,
+          "diagnostic_fixed_2_5_accuracy": 0.6078838174273858,
+          "diagnostic_fixed_2_5_brier": 0.23247725283458992,
+          "unseen_team_matches": 0
+        }
+      },
+      "report_file_sha256": "cf7ababf8e797da76fbaea533bf3fc5b4b1f6df720fc1a654eed7766adca21c7",
+      "artifact_file_sha256": "f9195f0ebf2d7f97edd3472745477d6015f263990b4b897532e31f9e5a4bb703"
+    }
+  }
+}

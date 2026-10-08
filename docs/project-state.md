@@ -495,3 +495,8 @@ PRAGMA foreign_key_check = 0
 ## 云端Challenger 0.1已实现
 
 用户确认历史主要以聊天方式执行，并授权本任务实现源码和配置。本轮新增runtime/wcpp.py、runtime/shadow.py、11项通过的测试及README运行说明。实现Poisson基线、同赛事族收缩拟合、输入校验、大小球/胜平负输出、研究冻结/复盘和Shadow核查；原V21.5 Champion身份保持不变，不宣称完整复原聊天模型。1751条Raw Mode与历史记录一致；726条历史测试95次Top1，LogLoss2.883828。Shadow重排723/726首选与旧记录一致，3场差异保留；未晋级。尚无真实比赛新冻结，500+200未重新预注册。以runtime/README.md及reports/cloud-runtime-delivery.json为实现边界，旧“无源码”的记录指历史产物缺失，不再表示本云端没有新实现。
+
+
+## 2026-10-08 新主模型实现
+
+用户授权原模型无法恢复时重建。当前工作主模型登记为 WCPP-MAIN-1.0，入口 runtime/v4/cli.py，独立源码、参数和训练流程。原 V21.5 正式登记保留。七个统计候选与时间安全近期状态学习已实现，四个分组均未通过候选接受门槛，研究执行回退到基线。综合因素训练依赖真实冻结、官方证据和对应 90 分钟结果，目前未启用。实际盘口为大小球唯一输入；没有核实盘口则不输出大小球。新版本只产生研究冻结，正式 KPI 新增零。完整限制见 docs/main-v1-validation.md 与 runtime/v4/README.md。

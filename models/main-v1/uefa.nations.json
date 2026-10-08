@@ -1,0 +1,602 @@
+{
+  "version": "WCPP-MAIN-1.0",
+  "role": "NEW_MAIN_RESEARCH",
+  "cohort": "uefa.nations",
+  "selected_recipe": "baseline",
+  "execution_recipe": "baseline",
+  "acceptance": {
+    "top1_difference": 0.0,
+    "date_cluster_bootstrap95": [
+      0.0,
+      0.0
+    ],
+    "acceptance_gate_passed": false,
+    "draws": 2000,
+    "rule": "positive lower Top1 interval, nonworse score log loss and WDL Brier; no test-based reselection",
+    "formal_promotion": false
+  },
+  "core": {
+    "baseline": {
+      "method": "v01_baseline",
+      "home_mean": 1.2570687151060187,
+      "away_mean": 1.2250797649837837,
+      "teams": {
+        "Estonia": {
+          "attack": 0.7914353996213618,
+          "concede": 0.7483573660204837
+        },
+        "Cyprus": {
+          "attack": 0.9909109160433716,
+          "concede": 0.9051155707923362
+        },
+        "Moldova": {
+          "attack": 0.8729020883261304,
+          "concede": 1.1830949601141447
+        },
+        "Kazakhstan": {
+          "attack": 0.9735163191181744,
+          "concede": 1.1645185976622474
+        },
+        "Poland": {
+          "attack": 1.1381911992525373,
+          "concede": 0.975507559621787
+        },
+        "Wales": {
+          "attack": 0.8188619433376885,
+          "concede": 0.9883322053660163
+        },
+        "Northern Ireland": {
+          "attack": 0.9540596532220857,
+          "concede": 0.6652062286539215
+        },
+        "Greece": {
+          "attack": 1.0172336583602468,
+          "concede": 0.8525887045162027
+        },
+        "Israel": {
+          "attack": 0.8006394739428333,
+          "concede": 1.1460088993634574
+        },
+        "Iceland": {
+          "attack": 1.1338928797507424,
+          "concede": 0.790288402621274
+        },
+        "Kosovo": {
+          "attack": 0.9044170106521975,
+          "concede": 0.9339502998248599
+        },
+        "Bulgaria": {
+          "attack": 0.8574036217995266,
+          "concede": 1.0071883714184062
+        },
+        "North Macedonia": {
+          "attack": 0.6907529820369759,
+          "concede": 1.2966298470622628
+        },
+        "Serbia": {
+          "attack": 0.8640273122351094,
+          "concede": 1.1726052830465699
+        },
+        "Norway": {
+          "attack": 1.0980717154913606,
+          "concede": 1.1920674647157192
+        },
+        "Spain": {
+          "attack": 1.5055215563358004,
+          "concede": 1.0205013168081596
+        },
+        "Portugal": {
+          "attack": 1.2768511884376115,
+          "concede": 0.9264934186172725
+        },
+        "San Marino": {
+          "attack": 0.7446641771884387,
+          "concede": 1.7030022350627876
+        },
+        "Slovenia": {
+          "attack": 0.9923741098872876,
+          "concede": 0.8764523639672863
+        },
+        "Sweden": {
+          "attack": 1.1763505735335529,
+          "concede": 0.8595462964125374
+        },
+        "Czechia": {
+          "attack": 0.8138190142243394,
+          "concede": 1.325642724598856
+        },
+        "Switzerland": {
+          "attack": 1.382163564905105,
+          "concede": 0.7718125529674617
+        },
+        "Georgia": {
+          "attack": 0.7339832473945637,
+          "concede": 0.7965830676915532
+        },
+        "Gibraltar": {
+          "attack": 0.8011205321494526,
+          "concede": 0.8722501700975199
+        },
+        "Belarus": {
+          "attack": 0.9867762887819796,
+          "concede": 0.7948923088613237
+        },
+        "Slovakia": {
+          "attack": 1.2589219130169713,
+          "concede": 0.7933021700951084
+        },
+        "Latvia": {
+          "attack": 0.798638259413662,
+          "concede": 1.0027596543331343
+        },
+        "Andorra": {
+          "attack": 0.7860972277102923,
+          "concede": 0.9421230049951208
+        },
+        "Croatia": {
+          "attack": 0.944346912273098,
+          "concede": 1.570551397446247
+        },
+        "Austria": {
+          "attack": 1.2653874214658574,
+          "concede": 0.996388834453219
+        },
+        "France": {
+          "attack": 1.1727288648045358,
+          "concede": 0.8406307976092451
+        },
+        "Denmark": {
+          "attack": 1.1225508747150061,
+          "concede": 1.1088395706237726
+        },
+        "Belgium": {
+          "attack": 1.0696014614803144,
+          "concede": 1.0159714119759722
+        },
+        "Netherlands": {
+          "attack": 1.1582229625426084,
+          "concede": 1.0057600407725396
+        },
+        "Liechtenstein": {
+          "attack": 0.7992708616194986,
+          "concede": 0.9678511590774417
+        },
+        "Azerbaijan": {
+          "attack": 0.8586794314630017,
+          "concede": 0.8524486535975792
+        },
+        "Armenia": {
+          "attack": 0.9257770817749728,
+          "concede": 1.0571525042144059
+        },
+        "Republic of Ireland": {
+          "attack": 1.059633596684615,
+          "concede": 0.9559329031208462
+        },
+        "Türkiye": {
+          "attack": 0.8470994765520782,
+          "concede": 1.3656197782040302
+        },
+        "Faroe Islands": {
+          "attack": 0.9935658620757578,
+          "concede": 0.9974445131289281
+        },
+        "Italy": {
+          "attack": 1.2254992859414244,
+          "concede": 1.0229983308311328
+        },
+        "Germany": {
+          "attack": 0.9252913803108513,
+          "concede": 0.8292096248481124
+        },
+        "Montenegro": {
+          "attack": 1.1141912828917573,
+          "concede": 0.9421505163472699
+        },
+        "Romania": {
+          "attack": 0.9154667341348031,
+          "concede": 1.4963349901616168
+        },
+        "Finland": {
+          "attack": 1.2294317503787462,
+          "concede": 0.8325467081778986
+        },
+        "Bosnia-Herzegovina": {
+          "attack": 1.0514107839093647,
+          "concede": 0.9143962128506798
+        },
+        "Hungary": {
+          "attack": 0.8552116924333782,
+          "concede": 0.8532503555518085
+        },
+        "England": {
+          "attack": 1.6203070127777546,
+          "concede": 0.852550096447063
+        },
+        "Lithuania": {
+          "attack": 0.9314003339923119,
+          "concede": 0.892553779563945
+        },
+        "Luxembourg": {
+          "attack": 0.8791618435707548,
+          "concede": 1.0477871913592915
+        },
+        "Malta": {
+          "attack": 0.9245057796852859,
+          "concede": 0.9557502900239457
+        },
+        "Albania": {
+          "attack": 1.1792058859201588,
+          "concede": 0.8704023155267118
+        },
+        "Ukraine": {
+          "attack": 0.820105054411912,
+          "concede": 1.0175371904357797
+        },
+        "Scotland": {
+          "attack": 0.8662769365597722,
+          "concede": 1.0066153997151472
+        }
+      },
+      "nuisance": {
+        "poisson": 0.0
+      }
+    },
+    "long": {
+      "version": "WCPP-CLOUD-CHALLENGER-0.2",
+      "cohort": "uefa.nations",
+      "intercept": 0.16351328094289816,
+      "home_advantage": 0.09592814812261634,
+      "attack": {
+        "Albania": 0.03753288960330245,
+        "Andorra": -0.19317944956419345,
+        "Armenia": -0.06627979283472972,
+        "Austria": 0.19593143030105134,
+        "Azerbaijan": -0.1216283358695114,
+        "Belarus": -0.07031584920009051,
+        "Belgium": 0.05148534097798155,
+        "Bosnia-Herzegovina": -0.0030437944540542966,
+        "Bulgaria": -0.11349013282359298,
+        "Croatia": -0.016417694980642942,
+        "Cyprus": -0.056389071395972504,
+        "Czechia": -0.11363834030839039,
+        "Denmark": 0.08705157083685792,
+        "England": 0.4133112356377886,
+        "Estonia": -0.16724377698569337,
+        "Faroe Islands": -0.04829094598330788,
+        "Finland": 0.10934080102040551,
+        "France": 0.1443788639787518,
+        "Georgia": -0.08917505401956591,
+        "Germany": 0.06705688008180431,
+        "Gibraltar": -0.20427709171157177,
+        "Greece": 0.0692140554381411,
+        "Hungary": -0.1277461585587964,
+        "Iceland": 0.11914489282659502,
+        "Israel": -0.14346352993405057,
+        "Italy": 0.1946838830177724,
+        "Kazakhstan": -0.07409900679736597,
+        "Kosovo": -0.019742430376732543,
+        "Latvia": -0.17463860849001187,
+        "Liechtenstein": -0.17944767372808038,
+        "Lithuania": -0.09375446003841778,
+        "Luxembourg": -0.07543860471549818,
+        "Malta": -0.10127290759371992,
+        "Moldova": -0.07442970096553643,
+        "Montenegro": 0.020864136620685557,
+        "Netherlands": 0.18492281394967436,
+        "North Macedonia": -0.1841628098637108,
+        "Northern Ireland": 0.019205357284323193,
+        "Norway": 0.1404831976669349,
+        "Poland": 0.08347488273326825,
+        "Portugal": 0.20670211772988922,
+        "Republic of Ireland": 0.01912553608601317,
+        "Romania": 0.042319086962756866,
+        "San Marino": -0.1689278459578365,
+        "Scotland": -0.0951891508626173,
+        "Serbia": -0.09132906935256131,
+        "Slovakia": 0.15794706947700024,
+        "Slovenia": -0.03023553384776739,
+        "Spain": 0.3586643112024686,
+        "Sweden": 0.17841533905102178,
+        "Switzerland": 0.22065394521915596,
+        "Türkiye": -0.02627103354977293,
+        "Ukraine": -0.08114974416632342,
+        "Wales": -0.11724203877352717
+      },
+      "defence": {
+        "Albania": -0.07748328197564935,
+        "Andorra": -0.021119537117442886,
+        "Armenia": 0.15517725964904078,
+        "Austria": -0.002311127118501618,
+        "Azerbaijan": -0.00422505637049762,
+        "Belarus": -0.16871486935316593,
+        "Belgium": -0.0024974358387712635,
+        "Bosnia-Herzegovina": -0.0009243872080258696,
+        "Bulgaria": 0.02318682885306626,
+        "Croatia": 0.25755673212462665,
+        "Cyprus": 0.028354502443452917,
+        "Czechia": 0.1386808063009012,
+        "Denmark": 0.008286610003126579,
+        "England": -0.14327870614477525,
+        "Estonia": -0.17362809531120338,
+        "Faroe Islands": 0.006104926958612512,
+        "Finland": -0.07256174537608283,
+        "France": -0.1147496124645176,
+        "Georgia": -0.15536193421852718,
+        "Germany": -0.13326416791331352,
+        "Gibraltar": -0.04279911145351721,
+        "Greece": -0.17342493241959164,
+        "Hungary": -0.03831511307593721,
+        "Iceland": -0.037766122194104995,
+        "Israel": 0.1159042415284984,
+        "Italy": 0.028958989214550528,
+        "Kazakhstan": 0.15524725062014746,
+        "Kosovo": -0.06635874935559961,
+        "Latvia": 0.03463902930021689,
+        "Liechtenstein": 0.02656289586150988,
+        "Lithuania": -0.0158156793806993,
+        "Luxembourg": 0.03264610180913649,
+        "Malta": 0.012967404049217611,
+        "Moldova": 0.085575816841622,
+        "Montenegro": -0.009611103488976584,
+        "Netherlands": 0.005829900276025665,
+        "North Macedonia": 0.12993529699637504,
+        "Northern Ireland": -0.24012865800990346,
+        "Norway": 0.0953602118884953,
+        "Poland": 0.04762952729027438,
+        "Portugal": -0.10305231461701973,
+        "Republic of Ireland": -0.005431403142897015,
+        "Romania": 0.2571942819900853,
+        "San Marino": 0.4492176974966218,
+        "Scotland": -0.0022320202387397965,
+        "Serbia": 0.024210739082693396,
+        "Slovakia": -0.15743556442587794,
+        "Slovenia": -0.08420721784034937,
+        "Spain": -0.018395647832249538,
+        "Sweden": -0.12002406825280944,
+        "Switzerland": -0.08729065210736685,
+        "Türkiye": 0.17301599833995904,
+        "Ukraine": 0.041132572377289345,
+        "Wales": -0.060967307049431305
+      },
+      "half_life_days": 365.0,
+      "ridge": 8.0,
+      "train_rows": 450,
+      "train_end": "2026-10-06",
+      "observed_at": "2026-10-07T07:13:12.963350+00:00",
+      "dataset_hash": "00fd835d0620b719e6175e7d4537cf1f4d78b30c2d40acbef5239b9354e814ba",
+      "nuisance": {
+        "poisson": 0.0,
+        "dixon_coles": 0.002784409351884585,
+        "bivariate": 4.469534883430863e-06
+      },
+      "context_coefficients": null,
+      "context_status": "UNTRAINED_NO_VERIFIED_FEATURE_HISTORY",
+      "champion_unchanged": "V21.5",
+      "formal_validation": false
+    },
+    "short": {
+      "version": "WCPP-CLOUD-CHALLENGER-0.2",
+      "cohort": "uefa.nations",
+      "intercept": 0.17546658287157305,
+      "home_advantage": 0.027798494306387058,
+      "attack": {
+        "Albania": 0.07869841079689217,
+        "Andorra": -0.14415176636347354,
+        "Armenia": -0.04301942609134672,
+        "Austria": 0.19333638537125458,
+        "Azerbaijan": -0.08581772849170394,
+        "Belarus": -0.018697101974391932,
+        "Belgium": 0.05272929032039583,
+        "Bosnia-Herzegovina": 0.030714336999371768,
+        "Bulgaria": -0.08664823273636671,
+        "Croatia": -0.036276048953962775,
+        "Cyprus": -0.005536917292033466,
+        "Czechia": -0.13753888186897256,
+        "Denmark": 0.09364255110326185,
+        "England": 0.3769043561050714,
+        "Estonia": -0.13635476341741692,
+        "Faroe Islands": -0.013122812731868865,
+        "Finland": 0.15766858682338128,
+        "France": 0.11116071983892326,
+        "Georgia": -0.1709211506341306,
+        "Germany": -0.042285907942951756,
+        "Gibraltar": -0.13947219625390395,
+        "Greece": 0.02738527088424178,
+        "Hungary": -0.08907281935978596,
+        "Iceland": 0.11750865195117477,
+        "Israel": -0.13406166494351834,
+        "Italy": 0.14329335964606238,
+        "Kazakhstan": -0.013285905882594356,
+        "Kosovo": -0.06882945128977676,
+        "Latvia": -0.13867422714687808,
+        "Liechtenstein": -0.12961835526129442,
+        "Lithuania": -0.03426722643545212,
+        "Luxembourg": -0.0679745335691176,
+        "Malta": -0.046041172996334936,
+        "Moldova": -0.07869520198406815,
+        "Montenegro": 0.08255040374775639,
+        "Netherlands": 0.12054689458931604,
+        "North Macedonia": -0.2062285949960189,
+        "Northern Ireland": -0.010163525666208015,
+        "Norway": 0.07921855301360507,
+        "Poland": 0.09236631094017587,
+        "Portugal": 0.18043007819777757,
+        "Republic of Ireland": 0.04262437670625212,
+        "Romania": -0.038734565275889254,
+        "San Marino": -0.16010506272011782,
+        "Scotland": -0.08749324895106433,
+        "Serbia": -0.0832479253416234,
+        "Slovakia": 0.16901210181494372,
+        "Slovenia": -0.004627746014117678,
+        "Spain": 0.29879067617528554,
+        "Sweden": 0.09349385956771662,
+        "Switzerland": 0.2480700184014259,
+        "Türkiye": -0.10007476360053955,
+        "Ukraine": -0.10070396676397803,
+        "Wales": -0.1384023000433845
+      },
+      "defence": {
+        "Albania": -0.07769704081935981,
+        "Andorra": -0.02152550534788829,
+        "Armenia": 0.049957535907745904,
+        "Austria": 0.01650199486919208,
+        "Azerbaijan": -0.0897547851756959,
+        "Belarus": -0.15637686722303695,
+        "Belgium": 0.0023174490123776155,
+        "Bosnia-Herzegovina": -0.06885490271970603,
+        "Bulgaria": 0.019533904874177666,
+        "Croatia": 0.322403338414454,
+        "Cyprus": -0.04959169408387956,
+        "Czechia": 0.1577210911573667,
+        "Denmark": 0.07775512249387725,
+        "England": -0.10452229898861677,
+        "Estonia": -0.1843337924995839,
+        "Faroe Islands": 0.002845841438208818,
+        "Finland": -0.1136001606771531,
+        "France": -0.12145991052997991,
+        "Georgia": -0.13132452772767683,
+        "Germany": -0.1289310615329803,
+        "Gibraltar": -0.06558101753971729,
+        "Greece": -0.1028012722553754,
+        "Hungary": -0.08191357915186216,
+        "Iceland": -0.12568658323415294,
+        "Israel": 0.09370356022521523,
+        "Italy": 0.02427910630328401,
+        "Kazakhstan": 0.1156911745276208,
+        "Kosovo": -0.06013131528705644,
+        "Latvia": 0.01653449420000104,
+        "Liechtenstein": -0.008440087220133185,
+        "Lithuania": -0.053246384160133595,
+        "Luxembourg": 0.055468854020854746,
+        "Malta": 0.002255309274703448,
+        "Moldova": 0.11623199926751049,
+        "Montenegro": -0.022393297558906403,
+        "Netherlands": 0.018868016294154768,
+        "North Macedonia": 0.18553185623251867,
+        "Northern Ireland": -0.21668813339212428,
+        "Norway": 0.11900046786636156,
+        "Poland": -0.01849592653885612,
+        "Portugal": -0.05439720157059086,
+        "Republic of Ireland": -0.02286276623281176,
+        "Romania": 0.32530234214920567,
+        "San Marino": 0.45727013901317637,
+        "Scotland": 0.005404217278673833,
+        "Serbia": 0.10673604454115866,
+        "Slovakia": -0.1354679641407978,
+        "Slovenia": -0.08318642307871649,
+        "Spain": 0.0034370508550709833,
+        "Sweden": -0.0982140334357026,
+        "Switzerland": -0.13994855743741913,
+        "Türkiye": 0.23168275717517378,
+        "Ukraine": 0.0395169124597422,
+        "Wales": -0.028523490291912163
+      },
+      "half_life_days": 180.0,
+      "ridge": 8.0,
+      "train_rows": 450,
+      "train_end": "2026-10-06",
+      "observed_at": "2026-10-07T07:13:12.963350+00:00",
+      "dataset_hash": "00fd835d0620b719e6175e7d4537cf1f4d78b30c2d40acbef5239b9354e814ba",
+      "nuisance": {},
+      "context_coefficients": null,
+      "context_status": "UNTRAINED_NO_VERIFIED_FEATURE_HISTORY",
+      "champion_unchanged": "V21.5",
+      "formal_validation": false
+    }
+  },
+  "form": {
+    "features": [
+      "recent_attack",
+      "opponent_recent_concede",
+      "recent_points",
+      "opponent_recent_points",
+      "same_cohort_gap",
+      "opponent_same_cohort_gap"
+    ],
+    "mean": [
+      -0.026531929632716195,
+      -0.019391201615250625,
+      1.355919854280513,
+      1.355919854280513,
+      0.5398126463700244,
+      0.5398126463700244
+    ],
+    "scale": [
+      0.2926006880809148,
+      0.2516415720267309,
+      0.37743229790061894,
+      0.37743229790061894,
+      0.3770005387042949,
+      0.3770005387042949
+    ],
+    "coefficients": [
+      0.08929557627398699,
+      0.01934818540029424,
+      0.0035798605754562627,
+      0.0684075297964165,
+      -0.08548600616674171,
+      0.034477016997695495
+    ],
+    "target_count": 488,
+    "folds": [
+      {
+        "fit_end": "2024-09-09",
+        "targets_start": "2024-09-10",
+        "targets_end": "2024-10-15",
+        "usable_matches": 53
+      },
+      {
+        "fit_end": "2024-10-14",
+        "targets_start": "2024-10-15",
+        "targets_end": "2024-11-19",
+        "usable_matches": 51
+      },
+      {
+        "fit_end": "2024-11-18",
+        "targets_start": "2024-11-19",
+        "targets_end": "2026-03-31",
+        "usable_matches": 34
+      },
+      {
+        "fit_end": "2026-03-26",
+        "targets_start": "2026-03-31",
+        "targets_end": "2026-09-29",
+        "usable_matches": 44
+      },
+      {
+        "fit_end": "2026-09-28",
+        "targets_start": "2026-09-29",
+        "targets_end": "9999-12-31",
+        "usable_matches": 62
+      }
+    ],
+    "max_log_rate_adjustment": 0.35,
+    "train_end": "2026-10-06",
+    "scope": "same-cohort history only; gap is not all-competition rest; no motivation/injury coefficients"
+  },
+  "train_end": "2026-10-06",
+  "observed_at": "2026-10-07T07:13:12.963350+00:00",
+  "built_at": "2026-10-08T09:12:59.476994+00:00",
+  "config": {
+    "recent_games": 6,
+    "recent_prior_games": 4,
+    "form_ridge": 20.0,
+    "max_log_rate_adjustment": 0.35,
+    "temperature": 1.0,
+    "selection_min_matches": 40,
+    "selection_loss_tolerance": 0.05
+  },
+  "code_hash": "1983533126c457524c44eab284af35972e18dbdc9dfee4e287407bb6c979e03e",
+  "selection_report_hash": "0fcd453dd7ac413ac03bf27aab44165f04dc7a3a5b438e838c41572cf336603c",
+  "legacy_champion_unchanged": "V21.5",
+  "permanent_lambda_modified": false,
+  "context_coefficients": null,
+  "market_numeric_adjustment": false,
+  "formal_validation": false,
+  "formal_freeze_eligible": false,
+  "document_type": "PARAMETER_SNAPSHOT_NOT_STANDALONE_ARTIFACT",
+  "history_rows": 450,
+  "history_hash": "00fd835d0620b719e6175e7d4537cf1f4d78b30c2d40acbef5239b9354e814ba",
+  "history_required_for_execution": true
+}

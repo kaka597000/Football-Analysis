@@ -2,7 +2,7 @@
 import os,subprocess,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-SUITES=('runtime','runtime/v2','runtime/v3','runtime/emperor_cup')
+SUITES=('runtime','runtime/v2','runtime/v3','runtime/v4','runtime/emperor_cup')
 
 def main():
     env=dict(os.environ,OPENBLAS_NUM_THREADS='1')

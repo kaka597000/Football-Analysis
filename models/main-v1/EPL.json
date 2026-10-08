@@ -1,0 +1,394 @@
+{
+  "version": "WCPP-MAIN-1.0",
+  "role": "NEW_MAIN_RESEARCH",
+  "cohort": "EPL",
+  "selected_recipe": "strength180",
+  "execution_recipe": "baseline",
+  "acceptance": {
+    "top1_difference": -0.004219409282700426,
+    "date_cluster_bootstrap95": [
+      -0.014953370876268073,
+      0.004651162790697674
+    ],
+    "acceptance_gate_passed": false,
+    "draws": 2000,
+    "rule": "positive lower Top1 interval, nonworse score log loss and WDL Brier; no test-based reselection",
+    "formal_promotion": false
+  },
+  "core": {
+    "baseline": {
+      "method": "v01_baseline",
+      "home_mean": 1.5362779597771032,
+      "away_mean": 1.2710756832200076,
+      "teams": {
+        "Crystal Palace": {
+          "attack": 0.8608464209645138,
+          "concede": 1.0224787727951963
+        },
+        "Southampton": {
+          "attack": 0.7802574810780141,
+          "concede": 1.2584721584935263
+        },
+        "Fulham": {
+          "attack": 0.9084549648422944,
+          "concede": 0.9610321961689909
+        },
+        "Arsenal": {
+          "attack": 1.2562120148833051,
+          "concede": 0.6392285216974943
+        },
+        "Liverpool": {
+          "attack": 1.2271756643715903,
+          "concede": 0.9727354723353068
+        },
+        "Leeds": {
+          "attack": 0.9483984609731357,
+          "concede": 0.999132279197961
+        },
+        "West Ham": {
+          "attack": 0.9134799637512541,
+          "concede": 1.119840163763534
+        },
+        "Newcastle": {
+          "attack": 1.0753295381437098,
+          "concede": 1.0209601861973483
+        },
+        "Tottenham": {
+          "attack": 0.9387448833334663,
+          "concede": 1.1121709539879543
+        },
+        "Everton": {
+          "attack": 0.9082648584262406,
+          "concede": 0.9629650578012993
+        },
+        "West Brom": {
+          "attack": 0.9991791147753585,
+          "concede": 1.0010837628732248
+        },
+        "Leicester": {
+          "attack": 0.8277470081896735,
+          "concede": 1.1975530888816404
+        },
+        "Brighton": {
+          "attack": 1.0188636538349671,
+          "concede": 0.9327470742900587
+        },
+        "Chelsea": {
+          "attack": 1.0437872145541782,
+          "concede": 1.0006064372960564
+        },
+        "Sheffield United": {
+          "attack": 0.9502984943176392,
+          "concede": 1.149367579916866
+        },
+        "Wolves": {
+          "attack": 0.7036288945132866,
+          "concede": 1.1788077438498632
+        },
+        "Man United": {
+          "attack": 1.1709838106308148,
+          "concede": 0.9415636508353594
+        },
+        "Burnley": {
+          "attack": 0.7672947685838617,
+          "concede": 1.3049674991606361
+        },
+        "Aston Villa": {
+          "attack": 1.085365229303237,
+          "concede": 0.975832596013919
+        },
+        "Man City": {
+          "attack": 1.3442951427529823,
+          "concede": 0.7403372146345898
+        },
+        "Brentford": {
+          "attack": 1.0440296029106206,
+          "concede": 0.9863216912684513
+        },
+        "Norwich": {
+          "attack": 0.9941492971078465,
+          "concede": 1.0063557419261528
+        },
+        "Watford": {
+          "attack": 0.9955560637811689,
+          "concede": 1.0051761135464636
+        },
+        "Bournemouth": {
+          "attack": 1.0544213489405945,
+          "concede": 0.9500500297222785
+        },
+        "Nott'm Forest": {
+          "attack": 1.0065664682543614,
+          "concede": 0.9400100767718458
+        },
+        "Luton": {
+          "attack": 1.000298092184823,
+          "concede": 1.1003692448176927
+        },
+        "Ipswich": {
+          "attack": 0.8615714528151927,
+          "concede": 1.2430571508863322
+        },
+        "Sunderland": {
+          "attack": 0.8536261960891082,
+          "concede": 0.9633231991759715
+        }
+      },
+      "nuisance": {
+        "poisson": 0.0
+      }
+    },
+    "long": {
+      "version": "WCPP-CLOUD-CHALLENGER-0.2",
+      "cohort": "EPL",
+      "intercept": 0.2574514741416723,
+      "home_advantage": 0.1739685077450616,
+      "attack": {
+        "Arsenal": 0.29018783445297225,
+        "Aston Villa": 0.11397923272362431,
+        "Bournemouth": 0.068392466490268,
+        "Brentford": 0.09408293538438953,
+        "Brighton": 0.07298106114512443,
+        "Burnley": -0.20599031112871471,
+        "Chelsea": 0.12622537735724731,
+        "Crystal Palace": -0.08473485649071477,
+        "Everton": -0.12177454225540077,
+        "Fulham": -0.032402163510143814,
+        "Ipswich": -0.1783011449561878,
+        "Leeds": -0.027276182177513195,
+        "Leicester": -0.16688977641550465,
+        "Liverpool": 0.3046485484609532,
+        "Luton": 0.0085491934993435,
+        "Man City": 0.3738201208304397,
+        "Man United": 0.13556208001524805,
+        "Newcastle": 0.15957333467231977,
+        "Norwich": -0.07853942139020545,
+        "Nott'm Forest": 0.0017847397175224308,
+        "Sheffield United": -0.14817833751107026,
+        "Southampton": -0.29104754502886543,
+        "Sunderland": -0.1243552682625973,
+        "Tottenham": 0.07758843273799718,
+        "Watford": -0.05433915072995848,
+        "West Brom": -0.025323573952243106,
+        "West Ham": -0.04410618395041809,
+        "Wolves": -0.24411689972791187
+      },
+      "defence": {
+        "Arsenal": -0.44673244004194923,
+        "Aston Villa": -0.08371889182099157,
+        "Bournemouth": -0.05297351405406873,
+        "Brentford": -0.04198536902823003,
+        "Brighton": -0.07897359590889873,
+        "Burnley": 0.20402179744031504,
+        "Chelsea": -0.09167810149720983,
+        "Crystal Palace": -0.06814913674246977,
+        "Everton": -0.11811013126170329,
+        "Fulham": -0.06531924218300852,
+        "Ipswich": 0.2480602312383594,
+        "Leeds": 0.01516129112706726,
+        "Leicester": 0.18760643286302844,
+        "Liverpool": -0.13002824159682835,
+        "Luton": 0.20248063238484884,
+        "Man City": -0.33862545515499093,
+        "Man United": -0.08323672666633464,
+        "Newcastle": -0.04941955653586614,
+        "Norwich": 0.07417387321455995,
+        "Nott'm Forest": -0.0711401912102883,
+        "Sheffield United": 0.3063677901326469,
+        "Southampton": 0.26107628808855526,
+        "Sunderland": -0.10976108565231146,
+        "Tottenham": 0.05561378178658028,
+        "Watford": 0.05739510769817985,
+        "West Brom": 0.027978307090862846,
+        "West Ham": 0.08325933493210892,
+        "Wolves": 0.10665681135803648
+      },
+      "half_life_days": 365.0,
+      "ridge": 8.0,
+      "train_rows": 2280,
+      "train_end": "2026-05-24",
+      "observed_at": "2026-10-07T07:13:12.621361+00:00",
+      "dataset_hash": "2172dfb10db01e583eeb6718e29c1807364fbddb4fedac8529a16f48090be50f",
+      "nuisance": {
+        "poisson": 0.0,
+        "dixon_coles": -0.019425095205628247,
+        "bivariate": 4.469534883430863e-06
+      },
+      "context_coefficients": null,
+      "context_status": "UNTRAINED_NO_VERIFIED_FEATURE_HISTORY",
+      "champion_unchanged": "V21.5",
+      "formal_validation": false
+    },
+    "short": {
+      "version": "WCPP-CLOUD-CHALLENGER-0.2",
+      "cohort": "EPL",
+      "intercept": 0.23074477301464258,
+      "home_advantage": 0.18862360481955984,
+      "attack": {
+        "Arsenal": 0.22779756311114113,
+        "Aston Villa": 0.09943820825273758,
+        "Bournemouth": 0.07592259019898623,
+        "Brentford": 0.06404012836846162,
+        "Brighton": 0.03592050523682293,
+        "Burnley": -0.19311941866534987,
+        "Chelsea": 0.06528860379743462,
+        "Crystal Palace": -0.10834845912579248,
+        "Everton": -0.06393857047755695,
+        "Fulham": -0.06560415298190246,
+        "Ipswich": -0.10465752972979309,
+        "Leeds": -0.02632463068947469,
+        "Leicester": -0.1351074608607136,
+        "Liverpool": 0.217374228731037,
+        "Luton": 0.003953353503672161,
+        "Man City": 0.3026318700743041,
+        "Man United": 0.17244547058070625,
+        "Newcastle": 0.09507964389667597,
+        "Norwich": -0.004142222715899797,
+        "Nott'm Forest": 0.0273916259878371,
+        "Sheffield United": -0.03384763942322887,
+        "Southampton": -0.1722630281049211,
+        "Sunderland": -0.11508090983544765,
+        "Tottenham": -0.02873666298899401,
+        "Watford": -0.0030961389806307416,
+        "West Brom": -0.000563909160445036,
+        "West Ham": -0.05362148837460584,
+        "Wolves": -0.2788315696250605
+      },
+      "defence": {
+        "Arsenal": -0.381528251363669,
+        "Aston Villa": -0.038920986821232094,
+        "Bournemouth": -0.06307216250531796,
+        "Brentford": -0.02916050270422289,
+        "Brighton": -0.07737472417111617,
+        "Burnley": 0.2293363821877476,
+        "Chelsea": -0.018290023715579116,
+        "Crystal Palace": -0.00634797603278196,
+        "Everton": -0.05635256346394163,
+        "Fulham": -0.05682718543375485,
+        "Ipswich": 0.18042533974910452,
+        "Leeds": -0.015911324207655293,
+        "Leicester": 0.1437985321998784,
+        "Liverpool": -0.03189794701612431,
+        "Luton": 0.06964543752987519,
+        "Man City": -0.26565969057680405,
+        "Man United": -0.06561005774909807,
+        "Newcastle": 0.0049554963394622675,
+        "Norwich": 0.004447103378654975,
+        "Nott'm Forest": -0.07413834073657244,
+        "Sheffield United": 0.10534982528817555,
+        "Southampton": 0.19045474236025509,
+        "Sunderland": -0.052832523670621925,
+        "Tottenham": 0.08318513210535024,
+        "Watford": 0.0035650005547193174,
+        "West Brom": 0.0007539419905652577,
+        "West Ham": 0.08521489681836387,
+        "Wolves": 0.1327924296663396
+      },
+      "half_life_days": 180.0,
+      "ridge": 8.0,
+      "train_rows": 2280,
+      "train_end": "2026-05-24",
+      "observed_at": "2026-10-07T07:13:12.621361+00:00",
+      "dataset_hash": "2172dfb10db01e583eeb6718e29c1807364fbddb4fedac8529a16f48090be50f",
+      "nuisance": {},
+      "context_coefficients": null,
+      "context_status": "UNTRAINED_NO_VERIFIED_FEATURE_HISTORY",
+      "champion_unchanged": "V21.5",
+      "formal_validation": false
+    }
+  },
+  "form": {
+    "features": [
+      "recent_attack",
+      "opponent_recent_concede",
+      "recent_points",
+      "opponent_recent_points",
+      "same_cohort_gap",
+      "opponent_same_cohort_gap"
+    ],
+    "mean": [
+      -0.0006559093030092502,
+      -0.005564048873165796,
+      1.354507743439097,
+      1.354507743439097,
+      0.5323941913863733,
+      0.5323941913863733
+    ],
+    "scale": [
+      0.24640693696141067,
+      0.24028036910342382,
+      0.3955008749127719,
+      0.3955008749127719,
+      0.23125157809043598,
+      0.23125157809043598
+    ],
+    "coefficients": [
+      0.03922341355248517,
+      0.020138268560011857,
+      -0.012269196760896144,
+      -0.05339224977262254,
+      -0.07394728835367939,
+      0.029078877453779125
+    ],
+    "target_count": 2302,
+    "folds": [
+      {
+        "fit_end": "2023-05-01",
+        "targets_start": "2023-05-02",
+        "targets_end": "2023-12-28",
+        "usable_matches": 215
+      },
+      {
+        "fit_end": "2023-12-27",
+        "targets_start": "2023-12-28",
+        "targets_end": "2024-09-01",
+        "usable_matches": 218
+      },
+      {
+        "fit_end": "2024-08-31",
+        "targets_start": "2024-09-01",
+        "targets_end": "2025-03-16",
+        "usable_matches": 259
+      },
+      {
+        "fit_end": "2025-03-15",
+        "targets_start": "2025-03-16",
+        "targets_end": "2025-12-13",
+        "usable_matches": 229
+      },
+      {
+        "fit_end": "2025-12-08",
+        "targets_start": "2025-12-13",
+        "targets_end": "9999-12-31",
+        "usable_matches": 230
+      }
+    ],
+    "max_log_rate_adjustment": 0.35,
+    "train_end": "2026-05-24",
+    "scope": "same-cohort history only; gap is not all-competition rest; no motivation/injury coefficients"
+  },
+  "train_end": "2026-05-24",
+  "observed_at": "2026-10-07T07:13:12.621361+00:00",
+  "built_at": "2026-10-08T09:13:03.416534+00:00",
+  "config": {
+    "recent_games": 6,
+    "recent_prior_games": 4,
+    "form_ridge": 20.0,
+    "max_log_rate_adjustment": 0.35,
+    "temperature": 1.0,
+    "selection_min_matches": 40,
+    "selection_loss_tolerance": 0.05
+  },
+  "code_hash": "1983533126c457524c44eab284af35972e18dbdc9dfee4e287407bb6c979e03e",
+  "selection_report_hash": "6312996df73e6b93fe8b3c36df4ddf7757488d5cbc907ebf3517e707cacec725",
+  "legacy_champion_unchanged": "V21.5",
+  "permanent_lambda_modified": false,
+  "context_coefficients": null,
+  "market_numeric_adjustment": false,
+  "formal_validation": false,
+  "formal_freeze_eligible": false,
+  "document_type": "PARAMETER_SNAPSHOT_NOT_STANDALONE_ARTIFACT",
+  "history_rows": 2280,
+  "history_hash": "2172dfb10db01e583eeb6718e29c1807364fbddb4fedac8529a16f48090be50f",
+  "history_required_for_execution": true
+}

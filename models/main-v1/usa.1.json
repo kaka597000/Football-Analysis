@@ -1,0 +1,434 @@
+{
+  "version": "WCPP-MAIN-1.0",
+  "role": "NEW_MAIN_RESEARCH",
+  "cohort": "usa.1",
+  "selected_recipe": "form180",
+  "execution_recipe": "baseline",
+  "acceptance": {
+    "top1_difference": -0.006224066390041499,
+    "date_cluster_bootstrap95": [
+      -0.02235886195419999,
+      0.00976658241421568
+    ],
+    "acceptance_gate_passed": false,
+    "draws": 2000,
+    "rule": "positive lower Top1 interval, nonworse score log loss and WDL Brier; no test-based reselection",
+    "formal_promotion": false
+  },
+  "core": {
+    "baseline": {
+      "method": "v01_baseline",
+      "home_mean": 1.7844283939117118,
+      "away_mean": 1.403002139937441,
+      "teams": {
+        "D.C. United": {
+          "attack": 0.8197436740690801,
+          "concede": 1.0743063050823793
+        },
+        "Charlotte FC": {
+          "attack": 1.0365270603323005,
+          "concede": 0.8893686228926394
+        },
+        "Inter Miami CF": {
+          "attack": 1.3930377887976093,
+          "concede": 1.067703654399793
+        },
+        "Chicago Fire FC": {
+          "attack": 1.1017919728426722,
+          "concede": 0.9997527894690555
+        },
+        "Austin FC": {
+          "attack": 0.8460836582075071,
+          "concede": 1.010249546687186
+        },
+        "FC Cincinnati": {
+          "attack": 1.1309348794942886,
+          "concede": 1.2415049325197822
+        },
+        "San Jose Earthquakes": {
+          "attack": 1.0354292574096258,
+          "concede": 1.0452824691482316
+        },
+        "Red Bull New York": {
+          "attack": 0.8240123209972484,
+          "concede": 1.0394034865321982
+        },
+        "FC Dallas": {
+          "attack": 1.0726911318464964,
+          "concede": 0.9873458741337394
+        },
+        "Toronto FC": {
+          "attack": 0.8750120920786204,
+          "concede": 1.074399960688941
+        },
+        "LAFC": {
+          "attack": 1.026570921885053,
+          "concede": 0.7632552248015815
+        },
+        "Colorado Rapids": {
+          "attack": 0.8767948177442846,
+          "concede": 0.9548702932351004
+        },
+        "Columbus Crew": {
+          "attack": 0.9766253896388511,
+          "concede": 0.9788623393646588
+        },
+        "Vancouver Whitecaps": {
+          "attack": 1.2320557917998378,
+          "concede": 0.809178229607026
+        },
+        "Philadelphia Union": {
+          "attack": 1.2432224358404236,
+          "concede": 0.9135570858782631
+        },
+        "Minnesota United FC": {
+          "attack": 1.0036784536267043,
+          "concede": 1.0787539411658742
+        },
+        "LA Galaxy": {
+          "attack": 0.9173622668062801,
+          "concede": 1.028272861549402
+        },
+        "New York City FC": {
+          "attack": 0.9379519948268641,
+          "concede": 0.8760797946253011
+        },
+        "Atlanta United FC": {
+          "attack": 0.8282651370515033,
+          "concede": 1.0374206990834285
+        },
+        "Sporting Kansas City": {
+          "attack": 0.8559671796488236,
+          "concede": 1.3164187892778978
+        },
+        "Orlando City SC": {
+          "attack": 1.1222029913385962,
+          "concede": 1.1993142204327778
+        },
+        "CF Montréal": {
+          "attack": 0.8004621378798102,
+          "concede": 1.1523280105826572
+        },
+        "Portland Timbers": {
+          "attack": 1.016194878961233,
+          "concede": 1.0947632262763685
+        },
+        "New England Revolution": {
+          "attack": 0.9935600009541669,
+          "concede": 0.9293663389183047
+        },
+        "Houston Dynamo FC": {
+          "attack": 0.8273588391918204,
+          "concede": 0.816701846732598
+        },
+        "Real Salt Lake": {
+          "attack": 0.8821661138776938,
+          "concede": 1.023549821946882
+        },
+        "Seattle Sounders FC": {
+          "attack": 0.9252044895236774,
+          "concede": 0.8957468734726171
+        },
+        "Nashville SC": {
+          "attack": 1.1226593741048845,
+          "concede": 0.7292782279980603
+        },
+        "MLS All-Stars": {
+          "attack": 1.1283589330446362,
+          "concede": 1.092165151162013
+        },
+        "Liga MX All-Stars": {
+          "attack": 1.0895092748630564,
+          "concede": 1.129860621236541
+        },
+        "St. Louis CITY SC": {
+          "attack": 1.1132099546407217,
+          "concede": 0.926558144220167
+        },
+        "Arsenal": {
+          "attack": 1.003053970975972,
+          "concede": 0.9984854513426564
+        },
+        "San Diego FC": {
+          "attack": 1.067393921499273,
+          "concede": 1.0169397652803218
+        }
+      },
+      "nuisance": {
+        "poisson": 0.0
+      }
+    },
+    "long": {
+      "version": "WCPP-CLOUD-CHALLENGER-0.2",
+      "cohort": "usa.1",
+      "intercept": 0.3091756565583483,
+      "home_advantage": 0.25490568557125026,
+      "attack": {
+        "Arsenal": 0.023119521906968397,
+        "Atlanta United FC": -0.16287457777620143,
+        "Austin FC": -0.1613640332681312,
+        "CF Montréal": -0.20285985535847254,
+        "Charlotte FC": 0.00395611979931164,
+        "Chicago Fire FC": 0.07164236273809091,
+        "Colorado Rapids": -0.10876768947397253,
+        "Columbus Crew": 0.031846327662893574,
+        "D.C. United": -0.19188943670792746,
+        "FC Cincinnati": 0.12177255913879595,
+        "FC Dallas": 0.05249203823174187,
+        "Houston Dynamo FC": -0.16270340993773658,
+        "Inter Miami CF": 0.3553046001114918,
+        "LA Galaxy": -0.004191358829828588,
+        "LAFC": 0.07861998008863108,
+        "Liga MX All-Stars": 0.08558227492935624,
+        "MLS All-Stars": 0.09514122697622958,
+        "Minnesota United FC": 0.008705705831344637,
+        "Nashville SC": 0.05049869639560687,
+        "New England Revolution": -0.04674376723374486,
+        "New York City FC": -0.04626318190049167,
+        "Orlando City SC": 0.11125019981543793,
+        "Philadelphia Union": 0.16023859938749996,
+        "Portland Timbers": 0.017155763444006558,
+        "Real Salt Lake": -0.07704952937545523,
+        "Red Bull New York": -0.1305970528701006,
+        "San Diego FC": 0.10368534466458491,
+        "San Jose Earthquakes": 0.036470473547860524,
+        "Seattle Sounders FC": -0.06338535038382265,
+        "Sporting Kansas City": -0.10734251604730564,
+        "St. Louis CITY SC": 0.04771673142152627,
+        "Toronto FC": -0.17247699690046475,
+        "Vancouver Whitecaps": 0.18331022997227706
+      },
+      "defence": {
+        "Arsenal": -0.01281012040188461,
+        "Atlanta United FC": 0.03885959169784224,
+        "Austin FC": 0.007381429079372584,
+        "CF Montréal": 0.12386736924808386,
+        "Charlotte FC": -0.09248740188655862,
+        "Chicago Fire FC": 0.023966811501360284,
+        "Colorado Rapids": 0.02287879535986467,
+        "Columbus Crew": -0.049229810996651954,
+        "D.C. United": 0.11621882394086969,
+        "FC Cincinnati": 0.12142039432845075,
+        "FC Dallas": -0.006609320482351468,
+        "Houston Dynamo FC": -0.14761844635742352,
+        "Inter Miami CF": 0.062251504738247754,
+        "LA Galaxy": 0.06699854859757587,
+        "LAFC": -0.24870769365655906,
+        "Liga MX All-Stars": 0.10793428633394038,
+        "MLS All-Stars": 0.10872128308425098,
+        "Minnesota United FC": 0.023624457736787487,
+        "Nashville SC": -0.2580188021283822,
+        "New England Revolution": -0.008111492922446194,
+        "New York City FC": -0.138537036184608,
+        "Orlando City SC": 0.12475817707104267,
+        "Philadelphia Union": -0.11127333460756601,
+        "Portland Timbers": 0.07942356790032372,
+        "Real Salt Lake": -0.00037055557035161127,
+        "Red Bull New York": -0.00595831058906445,
+        "San Diego FC": -0.021683060230620183,
+        "San Jose Earthquakes": 0.08863834928271148,
+        "Seattle Sounders FC": -0.1500861364637006,
+        "Sporting Kansas City": 0.2668077710653262,
+        "St. Louis CITY SC": 0.0028063287131558966,
+        "Toronto FC": 0.048086816809406775,
+        "Vancouver Whitecaps": -0.18314278401044495
+      },
+      "half_life_days": 365.0,
+      "ridge": 8.0,
+      "train_rows": 2456,
+      "train_end": "2026-10-07",
+      "observed_at": "2026-10-07T07:13:14.203610+00:00",
+      "dataset_hash": "d9556d3cdacc7457b1bdb80e449c03bb96d68dbb5c41e3808dca99229774eb9b",
+      "nuisance": {
+        "poisson": 0.0,
+        "dixon_coles": -0.046060118257184604,
+        "bivariate": 0.06287204623987867
+      },
+      "context_coefficients": null,
+      "context_status": "UNTRAINED_NO_VERIFIED_FEATURE_HISTORY",
+      "champion_unchanged": "V21.5",
+      "formal_validation": false
+    },
+    "short": {
+      "version": "WCPP-CLOUD-CHALLENGER-0.2",
+      "cohort": "usa.1",
+      "intercept": 0.33198070950241854,
+      "home_advantage": 0.241169525693236,
+      "attack": {
+        "Arsenal": 0.002367406415323902,
+        "Atlanta United FC": -0.1760637295337952,
+        "Austin FC": -0.13930793915228398,
+        "CF Montréal": -0.203889884528213,
+        "Charlotte FC": 0.03441920755266383,
+        "Chicago Fire FC": 0.09611480946463782,
+        "Colorado Rapids": -0.1180918873874493,
+        "Columbus Crew": -0.03002134452670767,
+        "D.C. United": -0.15390484911894622,
+        "FC Cincinnati": 0.13295878590382754,
+        "FC Dallas": 0.07415730985214697,
+        "Houston Dynamo FC": -0.1837075863355115,
+        "Inter Miami CF": 0.3436177543698132,
+        "LA Galaxy": -0.06827435261688862,
+        "LAFC": 0.014590344303856567,
+        "Liga MX All-Stars": 0.06704071789795465,
+        "MLS All-Stars": 0.09415778169000802,
+        "Minnesota United FC": 0.0030895455498816775,
+        "Nashville SC": 0.0998483194171998,
+        "New England Revolution": -0.0024441337958910105,
+        "New York City FC": -0.05336051570743097,
+        "Orlando City SC": 0.1161909534064242,
+        "Philadelphia Union": 0.19578716530360127,
+        "Portland Timbers": 0.024412113865991906,
+        "Real Salt Lake": -0.09699714393111189,
+        "Red Bull New York": -0.17008364190212613,
+        "San Diego FC": 0.05970180906528921,
+        "San Jose Earthquakes": 0.040502786670547075,
+        "Seattle Sounders FC": -0.08648527367763016,
+        "Sporting Kansas City": -0.10796354143948377,
+        "St. Louis CITY SC": 0.10343647947523994,
+        "Toronto FC": -0.10646724432978777,
+        "Vancouver Whitecaps": 0.19466977777884956
+      },
+      "defence": {
+        "Arsenal": -0.001322933153537229,
+        "Atlanta United FC": 0.018087100194904736,
+        "Austin FC": 0.009890453606963147,
+        "CF Montréal": 0.11215127290581436,
+        "Charlotte FC": -0.09216973932863474,
+        "Chicago Fire FC": -0.014245062400761975,
+        "Colorado Rapids": -0.02282364930105045,
+        "Columbus Crew": -0.026335003230463977,
+        "D.C. United": 0.06332686204865645,
+        "FC Cincinnati": 0.20676319388059738,
+        "FC Dallas": -0.0015227008952505136,
+        "Houston Dynamo FC": -0.18154558241619229,
+        "Inter Miami CF": 0.06545252479580654,
+        "LA Galaxy": 0.04162676977198332,
+        "LAFC": -0.22987600335832153,
+        "Liga MX All-Stars": 0.095474406819158,
+        "MLS All-Stars": 0.06941366051996904,
+        "Minnesota United FC": 0.0780680158148273,
+        "Nashville SC": -0.2979543171870007,
+        "New England Revolution": -0.05461045729358902,
+        "New York City FC": -0.13100163829378578,
+        "Orlando City SC": 0.169195408138006,
+        "Philadelphia Union": -0.07440644707724071,
+        "Portland Timbers": 0.08814017699505435,
+        "Real Salt Lake": 0.026220398864747755,
+        "Red Bull New York": 0.022255807184706943,
+        "San Diego FC": 0.010270596003246334,
+        "San Jose Earthquakes": 0.04919640094138211,
+        "Seattle Sounders FC": -0.0940093600359404,
+        "Sporting Kansas City": 0.27965510130904325,
+        "St. Louis CITY SC": -0.04512447662740388,
+        "Toronto FC": 0.0391322895021228,
+        "Vancouver Whitecaps": -0.17737306869781658
+      },
+      "half_life_days": 180.0,
+      "ridge": 8.0,
+      "train_rows": 2456,
+      "train_end": "2026-10-07",
+      "observed_at": "2026-10-07T07:13:14.203610+00:00",
+      "dataset_hash": "d9556d3cdacc7457b1bdb80e449c03bb96d68dbb5c41e3808dca99229774eb9b",
+      "nuisance": {},
+      "context_coefficients": null,
+      "context_status": "UNTRAINED_NO_VERIFIED_FEATURE_HISTORY",
+      "champion_unchanged": "V21.5",
+      "formal_validation": false
+    }
+  },
+  "form": {
+    "features": [
+      "recent_attack",
+      "opponent_recent_concede",
+      "recent_points",
+      "opponent_recent_points",
+      "same_cohort_gap",
+      "opponent_same_cohort_gap"
+    ],
+    "mean": [
+      0.008779449055431654,
+      0.011165729173414383,
+      1.3488953599025428,
+      1.3488953599025426,
+      0.4989151535914141,
+      0.4989151535914141
+    ],
+    "scale": [
+      0.23069307611238093,
+      0.22728257930264814,
+      0.36845773480618227,
+      0.36845773480618366,
+      0.2435543350758189,
+      0.2435543350758189
+    ],
+    "coefficients": [
+      0.05138434723080604,
+      -0.008996984322284185,
+      0.0024902143835340783,
+      -0.04751644699913621,
+      0.04125170612603568,
+      -0.02645851492413351
+    ],
+    "target_count": 2502,
+    "folds": [
+      {
+        "fit_end": "2024-05-18",
+        "targets_start": "2024-05-19",
+        "targets_end": "2024-10-12",
+        "usable_matches": 291
+      },
+      {
+        "fit_end": "2024-10-06",
+        "targets_start": "2024-10-12",
+        "targets_end": "2025-05-29",
+        "usable_matches": 249
+      },
+      {
+        "fit_end": "2025-05-28",
+        "targets_start": "2025-05-29",
+        "targets_end": "2025-09-25",
+        "usable_matches": 229
+      },
+      {
+        "fit_end": "2025-09-24",
+        "targets_start": "2025-09-25",
+        "targets_end": "2026-04-26",
+        "usable_matches": 212
+      },
+      {
+        "fit_end": "2026-04-25",
+        "targets_start": "2026-04-26",
+        "targets_end": "9999-12-31",
+        "usable_matches": 270
+      }
+    ],
+    "max_log_rate_adjustment": 0.35,
+    "train_end": "2026-10-07",
+    "scope": "same-cohort history only; gap is not all-competition rest; no motivation/injury coefficients"
+  },
+  "train_end": "2026-10-07",
+  "observed_at": "2026-10-07T07:13:14.203610+00:00",
+  "built_at": "2026-10-08T09:13:03.798017+00:00",
+  "config": {
+    "recent_games": 6,
+    "recent_prior_games": 4,
+    "form_ridge": 20.0,
+    "max_log_rate_adjustment": 0.35,
+    "temperature": 1.0,
+    "selection_min_matches": 40,
+    "selection_loss_tolerance": 0.05
+  },
+  "code_hash": "1983533126c457524c44eab284af35972e18dbdc9dfee4e287407bb6c979e03e",
+  "selection_report_hash": "0f7f3765ca256a1587ee57054c3b8de0b5ff5f0b630292384f4ea0ae60206994",
+  "legacy_champion_unchanged": "V21.5",
+  "permanent_lambda_modified": false,
+  "context_coefficients": null,
+  "market_numeric_adjustment": false,
+  "formal_validation": false,
+  "formal_freeze_eligible": false,
+  "document_type": "PARAMETER_SNAPSHOT_NOT_STANDALONE_ARTIFACT",
+  "history_rows": 2456,
+  "history_hash": "d9556d3cdacc7457b1bdb80e449c03bb96d68dbb5c41e3808dca99229774eb9b",
+  "history_required_for_execution": true
+}

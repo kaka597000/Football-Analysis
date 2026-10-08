@@ -66,3 +66,7 @@ git add README.md runtime scripts tests docs requirements.txt .github .gitignore
 git commit -m "Describe the change"
 git push origin main
 ```
+
+## 当前新主模型
+
+当前研究执行入口为 [WCPP-MAIN-1.0](runtime/v4/README.md)，独立于原 Champion 参数。候选未通过验证时执行基线，完整结果见 [验证说明](docs/main-v1-validation.md)。
