@@ -1,0 +1,23 @@
+{
+  "demonstration": true,
+  "match_id": "DEMO-NOT-A-REAL-MATCH",
+  "home": "演示主队",
+  "away": "演示客队",
+  "competition": "演示联赛",
+  "phase": "PreMatch",
+  "cohort": "MEN_TOP5_LEAGUE",
+  "identity_scope": "extended",
+  "cutoff_at": "2030-01-01T12:00:00+08:00",
+  "kickoff_at": "2030-01-01T20:00:00+08:00",
+  "lambda_home": 1.5,
+  "lambda_away": 1.0,
+  "lambda_provenance": "虚构输入，仅验证计算流程，不是赛事预测",
+  "total_line": 2.5,
+  "sources": [{
+    "source_url": "https://example.org/synthetic-demo",
+    "source_tier": "L3",
+    "supports_field": ["synthetic_fixture"],
+    "known_at": "2030-01-01T10:00:00+08:00",
+    "query_time": "2030-01-01T11:00:00+08:00"
+  }]
+}

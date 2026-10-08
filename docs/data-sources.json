@@ -1,0 +1,114 @@
+{
+  "provenance": "用户在当前聊天提供的登记清单；本轮未测试各源连接",
+  "timezone": "UTC+8",
+  "access_note": "大多通过公开网页查询，没有已配置的API密钥；不代表逐源连接已验证",
+  "sources": [
+    {
+      "name": "雷速体育",
+      "purpose": "竞彩身份、赛程、比分、阵容与指数",
+      "role": "竞彩核实优先来源",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "新球体育竞足板块",
+      "purpose": "竞彩编号、对阵、销售批次与时间",
+      "role": "竞彩核实优先来源",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "UEFA及其他赛事／足协官方",
+      "purpose": "国家队赛程、赛果、名单、停赛与规则",
+      "role": "L1优先",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "联赛、俱乐部官方",
+      "purpose": "首发、伤停、轮换、公开表态",
+      "role": "L1优先",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "FotMob、Sofascore",
+      "purpose": "赛果、过程数据、xG、阵容和近期表现",
+      "role": "L2交叉核验",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "Flashscore、ESPN、Sky Sports",
+      "purpose": "赛程、赛果与比赛资料",
+      "role": "补充核验",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "BetUS",
+      "purpose": "亚洲让球、大小球、1X2",
+      "role": "用户登记本次实际查询过；本云端未复验",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "PokerStars Sports",
+      "purpose": "大小球、1X2等",
+      "role": "用户登记本次实际查询过；三项让球不能当亚洲盘；本云端未复验",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "Oddschecker、SportyTrader",
+      "purpose": "多机构赔率比较",
+      "role": "辅助查询，须核机构与时间",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "AgentBets",
+      "purpose": "转引Pinnacle等机构盘口",
+      "role": "二手报价，明确标注",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "Sports Mole、Reuters等媒体",
+      "purpose": "前瞻、公开消息、比赛报道",
+      "role": "背景证据，不冒充官方首发",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "GitHub martj42/international_results",
+      "purpose": "国家队历史赛果扩库",
+      "role": "Raw staging；核实90分钟口径后才能训练",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "澳客",
+      "purpose": "第三方竞彩/北单身份清单发现",
+      "role": "备选公开网页，单源可读、未完成独立交叉核验",
+      "urls": [
+        "https://www.okooo.com/jingcai/",
+        "https://www.okooo.com/danchang/"
+      ],
+      "connection_verified_this_run": true,
+      "fixture_identity_cross_verified": false
+    },
+    {
+      "name": "JFA天皇杯官方比赛页与官方记录",
+      "purpose": "天皇杯赛程、分段比分、加时/点球、注册名单、首发与替补",
+      "role": "L1",
+      "connection_verified_this_run": true,
+      "verified_at": "2026-10-07T18:40:45.377567+08:00",
+      "database_manifest": "data/emperor-cup/manifest.json",
+      "scope": "2024–2026",
+      "historical_first_known_at_verified": false
+    }
+  ],
+  "betfair": {
+    "status": "NOT_CONNECTED_UNVERIFIED",
+    "verified_connection_or_key": false,
+    "fields_not_available": [
+      "matched_volume",
+      "back",
+      "lay",
+      "correct_score_trading_data"
+    ]
+  },
+  "market_policy": "最后校验与有界重排；不直接修改永久Football λ，市场单独不得翻Primary",
+  "prohibited_sources": "中国体育彩票官网及镜像",
+  "api_5dollar_status": "最新用户授权启用；当前缺少WCPP_5DOLLAR_API_KEY，认证及竞彩权限未验证",
+  "model_constraints_changed": false
+}
