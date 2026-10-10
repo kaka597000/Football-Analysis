@@ -70,3 +70,15 @@ git push origin main
 ## 当前新主模型
 
 当前研究执行入口为 [WCPP-MAIN-1.0](runtime/v4/README.md)，独立于原 Champion 参数。候选未通过验证时执行基线，完整结果见 [验证说明](docs/main-v1-validation.md)。
+
+## 统一赛事库与赛果更新
+
+数据消费入口已新增[统一赛事运行层](runtime/database/README.md)。旧主库只读保留，分散来源统一到`/workspace/WCPP/data/unified/WCPP_统一赛事库.sqlite`；赛事、赛季、球队身份、来源观察、修订与冲突分开登记。
+
+```bash
+python runtime/database/cli.py refresh --root /workspace/WCPP
+python runtime/database/cli.py audit --root /workspace/WCPP
+python runtime/database/cli.py export --root /workspace/WCPP
+```
+
+云端本机更新器按北京时间04:00、08:00、18:00运行；环境停止后需按startup instructions重启。比赛数量检查、来源清单导入与训练验证是不同状态。日本2026百年构想、2026/27常规赛及韩国附加赛分组，不能混合训练。数据库及原始快照仍不上传Git。

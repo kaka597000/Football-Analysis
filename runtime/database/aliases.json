@@ -1,0 +1,12 @@
+[
+  {"scope":"JPN","target":"espn:3393","aliases":["东京绿茵","東京ヴェルディ"],"evidence":"Explicit multilingual club identity; Canonical JLeague fixture 2026-09-13 and ESPN same fixture; not score-based inference"},
+  {"scope":"JPN","target":"espn:7111","aliases":["千叶市原","ジェフユナイテッド千葉"],"evidence":"Explicit multilingual club identity; Canonical JLeague fixture 2026-09-13 and ESPN same fixture; not score-based inference"},
+  {"scope":"JPN","target":"5dollar:3188617768","aliases":["仙台七夕","ベガルタ仙台"],"evidence":"Explicit Vegalta Sendai club identity; Canonical 2026-09-13 fixture and 5Dollar same fixture"},
+  {"scope":"JPN","target":"espn:9249","aliases":["札幌冈萨多","北海道コンサドーレ札幌","Hokkaido Consadole Sapporo"],"evidence":"Explicit Consadole Sapporo club identity; Canonical 2026-09-13 fixture and 5Dollar same fixture"},
+  {"scope":"KOR","target":"kleague:K01","aliases":["蔚山HD"],"evidence":"Explicit multilingual Ulsan club identity; official K League K01"},
+  {"scope":"KOR","target":"kleague:K09","aliases":["FC首尔"],"evidence":"Explicit multilingual FC Seoul club identity; official K League K09"},
+  {"scope":"KOR","target":"kleague:K18","aliases":["仁川联"],"evidence":"Explicit multilingual Incheon club identity; official K League K18"},
+  {"scope":"KOR","target":"kleague:K26","aliases":["富川FC"],"evidence":"Explicit multilingual Bucheon club identity; official K League K26"},
+  {"scope":"KOR","target":"kleague:K21","aliases":["江原FC"],"evidence":"Explicit multilingual Gangwon club identity; official K League K21"},
+  {"scope":"KOR","target":"kleague:K05","aliases":["全北现代"],"evidence":"Explicit multilingual Jeonbuk club identity; official K League K05"}
+]
