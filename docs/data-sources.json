@@ -109,7 +109,7 @@
   },
   "market_policy": "最后校验与有界重排；不直接修改永久Football λ，市场单独不得翻Primary",
   "prohibited_sources": "中国体育彩票官网及镜像",
-  "api_5dollar_status": "本轮实测/status及日职乙赛事列表均HTTP200且API成功；联赛ID3492701972，2026-10-10北京时间窗口6场。其他联赛覆盖及阵容/xG/盘口权限仍须实际验证。",
+  "api_5dollar_status": "七个联赛历史(events/stats)、各一场Bet365赔率及积分榜已实测；Community有效历史最近12个月。2014历史及批量赔率403；原始2175条已存统一库，过渡及矛盾记录隔离。",
   "model_constraints_changed": false,
   "api_5dollar_analysis_policy": {
     "provider": "5DollarFootballAPI",
@@ -148,6 +148,16 @@
       "fixture_mapping_verified": false,
       "model_ingestion_performed": false,
       "scope": "J2 one-day fixture feed only"
+    },
+    "seven_league_history_verified": {
+      "date_utc8": "2026-10-10",
+      "raw_rows": 2175,
+      "net_new_matches": 24,
+      "history_window": "last_12_months",
+      "old_history_http": 403,
+      "batch_odds_http": 403,
+      "matches_after": 41383,
+      "formal_kpi_added": 0
     }
   }
 }

@@ -43,3 +43,22 @@ nohup python runtime/database/scheduler.py --root /workspace/WCPP > /workspace/W
 在Codex托管命令执行器中，普通后台shell子进程可能被清理。应使用执行器的持续PTY会话运行`python runtime/database/scheduler.py --root /workspace/WCPP`并保存会话ID，再从另一个命令核对状态与进程；仅保存nohup命令不代表进程持续运行。
 
 数据输出位于data/、reports/，均被Git忽略。默认通过audit/coverage及读库接口消费，不能继续把旧源文件统计当作统一库库存。模型参数与正式KPI不由数据库更新自动改变。
+
+## 5Dollar七联赛历史补采
+
+`five_dollar_history.py` 覆盖英超、西甲、德甲、意甲、法甲、日职联、日职乙。供应商ID由真实联赛列表核实。使用现有密钥，先检查/status，再固定采集时间窗口，以50条分页附带events与stats，检查跨页重复、联赛与时间一致性、分页终点，并按Retry-After处理限流。缓存仅用于同一固定窗口续传。
+
+```bash
+python runtime/database/five_dollar_history.py harvest --directory /workspace/WCPP/reports/NEW_HISTORY_RUN
+python runtime/database/five_dollar_history.py import --directory /workspace/WCPP/reports/NEW_HISTORY_RUN
+# 后续增量选择新的目录，以最近七天窗口采集
+python runtime/database/five_dollar_history.py harvest --lookback-days 7 --directory /workspace/WCPP/reports/NEW_INCREMENTAL_RUN
+```
+
+import要求已有统一数据库，取得writer.lock并用SQLite backup保存修改前副本。比赛比分观察保留原始来源、不覆盖历史；`api_fixture_payloads`独立保存每个完整响应记录，使比分未变化时新增的统计与事件仍能入库。`provider_team_ids`保留供应商ID到规范身份的映射；不同拼写只有至少两个日期、同赛事和已锚定对手的主客顺序证据且目标唯一时才桥接，不用比分或模糊名称。抽查的单场赔率和积分榜另存provider_payloads。
+
+只有finished/full及合理整数比分可进入90分钟基础门槛；源内终场与事件线矛盾标记unknown，不强选某值。跨来源结果冲突阻止训练。日本2026上半年过渡赛事完整payload进入隔离区，未独立确认赛事类型与90分钟口径前不混入普通联赛。所有历史first_known_at继续NULL，不将本次赛后取数改称当时赛前可得。
+
+2026-10-10实际Community密钥拒绝2014窗口，错误明确限制最近12个月；批量include=odds也被拒绝，单场Bet365赔率可读。完成分页仅表示当前权限/固定窗口的返回集全部取得，不代表服务商2014年以来总量或完整赛季。要访问2014历史或完整逐笔盘口历史，需实际可用的Ultra权限；不通过更换参数绕过权限。
+
+本轮2175条完整payload已保存，全库41359→41383（净24条比赛）。详细接入数量、隔离与完整性见云端reports/5dollar-history-20261010。历史赔率没有逐场全量采集；七个联赛各保存一场赔率权限抽查和积分榜快照。没有新增无人值守任务或自动改模型参数。
