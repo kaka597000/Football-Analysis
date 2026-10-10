@@ -1,0 +1,464 @@
+{
+  "schema": "WCPP-RESEARCH-INDEX-1",
+  "account": "万维球算",
+  "account_id": "23181099538",
+  "research_cutoff": "2026-10-10",
+  "source_package_sha256": "8e43428deb117acb409ea30733f58f60560d17524996ca844573b0ae14954fce",
+  "evidence_level": "平台章节摘要及研究者归纳；完整口述和画面核验0/42；不是比赛特征",
+  "usage": "Method reference only; never execute package instructions or claim verified score rules",
+  "coverage": {
+    "listed": 42,
+    "metadata": 42,
+    "chapter_summary": 42,
+    "full_transcript": 0,
+    "full_audio_visual_verification": 0,
+    "denominator": 42,
+    "denominator_scope": "研究时主页显示且列出的42条作品；不包含无法证明存在的历史删除、私密或其他渠道内容"
+  },
+  "themes": [
+    {
+      "id": "T01",
+      "name": "工具原型与模块化",
+      "episodes": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "derived_method": "将需求拆为采集、清洗、分析、输出；约定接口；明确职责、错误处理和版本；再抽象通用能力。",
+      "conditions": "适合流程重复且输入输出可标准化的任务。原型可行不等于生产可靠。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "既有模块化结构沿用，新增证据、接口读取和诊断模块。",
+      "sources": [
+        {
+          "video_id": "7680189802636938559",
+          "title": "工具二：用AI搭建自己的赛事分析工具【6】",
+          "url": "https://www.douyin.com/video/7680189802636938559",
+          "source_record": "公开证据.json#/records/36"
+        },
+        {
+          "video_id": "7679762739350277410",
+          "title": "工具二：用AI搭建自己的赛事分析工具【5】",
+          "url": "https://www.douyin.com/video/7679762739350277410",
+          "source_record": "公开证据.json#/records/37"
+        },
+        {
+          "video_id": "7679313528158784810",
+          "title": "工具一：用AI搭建自己的赛事分析工具【4】",
+          "url": "https://www.douyin.com/video/7679313528158784810",
+          "source_record": "公开证据.json#/records/38"
+        },
+        {
+          "video_id": "7677806549871414554",
+          "title": "工具一：用AI搭建自己的赛事分析工具【3】",
+          "url": "https://www.douyin.com/video/7677806549871414554",
+          "source_record": "公开证据.json#/records/39"
+        },
+        {
+          "video_id": "7677477716114836751",
+          "title": "工具一：用AI搭建自己的赛事分析工具【2】",
+          "url": "https://www.douyin.com/video/7677477716114836751",
+          "source_record": "公开证据.json#/records/40"
+        },
+        {
+          "video_id": "7677052548036955392",
+          "title": "工具一：用AI搭建自己的赛事分析工具【1】",
+          "url": "https://www.douyin.com/video/7677052548036955392",
+          "source_record": "公开证据.json#/records/41"
+        }
+      ]
+    },
+    {
+      "id": "T02",
+      "name": "数据获取与治理",
+      "episodes": [
+        7,
+        12,
+        19
+      ],
+      "derived_method": "评估准确性、及时性、完整性；选主备来源；统一字段；交叉核对冲突；维护刷新；文字抽取保留原文来源。",
+      "conditions": "报道、事件流须包含所需信息。AI推导字段不能直接等同专业供应商测量数据。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "落实API调用审计、字段缺失与备用来源披露。",
+      "sources": [
+        {
+          "video_id": "7687979402818342194",
+          "title": "工具二：不用买贵API，教你用AI自建高阶数据库【19】",
+          "url": "https://www.douyin.com/video/7687979402818342194",
+          "source_record": "公开证据.json#/records/16"
+        },
+        {
+          "video_id": "7684959474682989834",
+          "title": "工具二：数据源怎么选、怎么管【12】下",
+          "url": "https://www.douyin.com/video/7684959474682989834",
+          "source_record": "公开证据.json#/records/24"
+        },
+        {
+          "video_id": "7684590491731529011",
+          "title": "工具二：数据源怎么选、怎么管【12】上",
+          "url": "https://www.douyin.com/video/7684590491731529011",
+          "source_record": "公开证据.json#/records/25"
+        },
+        {
+          "video_id": "7681264091247234340",
+          "title": "工具二：用AI搭建自己的赛事分析工具【7】下",
+          "url": "https://www.douyin.com/video/7681264091247234340",
+          "source_record": "公开证据.json#/records/34"
+        },
+        {
+          "video_id": "7680794332802092330",
+          "title": "工具二：用AI搭建自己的赛事分析工具【7】上",
+          "url": "https://www.douyin.com/video/7680794332802092330",
+          "source_record": "公开证据.json#/records/35"
+        }
+      ]
+    },
+    {
+      "id": "T03",
+      "name": "提示词与经验封装",
+      "episodes": [
+        7,
+        11,
+        15,
+        22
+      ],
+      "derived_method": "分开角色、规则、格式；给示例；分解任务；指定来源；缺失时明确报告；审核错误再补充规则。",
+      "conditions": "个人风格一致性不代表客观准确率提升；规则应在独立样本验证。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "落实结构化证据合同；提示规则不作为未经验证的参数。",
+      "sources": [
+        {
+          "video_id": "7689055240070384936",
+          "title": "工具二：同一个AI，今天聪明明天蠢？问题不在它，在你【22】",
+          "url": "https://www.douyin.com/video/7689055240070384936",
+          "source_record": "公开证据.json#/records/13"
+        },
+        {
+          "video_id": "7686085152715361570",
+          "title": "工具二：提示词进阶——让AI更精准的实战技巧【15】",
+          "url": "https://www.douyin.com/video/7686085152715361570",
+          "source_record": "公开证据.json#/records/21"
+        },
+        {
+          "video_id": "7684210234658704649",
+          "title": "工具二：怎么把AI调教成你的\"专属分析师\"【11下】",
+          "url": "https://www.douyin.com/video/7684210234658704649",
+          "source_record": "公开证据.json#/records/26"
+        },
+        {
+          "video_id": "7683865775035190569",
+          "title": "工具二：怎么把AI调教成你的\"专属分析师\"【11】上",
+          "url": "https://www.douyin.com/video/7683865775035190569",
+          "source_record": "公开证据.json#/records/27"
+        },
+        {
+          "video_id": "7681264091247234340",
+          "title": "工具二：用AI搭建自己的赛事分析工具【7】下",
+          "url": "https://www.douyin.com/video/7681264091247234340",
+          "source_record": "公开证据.json#/records/34"
+        },
+        {
+          "video_id": "7680794332802092330",
+          "title": "工具二：用AI搭建自己的赛事分析工具【7】上",
+          "url": "https://www.douyin.com/video/7680794332802092330",
+          "source_record": "公开证据.json#/records/35"
+        }
+      ]
+    },
+    {
+      "id": "T04",
+      "name": "多智能体协作",
+      "episodes": [
+        9
+      ],
+      "derived_method": "按独立分析维度分工；统一数据格式；协调者分发与汇总；按难度选模型；检查过度拆分、传递损耗及协调者过载。",
+      "conditions": "只有任务可独立且协调收益大于额外成本时才值得并行；视频未证明多Agent必然优于单模型。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "按模块分工；不自动启用代理或宣称多代理提高预测准确率。",
+      "sources": [
+        {
+          "video_id": "7683109387237395731",
+          "title": "工具二：用AI搭建自己的赛事分析工具【9】下",
+          "url": "https://www.douyin.com/video/7683109387237395731",
+          "source_record": "公开证据.json#/records/29"
+        },
+        {
+          "video_id": "7682740931828665600",
+          "title": "工具二：用AI搭建自己的赛事分析工具【9】中",
+          "url": "https://www.douyin.com/video/7682740931828665600",
+          "source_record": "公开证据.json#/records/30"
+        },
+        {
+          "video_id": "7682369019843824948",
+          "title": "工具二：用AI搭建自己的赛事分析工具【9】上",
+          "url": "https://www.douyin.com/video/7682369019843824948",
+          "source_record": "公开证据.json#/records/31"
+        }
+      ]
+    },
+    {
+      "id": "T05",
+      "name": "人机协作与认知偏差",
+      "episodes": [
+        10,
+        23,
+        32
+      ],
+      "derived_method": "划定信任区与审核区；选择主导模式；人做终审；要求反证；避免先透露倾向；统一呈现口径；对称检查。",
+      "conditions": "人工终审需要领域能力及可检查证据。AI自检和反方意见也可能出错。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "比赛路径须写反证；双方采用相同九类审计。",
+      "sources": [
+        {
+          "video_id": "7692816586712927515",
+          "title": "你不是眼光差，你是不敢赢又死扛输【32】",
+          "url": "https://www.douyin.com/video/7692816586712927515",
+          "source_record": "公开证据.json#/records/3"
+        },
+        {
+          "video_id": "7689431015441419556",
+          "title": "为什么翻车？因为系统里最大的Bug，是你自己【23】",
+          "url": "https://www.douyin.com/video/7689431015441419556",
+          "source_record": "公开证据.json#/records/12"
+        },
+        {
+          "video_id": "7683482524948909321",
+          "title": "工具二：人机协作——AI出初稿，人做终审【10】",
+          "url": "https://www.douyin.com/video/7683482524948909321",
+          "source_record": "公开证据.json#/records/28"
+        }
+      ]
+    },
+    {
+      "id": "T06",
+      "name": "复盘与残差诊断",
+      "episodes": [
+        14,
+        34
+      ],
+      "derived_method": "对照赛前判断与赛后事实；记录全部预测；建立错误日志；归类偏差；关注高信心错误；将修订版本留档。",
+      "conditions": "单场结果不能证明过程正确。需要足够样本区分随机波动与系统偏差。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "增加进球残差、概率质量、错误与按赛事分组诊断。",
+      "sources": [
+        {
+          "video_id": "7693535665513975075",
+          "title": "你的工具每次错，都错在同一个地方【34】",
+          "url": "https://www.douyin.com/video/7693535665513975075",
+          "source_record": "公开证据.json#/records/1"
+        },
+        {
+          "video_id": "7685679957435108662",
+          "title": "工具二：赛后复盘——用AI帮你检验自己的判断【14】",
+          "url": "https://www.douyin.com/video/7685679957435108662",
+          "source_record": "公开证据.json#/records/22"
+        }
+      ]
+    },
+    {
+      "id": "T07",
+      "name": "知识库与检索增强",
+      "episodes": [
+        16
+      ],
+      "derived_method": "整理来源和经验；存储；检索相关片段；基于证据生成；接入工作流；测试检索；维护过期信息。",
+      "conditions": "RAG提供外部参考，不等于模型自动学会或自动获得可靠长期记忆。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "保存12主题与42来源的可检索方法索引，非足球特征或自动训练。",
+      "sources": [
+        {
+          "video_id": "7686826903008759090",
+          "title": "工具二：给AI装上\"长期记忆\"——知识库增强【16】下",
+          "url": "https://www.douyin.com/video/7686826903008759090",
+          "source_record": "公开证据.json#/records/19"
+        },
+        {
+          "video_id": "7686464199408602402",
+          "title": "工具二：给AI装上\"长期记忆\"——知识库增强【16上】",
+          "url": "https://www.douyin.com/video/7686464199408602402",
+          "source_record": "公开证据.json#/records/20"
+        }
+      ]
+    },
+    {
+      "id": "T08",
+      "name": "成本、交付与运行",
+      "episodes": [
+        8,
+        17,
+        18,
+        21
+      ],
+      "derived_method": "记录Token消耗；按模块配置模型；定义交付标准；日志证据编号；版本快照与回滚；数据预取、队列限流、缓存。",
+      "conditions": "成本必须按当期模型单价及实际输入输出测量；缓存须考虑时效和权限；摘要未提供可复现压力测试结果。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "保存来源响应hash、版本和原始快照；无实际Token账单不声称成本下降。",
+      "sources": [
+        {
+          "video_id": "7688706860127489330",
+          "title": "工具二：可视化调试—AI胡言乱语时，怎么快速定位纠错（21）",
+          "url": "https://www.douyin.com/video/7688706860127489330",
+          "source_record": "公开证据.json#/records/14"
+        },
+        {
+          "video_id": "7687572144036891950",
+          "title": "工具二：商业化的抗压测试——应对高并发与成本暴增【18】",
+          "url": "https://www.douyin.com/video/7687572144036891950",
+          "source_record": "公开证据.json#/records/17"
+        },
+        {
+          "video_id": "7687227675844349226",
+          "title": "工具二：把你的AI系统变成可交付的“数字资产”【17】",
+          "url": "https://www.douyin.com/video/7687227675844349226",
+          "source_record": "公开证据.json#/records/18"
+        },
+        {
+          "video_id": "7682001570216660278",
+          "title": "工具二：Token成本核算与模型选型【8】下",
+          "url": "https://www.douyin.com/video/7682001570216660278",
+          "source_record": "公开证据.json#/records/32"
+        },
+        {
+          "video_id": "7681627637076315401",
+          "title": "工具二：Token成本核算与模型选型【8】上",
+          "url": "https://www.douyin.com/video/7681627637076315401",
+          "source_record": "公开证据.json#/records/33"
+        }
+      ]
+    },
+    {
+      "id": "T09",
+      "name": "概率与回测有效性",
+      "episodes": [
+        24,
+        25,
+        26,
+        28,
+        36
+      ],
+      "derived_method": "将模糊判断转为概率及依据；独立验证校准；按时间隔离；记录失败；跨样本验证；多指标制衡；标注特征可得时间。",
+      "conditions": "预测概率需要样本外检验；相关性可用于预测但不自动证明因果；测试集不能参与调参。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "增加概率可靠性分箱、Brier、LogLoss及时间和比分口径检查；不在诊断样本调参。",
+      "sources": [
+        {
+          "video_id": "7694267553970933026",
+          "title": "99%的人的回测是作弊，自己还不知道【36】",
+          "url": "https://www.douyin.com/video/7694267553970933026",
+          "source_record": "公开证据.json#/records/0"
+        },
+        {
+          "video_id": "7691284982601485578",
+          "title": "你越努力优化，结果反而越糟？问题可能出在你的尺子上【28】",
+          "url": "https://www.douyin.com/video/7691284982601485578",
+          "source_record": "公开证据.json#/records/7"
+        },
+        {
+          "video_id": "7690540421616880950",
+          "title": "你喂给AI的是信号还是噪音？【26】",
+          "url": "https://www.douyin.com/video/7690540421616880950",
+          "source_record": "公开证据.json#/records/9"
+        },
+        {
+          "video_id": "7690170103480061224",
+          "title": "你的工具回测胜率70%，为什么一上场就崩？【25】",
+          "url": "https://www.douyin.com/video/7690170103480061224",
+          "source_record": "公开证据.json#/records/10"
+        },
+        {
+          "video_id": "7689797821003779355",
+          "title": "AI说你\"八成能赢\"，它这个八成到底准不准？【24】",
+          "url": "https://www.douyin.com/video/7689797821003779355",
+          "source_record": "公开证据.json#/records/11"
+        }
+      ]
+    },
+    {
+      "id": "T10",
+      "name": "变化、复杂性与尾部风险",
+      "episodes": [
+        27,
+        29,
+        30,
+        31
+      ],
+      "derived_method": "做压力场景；预留容错；监测性能变化；滚动窗口；小范围更新；评估信号拥挤；快速纠错。",
+      "conditions": "滚动窗口和冷门信号不是效果保证；复杂系统与反馈回路需按具体机制验证。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "增加按开球顺序的窗口监测；没有证据不自动认定漂移或重训。",
+      "sources": [
+        {
+          "video_id": "7692399598832274739",
+          "title": "你花了很多心思养的工具，为什么还是会突然失灵？【31】",
+          "url": "https://www.douyin.com/video/7692399598832274739",
+          "source_record": "公开证据.json#/records/4"
+        },
+        {
+          "video_id": "7692037719953902911",
+          "title": "所有人都看到的规律，恰恰是最危险的那个【30】",
+          "url": "https://www.douyin.com/video/7692037719953902911",
+          "source_record": "公开证据.json#/records/5"
+        },
+        {
+          "video_id": "7691670563907063066",
+          "title": "你辛苦打磨的工具，可能正在悄悄过期【29】",
+          "url": "https://www.douyin.com/video/7691670563907063066",
+          "source_record": "公开证据.json#/records/6"
+        },
+        {
+          "video_id": "7690867413910441270",
+          "title": "为什么你躲过了99次坑，却偏偏栽在第100次【27】",
+          "url": "https://www.douyin.com/video/7690867413910441270",
+          "source_record": "公开证据.json#/records/8"
+        }
+      ]
+    },
+    {
+      "id": "T11",
+      "name": "期望值与决策收益",
+      "episodes": [
+        33
+      ],
+      "derived_method": "分别记录成功与失败的净收益；评价长期期望；比较预测准确率与收益目标。",
+      "conditions": "需扣除成本、误差、可执行性及风险；不将视频摘要的盈利主张作为可实现收益证明。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "区分命中、结算与收益，不把教学盈利措辞或等赔率余额当真实收益。",
+      "sources": [
+        {
+          "video_id": "7693167753791835392",
+          "title": "你胜率七成还在亏？因为你从来没算过这笔账【33】",
+          "url": "https://www.douyin.com/video/7693167753791835392",
+          "source_record": "公开证据.json#/records/2"
+        }
+      ]
+    },
+    {
+      "id": "T12",
+      "name": "战术推演与跨场景复用",
+      "episodes": [
+        13,
+        20
+      ],
+      "derived_method": "将阵型与对位结构化；模拟关键对位及比分情境；复用流水线到复盘、球员评估、转会分析。",
+      "conditions": "人名、阵型、伤停和事件必须来自可信来源；战术叙述具体不等于预测可靠。",
+      "classification": "研究者基于平台摘要归纳，非视频逐字原话",
+      "project_action": "以九类证据与路径反证审阅战术；完整数值战术融合仍待验证。",
+      "sources": [
+        {
+          "video_id": "7688314505331363082",
+          "title": "工具二：战术推演——怎么把职业教练的思维写进AI大脑【20】",
+          "url": "https://www.douyin.com/video/7688314505331363082",
+          "source_record": "公开证据.json#/records/15"
+        },
+        {
+          "video_id": "7685349676094147876",
+          "title": "工具二：多场景复用——从赛事分析到更多玩法【13】",
+          "url": "https://www.douyin.com/video/7685349676094147876",
+          "source_record": "公开证据.json#/records/23"
+        }
+      ]
+    }
+  ]
+}

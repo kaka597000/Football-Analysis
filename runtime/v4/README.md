@@ -1,6 +1,6 @@
-# WCPP 新主模型 1.1
+# WCPP 新主模型 1.2
 
-独立可运行的 `WCPP-MAIN-1.1`，不依赖无法恢复的 Champion 数值参数。用于当前研究执行；原 Champion V21.5 登记、永久 λ 和正式验证口径保留。当前正式 KPI 新增为零，未重新注册 500+200。
+独立可运行的 `WCPP-MAIN-1.2`，不依赖无法恢复的 Champion 数值参数。用于当前研究执行；原 Champion V21.5 登记、永久 λ 和正式验证口径保留。当前正式 KPI 新增为零，未重新注册 500+200。
 
 ## 分析前的赛事分类
 
@@ -27,6 +27,8 @@ python runtime/v4/cli.py classify fixture.json --out outputs/classification.json
 - 概率未证明经过未来校准，所有输出 `OBSERVE`，不声称目标准确率已经达到。
 
 ## 综合因素
+
+第一推荐的业务定义及九类决策核查见 [第一比分综合决策规范](../../docs/primary-score-decision-contract.md)。`primary` 是为研究与复盘保留的矩阵首选格，并不自动代表综合推荐；输出增加 `primary_basis`、`primary_label` 与 `comprehensive_primary_ready`。目前后者固定为 false，防止把基线或六块因素修正冒充已完成九类综合决策。实际Top1命中率目标是70%，不是要求单场概率达到70%。
 
 复用 0.3 的六块证据审计：实力、战意、跨赛事赛程、阵容可用性、战术和环境完整性。缺少数据保持未知，不能填零或直接改 λ。
 
@@ -65,3 +67,20 @@ python scripts/run_tests.py
 使用已经研究过的 6,748 场公开历史，属于开发诊断，不是新独立测试或未来验证。四个分组均未通过候选接受门槛，当前执行模型均为基线。真实参数摘要在 `models/main-v1/`，完整历史与可运行训练产物保存在云端 `reports/main-v1-release/`，不提交数据库或原始附件。
 
 英超选择出的候选在滚动测试命中 55/474，基线 57/474；改进未获证明。详情见 `docs/main-v1-validation.md`。
+
+## 1.2：研究包方法落实
+
+本次增加九类证据记录审计、5Dollar赛事调用审计及读取入口、历史概率与残差诊断、方法知识索引。不会由提示词或平台摘要直接改变比分矩阵。详细合同与启用边界见 [1.2 升级说明](../../docs/main-v1-2-upgrade.md)。
+
+```bash
+python runtime/v4/cli.py audit-decision fixture.json --out outputs/decision-audit.json
+python runtime/v4/cli.py fetch-feed --league-id VERIFIED_PROVIDER_LEAGUE_ID --start-time START_UNIX --end-time END_UNIX --out outputs/feed.json
+python runtime/v4/cli.py diagnose saved-prematch-forecasts.json sourced-results.json --population 20 --out outputs/diagnostics.json
+python runtime/v4/cli.py lookup-research --theme T09 --out outputs/research-reference.json
+```
+
+读取器先验证 `/status`，再使用既有已验证的 `/leagues/{id}/fixtures` 协议，逐页保存无密钥响应。联赛ID必须从真实供应商登记核实；每页 `has_more=true` 必须继续请求下一页，不能称覆盖完整。读取不自动证明比赛匹配，也不自动入库或进入模型。上例占位值须替换为整数。
+
+`decision_assessment` 是证据元数据和覆盖审计，不能证明叙述正确；即使18块文档齐全，`comprehensive_primary_ready` 仍为 false。`source_calls` 记录取得、用于分析、进入模型三个阶段，不能把 `/status` 当赛事数据。缺调用或缺证据会列入 OBSERVE 原因；允许研究留档记录缺口，不计正式KPI。
+
+1.0/1.1产物不能直接运行1.2。按新源码重新训练，禁止改旧产物的版本/hash冒充重建；旧预测、矩阵、复盘与源码快照保留。

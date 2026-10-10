@@ -13,8 +13,9 @@ from model import (aware, digest, validate_history, fit_strength, fit_nuisance,
                    fit_baseline, rates, matrix, probabilities, total_settlement, partitions)
 from context import assess
 from competition_router import classify, validate_training, format_audit, empirical_profile
+from decision_audit import assess_decision
 
-VERSION = 'WCPP-MAIN-1.1'
+VERSION = 'WCPP-MAIN-1.2'
 RECIPES = ('baseline', 'strength365', 'strength180', 'dc365', 'bivariate365', 'form180', 'blend180')
 FEATURES = ('recent_attack', 'opponent_recent_concede', 'recent_points',
             'opponent_recent_points', 'same_cohort_gap', 'opponent_same_cohort_gap')
@@ -24,7 +25,7 @@ CONFIG = {'recent_games': 6, 'recent_prior_games': 4, 'form_ridge': 20.,
 
 
 def code_hash():
-    paths = [ROOT/'v2/model.py', ROOT/'v2/evidence.py', ROOT/'v3/context.py', ROOT/'database/registry.py', Path(__file__), Path(__file__).with_name('context_learning.py'), Path(__file__).with_name('competition_router.py')]
+    paths = [ROOT/'v2/model.py', ROOT/'v2/evidence.py', ROOT/'v3/context.py', ROOT/'database/registry.py', Path(__file__), Path(__file__).with_name('context_learning.py'), Path(__file__).with_name('competition_router.py'), Path(__file__).with_name('decision_audit.py')]
     return digest({str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths})
 
 
@@ -281,6 +282,7 @@ def predict(artifact, fixture):
         for k in ('source_published_at','known_at'):
             if e.get(k) and aware(e[k]) > aware(e['query_time']): raise ValueError('later evidence publication/knowledge')
     review = assess(fixture)
+    decision = assess_decision(fixture)
     format_reasons = format_audit(fixture, fixture_route)
     review = dict(review, complete=review['complete'] and not format_reasons,
                   reasons=list(review['reasons']) + format_reasons)
@@ -302,7 +304,7 @@ def predict(artifact, fixture):
         side = max(('over','under'),key=lambda s: (over if s=='over' else under)['win']+.5*(over if s=='over' else under)['half_win']-.5*(over if s=='over' else under)['half_loss']-(over if s=='over' else under)['loss'])
         total = {'quote':quote,'over':over,'under':under,'reference_direction':side,
                  'direction_basis':'unit-odds settlement balance; not betting expected value'}
-    reasons = list(review['reasons']) + ['Prospective accuracy not established']
+    reasons = list(review['reasons']) + decision['reasons'] + ['Prospective accuracy not established']
     if not context_applied: reasons.append(context_reason)
     if fixture.get('market_conflict'): reasons.append('Unresolved market conflict')
     return {'version':VERSION,'role':'NEW_MAIN_RESEARCH','generated_at':now.isoformat(),'input':fixture,
@@ -310,7 +312,11 @@ def predict(artifact, fixture):
             'baseline_contract':baseline_contract(artifact),'code_hash':code_hash(),'matrix_hash':digest(m.tolist()),'matrix':m.tolist(),
             'recipe':artifact['execution_recipe'],'selected_candidate':artifact['selected_recipe'],'rates':meta,'primary':f'{primary[0]}-{primary[1]}',
             'primary_probability':float(m[primary]),'top3':[{'score':f'{i//len(m)}-{i%len(m)}','probability':float(m.ravel()[i])} for i in ranked],
+            'primary_basis':'CONTEXT_ADJUSTED_STATISTICAL' if context_applied else 'STATISTICAL_BASELINE',
+            'comprehensive_primary_ready':False,
+            'primary_label':'统计参考比分；九类综合决策尚未完成',
             'wdl':wd,'wdl_reference':max(wd,key=wd.get),'total':total,'context_assessment':review,
+            'decision_assessment':decision,
             'competition_route':fixture_route,'competition_format_reasons':format_reasons,
             'competition_profile':empirical_profile(stored,fixture),
             'context_numeric_adjustment_applied':context_applied,'market_numeric_adjustment_applied':False,

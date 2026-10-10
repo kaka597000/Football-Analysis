@@ -109,6 +109,45 @@
   },
   "market_policy": "最后校验与有界重排；不直接修改永久Football λ，市场单独不得翻Primary",
   "prohibited_sources": "中国体育彩票官网及镜像",
-  "api_5dollar_status": "最新用户授权启用；当前缺少WCPP_5DOLLAR_API_KEY，认证及竞彩权限未验证",
-  "model_constraints_changed": false
+  "api_5dollar_status": "本轮实测/status及日职乙赛事列表均HTTP200且API成功；联赛ID3492701972，2026-10-10北京时间窗口6场。其他联赛覆盖及阵容/xG/盘口权限仍须实际验证。",
+  "model_constraints_changed": false,
+  "api_5dollar_analysis_policy": {
+    "provider": "5DollarFootballAPI",
+    "base_url": "https://api.5dollarfootballapi.com/v1",
+    "documentation_url": "https://5dollarfootballapi.com/docs",
+    "credential_environment_variable": "WCPP_5DOLLAR_API_KEY",
+    "required_competitions": [
+      "日职联（J1）",
+      "日职乙（J2）",
+      "英超",
+      "西甲",
+      "德甲",
+      "意甲",
+      "法甲"
+    ],
+    "requirement": "分析上述赛事时实际调用接口；仅检查密钥存在或/status成功不能算已获取比赛数据。",
+    "workflow": [
+      "本次分析先验证/status，再依据官方文档使用适用且获授权的赛事数据端点。",
+      "核对赛事、球队、时间与比赛ID；取得可用赛程、近期赛果、过程、阵容与盘口字段，缺失项明确标注。",
+      "记录查询时间（UTC+8）、无密钥的请求定位、HTTP状态、取得字段、字段来源时间、缺失及失败原因。",
+      "明确区分数据已取得、已纳入分析和已作为模型输入；不宣称未运行的完整融合。",
+      "失败、权限不足或无赛事覆盖时记录事实并用官方或其他已验证来源补充。"
+    ],
+    "secrets": "密钥仅从环境变量读取，不写入文件或日志；审计去除认证信息及含密钥URL。",
+    "odds": "大小球使用实际取得且身份和时间可核验的盘口，缺失不补造；市场仍只用于最后校验和有界重排。",
+    "jingcai": "使用竞彩端点时固定types=jingcailottery；权限须实际验证。",
+    "status_verified_this_update": false,
+    "prior_connection_evidence": "此前任务/status验证成功；本次只保存调用要求，未重新调用或验证各联赛覆盖。",
+    "updated_at": "2026-10-10T19:34:02.077845+08:00",
+    "latest_smoke_test": {
+      "date_utc8": "2026-10-10",
+      "status_http": 200,
+      "fixture_http": 200,
+      "league_id": 3492701972,
+      "rows": 6,
+      "fixture_mapping_verified": false,
+      "model_ingestion_performed": false,
+      "scope": "J2 one-day fixture feed only"
+    }
+  }
 }

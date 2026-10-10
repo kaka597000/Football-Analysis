@@ -75,6 +75,13 @@ class Tests(unittest.TestCase):
         self.assertEqual(p['total']['quote']['line'],2.25)
         self.assertEqual(p['total']['quote']['quoted_at_status'],'UNKNOWN')
         self.assertAlmostEqual(sum(p['total']['over'].values()),1,12)
+        # A market-line change must not replace the football-model score.
+        q['line']=3.25
+        changed=predict(self.artifact(),f)
+        self.assertEqual(changed['primary'],p['primary'])
+        self.assertEqual(changed['matrix'],p['matrix'])
+        self.assertFalse(changed['comprehensive_primary_ready'])
+        self.assertEqual(changed['primary_basis'],'STATISTICAL_BASELINE')
         q['match_id']='other'
         with self.assertRaises(ValueError):predict(self.artifact(),f)
 
@@ -91,6 +98,16 @@ class Tests(unittest.TestCase):
         with self.assertRaises(ValueError):predict(self.artifact(),f)
         f=self.fixture();f['context_features']={'motivation':2}
         with self.assertRaises(ValueError):predict(self.artifact(),f)
+
+    def test_decision_evidence_is_audit_only_and_feed_scope_is_required(self):
+        f=self.fixture();before=predict(self.artifact(),f)
+        self.assertTrue(before['decision_assessment']['source_call_audit']['required'])
+        self.assertFalse(before['decision_assessment']['source_call_audit']['compliant'])
+        f['decision_evidence']={'home':{'motivation':{'status':'unknown','summary':'No verified standings'}}}
+        after=predict(self.artifact(),f)
+        self.assertEqual(before['matrix'],after['matrix'])
+        self.assertEqual(before['primary'],after['primary'])
+        self.assertFalse(after['comprehensive_primary_ready'])
 
     def test_research_freeze_tampering_and_overwrite(self):
         f=self.fixture();a=self.artifact();p=predict(a,f)
