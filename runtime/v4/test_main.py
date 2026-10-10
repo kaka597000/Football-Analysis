@@ -10,7 +10,7 @@ from review import evaluate
 def rows():
     start=datetime(2020,1,1,tzinfo=timezone.utc); out=[]
     for i in range(180):
-        out.append({'match_id':str(i),'cohort':'TEST','date':(start+timedelta(days=i)).date().isoformat(),
+        out.append({'match_id':str(i),'cohort':'eng.1','date':(start+timedelta(days=i)).date().isoformat(),
                     'home':'A' if i%2 else 'B','away':'B' if i%2 else 'A',
                     'home_goals':2 if i%2 else i%3,'away_goals':i%2,'score_basis':'regulation_90',
                     'source_url':'https://example.org/result','observed_at':'2026-01-01T00:00:00+00:00','neutral':False})
@@ -22,13 +22,13 @@ class Tests(unittest.TestCase):
         cls.rows=rows(); cls.form=form_training(cls.rows); cls.core=fit_core(cls.rows)
 
     def artifact(self):
-        return dict(version=VERSION,cohort='TEST',core=self.core,form=self.form,history=self.rows,
+        return dict(version=VERSION,cohort='eng.1',core=self.core,form=self.form,history=self.rows,
                     selected_recipe='form180',execution_recipe='form180',train_end=self.rows[-1]['date'],observed_at='2026-01-01T00:00:00+00:00',
                     built_at='2026-01-02T00:00:00+00:00',code_hash=code_hash(),config=CONFIG)
 
     def fixture(self):
         now=datetime.now(timezone.utc)
-        return dict(match_id='future',cohort='TEST',home='A',away='B',phase='PreMatch',identity_verified=True,
+        return dict(match_id='future',cohort='eng.1',home='A',away='B',phase='PreMatch',neutral=False,identity_verified=True,
                     cutoff_at=now.isoformat(),kickoff_at=(now+timedelta(days=2)).isoformat(),
                     sources=[dict(source_url='https://example.org/fixture',query_time=now.isoformat())])
 
@@ -109,7 +109,11 @@ class Tests(unittest.TestCase):
         with self.assertRaises(ValueError): train_context(self.artifact(),[{'forecast':predict(self.artifact(),self.fixture()),'result':{}}])
 
     def test_validated_context_applies_only_to_complete_official_evidence(self):
-        from test_pipeline import fixture as complete_fixture
+        from test_pipeline import fixture as legacy_complete_fixture
+        def complete_fixture():
+            f=legacy_complete_fixture();f['cohort']='eng.1';f['neutral']=False
+            for side in ('home','away'):f['context_audit'][side]['strength']['competition']='eng.1'
+            return f
         from context_learning import CONTRACT,baseline_contract
         from context import assess
         f=complete_fixture();f.pop('total_line');a=self.artifact()
@@ -129,7 +133,11 @@ class Tests(unittest.TestCase):
 
     def test_real_sample_contract_and_temporal_context_learning(self):
         # Synthetic dated freezes test learning plumbing; never count as real performance evidence.
-        from test_pipeline import fixture as complete_fixture
+        from test_pipeline import fixture as legacy_complete_fixture
+        def complete_fixture():
+            f=legacy_complete_fixture();f['cohort']='eng.1';f['neutral']=False
+            for side in ('home','away'):f['context_audit'][side]['strength']['competition']='eng.1'
+            return f
         from context_learning import baseline_contract,train_context
         a=self.artifact();base=complete_fixture();base.pop('total_line');samples=[]
         original=datetime.fromisoformat(base['kickoff_at'])

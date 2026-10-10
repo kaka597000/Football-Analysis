@@ -1,0 +1,9 @@
+{
+  "current_version": "WCPP-MAIN-1.1",
+  "research_only": true,
+  "artifacts": {
+    "EPL": "EPL.json"
+  },
+  "other_competitions": "Require classified history and independent retraining; old1.0 artifacts are not executable in1.1",
+  "formal_kpi_added": 0
+}

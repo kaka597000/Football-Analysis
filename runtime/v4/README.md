@@ -1,6 +1,20 @@
-# WCPP 新主模型 1.0
+# WCPP 新主模型 1.1
 
-独立可运行的 `WCPP-MAIN-1.0`，不依赖无法恢复的 Champion 数值参数。用于当前研究执行；原 Champion V21.5 登记、永久 λ 和正式验证口径保留。当前正式 KPI 新增为零，未重新注册 500+200。
+独立可运行的 `WCPP-MAIN-1.1`，不依赖无法恢复的 Champion 数值参数。用于当前研究执行；原 Champion V21.5 登记、永久 λ 和正式验证口径保留。当前正式 KPI 新增为零，未重新注册 500+200。
+
+## 分析前的赛事分类
+
+先执行 `competition_router.py`，再估计实力和比分矩阵。路由键同时包含赛事、男女、年龄、级别、俱乐部／国家队、赛事类型和阶段；同一赛事标签内部混入女足、青年、低级别或附加赛也会拒绝训练。已登记的32个明确赛事代码映射到成年男足；未知代码不默认男足，须提供有官方来源和时间戳的 `competition_classification`。女足、U17、U20、U23等分别训练与验证，不能直接复用成年男足参数。分类支持不代表已有这些类别的合格模型。
+
+英超、西甲等联赛不绑定“对攻／传控”的固定倍率。每次分析保存同路由、赛前截止时间可见、此前730天的进球、双方进球和平局统计；不足60场标记样本不足。这些仅为描述性背景，赛果数据不能推出控球风格或xG。数值仍须通过原有选择／接受门槛，球队实际战术证据优先于赛事印象。
+
+非普通联赛阶段增加官方赛制审计：阶段、单／两回合、第二回合前按本场主客顺序的总比分、客场进球规则、晋级局势、轮换、加时与点球规则，预测目标始终是90分钟。友谊赛另核换人和试阵；青年赛事另核该届年龄／超龄规则。缺少规则仍可保存标为OBSERVE的同路由研究矩阵，但禁止启用综合因素数值修正。未知赛事身份或中立场状态则停止预测。“剧本”不构成可用证据；只分析有来源的激励、规则和阵容变化。
+
+```bash
+python runtime/v4/cli.py classify fixture.json --out outputs/classification.json
+```
+
+`competition_rules` 字段及示例见 [分类升级说明](../../docs/competition-router-20261010.md)。旧1.0产物不能直接执行1.1；须从原历史重新训练并保留旧留档，不能仅修改版本或源码hash。
 
 ## 算法与启用规则
 
@@ -36,7 +50,7 @@ python scripts/run_tests.py
 
 历史输入沿用 0.2 的历史 JSON 合同，包括比赛身份、赛事分组、ISO 日期、90 分钟比分、来源 URL 与实际采集时间。未来预测需要模型构建和数据观察时间不晚于预测截止时间，历史日期早于开赛 UTC 日期，球队必须在模型中存在。源码 hash 不一致须重新训练。
 
-未来比赛至少提供 `match_id/cohort/home/away/phase/cutoff_at/kickoff_at/sources`，研究冻结另要求 `identity_verified=true`。详细 `context_audit` 合同见 0.3。手工 `context_features/total_line/market_quote/date` 禁止覆盖。
+未来比赛至少提供 `match_id/cohort/home/away/phase/cutoff_at/kickoff_at/sources/neutral`，其中 `neutral` 必须为明确布尔值；未知赛事另附正式分类证据，非普通联赛阶段附 `stage/competition_rules`。研究冻结另要求 `identity_verified=true`。详细 `context_audit` 合同见 0.3。手工 `context_features/total_line/market_quote/date` 禁止覆盖。
 
 大小球只接收 `total_quote`：`verified=true`、匹配的 `match_id`、机构 `bookmaker`、HTTPS `source_url`、`query_time`、真实 `line` 和明确 `market=asian_total|standard_total`。可附 `quoted_at`；缺少报价时刻标记 UNKNOWN，不声称实时或亚洲主盘。没有报价则 `total=null`，不得回退到 2.5。当前没有市场数值重排，方向比较是等赔率结算余额，不是投注收益计算。
 

@@ -1,0 +1,86 @@
+{
+  "version": "WCPP-MAIN-1.1",
+  "role": "NEW_MAIN_RESEARCH",
+  "cohort": "EPL",
+  "competition_route": {
+    "contract": "wcpp-competition-router-1",
+    "complete": true,
+    "reasons": [],
+    "classification": {
+      "competition": "eng.1",
+      "gender": "men",
+      "age": "senior",
+      "level": "tier1",
+      "entity": "club",
+      "kind": "league",
+      "stage": "regular"
+    },
+    "route_key": "eng.1|men|senior|tier1|club|league|regular",
+    "requirements": [
+      "opponent_adjusted_strength",
+      "objective_and_draw_acceptability",
+      "all_competition_previous14_next7_schedule",
+      "official_lineup_and_rotation",
+      "team_tactical_matchup",
+      "venue_travel_weather",
+      "actual_bookmaker_total_line"
+    ],
+    "provenance": {
+      "registry": "runtime/database/registry.py",
+      "identity_basis": "explicit competition-code mapping"
+    }
+  },
+  "selected_recipe": "strength180",
+  "execution_recipe": "baseline",
+  "acceptance": {
+    "top1_difference": -0.004219409282700426,
+    "date_cluster_bootstrap95": [
+      -0.014953370876268073,
+      0.004651162790697674
+    ],
+    "acceptance_gate_passed": false,
+    "draws": 2000,
+    "rule": "positive lower Top1 interval, nonworse score log loss and WDL Brier; no test-based reselection",
+    "formal_promotion": false
+  },
+  "train_end": "2026-05-24",
+  "observed_at": "2026-10-07T07:13:12.621361+00:00",
+  "built_at": "2026-10-10T01:25:26.415392+00:00",
+  "code_hash": "48d4071e05bf5cf6d8972a379f8e8c6979dcde6733f1d9d4d8fbac384b377b73",
+  "formal_validation": false,
+  "formal_freeze_eligible": false,
+  "legacy_champion_unchanged": "V21.5",
+  "permanent_lambda_modified": false,
+  "history_count": 2280,
+  "history_hash": "2172dfb10db01e583eeb6718e29c1807364fbddb4fedac8529a16f48090be50f",
+  "artifact_path": "/workspace/WCPP/reports/main-v1.1-current/EPL/artifact.json",
+  "test": {
+    "baseline": {
+      "n": 474,
+      "primary_hits": 57,
+      "top1": 0.12025316455696203,
+      "score_log_loss": 2.891314840236465,
+      "wdl_hits": 231,
+      "wdl_accuracy": 0.4873417721518987,
+      "wdl_brier": 0.6142197357476943,
+      "diagnostic_fixed_2_5_hits": 263,
+      "diagnostic_fixed_2_5_accuracy": 0.5548523206751055,
+      "diagnostic_fixed_2_5_brier": 0.2517707039718065,
+      "unseen_team_matches": 3
+    },
+    "strength180": {
+      "n": 474,
+      "primary_hits": 55,
+      "top1": 0.1160337552742616,
+      "score_log_loss": 2.891428843027255,
+      "wdl_hits": 231,
+      "wdl_accuracy": 0.4873417721518987,
+      "wdl_brier": 0.6142553168219905,
+      "diagnostic_fixed_2_5_hits": 259,
+      "diagnostic_fixed_2_5_accuracy": 0.5464135021097046,
+      "diagnostic_fixed_2_5_brier": 0.251499911051588,
+      "unseen_team_matches": 3
+    }
+  },
+  "target_attainment_proven": false
+}

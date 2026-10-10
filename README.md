@@ -2,7 +2,7 @@
 
 足球赛事研究与赛前预测项目：输出唯一精确比分参考、胜平负概率及指定大小球盘口的结算概率，并保存证据、完整比分矩阵与研究记录。
 
-目前运行的是独立云端候选0.3，包含战意、实力、全赛事赛程、阵容、战术与场地条件审计。原Champion V21.5完整数值执行链尚未恢复，保持原身份；没有证明精确比分70%或胜平负/大小球80%的目标已实现。
+目前研究入口是独立新主模型1.1，先区分赛事级别、男女、年龄、类型和阶段，再审计战意、实力、全赛事赛程、阵容、战术与场地条件。原Champion V21.5完整数值执行链尚未恢复，保持原身份；没有证明精确比分70%或胜平负/大小球80%的目标已实现。
 
 ## 安装与测试
 
@@ -17,20 +17,20 @@ python -m pip install -r requirements.txt
 python scripts/run_tests.py
 ```
 
-四组测试分别运行：原基线、候选0.2、上下文候选0.3和天皇杯数据库解析器。测试可离线运行；合成测试资料不用于训练或准确率证明。GitHub Actions会在push和pull request时运行同一命令。
+六组测试分别运行：原基线、候选0.2、上下文候选0.3、新主模型、天皇杯解析器和统一数据库。测试可离线运行；合成测试资料不用于训练或准确率证明。GitHub Actions会在push和pull request时运行同一命令。
 
 ## 当前研究入口
 
 先准备真实模型产物和带来源、查询时间的赛前输入；这些文件在本地保存，仓库没有捏造的生产参数。
 
 ```bash
-python runtime/v3/cli.py audit fixture.json --out outputs/audit.json
-python runtime/v3/cli.py predict model.json fixture.json --out outputs/draft.json
+python runtime/v4/cli.py classify fixture.json --out outputs/classification.json
+python runtime/v4/cli.py predict model.json fixture.json --out outputs/draft.json
 ```
 
-输出文件拒绝覆盖。缺少官方阵容、完整全赛事赛程或其他关键证据时，结果标为OBSERVE，阻止研究冻结。只有兼容且独立验证的上下文系数才修正数值；未知数据不填零，不任意乘上“战意/疲劳系数”。
+输出文件拒绝覆盖。缺少官方阵容、完整全赛事赛程或其他关键证据时，结果标为OBSERVE，不能作为正式冻结；可保存完整矩阵的观察性研究留档。只有兼容且独立验证的上下文系数才修正数值；未知数据不填零，不任意乘上“战意/疲劳系数”。
 
-详细字段与训练、冻结、验收命令见[runtime/v3/README.md](runtime/v3/README.md)。
+详细字段与训练、冻结、验收命令见[runtime/v4/README.md](runtime/v4/README.md)。
 
 ## 项目结构
 
@@ -39,6 +39,8 @@ python runtime/v3/cli.py predict model.json fixture.json --out outputs/draft.jso
 | runtime/ | 原云端基线与Shadow研究实现 |
 | runtime/v2/ | 对手强度校正、比分分布、校准与时间留出验证 |
 | runtime/v3/ | 有来源的上下文特征、推荐门控及研究验收 |
+| runtime/v4/ | 新主模型、赛事分类隔离、赛制审计与同类赛事统计 |
+| runtime/database/ | 统一赛事来源、身份、赛果和定时更新 |
 | runtime/emperor_cup/ | JFA官方赛果解析与独立SQLite扩展库 |
 | tests/fixtures/ | 人工构造的离线解析测试资料 |
 | docs/ | 当前状态、历史规范与验证结论 |
@@ -69,7 +71,7 @@ git push origin main
 
 ## 当前新主模型
 
-当前研究执行入口为 [WCPP-MAIN-1.0](runtime/v4/README.md)，独立于原 Champion 参数。候选未通过验证时执行基线，完整结果见 [验证说明](docs/main-v1-validation.md)。
+当前研究执行入口为 [WCPP-MAIN-1.1](runtime/v4/README.md)，独立于原 Champion 参数。分类与赛制升级见 [说明](docs/competition-router-20261010.md)。候选未通过验证时执行基线，既有历史开发诊断见 [验证说明](docs/main-v1-validation.md)。
 
 ## 统一赛事库与赛果更新
 

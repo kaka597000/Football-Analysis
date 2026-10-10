@@ -3,6 +3,7 @@ from datetime import datetime, timezone, timedelta
 from main_model import VERSION, aware, digest, url, code_hash
 from context import assess
 from evidence import validate_context, context_rates
+from competition_router import classify, validate_training, format_audit
 
 CONTRACT = 'wcpp-main-source-backed-context-1'
 POISSON_RECIPES = ('baseline','strength365','strength180','form180')
@@ -10,7 +11,8 @@ POISSON_RECIPES = ('baseline','strength365','strength180','form180')
 
 def baseline_contract(artifact):
     return digest({'version':VERSION,'code_hash':code_hash(),'config':artifact['config'],
-                   'cohort':artifact['cohort'],'recipe':artifact['execution_recipe']})
+                   'cohort':artifact['cohort'],'route_key':validate_training(artifact['history'])['route_key'],
+                   'recipe':artifact['execution_recipe']})
 
 
 def prepare(samples,artifact):
@@ -33,6 +35,10 @@ def prepare(samples,artifact):
         if not kickoff+timedelta(minutes=90) <= aware(r['observed_at']) <= now: raise ValueError('invalid result timing')
         if any(type(r[k]) is not int or not 0<=r[k]<=30 for k in ('home_goals','away_goals')): raise ValueError('invalid target goals')
         review=assess(fixture)
+        route=classify(fixture)
+        if not route['complete'] or route['route_key'] != validate_training(artifact['history'])['route_key']:
+            raise ValueError('context training competition route mismatch')
+        if format_audit(fixture,route): raise ValueError('context training competition rules incomplete')
         if not review['complete'] or any(e['source_tier']!='L1' for e in review['evidence']):
             raise ValueError('complete official source-backed context required for numerical training')
         rows.append({'cohort':fixture['cohort'],'kickoff_at':fixture['kickoff_at'],'cutoff_at':fixture['cutoff_at'],

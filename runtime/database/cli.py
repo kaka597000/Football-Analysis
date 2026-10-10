@@ -43,6 +43,9 @@ def main():
     if args.command=='repair':
         repair_cached(store);store.curated_aliases();store.bridge();store.project()
     if args.command=='export':
+        import sys
+        sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'v4'))
+        from competition_router import classify
         rows=[]
         for r in store.db.execute('SELECT * FROM training_90 ORDER BY date,match_id'):
             cohort=r['competition']+(':'+r['stage'] if r['stage'] and r['stage'] not in ('regular','regular-season') else '')
@@ -50,6 +53,15 @@ def main():
             times=[e['observed_at'] for e in evidence if e['observed_at']]
             from store import timestamp
             rows.append(dict(match_id='unified:'+r['match_id'],cohort=cohort,competition=r['competition'],season=r['season'],stage=r['stage'],date=r['date'],kickoff_at=r['kickoff_utc'],home=r['home_id'],away=r['away_id'],home_name=r['home'],away_name=r['away'],home_goals=r['h90'],away_goals=r['a90'],score_basis='regulation_90',first_known_at=None,observed_at=max(times,key=timestamp) if times else None,source_url=next((e['url'] for e in evidence if e['url']),None),source_observation_ids=[e['obs_id'] for e in evidence]))
+            route=classify(rows[-1])
+            rows[-1]['source_stage']=rows[-1]['stage']
+            if route['complete']:
+                stage=route['classification']['stage']
+                rows[-1]['stage']=stage
+                rows[-1]['cohort']=r['competition']+(':'+stage if stage not in ('regular','friendly') else '')
+            rows[-1]['competition_route']=route
+            rows[-1]['classification_training_eligible']=route['complete']
+            rows[-1]['neutral']=None  # No neutral-venue evidence is stored in this projection.
         dest=root/'data/unified/training-90.json';dest.write_text(json.dumps(rows,ensure_ascii=False,indent=2))
     audit=store.audit();audit.update(run_id=run_id,started_at=started,finished_at=now(),database=str(path),
                                     canonical_sha256_before=before,canonical_sha256_after=hashlib.sha256(original.read_bytes()).hexdigest() if original.exists() else None,

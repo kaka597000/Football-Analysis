@@ -12,8 +12,9 @@ sys.path.insert(0, str(ROOT / 'v3'))
 from model import (aware, digest, validate_history, fit_strength, fit_nuisance,
                    fit_baseline, rates, matrix, probabilities, total_settlement, partitions)
 from context import assess
+from competition_router import classify, validate_training, format_audit, empirical_profile
 
-VERSION = 'WCPP-MAIN-1.0'
+VERSION = 'WCPP-MAIN-1.1'
 RECIPES = ('baseline', 'strength365', 'strength180', 'dc365', 'bivariate365', 'form180', 'blend180')
 FEATURES = ('recent_attack', 'opponent_recent_concede', 'recent_points',
             'opponent_recent_points', 'same_cohort_gap', 'opponent_same_cohort_gap')
@@ -23,13 +24,15 @@ CONFIG = {'recent_games': 6, 'recent_prior_games': 4, 'form_ridge': 20.,
 
 
 def code_hash():
-    paths = [ROOT/'v2/model.py', ROOT/'v2/evidence.py', ROOT/'v3/context.py', Path(__file__), Path(__file__).with_name('context_learning.py')]
+    paths = [ROOT/'v2/model.py', ROOT/'v2/evidence.py', ROOT/'v3/context.py', ROOT/'database/registry.py', Path(__file__), Path(__file__).with_name('context_learning.py'), Path(__file__).with_name('competition_router.py')]
     return digest({str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths})
 
 
 def history(rows):
     rows = validate_history(rows)
+    validate_training(rows)
     for r in rows:
+        if type(r.get('neutral')) is not bool: raise ValueError('historical neutral venue must be explicit')
         for k in ('home', 'away'):
             if not isinstance(r[k], str) or not r[k]: raise ValueError('invalid team name')
         if r['home'] == r['away']: raise ValueError('same team fixture')
@@ -196,6 +199,7 @@ def comparison(candidate, baseline):
 
 def train(rows):
     rows = history(rows)
+    route = validate_training(rows)
     first, second, select, test = partitions(rows); initial = first+second
     form = form_training(initial)
     selection, sfolds = rolling(rows,select,form)
@@ -203,7 +207,7 @@ def train(rows):
     tested, tfolds = rolling(rows,test,form,('baseline',recipe) if recipe != 'baseline' else ('baseline',))
     acceptance = comparison(tested[recipe],tested['baseline'])
     execution = recipe if acceptance['acceptance_gate_passed'] else 'baseline'
-    report = {'version':VERSION,'cohort':rows[0]['cohort'],'mode':'RETROSPECTIVE_DATE_ORDER_DIAGNOSTIC',
+    report = {'version':VERSION,'cohort':rows[0]['cohort'],'competition_route':route,'mode':'RETROSPECTIVE_DATE_ORDER_DIAGNOSTIC',
               'formal_validation':False,'previously_inspected_history':True,
               'selection_rule':'rolling selection Top1 improvement and score-log-loss guard versus baseline; test never selects',
               'config':CONFIG,'selected_recipe':recipe,'execution_recipe':execution,'acceptance':acceptance,'dataset_hash':digest(rows),'code_hash':code_hash(),
@@ -215,7 +219,7 @@ def train(rows):
                              'OU2.5 is a fixed-line diagnostic, not actual market accuracy',
                              'a development comparison cannot prove target attainment'],
               'legacy_champion_unchanged':'V21.5','target_attainment_proven':False,'formal_kpi_added':0}
-    artifact = {'version':VERSION,'role':'NEW_MAIN_RESEARCH','cohort':rows[0]['cohort'],
+    artifact = {'version':VERSION,'role':'NEW_MAIN_RESEARCH','cohort':rows[0]['cohort'],'competition_route':route,
                 'selected_recipe':recipe,'execution_recipe':execution,'acceptance':acceptance,'core':fit_core(rows),'form':form_training(rows),
                 'history':rows,'train_end':rows[-1]['date'],
                 'observed_at':max(r['observed_at'] for r in rows),'built_at':datetime.now(timezone.utc).isoformat(),
@@ -254,6 +258,12 @@ def predict(artifact, fixture):
     if artifact.get('version') != VERSION or artifact['code_hash'] != code_hash(): raise ValueError('artifact/code mismatch')
     if artifact.get('config') != CONFIG: raise ValueError('artifact/config mismatch')
     stored = history(artifact['history'])
+    trained_route = validate_training(stored)
+    fixture_route = classify(fixture)
+    if not fixture_route['complete']: raise ValueError('Cannot predict unclassified competition: ' + '; '.join(fixture_route['reasons']))
+    if fixture_route['route_key'] != trained_route['route_key']: raise ValueError('competition route mismatch; separate model required')
+    if artifact.get('competition_route', trained_route) != trained_route: raise ValueError('artifact/route mismatch')
+    if type(fixture.get('neutral')) is not bool: raise ValueError('Explicit neutral venue required before prediction')
     if stored[-1]['date'] != artifact['train_end'] or stored[0]['cohort'] != artifact['cohort']:
         raise ValueError('artifact/history mismatch')
     if max(aware(r['observed_at']) for r in stored) > aware(artifact['observed_at']):
@@ -271,6 +281,9 @@ def predict(artifact, fixture):
         for k in ('source_published_at','known_at'):
             if e.get(k) and aware(e[k]) > aware(e['query_time']): raise ValueError('later evidence publication/knowledge')
     review = assess(fixture)
+    format_reasons = format_audit(fixture, fixture_route)
+    review = dict(review, complete=review['complete'] and not format_reasons,
+                  reasons=list(review['reasons']) + format_reasons)
     m, meta = distribution(artifact['core'],artifact['form'],artifact['history'],fixture,artifact['execution_recipe'])
     if meta['unseen_teams']: raise ValueError('unseen teams unsupported for main-model prediction')
     from context_learning import adjusted_rates, baseline_contract
@@ -298,6 +311,8 @@ def predict(artifact, fixture):
             'recipe':artifact['execution_recipe'],'selected_candidate':artifact['selected_recipe'],'rates':meta,'primary':f'{primary[0]}-{primary[1]}',
             'primary_probability':float(m[primary]),'top3':[{'score':f'{i//len(m)}-{i%len(m)}','probability':float(m.ravel()[i])} for i in ranked],
             'wdl':wd,'wdl_reference':max(wd,key=wd.get),'total':total,'context_assessment':review,
+            'competition_route':fixture_route,'competition_format_reasons':format_reasons,
+            'competition_profile':empirical_profile(stored,fixture),
             'context_numeric_adjustment_applied':context_applied,'market_numeric_adjustment_applied':False,
             'recommendation_status':'OBSERVE','reasons':reasons,'probability_calibration_status':'NOT_PROSPECTIVELY_VALIDATED',
             'freeze_status':'DRAFT_NOT_FROZEN','formal_kpi_eligible':False,
