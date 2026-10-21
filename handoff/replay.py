@@ -64,6 +64,7 @@ def main():
             route[key] = str(root/mappings[route[key]])
     adapted = dict(original_registry, models={fixture['cohort']:route})
     out.mkdir(parents=True)
+    os.environ['MPLCONFIGDIR'] = str(out/'matplotlib-cache')
     write(out/'registry.mapped.json', adapted)
     original_main = root/'source/runtime/predict_active.py'
     sys.path.insert(0, str(original_main.parent))
@@ -79,6 +80,7 @@ def main():
     active = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(active)
     sys.path.insert(0, str(original_main.parent/'continental'))
+    sys.path.insert(0, str(original_main.parent/'upset'))
     import ucl_ml
     import classifier
     from upset_v2 import predict as candidate
