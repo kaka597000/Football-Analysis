@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "archive": "/workspace/handoffs/wcpp-handoff-20261021-0956/WCPP_双模型交接包_20261021.zip",
+  "bytes": 1387486,
+  "sha256": "b26a56ca5c8c7cfb9c1adaddc41e4def2fd831be7262bae5bbaa6fa5f956f6e5",
+  "archive_integrity": "PASS",
+  "manifest_files": 238,
+  "checkpoint_commit": "d7c0d214369db04bf5c9deb2fa7b14d8df23c944",
+  "source_files": 197,
+  "changed_files": 105,
+  "extracted_replay_status": "PASS",
+  "original_workspace_read_denied": true,
+  "cross_cloud_replay_not_yet_executed": true,
+  "original_state": {
+    "checked_at_beijing": "2026-10-21T09:59:08.733728+08:00",
+    "source_file_count": 193,
+    "source_files_changed": [],
+    "original_head_unchanged": true,
+    "original_branch_unchanged": true,
+    "original_status_unchanged": true,
+    "canonical_database_sha256_before": "3d2de1064536d8b4029e2df6bd3ec227af15324e7ff7803413046c74823fdaea",
+    "canonical_database_sha256_after": "3d2de1064536d8b4029e2df6bd3ec227af15324e7ff7803413046c74823fdaea",
+    "canonical_database_unchanged": true,
+    "checkpoint_worktree_clean": true
+  }
+}
