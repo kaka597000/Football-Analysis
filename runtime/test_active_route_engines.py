@@ -14,6 +14,7 @@ REGISTRY = Path('/workspace/WCPP/runtime/active-model.json')
 
 
 class ActiveRouteEngineTests(unittest.TestCase):
+    @unittest.skipUnless(REGISTRY.is_file(), 'external active registry required')
     def test_four_requested_routes_are_hash_locked(self):
         registry = json.loads(REGISTRY.read_text())
         self.assertEqual(registry['version'], 'WCPP-DUAL-4')
@@ -26,6 +27,7 @@ class ActiveRouteEngineTests(unittest.TestCase):
                 actual = hashlib.sha256(path.read_bytes()).hexdigest()
                 self.assertEqual(actual, route[prefix + 'artifact_sha256'])
 
+    @unittest.skipUnless(REGISTRY.is_file(), 'external active registry required')
     def test_afc_elite_route_is_phase_isolated(self):
         route = json.loads(REGISTRY.read_text())['models'][
             'afc.champions:ELITE:league_phase']
@@ -34,6 +36,7 @@ class ActiveRouteEngineTests(unittest.TestCase):
         self.assertIn('LEGACY_CHAMPIONS', route['excluded'])
         self.assertIn('afc.champions_two', route['excluded'])
 
+    @unittest.skipUnless(Path('/workspace/WCPP/models/active-routes-20261027/afc.champions-ELITE-league_phase').is_dir(), 'external AFC artifacts required')
     def test_today_afc_provider_team_map_has_no_cold_start_target(self):
         root = Path('/workspace/WCPP/models/active-routes-20261027/'
                     'afc.champions-ELITE-league_phase')

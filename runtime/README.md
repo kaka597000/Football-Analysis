@@ -1,4 +1,6 @@
-# WCPP 云端数值实现 0.1
+# 历史实现：WCPP 云端数值实现 0.1
+
+本页仅说明旧版独立基线。当前活动双模型入口为`runtime/predict_active.py`，以仓库根README.md及AGENTS.md为准；下文版本和冻结限制是此历史工具自身的行为，不能替代最新项目规则。
 
 HELLO BOSS。该实现是新的 Challenger，Python 3.12 标准库即可运行，没有第三方依赖。不是原 V21.5 Champion 恢复，不代表已提升精确比分 Top1。使用已有云端目录，不创建 Git worktree。
 

@@ -6,7 +6,9 @@ sys.path.insert(0,str(ROOT/'continental'));import ucl_ml as ml
 import train_queues as q
 class Tests(unittest.TestCase):
  def rows(self):
-  r=json.loads(Path('/workspace/WCPP/reports/ucl-onboarding-20261013/training-new-format-league_phase.json').read_text());return r if isinstance(r,list) else r['rows']
+  p=Path('/workspace/WCPP/reports/ucl-onboarding-20261013/training-new-format-league_phase.json')
+  if not p.is_file():self.skipTest('external UCL historical dataset required')
+  r=json.loads(p.read_text());return r if isinstance(r,list) else r['rows']
  def test_partial_process_preserves_real_sot_and_possession(self):
   r=self.rows();target=r[160];past=[x for x in r if x['date']<target['date']];f=ml.side_features(past,target['home'],target['date'],True)
   self.assertTrue(math.isfinite(f[-4]));self.assertTrue(math.isnan(f[-3]));self.assertTrue(math.isfinite(f[-2]));self.assertGreater(f[-1],0);self.assertLessEqual(f[-1],2/3)

@@ -1,4 +1,4 @@
-import sys,copy,unittest
+import sys,copy,unittest,tempfile,json,hashlib,os
 from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
@@ -6,6 +6,12 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'v6'))
 import predict_active,ml_model
 from weighted_model import legacy
 class DispatcherTests(unittest.TestCase):
+ def setUp(self):
+  self.folder=tempfile.TemporaryDirectory();self.addCleanup(self.folder.cleanup)
+  root=Path(self.folder.name);anchor=root/'anchor.json';ml=root/'ml.json'
+  anchor.write_text(json.dumps({'anchor':{'train_end':'2020-01-01'}}));ml.write_text('{}')
+  reg=root/'registry.json';reg.write_text(json.dumps({'version':'SYNTHETIC-TEST-ONLY','status':'ACTIVE_RESEARCH','models':{'eng.1':{'artifact_path':str(anchor),'artifact_sha256':hashlib.sha256(anchor.read_bytes()).hexdigest(),'test_artifact_path':str(ml),'test_artifact_sha256':hashlib.sha256(ml.read_bytes()).hexdigest()}}}))
+  env=patch.dict(os.environ,{'WCPP_ACTIVE_MODEL':str(reg)});env.start();self.addCleanup(env.stop)
  def test_sidecar_failure_does_not_change_either_main_output(self):
   fixture={'match_id':'synthetic-test-only','cohort':'eng.1','cutoff_at':'2026-10-13T00:00:00+00:00'}
   current={'input':fixture,'primary':'1-0','wdl':{'主胜':.6,'平局':.2,'客胜':.2},'matrix':[[.1,.2],[.5,.2]],'matrix_hash':legacy.digest([[.1,.2],[.5,.2]])}
@@ -16,6 +22,8 @@ class DispatcherTests(unittest.TestCase):
   self.assertFalse(result['execution_audit']['prediction_values_modified'])
   self.assertEqual(result['execution_audit']['fixture_sha256'],predict_active.object_sha256(fixture))
   self.assertTrue(result['execution_audit']['entrypoint_sha256'])
+  self.assertEqual(result['execution_audit']['source_identity']['status'],'GIT_IDENTIFIED')
+  self.assertEqual(len(result['execution_audit']['source_identity']['commit']),40)
   self.assertEqual(result['current_test_disagreement']['status'],'READY')
   self.assertTrue(result['current_test_disagreement']['primary_disagreement'])
  def test_candidate_failure_does_not_change_either_main_output(self):

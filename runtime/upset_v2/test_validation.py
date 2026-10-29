@@ -4,6 +4,7 @@ import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from upset_v2 import train
 class ValidationTest(unittest.TestCase):
+ @unittest.skipUnless(Path('/workspace/WCPP/reports/python-upset-20261013/enriched-history-research-xg.json').is_file() and Path('/workspace/WCPP/models/upset-20261013/esp.1/report.json').is_file(), 'external upset training history and prior report required')
  def test_test_outcomes_do_not_select_models_blends_or_hyperparameters(self):
   # Perturbed real history is a software test, not a model-performance result.
   rows=json.loads(Path('/workspace/WCPP/reports/python-upset-20261013/enriched-history-research-xg.json').read_text());rows=[r for r in rows if r['cohort']=='esp.1'];prior=json.loads(Path('/workspace/WCPP/models/upset-20261013/esp.1/report.json').read_text());changed=copy.deepcopy(rows)

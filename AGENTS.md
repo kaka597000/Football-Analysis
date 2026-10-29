@@ -2,6 +2,8 @@
 
 # WCPP 项目工作规则
 
+- **2026-10-29采集与版本管理**：默认批量入口为 `python runtime/data_sources/cli.py --plan PLAN.json --cache-dir /workspace/WCPP/cache/api-first --out NEW.json`。先读适用接口/已有缓存，独立服务并行、同服务限速，按赛事/日期复用请求；API阶段结束后只把实际未补齐字段交给gpt-6-luna查公开网页。ESPN/FotMob公共JSON计入接口阶段；首发历史列表、空伤停、陈旧盘口不算已补齐。完整流程见docs/api-first-collection.md。完成一次可交付变更即测试、提交、推送并核验远端HEAD，按docs/version-management.md执行；不新建定时任务。此条替代先大范围网页搜索的旧流程。
+
 - **2026-10-19输出要求**：每批分析结尾列最推荐TOP3赛事，含胜平负、实际盘口大小球及唯一综合第一比分、排序理由；当前/test继续独立，名单和排序随分析赛前冻结，复盘单列且不替代全批统计。不足三场不强凑。完整规范见 docs/user-primary-score-requirements.md 的TOP3条款。
 
 每次足球预测或复盘先读 [用户核心需求](docs/user-primary-score-requirements.md) 和 `/workspace/WCPP/AGENTS.md`；需要模型推理时再读取 `/workspace/WCPP/runtime/active-model.json`。

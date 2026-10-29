@@ -1,0 +1,4 @@
+-r runtime/v6/requirements.txt
+xgboost-cpu==3.4.1
+catboost==1.2.10
+optuna==5.0.0

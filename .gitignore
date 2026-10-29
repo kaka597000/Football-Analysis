@@ -22,3 +22,10 @@ outputs/
 *.zip
 *.csv
 *.log
+cache/
+checkpoints/
+*.tar.gz
+*.7z
+*.pkl
+*.parquet
+*.jsonl

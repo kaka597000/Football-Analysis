@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime,timedelta,timezone
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from upset_v2 import predict as m
+@unittest.skipUnless(Path('/workspace/WCPP/runtime/upset-candidates.json').is_file(), 'external upset model registry required')
 class PredictionTest(unittest.TestCase):
  def fixture(self):
   now=datetime.now(timezone.utc);cut=now.isoformat()

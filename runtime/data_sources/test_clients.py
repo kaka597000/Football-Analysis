@@ -14,6 +14,34 @@ class Response(io.BytesIO):
 
 
 class Tests(unittest.TestCase):
+    def test_query_authenticated_services_never_persist_key_or_redirect_it(self):
+        for provider, binding, path, params, parameter in (
+                ('the-odds-api', 'manyzhishu_theodds_sports', '/sports', {}, 'apiKey'),
+                ('apifootball-com', 'apifootball2', '/', {'action': 'get_events'}, 'APIkey')):
+            key = 'TEST_QUERY_KEY_NOT_REAL_123456'
+            def opener(req, **kwargs):
+                self.assertIn(parameter + '=' + key, req.full_url)
+                return Response([{'message': 'echo ' + key, 'apiKey': key}])
+            with self.subTest(provider=provider), patch.dict(os.environ, {binding: key}, clear=True):
+                result = fetch(provider, path, params, opener=opener)
+            self.assertTrue(result['call']['api_success'])
+            self.assertNotIn(key, json.dumps(result))
+            self.assertNotIn(parameter + '=', result['call']['url'])
+
+    def test_5dollar_and_public_json_have_distinct_authentication(self):
+        def dollar(req, **kwargs):
+            self.assertEqual(req.get_header('Authorization'), 'Bearer TEST_DOLLAR_ONLY')
+            return Response({'success': 1, 'data': []})
+        with patch.dict(os.environ, {'WCPP_5DOLLAR_API_KEY': 'TEST_DOLLAR_ONLY'}, clear=True):
+            result = fetch('5dollar', opener=dollar)
+            self.assertTrue(result['call']['authenticated'])
+            bad = fetch('5dollar', opener=lambda *a, **k: Response({'success': 0}))
+            self.assertFalse(bad['call']['api_success'])
+        with patch.dict(os.environ, {}, clear=True):
+            result = fetch('espn', opener=lambda *a, **k: Response({'events': []}))
+        self.assertTrue(result['call']['api_success'])
+        self.assertFalse(result['call']['authenticated'])
+
     def test_verified_new_binding_takes_priority(self):
         def opener(req, **kwargs):
             self.assertEqual(req.get_header('X-apisports-key'), 'NEW_BINDING_TEST_ONLY')

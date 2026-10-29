@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -19,6 +20,18 @@ def object_sha256(value):
     raw = json.dumps(value, ensure_ascii=False, sort_keys=True,
                      separators=(',', ':'), allow_nan=False).encode()
     return hashlib.sha256(raw).hexdigest()
+
+
+def source_identity():
+    """Attach the real checkout identity; never invent a version outside Git."""
+    try:
+        commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT.parent,
+                                         stderr=subprocess.DEVNULL, text=True, timeout=2).strip()
+        dirty = bool(subprocess.check_output(['git', 'status', '--porcelain'],
+                     cwd=ROOT.parent, stderr=subprocess.DEVNULL, timeout=2))
+        return {'commit': commit, 'worktree_dirty': dirty, 'status': 'GIT_IDENTIFIED'}
+    except (OSError, subprocess.SubprocessError):
+        return {'commit': None, 'worktree_dirty': None, 'status': 'GIT_UNAVAILABLE'}
 
 
 def run(fixture, registry_path=None):
@@ -136,6 +149,7 @@ def run(fixture, registry_path=None):
             'formal_kpi_eligible': False}
     output['execution_audit'] = {
         'schema': 'WCPP-PREDICTION-EXECUTION-AUDIT-1',
+        'source_identity': source_identity(),
         'fixture_sha256': object_sha256(fixture),
         'entrypoint': str(Path(__file__).resolve()),
         'entrypoint_sha256': file_sha256(__file__),

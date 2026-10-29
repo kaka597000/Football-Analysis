@@ -1,0 +1,669 @@
+{
+  "schema": "WCPP-VERSION-CHECKPOINT-1",
+  "captured_at": "2026-10-29T10:16:21.109617+08:00",
+  "source_base_commit": "4566742fa0933c22e09c245a7d9ec8848f7c3f3c",
+  "source_worktree_dirty": true,
+  "runtime_root": "/workspace/WCPP",
+  "registry_version": "WCPP-DUAL-4",
+  "registry": {
+    "path": "/workspace/WCPP/runtime/active-model.json",
+    "exists": true,
+    "bytes": 10170,
+    "sha256": "923e34fc44cda33fe965498a24a2435abb37a01a80c539108d8ec20d490bf013"
+  },
+  "routes": {
+    "afc.champions:ELITE:league_phase": {
+      "current": {
+        "path": "/workspace/WCPP/models/active-routes-20261027/afc.champions-ELITE-league_phase/current-artifact.json",
+        "exists": true,
+        "bytes": 1417,
+        "sha256": "c6528dec375c8d03986abc3fbe07a6312b5fb4567828e71193ea0e8a6e07ce4d",
+        "registered_sha256": "c6528dec375c8d03986abc3fbe07a6312b5fb4567828e71193ea0e8a6e07ce4d",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AFC-ELITE-CURRENT-CONSTANT-0.1",
+          "created_at": "2026-10-27T06:31:31.540598+00:00"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/active-routes-20261027/afc.champions-ELITE-league_phase/test-artifact.json",
+        "exists": true,
+        "bytes": 5409,
+        "sha256": "5c30631e3f3552aa8d9d60812848695e04393c73ccd9a22d12551009a5b4e9de",
+        "registered_sha256": "5c30631e3f3552aa8d9d60812848695e04393c73ccd9a22d12551009a5b4e9de",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AFC-ELITE-TEST-POISSON-0.1",
+          "created_at": "2026-10-27T06:31:31.540682+00:00"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "generic_poisson",
+      "test_engine": "generic_poisson"
+    },
+    "aus.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/active-routes-20261027/aus.1/current-artifact.json",
+        "exists": true,
+        "bytes": 1328,
+        "sha256": "f3e9e25f84a468ed937c0d82c041c4ba0f16cb641e36f63e7515a00b2415964a",
+        "registered_sha256": "f3e9e25f84a468ed937c0d82c041c4ba0f16cb641e36f63e7515a00b2415964a",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AUS-CURRENT-CONSTANT-0.1",
+          "created_at": "2026-10-27T06:31:31.484322+00:00"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/aus-expert-20261016-boundary-refit-v1/artifact.json",
+        "exists": true,
+        "bytes": 3322,
+        "sha256": "6cd38d5fa0dc9d5413ec4e062bcb209a598763b419f8bab54f60352dd26bef5d",
+        "registered_sha256": "6cd38d5fa0dc9d5413ec4e062bcb209a598763b419f8bab54f60352dd26bef5d",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AUS-EXPERT-0.1.1-DATAFIX",
+          "created_at": "2026-10-16T02:58:16.294930+00:00"
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/reports/aus-expert-20261016/dataset-boundary-refit-v1/manifest.json",
+            "exists": true,
+            "bytes": 982,
+            "sha256": "8e2e105d435d45c4298d1547088b7cfb9c255b19a2feed84baf7342905f9fdec",
+            "reference_key": "dataset"
+          }
+        ]
+      },
+      "current_engine": "generic_poisson",
+      "test_engine": "aus_expert"
+    },
+    "bra.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/bra.1/artifact.json",
+        "exists": true,
+        "bytes": 1014014,
+        "sha256": "6fa5b60cec4cc1a51b6ff019072da029cd7d558a33a203ab8c2846b97efdf318",
+        "registered_sha256": "6fa5b60cec4cc1a51b6ff019072da029cd7d558a33a203ab8c2846b97efdf318",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "bra.1",
+          "anchor_train_end": "2026-10-09"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/bra.1/artifact.json",
+        "exists": true,
+        "bytes": 566428,
+        "sha256": "bfb1ec1472a7503c7f70bd69bbd349d88df652d7ecaac436b4e36fdeef415191",
+        "registered_sha256": "bfb1ec1472a7503c7f70bd69bbd349d88df652d7ecaac436b4e36fdeef415191",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "bra.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "eng.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/eng.1/artifact.json",
+        "exists": true,
+        "bytes": 895782,
+        "sha256": "ac5ef67c624da8913a2e3492b2fbae6b73776bf0f9e5157423c72e718dd72983",
+        "registered_sha256": "ac5ef67c624da8913a2e3492b2fbae6b73776bf0f9e5157423c72e718dd72983",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "eng.1",
+          "anchor_train_end": "2026-09-20"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/eng.1/artifact.json",
+        "exists": true,
+        "bytes": 797661,
+        "sha256": "9f78989414419514a23f669aa9648e341a4899890101f363cc47bff5057b03e0",
+        "registered_sha256": "9f78989414419514a23f669aa9648e341a4899890101f363cc47bff5057b03e0",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "eng.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "eng.2": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/eng.2/artifact.json",
+        "exists": true,
+        "bytes": 1340284,
+        "sha256": "72beee6485c2c700219ab800fc1ce20794b6b41f096dea3b13214f9b8d283fcc",
+        "registered_sha256": "72beee6485c2c700219ab800fc1ce20794b6b41f096dea3b13214f9b8d283fcc",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "eng.2",
+          "anchor_train_end": "2026-09-20"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/eng.2/artifact.json",
+        "exists": true,
+        "bytes": 725650,
+        "sha256": "8b5450da4931868d9e352c06937a762546f0a08b30cf055be3f809f2ea7cea54",
+        "registered_sha256": "8b5450da4931868d9e352c06937a762546f0a08b30cf055be3f809f2ea7cea54",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "eng.2"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "esp.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/esp.1/artifact.json",
+        "exists": true,
+        "bytes": 912322,
+        "sha256": "3d4da662d2b671c368860f7786ce7d2b22ddab4f60efc1b61470230ce57234ec",
+        "registered_sha256": "3d4da662d2b671c368860f7786ce7d2b22ddab4f60efc1b61470230ce57234ec",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "esp.1",
+          "anchor_train_end": "2026-10-09"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/esp.1/artifact.json",
+        "exists": true,
+        "bytes": 812983,
+        "sha256": "dc1c4071478cabd7de2861e31edfe9decad328ebdf174c3c8cf639dbc4fd5682",
+        "registered_sha256": "dc1c4071478cabd7de2861e31edfe9decad328ebdf174c3c8cf639dbc4fd5682",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "esp.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "fra.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/fra.1/artifact.json",
+        "exists": true,
+        "bytes": 712821,
+        "sha256": "403b79855abfe75a6fc05dfe0e4ddaf52f2204e933daadae6335df2ba9b816b8",
+        "registered_sha256": "403b79855abfe75a6fc05dfe0e4ddaf52f2204e933daadae6335df2ba9b816b8",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "fra.1",
+          "anchor_train_end": "2026-10-09"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/fra.1/artifact.json",
+        "exists": true,
+        "bytes": 418965,
+        "sha256": "1b6567b71fbbdb0f0e03669bf37c732b9f73ceda0bc66f30bf905d6a5298b9e9",
+        "registered_sha256": "1b6567b71fbbdb0f0e03669bf37c732b9f73ceda0bc66f30bf905d6a5298b9e9",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "fra.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "ger.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/ger.1/artifact.json",
+        "exists": true,
+        "bytes": 724777,
+        "sha256": "d8e4e8edeb3b1be5bb3567496c5ff3f90de31de8bdf2e5ec00e68c38990c7691",
+        "registered_sha256": "d8e4e8edeb3b1be5bb3567496c5ff3f90de31de8bdf2e5ec00e68c38990c7691",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ger.1",
+          "anchor_train_end": "2026-10-09"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/ger.1/artifact.json",
+        "exists": true,
+        "bytes": 425214,
+        "sha256": "9d81229e3699c648596e4545e6670cf705ecfb92385c35f7f19444b641edc740",
+        "registered_sha256": "9d81229e3699c648596e4545e6670cf705ecfb92385c35f7f19444b641edc740",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ger.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "ita.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/ita.1/artifact.json",
+        "exists": true,
+        "bytes": 920595,
+        "sha256": "ca69b767362958577e22a4157c23613cb9b6e12604ffb20fcaa2b624413e6dbd",
+        "registered_sha256": "ca69b767362958577e22a4157c23613cb9b6e12604ffb20fcaa2b624413e6dbd",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "ita.1",
+          "anchor_train_end": "2026-09-20"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/ita.1/artifact.json",
+        "exists": true,
+        "bytes": 520787,
+        "sha256": "f005920710f0124a37ab75e448a96c141bb9b3024d40b444a6445bc6dea34cb5",
+        "registered_sha256": "f005920710f0124a37ab75e448a96c141bb9b3024d40b444a6445bc6dea34cb5",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "ita.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "jpn.1": {
+      "current": {
+        "path": "/workspace/WCPP/reports/japan-korea-20261010/jpn.1-artifact.json",
+        "exists": true,
+        "bytes": 42478,
+        "sha256": "995f8686ff6348e5f0c6b40a8838a714c4118036968285d01e188e6db29f4ab2",
+        "registered_sha256": "995f8686ff6348e5f0c6b40a8838a714c4118036968285d01e188e6db29f4ab2",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-MAIN-1.1",
+          "train_end": "2026-10-09",
+          "cohort": "jpn.1"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/systematic-20261015-final-extended-003/jpn.1/artifact.json",
+        "exists": true,
+        "bytes": 3965,
+        "sha256": "f5532bb519983e04eb44c6778df405aaa7420790f78c84b8b6047ea13011b12a",
+        "registered_sha256": "f5532bb519983e04eb44c6778df405aaa7420790f78c84b8b6047ea13011b12a",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-SYSTEMATIC-RESEARCH-0.1",
+          "cohort": "jpn.1",
+          "created_at": "2026-10-15T06:00:06.989216+00:00"
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/reports/systematic-optimization-20261015/datasets/extended-001/manifest.json",
+            "exists": true,
+            "bytes": 1197,
+            "sha256": "59a3eb9a3bb96a2004f4fcbfc2bcdfa5953ca5d6dfd9063aadb3bc573ad75b48",
+            "reference_key": "dataset"
+          }
+        ]
+      },
+      "current_engine": "v4_main_compat",
+      "test_engine": "systematic_candidate"
+    },
+    "kor.1": {
+      "current": {
+        "path": "/workspace/WCPP/reports/japan-korea-20261010/kor.1-artifact.json",
+        "exists": true,
+        "bytes": 158288,
+        "sha256": "f2c9a03bf4ddaa7bcb4eabaf2cb94434f9694e18d26dd6721af602e65aa9dd62",
+        "registered_sha256": "f2c9a03bf4ddaa7bcb4eabaf2cb94434f9694e18d26dd6721af602e65aa9dd62",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-MAIN-1.1",
+          "train_end": "2026-10-09",
+          "cohort": "kor.1"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/systematic-20261015-final-extended-003/kor.1/artifact.json",
+        "exists": true,
+        "bytes": 3194,
+        "sha256": "6b6d9bd66bb2f7dcb1f214407ed027f720d6cd4f823c120061ed1b172631014c",
+        "registered_sha256": "6b6d9bd66bb2f7dcb1f214407ed027f720d6cd4f823c120061ed1b172631014c",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-SYSTEMATIC-RESEARCH-0.1",
+          "cohort": "kor.1",
+          "created_at": "2026-10-15T06:00:07.569760+00:00"
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/reports/systematic-optimization-20261015/datasets/extended-001/manifest.json",
+            "exists": true,
+            "bytes": 1197,
+            "sha256": "59a3eb9a3bb96a2004f4fcbfc2bcdfa5953ca5d6dfd9063aadb3bc573ad75b48",
+            "reference_key": "dataset"
+          }
+        ]
+      },
+      "current_engine": "v4_main_compat",
+      "test_engine": "systematic_candidate"
+    },
+    "ksa.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/ksa.1/artifact.json",
+        "exists": true,
+        "bytes": 840590,
+        "sha256": "4a59e33f7acce4da67b35b9dcee9d94abfd798bbb80fc9c25ef472fa8fba8dec",
+        "registered_sha256": "4a59e33f7acce4da67b35b9dcee9d94abfd798bbb80fc9c25ef472fa8fba8dec",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ksa.1",
+          "anchor_train_end": "2026-10-09"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/ksa.1/artifact.json",
+        "exists": true,
+        "bytes": 481721,
+        "sha256": "f3e45a331a3a0e7ad3cb0221ff3cb0cf45ea2a4bd6c6df55a5a4a58df96f1759",
+        "registered_sha256": "f3e45a331a3a0e7ad3cb0221ff3cb0cf45ea2a4bd6c6df55a5a4a58df96f1759",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ksa.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "mex.1:apertura:regular": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/mex-apertura-dual/artifact.json",
+        "exists": true,
+        "bytes": 538863,
+        "sha256": "9614858205e8d3dcc56951d957f012e1c4ca603198a8acf79036037ed65e017e",
+        "registered_sha256": "9614858205e8d3dcc56951d957f012e1c4ca603198a8acf79036037ed65e017e",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-28",
+          "cohort": "mex.1:apertura:regular",
+          "anchor_train_end": "2026-09-28"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/mex.1-apertura-regular/artifact.json",
+        "exists": true,
+        "bytes": 333068,
+        "sha256": "70d7e66f72c30717327223c47a49c5c3e6998e56a9dbc16fa111f0667cfcad9a",
+        "registered_sha256": "70d7e66f72c30717327223c47a49c5c3e6998e56a9dbc16fa111f0667cfcad9a",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-28",
+          "cohort": "mex.1:apertura:regular"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "ned.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/ned.1/artifact.json",
+        "exists": true,
+        "bytes": 745492,
+        "sha256": "1440e0242882cecc14d4486f88220270ae05d8bdbf00361384432f026e2d3738",
+        "registered_sha256": "1440e0242882cecc14d4486f88220270ae05d8bdbf00361384432f026e2d3738",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ned.1",
+          "anchor_train_end": "2026-10-09"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/ned.1/artifact.json",
+        "exists": true,
+        "bytes": 435284,
+        "sha256": "2442f03bbe7da265d546af20b9097ca52efbb2435f49a9479d1a88da699f30aa",
+        "registered_sha256": "2442f03bbe7da265d546af20b9097ca52efbb2435f49a9479d1a88da699f30aa",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ned.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "nor.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/nor.1/artifact.json",
+        "exists": true,
+        "bytes": 969273,
+        "sha256": "7c980a4cf9f4a2c8f47f44eb761f5aa9b75e1933872406416c41e3840ce8ffd3",
+        "registered_sha256": "7c980a4cf9f4a2c8f47f44eb761f5aa9b75e1933872406416c41e3840ce8ffd3",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "nor.1",
+          "anchor_train_end": "2026-10-09"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/nor.1/artifact.json",
+        "exists": true,
+        "bytes": 544714,
+        "sha256": "086fd30bf2ba48fd246af72cd30476007f2e5684f2555f017463d210dbaf31af",
+        "registered_sha256": "086fd30bf2ba48fd246af72cd30476007f2e5684f2555f017463d210dbaf31af",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "nor.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "por.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/por.1/artifact.json",
+        "exists": true,
+        "bytes": 742463,
+        "sha256": "860c6244fed26c1685d5487797b243bc9873ac66fa7f747afe7c6d9b45290746",
+        "registered_sha256": "860c6244fed26c1685d5487797b243bc9873ac66fa7f747afe7c6d9b45290746",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "por.1",
+          "anchor_train_end": "2026-10-09"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/por.1/artifact.json",
+        "exists": true,
+        "bytes": 432843,
+        "sha256": "86e67de8d9244522e988439ab64041455ba08777d21fdd05558b6c2678999f56",
+        "registered_sha256": "86e67de8d9244522e988439ab64041455ba08777d21fdd05558b6c2678999f56",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "por.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "swe.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/swe.1/artifact.json",
+        "exists": true,
+        "bytes": 995890,
+        "sha256": "ecaf574c2e639139a404ec1f30432c8b27576b310a285843455f2e264832dc27",
+        "registered_sha256": "ecaf574c2e639139a404ec1f30432c8b27576b310a285843455f2e264832dc27",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "swe.1",
+          "anchor_train_end": "2026-09-20"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/swe.1/artifact.json",
+        "exists": true,
+        "bytes": 557666,
+        "sha256": "f540e29e1f11457061b332118412145d8e3d9966c06d23eb9564acbcf34ec5d2",
+        "registered_sha256": "f540e29e1f11457061b332118412145d8e3d9966c06d23eb9564acbcf34ec5d2",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "swe.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "uefa.champions:NEW_FORMAT:league_phase": {
+      "current": {
+        "path": "/workspace/WCPP/models/ucl-dual-20261013/uefa.champions-NEW_FORMAT-league_phase/current-artifact.json",
+        "exists": true,
+        "bytes": 3174181,
+        "sha256": "30e1baf7f24f9db3ccf683179162d994a87f20f5048b5eb6ecb3d6e011589759",
+        "registered_sha256": "30e1baf7f24f9db3ccf683179162d994a87f20f5048b5eb6ecb3d6e011589759",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-10",
+          "cohort": "uefa.champions:NEW_FORMAT:league_phase",
+          "anchor_train_end": "2026-09-10"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ucl-dual-20261013/uefa.champions-NEW_FORMAT-league_phase/test-artifact.json",
+        "exists": true,
+        "bytes": 1612519,
+        "sha256": "82180940b19757779ea06c192a2600bd45a8c832ddf9fd08e6ea5a620cc4dd6e",
+        "registered_sha256": "82180940b19757779ea06c192a2600bd45a8c832ddf9fd08e6ea5a620cc4dd6e",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-UCL-0.1",
+          "train_end": "2026-09-10",
+          "cohort": "uefa.champions:NEW_FORMAT:league_phase"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-UCL-0.1"
+    },
+    "usa.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/usa.1/artifact.json",
+        "exists": true,
+        "bytes": 1075199,
+        "sha256": "ff328c4edd392a31eb414ec0ba188290e56524506dd80cdd011e61da3b9188e7",
+        "registered_sha256": "ff328c4edd392a31eb414ec0ba188290e56524506dd80cdd011e61da3b9188e7",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-07",
+          "cohort": "usa.1",
+          "anchor_train_end": "2026-10-07"
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/usa.1/artifact.json",
+        "exists": true,
+        "bytes": 596531,
+        "sha256": "15d3c0f5d570792545b6659590a4be49666944af9be9248f26fcffde98620478",
+        "registered_sha256": "15d3c0f5d570792545b6659590a4be49666944af9be9248f26fcffde98620478",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-07",
+          "cohort": "usa.1"
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    }
+  },
+  "databases": [
+    {
+      "path": "/workspace/WCPP/data/unified/WCPP_统一赛事库.sqlite",
+      "exists": true,
+      "bytes": 1031159808,
+      "sha256": "3d2de1064536d8b4029e2df6bd3ec227af15324e7ff7803413046c74823fdaea"
+    }
+  ],
+  "scope": "IDENTITIES_ONLY_NOT_RUNTIME_BACKUP_OR_COMPLETE_DEPENDENCY_CLOSURE",
+  "accuracy_improvement_claimed": false
+}

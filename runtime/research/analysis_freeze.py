@@ -66,7 +66,10 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT):
     try:
         from .score_distribution_audit import audit_issued
     except ImportError:
-        from score_distribution_audit import audit_issued
+        try:
+            from research.score_distribution_audit import audit_issued
+        except ImportError:
+            from score_distribution_audit import audit_issued
     selection_audit = audit_issued(payload, fixture, stage=stage, track=track,
                                    verify_record=verify)
     scope = {'match_id': fixture['match_id'], 'stage': stage, 'track': track}
