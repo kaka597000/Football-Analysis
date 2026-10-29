@@ -6,7 +6,7 @@
 
 ## 运行入口
 
-先阅读[用户需求](docs/user-primary-score-requirements.md)与[执行规则](AGENTS.md)。默认入口读取外部活动注册表，目前为WCPP-DUAL-4，登记19个赛事队列。各队列实际引擎及当前/test工件不同，以注册表和[本次身份摘要](manifests/runtime-assets-20261029-final.json)为准。
+先阅读[用户需求](docs/user-primary-score-requirements.md)与[执行规则](AGENTS.md)。默认入口读取外部活动注册表，目前为WCPP-DUAL-5，登记21个赛事队列。各队列实际引擎及当前/test工件不同，以注册表和[本次身份摘要](manifests/runtime-assets-20261029-queue-supplement.json)为准。
 
 ```bash
 python runtime/data_sources/cli.py --plan batch-plan.json \

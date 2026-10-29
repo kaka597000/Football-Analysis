@@ -17,7 +17,7 @@ class ActiveRouteEngineTests(unittest.TestCase):
     @unittest.skipUnless(REGISTRY.is_file(), 'external active registry required')
     def test_four_requested_routes_are_hash_locked(self):
         registry = json.loads(REGISTRY.read_text())
-        self.assertEqual(registry['version'], 'WCPP-DUAL-4')
+        self.assertIn(registry['version'], ('WCPP-DUAL-4', 'WCPP-DUAL-5'))
         for cohort in ('jpn.1', 'kor.1', 'aus.1',
                        'afc.champions:ELITE:league_phase'):
             route = registry['models'][cohort]

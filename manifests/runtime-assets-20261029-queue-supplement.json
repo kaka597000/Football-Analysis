@@ -1,0 +1,1971 @@
+{
+  "schema": "WCPP-VERSION-CHECKPOINT-1",
+  "captured_at": "2026-10-29T15:52:51.294929+08:00",
+  "source_base_commit": "d5aea76464aea73eaa14b8fc7a1210800e7cd143",
+  "source_worktree_dirty": true,
+  "runtime_root": "/workspace/WCPP",
+  "registry_version": "WCPP-DUAL-5",
+  "source_files": [
+    {
+      "path": "/workspace/Football-Analysis/runtime/active_route_engines.py",
+      "exists": true,
+      "bytes": 11108,
+      "sha256": "1378ed686fbb83dc7a21acc99d20a985788ed716820d22d77305e5d69761bda4",
+      "changed_during_hash": false,
+      "relative_path": "runtime/active_route_engines.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/aus_expert/runner.py",
+      "exists": true,
+      "bytes": 22836,
+      "sha256": "ec87f95894eb77b8a24d104eafdaf9b88d525bf602415ea5c0991293af076edd",
+      "changed_during_hash": false,
+      "relative_path": "runtime/aus_expert/runner.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/aus_expert/test_expert.py",
+      "exists": true,
+      "bytes": 3417,
+      "sha256": "75b50157e95e75eafef0762e9822e7dbbbb68d50c5b9e700720023e6d195cc7c",
+      "changed_during_hash": false,
+      "relative_path": "runtime/aus_expert/test_expert.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/build_active_routes_20261027.py",
+      "exists": true,
+      "bytes": 9999,
+      "sha256": "6714324b77e3089623d3be87bac9b2357f3f26f3fa0bac8ba9152c30c6446d82",
+      "changed_during_hash": false,
+      "relative_path": "runtime/build_active_routes_20261027.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/continental/test_ucl.py",
+      "exists": true,
+      "bytes": 2042,
+      "sha256": "ac3afdbce29f91599fe45ab49f55714b4e8e88bea01bc652aaeddf8739b20120",
+      "changed_during_hash": false,
+      "relative_path": "runtime/continental/test_ucl.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/continental/train_queues.py",
+      "exists": true,
+      "bytes": 4266,
+      "sha256": "f56a382d20ee9f8a35ae89fa1f8304fb985243072140635d16a54f31879e6997",
+      "changed_during_hash": false,
+      "relative_path": "runtime/continental/train_queues.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/continental/ucl_ml.py",
+      "exists": true,
+      "bytes": 15287,
+      "sha256": "03b75587669d84e0837e501240789e4741a9887d9139406f39167b19e6e92f5a",
+      "changed_during_hash": false,
+      "relative_path": "runtime/continental/ucl_ml.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/data_sources/api_first.py",
+      "exists": true,
+      "bytes": 10166,
+      "sha256": "bbe2321ccbfd8580965cd7748c963a03a81b36f4c976087e99ad4369bcaacbb6",
+      "changed_during_hash": false,
+      "relative_path": "runtime/data_sources/api_first.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/data_sources/cli.py",
+      "exists": true,
+      "bytes": 1374,
+      "sha256": "89c350c01f169e34c523f524f4ecd879750746ee2e999a180328cf9b43a5c33b",
+      "changed_during_hash": false,
+      "relative_path": "runtime/data_sources/cli.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/data_sources/clients.py",
+      "exists": true,
+      "bytes": 8372,
+      "sha256": "5874f4de57b90e58aabe00871373ea437e632d16162520cb5e0eb7bd0bf35eb3",
+      "changed_during_hash": false,
+      "relative_path": "runtime/data_sources/clients.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/data_sources/history_process.py",
+      "exists": true,
+      "bytes": 2343,
+      "sha256": "5db7e092a60b39b02f327ad8922bccce3e3c18441fd481e97f08adde5e5d9677",
+      "changed_during_hash": false,
+      "relative_path": "runtime/data_sources/history_process.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/data_sources/registry.json",
+      "exists": true,
+      "bytes": 4294,
+      "sha256": "591506aabce57b2ef2f3fdaf19b50123bd2122a6f887f9e3f2c9f44ac28b6e39",
+      "changed_during_hash": false,
+      "relative_path": "runtime/data_sources/registry.json"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/data_sources/test_api_first.py",
+      "exists": true,
+      "bytes": 5269,
+      "sha256": "541e037e52a45069ca60f5000dce5806f752c1078fcc46fd1e56d47ed2aafad3",
+      "changed_during_hash": false,
+      "relative_path": "runtime/data_sources/test_api_first.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/data_sources/test_clients.py",
+      "exists": true,
+      "bytes": 6897,
+      "sha256": "2831763f822c9ffa52304be093649540af7aefea2da6fded3b06a32e26082cf3",
+      "changed_during_hash": false,
+      "relative_path": "runtime/data_sources/test_clients.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/data_sources/test_history_process.py",
+      "exists": true,
+      "bytes": 1403,
+      "sha256": "421535d7799b4cf342606f34b0be0aaf735de2d3d153c1154bb80412c77e3141",
+      "changed_during_hash": false,
+      "relative_path": "runtime/data_sources/test_history_process.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/aliases.json",
+      "exists": true,
+      "bytes": 1790,
+      "sha256": "3b7d9727158afb11f016e702b63e0647a1652ff86971901ecf2cce193aea5023",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/aliases.json"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/cli.py",
+      "exists": true,
+      "bytes": 5733,
+      "sha256": "8630b4c867b85ac802b572fc4ef070df0b43c644b73debedbe60f2bc09960635",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/cli.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/five_dollar.py",
+      "exists": true,
+      "bytes": 5036,
+      "sha256": "7dcec2e593d4630859cbae4a65eda2e5587fe3356caee80b3485a435ecdd0ddd",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/five_dollar.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/five_dollar_history.py",
+      "exists": true,
+      "bytes": 18375,
+      "sha256": "802a5ea49780521ad3aafd912fd428f809a51351134413029b42bd3ae953c2f7",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/five_dollar_history.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/providers.py",
+      "exists": true,
+      "bytes": 28365,
+      "sha256": "10293cc84858a0cdb63863a206b28d32f436e9c4c19c573f9c39ed0128d62abd",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/providers.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/registry.py",
+      "exists": true,
+      "bytes": 4573,
+      "sha256": "0dcb3efb2b991e532e398c04636c1a8d7c0e517c28a5d118ba813560ad3e757c",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/registry.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/scheduler.py",
+      "exists": true,
+      "bytes": 2357,
+      "sha256": "14894f62bf1369e0afd0ae494056af635637aa580aa531afd6d5d810e1fb0dd7",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/scheduler.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/store.py",
+      "exists": true,
+      "bytes": 19254,
+      "sha256": "0350ac6b2809c90f0f972cc7df0cedf74ba5ac24c4a62004c6385b82ac0a805c",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/store.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/test_database.py",
+      "exists": true,
+      "bytes": 7820,
+      "sha256": "8c5646bbe2691a4f572b21384420b71473d5d580924f3f8bb1cdb16217182150",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/test_database.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/database/test_five_dollar_history.py",
+      "exists": true,
+      "bytes": 4907,
+      "sha256": "6f43b2d3d1ab4c20b7aef36487b46d91387d28565576848ae4f00a53b6493902",
+      "changed_during_hash": false,
+      "relative_path": "runtime/database/test_five_dollar_history.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/demo-fixture.json",
+      "exists": true,
+      "bytes": 715,
+      "sha256": "ddf42fff3fc4982f9717dfb61eecd7e88ad695c13088f9c997ad077b1d7d0f0e",
+      "changed_during_hash": false,
+      "relative_path": "runtime/demo-fixture.json"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/emperor_cup/ingest.py",
+      "exists": true,
+      "bytes": 21120,
+      "sha256": "c8e5969b1b9d4cf2cc80a066fc8c0b893de775b410d26710063b7e4b915ceab6",
+      "changed_during_hash": false,
+      "relative_path": "runtime/emperor_cup/ingest.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/emperor_cup/test_ingest.py",
+      "exists": true,
+      "bytes": 3936,
+      "sha256": "7bbe40eed7cebf7ed390f2bad9fad544800f6db1818f6a08fbc89a9953527de9",
+      "changed_during_hash": false,
+      "relative_path": "runtime/emperor_cup/test_ingest.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/audit.py",
+      "exists": true,
+      "bytes": 3266,
+      "sha256": "8c44896c0a016c9bb5a79d4c8a3e99320fe15921c40d79dc9df5c107f68d2c03",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/audit.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/availability.py",
+      "exists": true,
+      "bytes": 1372,
+      "sha256": "4d005d6ca900a5d22d1c210ccb7a1de4dd0ee9c1a54ab99fe52a4cf37fc9df29",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/availability.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/dataset.py",
+      "exists": true,
+      "bytes": 11291,
+      "sha256": "4ae69643c8acc40242ce809ab9cb7038bad64f4f1f26dcf141f5483f5c492b32",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/dataset.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/evaluate.py",
+      "exists": true,
+      "bytes": 16906,
+      "sha256": "e2a4b5f8bc362f200b984477fa7f77b1391f181a9d9952bc79a45cb8e7d93058",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/evaluate.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/features.py",
+      "exists": true,
+      "bytes": 3378,
+      "sha256": "d9523424e84fe236d4f7423ec0ca555f154df01e00cfa0ab8d89b22787b109c1",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/features.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/ledger.py",
+      "exists": true,
+      "bytes": 1734,
+      "sha256": "182847853ea592c85c100f667891ba921be8bd5152eee78e6cf18d2d6139e385",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/ledger.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/legacy.py",
+      "exists": true,
+      "bytes": 8005,
+      "sha256": "036442b9b38ff992321de938605a63365723c621af988c4ddfb591ef5238fee6",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/legacy.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/models.py",
+      "exists": true,
+      "bytes": 4100,
+      "sha256": "4c81b1fc32374ed840c5c8e76c352968f69b5c70a953fe036464a4456e99a9a1",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/models.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/pipeline.py",
+      "exists": true,
+      "bytes": 12960,
+      "sha256": "fc20524526cbdae69a47b8ec93180e11b5ada3aeffe69139547b6edb1d460eb4",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/pipeline.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/schema.py",
+      "exists": true,
+      "bytes": 1974,
+      "sha256": "0f805bfa989fc0e5bb774d480c974b5a4f053b56e38a1905aee04b75c1c08117",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/schema.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/test_evaluate.py",
+      "exists": true,
+      "bytes": 8406,
+      "sha256": "ddac34ead45a6d449dc47532b90b4d238b9e6fbad15de27ed24de159e390abf8",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/test_evaluate.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/test_integrity.py",
+      "exists": true,
+      "bytes": 10532,
+      "sha256": "850d0f4f6a124760526287d061cbb7e235011db36abca11c06ae3e702c65cfa4",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/test_integrity.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization/test_legacy.py",
+      "exists": true,
+      "bytes": 4348,
+      "sha256": "7191c474293c4d724da802cbd261ae940b55bc89cf993ec7d81e63700f2c8c86",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization/test_legacy.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization_tools/artifact_audit.py",
+      "exists": true,
+      "bytes": 3903,
+      "sha256": "72549b1ffc8c0d6cec87b0b05ecf60b67d66b44a61bbefdfdb4320316e1ae082",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization_tools/artifact_audit.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization_tools/candidate.py",
+      "exists": true,
+      "bytes": 8107,
+      "sha256": "244a0c3da5ce21efad98dd27b978f7ef79fb7d4c4115b7a91c677b935a94e967",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization_tools/candidate.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization_tools/extend_dataset.py",
+      "exists": true,
+      "bytes": 8995,
+      "sha256": "2f0063ca79fb759ab50ff0d773151975273562ddb4cae7f778bb8da74a724a9f",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization_tools/extend_dataset.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization_tools/extend_secondary.py",
+      "exists": true,
+      "bytes": 8309,
+      "sha256": "6df8a602dbe6040dc85933d1d8b800eb3b3daeda5191a61bd8e631197c24c233",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization_tools/extend_secondary.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization_tools/repair_domestic.py",
+      "exists": true,
+      "bytes": 6065,
+      "sha256": "35320d1346ed4cdaa55df87973c44b7861551d9802deb718a908ce03f6339bfb",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization_tools/repair_domestic.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization_tools/rescore.py",
+      "exists": true,
+      "bytes": 2114,
+      "sha256": "f4decf5d2c269b258f655c0f7498d635ba9bc37292a2ec97a0adedf3c08b20db",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization_tools/rescore.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization_tools/test_candidate.py",
+      "exists": true,
+      "bytes": 3363,
+      "sha256": "c7cdef6cafd1ca6514f066f859b7c37f5066a19eef553f93214eb7a726112ff5",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization_tools/test_candidate.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/optimization_tools/xg_shadow.py",
+      "exists": true,
+      "bytes": 3715,
+      "sha256": "c6ebdb16f06c11f16ea5ee1f5aa85e7536857577847317171eb4786b1d6d6f59",
+      "changed_during_hash": false,
+      "relative_path": "runtime/optimization_tools/xg_shadow.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/predict_active.py",
+      "exists": true,
+      "bytes": 10736,
+      "sha256": "5e8f6d19b542f2c86c5b0b26e5b2250e63c47473eb2fff873f3cc3aa8750c67c",
+      "changed_during_hash": false,
+      "relative_path": "runtime/predict_active.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/analysis_freeze.py",
+      "exists": true,
+      "bytes": 5451,
+      "sha256": "6da5e5111f7b6d8f4a4216d49097b42863c1737411ff3670d53d59fcb3b31a4d",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/analysis_freeze.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/availability.py",
+      "exists": true,
+      "bytes": 4162,
+      "sha256": "e01cea356d4f02271c6c6c1efa7f9bac9dc2de984b97ded38775ce4e1ff9805d",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/availability.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/build_cup_pair.py",
+      "exists": true,
+      "bytes": 6640,
+      "sha256": "27ad881c3c3340495c4e6395cb7a3f60783aba61bd7df3ed66e9398de2e6419b",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/build_cup_pair.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/check_environment.py",
+      "exists": true,
+      "bytes": 2115,
+      "sha256": "4e4779b6e85e07f16f642449d58bfb0db32746425128ef4286cd8f2591a1d4f5",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/check_environment.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/prospective.py",
+      "exists": true,
+      "bytes": 5994,
+      "sha256": "fd0091289f9afd324c7487d3fc9658a6099a714cfa11896f41cf10cbac599ddd",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/prospective.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/review_events.py",
+      "exists": true,
+      "bytes": 2346,
+      "sha256": "fe5e208c2b27bdb5c505026ffdcc0855d83506c605b62f2ab4c9bb9b39cc23a2",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/review_events.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/score_distribution_audit.py",
+      "exists": true,
+      "bytes": 14268,
+      "sha256": "22da74205542a2f81d01310752e63e65cff9f88b5571792456ceec8a18eb6481",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/score_distribution_audit.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/snapshots.py",
+      "exists": true,
+      "bytes": 2217,
+      "sha256": "33ca98826733862d7b9f611d8fee8de1eed30d62c1f8bb2d1e0cb8207530a39b",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/snapshots.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/team_goal_analysis.py",
+      "exists": true,
+      "bytes": 8520,
+      "sha256": "4b57b731b50ae97c1c18bb1e4c96576aefe34cea2858daeb2b2d4ba2bbfe3934",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/team_goal_analysis.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/test_analysis_freeze.py",
+      "exists": true,
+      "bytes": 5299,
+      "sha256": "970fd70325fe05be2adcb5a4d4d19360a162456e77ece6869f643e33010fa70f",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/test_analysis_freeze.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/test_availability.py",
+      "exists": true,
+      "bytes": 2293,
+      "sha256": "24d40a451f576ac128ecb9821651654e8d3e7699a8d9c2542ca17ad55181eed0",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/test_availability.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/test_build_cup_pair.py",
+      "exists": true,
+      "bytes": 2213,
+      "sha256": "63b3298c91a390150cf72ade2919fd8749e5d5e97330f78521a1361c0dc1bd51",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/test_build_cup_pair.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/test_prospective.py",
+      "exists": true,
+      "bytes": 2649,
+      "sha256": "60edf26aec7b896bbda8aad25b491c6e596ab804242874f49664fee0f8d98f2a",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/test_prospective.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/test_review_events.py",
+      "exists": true,
+      "bytes": 2546,
+      "sha256": "f986cf80a09f928cea0ae0737c86f1cb02377f107b3879f9cb63434535313ba5",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/test_review_events.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/test_score_distribution_audit.py",
+      "exists": true,
+      "bytes": 8904,
+      "sha256": "07ff8651b9d0c231bc6b0e1b1c43325e5c5e8fcd5be8ca4506ee2361d9d01ddb",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/test_score_distribution_audit.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/test_snapshots.py",
+      "exists": true,
+      "bytes": 1133,
+      "sha256": "a39030d4ae26eae79ffea04f8d55bf4782fe491326ad9b9293112cb844f1fc4f",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/test_snapshots.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/research/test_team_goal_analysis.py",
+      "exists": true,
+      "bytes": 7979,
+      "sha256": "3b135d552d41f59589de4cb7d3366c84491492e3b160de17d9f2e395b8a27e2f",
+      "changed_during_hash": false,
+      "relative_path": "runtime/research/test_team_goal_analysis.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/review_active.py",
+      "exists": true,
+      "bytes": 744,
+      "sha256": "feb8ca8997665a30f0bc1d7ee5db88f937d4f4ad08328e6cbd5c7762019dcaa8",
+      "changed_during_hash": false,
+      "relative_path": "runtime/review_active.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/score_adjustment/__init__.py",
+      "exists": true,
+      "bytes": 73,
+      "sha256": "a80c8bbb4d6f363a3bb34d6011e878638841d07040a958479b476e53ae587549",
+      "changed_during_hash": false,
+      "relative_path": "runtime/score_adjustment/__init__.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/score_adjustment/calibration.py",
+      "exists": true,
+      "bytes": 6806,
+      "sha256": "04db9eb6e70786d681a3894dead56c693727480328bc4149bbb4784062a575ca",
+      "changed_during_hash": false,
+      "relative_path": "runtime/score_adjustment/calibration.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/score_adjustment/runner.py",
+      "exists": true,
+      "bytes": 12741,
+      "sha256": "2b90c1e8aad42df66e8241936d3a49b91029728febfc08f63fbeca7bb4df9e99",
+      "changed_during_hash": false,
+      "relative_path": "runtime/score_adjustment/runner.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/score_adjustment/test_calibration.py",
+      "exists": true,
+      "bytes": 4658,
+      "sha256": "d888507b7dccb607b6b0c84456e3f5fb57e79e1e1281c624405ac0ae2ca1fa3c",
+      "changed_during_hash": false,
+      "relative_path": "runtime/score_adjustment/test_calibration.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/shadow.py",
+      "exists": true,
+      "bytes": 4877,
+      "sha256": "71eb74cb1128cc9bfe11fe9682d8f949441d5adbf64b052aedc9c08d1b04ce16",
+      "changed_during_hash": false,
+      "relative_path": "runtime/shadow.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/test_active_route_engines.py",
+      "exists": true,
+      "bytes": 3054,
+      "sha256": "2963a7ff419b5b68781b18ca4b6cb580fdbe4cd77ddd12fd143444882dd8f8db",
+      "changed_during_hash": false,
+      "relative_path": "runtime/test_active_route_engines.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/test_wcpp.py",
+      "exists": true,
+      "bytes": 7417,
+      "sha256": "51746b6147d2a72462b71b3237e4f272fc56b6bf06e3fa17cea061fce3e47ef9",
+      "changed_during_hash": false,
+      "relative_path": "runtime/test_wcpp.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset/classifier.py",
+      "exists": true,
+      "bytes": 15044,
+      "sha256": "fbde4b5b4fd4c1d80c985f8a0845a8b9a0ea4cc8757e640ba302b39c84becf7f",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset/classifier.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset/cli.py",
+      "exists": true,
+      "bytes": 683,
+      "sha256": "79b2d5c0db4dec78bdd97a65f031eec50cbfb3d0f60aced2401093d8c9d9a397",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset/cli.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset/quotes.py",
+      "exists": true,
+      "bytes": 1661,
+      "sha256": "a2664860856f7b80d362c9cfd477c2e721f5df5353942fcc77393b105abfc699",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset/quotes.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset/test_classifier.py",
+      "exists": true,
+      "bytes": 4656,
+      "sha256": "23021defda26aa10f395b47a0da842d48ef7c4aede50d7d56fa1bc0880279ae0",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset/test_classifier.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset/test_dispatcher.py",
+      "exists": true,
+      "bytes": 3756,
+      "sha256": "d3acc0b0b7e143348cde2889c5fdd94ba494a3de5edd04e86e401ae1776e70fe",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset/test_dispatcher.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset/train.py",
+      "exists": true,
+      "bytes": 4133,
+      "sha256": "d7e3f8ef6a6956f37c031056ce7cd7505ae13b1fd489b7050409bb89e8e4fc6e",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset/train.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset_v2/__init__.py",
+      "exists": true,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset_v2/__init__.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset_v2/features.py",
+      "exists": true,
+      "bytes": 4147,
+      "sha256": "347492ef69db6fa939e5b027c287d5aed5c3a7ce12954a9464cab1d633d689cd",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset_v2/features.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset_v2/predict.py",
+      "exists": true,
+      "bytes": 4333,
+      "sha256": "844859b38e98c35090e2ac7d38a012e91a92c2b03cb46fd7c4b40bf1fa4d6e4e",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset_v2/predict.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset_v2/test_features.py",
+      "exists": true,
+      "bytes": 1898,
+      "sha256": "4492ab510887611a436627f5998c7fbec5a5414474135f900176daef7aaac393",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset_v2/test_features.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset_v2/test_predict.py",
+      "exists": true,
+      "bytes": 2047,
+      "sha256": "50d2900c80d2fbec44b4acf3880ab2ba6fefde77adbd96bc9650f65860eb54ae",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset_v2/test_predict.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset_v2/test_validation.py",
+      "exists": true,
+      "bytes": 1500,
+      "sha256": "40bc70a5d963093a841f8cd7fac83f081fc85990a491a9f0c486aef9a361142c",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset_v2/test_validation.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/upset_v2/train.py",
+      "exists": true,
+      "bytes": 12090,
+      "sha256": "79f973ddd0c158c82632b50273d8862937f5a8616742cfdd76d515e751e3d1af",
+      "changed_during_hash": false,
+      "relative_path": "runtime/upset_v2/train.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v2/benchmark.py",
+      "exists": true,
+      "bytes": 6372,
+      "sha256": "1951ed91a884c16a1d565d1865caa1d6c4effc98bf7ab1969b3b14068ff105e7",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v2/benchmark.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v2/cli.py",
+      "exists": true,
+      "bytes": 3217,
+      "sha256": "eb190bc127ee5c031508db1aeba8360b9074f0a672a7965e3015ff28d661faa2",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v2/cli.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v2/collect.py",
+      "exists": true,
+      "bytes": 4502,
+      "sha256": "de2276fbcddfb0678c648c786b427921080a99ad02518ab6424428600a0a65af",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v2/collect.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v2/evidence.py",
+      "exists": true,
+      "bytes": 7738,
+      "sha256": "5d8f7eed73971dde7cfcaa4bcacdb0bbcc2cfd20e5fa6a5989d745de283345b6",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v2/evidence.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v2/model.py",
+      "exists": true,
+      "bytes": 13725,
+      "sha256": "d11e5296500df41a149ae16eecb8a12f4c88bb613d05f35764cec62f613c7a9a",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v2/model.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v2/snapshot.py",
+      "exists": true,
+      "bytes": 2962,
+      "sha256": "9dde5224b3fe3190a74d4bd922f0a1602528d39d81efe4e962d9de33c91060ec",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v2/snapshot.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v2/test_model.py",
+      "exists": true,
+      "bytes": 6760,
+      "sha256": "6a30790181de705feacd535db0e16f093eaa435ebbdd1cf8a234a064f9443fef",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v2/test_model.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v2/walk_forward.py",
+      "exists": true,
+      "bytes": 2423,
+      "sha256": "581a6a6d3acee906a36a6ac8eb6cca647c4244d0896338ee13efb8f740b39bed",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v2/walk_forward.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v3/cli.py",
+      "exists": true,
+      "bytes": 1920,
+      "sha256": "527bb3a4b96b68714597624e0cf3a120b084629f79d7492c07aa3fb904a61035",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v3/cli.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v3/context.py",
+      "exists": true,
+      "bytes": 8708,
+      "sha256": "7ee4b220b3f13e9b32986c7f1f0a767590c5d86f7edfc2d6648234ba9ef48f48",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v3/context.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v3/pipeline.py",
+      "exists": true,
+      "bytes": 9552,
+      "sha256": "48a25d4e9a3bf399717cda01b6b3e776156a97a059459e43f0179ccecb8446dc",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v3/pipeline.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v3/test_pipeline.py",
+      "exists": true,
+      "bytes": 9683,
+      "sha256": "54d3eeb0aecc1839eb69a281dffe77f59bc0810ac9f1ac0d97d9518995cdc251",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v3/test_pipeline.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/cli.py",
+      "exists": true,
+      "bytes": 4123,
+      "sha256": "a49da8679199d6a6e9ef0d461d5f69f224addb3e71a591166a92a68a9de4224b",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/cli.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/competition_router.py",
+      "exists": true,
+      "bytes": 10622,
+      "sha256": "3f796cd5846fa98361260bbda098e6d86fbbea1a4428f7199960f52bb24903b3",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/competition_router.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/context_learning.py",
+      "exists": true,
+      "bytes": 5270,
+      "sha256": "db723eca1fab32c19850c3eb2c75ab1cf35a730d3625ed5b55c27324c0e551de",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/context_learning.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/decision_audit.py",
+      "exists": true,
+      "bytes": 7879,
+      "sha256": "7bf7e116c0001e9c663124ab510a1f052e93f1d05a05e8da098d4604e5560411",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/decision_audit.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/diagnostics.py",
+      "exists": true,
+      "bytes": 10394,
+      "sha256": "2db6da3089134bf6ccda54da08362ad335d6db685fe8a16dfae9f0c8c943d595",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/diagnostics.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/main_model.py",
+      "exists": true,
+      "bytes": 22280,
+      "sha256": "6a8f9b36c4cbb27240e9a2e3c067c9dc36d009e990f556910d35f8357fafcb2f",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/main_model.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/provider_feed.py",
+      "exists": true,
+      "bytes": 3526,
+      "sha256": "a7c12de9c6e67b3a18ca902388247c3041abac4b49d595f8a2a6e197bc5dd006",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/provider_feed.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/review.py",
+      "exists": true,
+      "bytes": 3569,
+      "sha256": "5ebf3dc63e34c4bc79c007dc381402eb617d99df442fa43b6f25576a39e6462b",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/review.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/test_competition_router.py",
+      "exists": true,
+      "bytes": 6862,
+      "sha256": "9a0784d608cd68557fa3ba6ae718357c5792023f561f4dde56ec81778f801c36",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/test_competition_router.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/test_decision_diagnostics.py",
+      "exists": true,
+      "bytes": 8186,
+      "sha256": "c838d5360f982104734abb573d9d80c3c44b7f1be5c1eeb18d058865efeac3e1",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/test_decision_diagnostics.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v4/test_main.py",
+      "exists": true,
+      "bytes": 13205,
+      "sha256": "698bf4abf903c45d853f9a7e3a5a25078b83429fd706615dcdbfcf6579455fb3",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v4/test_main.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v5/cli.py",
+      "exists": true,
+      "bytes": 1354,
+      "sha256": "6f98dc71e7e266d8956f44df90a53cecd5e87ac09ab61936c3bbf82d8a6ce307",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v5/cli.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v5/paired_review.py",
+      "exists": true,
+      "bytes": 4099,
+      "sha256": "883210d889b1a173dafe055deb43eeeed2e3b1782d87962dbe8e4c640f4303ba",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v5/paired_review.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v5/test_weighted.py",
+      "exists": true,
+      "bytes": 8159,
+      "sha256": "f3512eb457ed66d382a073290000e2ccecaee84ad5a6ca25b4a894c699678c09",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v5/test_weighted.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v5/weighted_model.py",
+      "exists": true,
+      "bytes": 12827,
+      "sha256": "552754351f1b1a149f5a46111d129bb57e50992bf25f9ba262fc3973e540174d",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v5/weighted_model.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v6/cli.py",
+      "exists": true,
+      "bytes": 597,
+      "sha256": "82974685cbbd1600a39f69c5f84989120d0320e042c54f57ec9fc66a620f502b",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v6/cli.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v6/five_role_review.py",
+      "exists": true,
+      "bytes": 4197,
+      "sha256": "c91b2d5a655bca85d168e05179f64d9449e8884b2d33c1c6dc1a666e0110b47c",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v6/five_role_review.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v6/ml_model.py",
+      "exists": true,
+      "bytes": 14959,
+      "sha256": "5addc5e139f89de361cc9e14d47cb62ebf4b70a896778d9a9aa5d9d911ba8767",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v6/ml_model.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v6/test_five_role_review.py",
+      "exists": true,
+      "bytes": 2132,
+      "sha256": "ccc6b9efa5764f43d2e15cafa3306e162d8300dd96ed6dc9cdd9e7de8284a969",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v6/test_five_role_review.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v6/test_ml.py",
+      "exists": true,
+      "bytes": 3731,
+      "sha256": "cf55278280512b8a4ded7ed39251081c08b620ef6e3db06d97653d463105d4b3",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v6/test_ml.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v6/train_registered.py",
+      "exists": true,
+      "bytes": 1990,
+      "sha256": "59285c4ec065f2c1054d937f54a8081263d3cd01601131d377bf206552ade7d6",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v6/train_registered.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v7/continued_model.py",
+      "exists": true,
+      "bytes": 11736,
+      "sha256": "baca532e3ad5493bbf9e337e98caac0e515bac4d9f40c9981c279560be69e5f3",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v7/continued_model.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v7/export_training.py",
+      "exists": true,
+      "bytes": 8190,
+      "sha256": "e165d689d788189cd7b122fdae75eae35fd762bd881f265b998d5673e8f32b01",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v7/export_training.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v7/predict.py",
+      "exists": true,
+      "bytes": 1305,
+      "sha256": "15fb359c8c25c9850c4687597ef132bea2f9f8ddd019e7cb217dadd77d381bd6",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v7/predict.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v7/test_continued.py",
+      "exists": true,
+      "bytes": 2855,
+      "sha256": "3aa0277405d7bbe5f252d2fa0ece75ec031f4b4bfee6362f50ecc15ebfbe0534",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v7/test_continued.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/v7/train.py",
+      "exists": true,
+      "bytes": 2226,
+      "sha256": "7350c2a8af0afa8999649a8a4944defbc69c3a9b69aaf14a8d0cf919a9317c3f",
+      "changed_during_hash": false,
+      "relative_path": "runtime/v7/train.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/runtime/wcpp.py",
+      "exists": true,
+      "bytes": 17356,
+      "sha256": "207e0df229ab561edc93b854fc297593575289c2f530b4532ea45d6965e0bf00",
+      "changed_during_hash": false,
+      "relative_path": "runtime/wcpp.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/scripts/build_test_fixtures.py",
+      "exists": true,
+      "bytes": 2386,
+      "sha256": "8c4fb946ad00eed43c26f3f3abd76186ae5ca3e49cdac451e9f383d88cd30a30",
+      "changed_during_hash": false,
+      "relative_path": "scripts/build_test_fixtures.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/scripts/check_repository.py",
+      "exists": true,
+      "bytes": 2602,
+      "sha256": "3299af3c586f3d166346c006150c8fb616ff0c8be6d948f6d8eed5324ec6140a",
+      "changed_during_hash": false,
+      "relative_path": "scripts/check_repository.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/scripts/run_tests.py",
+      "exists": true,
+      "bytes": 943,
+      "sha256": "aa78ced183f919c30e6728203a9d34a12930ef79806cbf96862750e02b9ae81e",
+      "changed_during_hash": false,
+      "relative_path": "scripts/run_tests.py"
+    },
+    {
+      "path": "/workspace/Football-Analysis/scripts/version_checkpoint.py",
+      "exists": true,
+      "bytes": 5455,
+      "sha256": "fb9ba4abd98bf7d5dce868b335acf0a20156288d0926d0edadc2ab299a344a42",
+      "changed_during_hash": false,
+      "relative_path": "scripts/version_checkpoint.py"
+    }
+  ],
+  "registry": {
+    "path": "/workspace/WCPP/runtime/active-model.json",
+    "exists": true,
+    "bytes": 11451,
+    "sha256": "7c53ac2f7b3b5c856beb6590c274b006f2cdc8d4c49625fe6beef16b2e9a1590",
+    "changed_during_hash": false
+  },
+  "routes": {
+    "afc.champions:ELITE:league_phase": {
+      "current": {
+        "path": "/workspace/WCPP/models/active-routes-20261027/afc.champions-ELITE-league_phase/current-artifact.json",
+        "exists": true,
+        "bytes": 1417,
+        "sha256": "c6528dec375c8d03986abc3fbe07a6312b5fb4567828e71193ea0e8a6e07ce4d",
+        "changed_during_hash": false,
+        "registered_sha256": "c6528dec375c8d03986abc3fbe07a6312b5fb4567828e71193ea0e8a6e07ce4d",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AFC-ELITE-CURRENT-CONSTANT-0.1",
+          "created_at": "2026-10-27T06:31:31.540598+00:00",
+          "core_training": {
+            "fit_end": "2026-10-12",
+            "fit_n": 207
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/models/active-routes-20261027/afc.champions-ELITE-league_phase/dataset/manifest.json",
+            "exists": true,
+            "bytes": 591,
+            "sha256": "41ead7c887596850510b4fb2e21a02e1e9ea65a1bcb05d798d1d8d65f4ae8f27",
+            "changed_during_hash": false,
+            "reference_key": "dataset_manifest"
+          }
+        ]
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/active-routes-20261027/afc.champions-ELITE-league_phase/test-artifact.json",
+        "exists": true,
+        "bytes": 5409,
+        "sha256": "5c30631e3f3552aa8d9d60812848695e04393c73ccd9a22d12551009a5b4e9de",
+        "changed_during_hash": false,
+        "registered_sha256": "5c30631e3f3552aa8d9d60812848695e04393c73ccd9a22d12551009a5b4e9de",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AFC-ELITE-TEST-POISSON-0.1",
+          "created_at": "2026-10-27T06:31:31.540682+00:00",
+          "core_training": {
+            "fit_end": "2026-10-12",
+            "fit_n": 207
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/models/active-routes-20261027/afc.champions-ELITE-league_phase/dataset/manifest.json",
+            "exists": true,
+            "bytes": 591,
+            "sha256": "41ead7c887596850510b4fb2e21a02e1e9ea65a1bcb05d798d1d8d65f4ae8f27",
+            "changed_during_hash": false,
+            "reference_key": "dataset_manifest"
+          }
+        ]
+      },
+      "current_engine": "generic_poisson",
+      "test_engine": "generic_poisson"
+    },
+    "afc.cup:CHAMPIONS_TWO:group_stage": {
+      "current": {
+        "path": "/workspace/WCPP/models/afc2-group-20261029-r2/current-artifact.json",
+        "exists": true,
+        "bytes": 1096,
+        "sha256": "ae388db40e998bb0d9ca935e1ca403b414da68c1a07855d313e23d758dbe4665",
+        "changed_during_hash": false,
+        "registered_sha256": "ae388db40e998bb0d9ca935e1ca403b414da68c1a07855d313e23d758dbe4665",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AFC2-CUP-CURRENT-0.1",
+          "created_at": "2026-10-29T07:48:47.570887+00:00",
+          "core_training": {
+            "fit_end": "2026-09-17",
+            "fit_n": 197
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/models/afc2-group-20261029-r2/manifest.json",
+            "exists": true,
+            "bytes": 559,
+            "sha256": "65b081cd579aac16516b2828e57e4d8b6e064c69a130d87899157b848b647aac",
+            "changed_during_hash": false,
+            "reference_key": "dataset_manifest"
+          }
+        ]
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/afc2-group-20261029-r2/test-artifact.json",
+        "exists": true,
+        "bytes": 6445,
+        "sha256": "75c2c77b99cc366651c146eef95e92498035762dafaf122b641700cc97efc9e3",
+        "changed_during_hash": false,
+        "registered_sha256": "75c2c77b99cc366651c146eef95e92498035762dafaf122b641700cc97efc9e3",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AFC2-CUP-TEST-0.1",
+          "created_at": "2026-10-29T07:48:47.571081+00:00",
+          "core_training": {
+            "fit_end": "2026-09-17",
+            "fit_n": 197
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/models/afc2-group-20261029-r2/manifest.json",
+            "exists": true,
+            "bytes": 559,
+            "sha256": "65b081cd579aac16516b2828e57e4d8b6e064c69a130d87899157b848b647aac",
+            "changed_during_hash": false,
+            "reference_key": "dataset_manifest"
+          }
+        ]
+      },
+      "current_engine": "generic_poisson",
+      "test_engine": "generic_poisson"
+    },
+    "aus.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/active-routes-20261027/aus.1/current-artifact.json",
+        "exists": true,
+        "bytes": 1328,
+        "sha256": "f3e9e25f84a468ed937c0d82c041c4ba0f16cb641e36f63e7515a00b2415964a",
+        "changed_during_hash": false,
+        "registered_sha256": "f3e9e25f84a468ed937c0d82c041c4ba0f16cb641e36f63e7515a00b2415964a",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AUS-CURRENT-CONSTANT-0.1",
+          "created_at": "2026-10-27T06:31:31.484322+00:00",
+          "core_training": {
+            "fit_end": "2026-04-26",
+            "fit_n": 2807
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/reports/aus-expert-20261016/dataset-boundary-refit-v1/manifest.json",
+            "exists": true,
+            "bytes": 982,
+            "sha256": "8e2e105d435d45c4298d1547088b7cfb9c255b19a2feed84baf7342905f9fdec",
+            "changed_during_hash": false,
+            "reference_key": "dataset_manifest"
+          }
+        ]
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/aus-expert-20261016-boundary-refit-v1/artifact.json",
+        "exists": true,
+        "bytes": 3322,
+        "sha256": "6cd38d5fa0dc9d5413ec4e062bcb209a598763b419f8bab54f60352dd26bef5d",
+        "changed_during_hash": false,
+        "registered_sha256": "6cd38d5fa0dc9d5413ec4e062bcb209a598763b419f8bab54f60352dd26bef5d",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-AUS-EXPERT-0.1.1-DATAFIX",
+          "created_at": "2026-10-16T02:58:16.294930+00:00",
+          "core_training": {
+            "fit_end": "2026-04-26",
+            "fit_n": 2807
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/reports/aus-expert-20261016/dataset-boundary-refit-v1/manifest.json",
+            "exists": true,
+            "bytes": 982,
+            "sha256": "8e2e105d435d45c4298d1547088b7cfb9c255b19a2feed84baf7342905f9fdec",
+            "changed_during_hash": false,
+            "reference_key": "dataset"
+          }
+        ]
+      },
+      "current_engine": "generic_poisson",
+      "test_engine": "aus_expert"
+    },
+    "bra.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/bra.1/artifact.json",
+        "exists": true,
+        "bytes": 1014014,
+        "sha256": "6fa5b60cec4cc1a51b6ff019072da029cd7d558a33a203ab8c2846b97efdf318",
+        "changed_during_hash": false,
+        "registered_sha256": "6fa5b60cec4cc1a51b6ff019072da029cd7d558a33a203ab8c2846b97efdf318",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "bra.1",
+          "anchor_train_end": "2026-10-09",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/bra.1/artifact.json",
+        "exists": true,
+        "bytes": 566428,
+        "sha256": "bfb1ec1472a7503c7f70bd69bbd349d88df652d7ecaac436b4e36fdeef415191",
+        "changed_during_hash": false,
+        "registered_sha256": "bfb1ec1472a7503c7f70bd69bbd349d88df652d7ecaac436b4e36fdeef415191",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "bra.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "eng.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/eng.1/artifact.json",
+        "exists": true,
+        "bytes": 895782,
+        "sha256": "ac5ef67c624da8913a2e3492b2fbae6b73776bf0f9e5157423c72e718dd72983",
+        "changed_during_hash": false,
+        "registered_sha256": "ac5ef67c624da8913a2e3492b2fbae6b73776bf0f9e5157423c72e718dd72983",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "eng.1",
+          "anchor_train_end": "2026-09-20",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/eng.1/artifact.json",
+        "exists": true,
+        "bytes": 797661,
+        "sha256": "9f78989414419514a23f669aa9648e341a4899890101f363cc47bff5057b03e0",
+        "changed_during_hash": false,
+        "registered_sha256": "9f78989414419514a23f669aa9648e341a4899890101f363cc47bff5057b03e0",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "eng.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "eng.2": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/eng.2/artifact.json",
+        "exists": true,
+        "bytes": 1340284,
+        "sha256": "72beee6485c2c700219ab800fc1ce20794b6b41f096dea3b13214f9b8d283fcc",
+        "changed_during_hash": false,
+        "registered_sha256": "72beee6485c2c700219ab800fc1ce20794b6b41f096dea3b13214f9b8d283fcc",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "eng.2",
+          "anchor_train_end": "2026-09-20",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/eng.2/artifact.json",
+        "exists": true,
+        "bytes": 725650,
+        "sha256": "8b5450da4931868d9e352c06937a762546f0a08b30cf055be3f809f2ea7cea54",
+        "changed_during_hash": false,
+        "registered_sha256": "8b5450da4931868d9e352c06937a762546f0a08b30cf055be3f809f2ea7cea54",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "eng.2",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "eng.league_cup:single_leg": {
+      "current": {
+        "path": "/workspace/WCPP/models/efl-cup-20261029-r3/current-artifact.json",
+        "exists": true,
+        "bytes": 1283,
+        "sha256": "3e608caf414d3c68b4100894a18cbaf196123110826f54a9c8d48c3fe5a5efad",
+        "changed_during_hash": false,
+        "registered_sha256": "3e608caf414d3c68b4100894a18cbaf196123110826f54a9c8d48c3fe5a5efad",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-EFL-CUP-CURRENT-0.1",
+          "created_at": "2026-10-29T07:50:39.371985+00:00",
+          "core_training": {
+            "fit_end": "2026-10-28",
+            "fit_n": 342
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/models/efl-cup-20261029-r3/manifest.json",
+            "exists": true,
+            "bytes": 559,
+            "sha256": "3a27220e638b7559625cbacede9bdceaed183b822030f8f2b35091e4ec146299",
+            "changed_during_hash": false,
+            "reference_key": "dataset_manifest"
+          }
+        ]
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/efl-cup-20261029-r3/test-artifact.json",
+        "exists": true,
+        "bytes": 8509,
+        "sha256": "e2fcdebe8bf984abb8bacee4f722a746ca4d57e9ef79b0239d2782371f6c23fb",
+        "changed_during_hash": false,
+        "registered_sha256": "e2fcdebe8bf984abb8bacee4f722a746ca4d57e9ef79b0239d2782371f6c23fb",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-EFL-CUP-TEST-0.1",
+          "created_at": "2026-10-29T07:50:39.372187+00:00",
+          "core_training": {
+            "fit_end": "2026-10-28",
+            "fit_n": 342
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/models/efl-cup-20261029-r3/manifest.json",
+            "exists": true,
+            "bytes": 559,
+            "sha256": "3a27220e638b7559625cbacede9bdceaed183b822030f8f2b35091e4ec146299",
+            "changed_during_hash": false,
+            "reference_key": "dataset_manifest"
+          }
+        ]
+      },
+      "current_engine": "generic_poisson",
+      "test_engine": "generic_poisson"
+    },
+    "esp.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/esp.1/artifact.json",
+        "exists": true,
+        "bytes": 912322,
+        "sha256": "3d4da662d2b671c368860f7786ce7d2b22ddab4f60efc1b61470230ce57234ec",
+        "changed_during_hash": false,
+        "registered_sha256": "3d4da662d2b671c368860f7786ce7d2b22ddab4f60efc1b61470230ce57234ec",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "esp.1",
+          "anchor_train_end": "2026-10-09",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/esp.1/artifact.json",
+        "exists": true,
+        "bytes": 812983,
+        "sha256": "dc1c4071478cabd7de2861e31edfe9decad328ebdf174c3c8cf639dbc4fd5682",
+        "changed_during_hash": false,
+        "registered_sha256": "dc1c4071478cabd7de2861e31edfe9decad328ebdf174c3c8cf639dbc4fd5682",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "esp.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "fra.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/fra.1/artifact.json",
+        "exists": true,
+        "bytes": 712821,
+        "sha256": "403b79855abfe75a6fc05dfe0e4ddaf52f2204e933daadae6335df2ba9b816b8",
+        "changed_during_hash": false,
+        "registered_sha256": "403b79855abfe75a6fc05dfe0e4ddaf52f2204e933daadae6335df2ba9b816b8",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "fra.1",
+          "anchor_train_end": "2026-10-09",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/fra.1/artifact.json",
+        "exists": true,
+        "bytes": 418965,
+        "sha256": "1b6567b71fbbdb0f0e03669bf37c732b9f73ceda0bc66f30bf905d6a5298b9e9",
+        "changed_during_hash": false,
+        "registered_sha256": "1b6567b71fbbdb0f0e03669bf37c732b9f73ceda0bc66f30bf905d6a5298b9e9",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "fra.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "ger.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/ger.1/artifact.json",
+        "exists": true,
+        "bytes": 724777,
+        "sha256": "d8e4e8edeb3b1be5bb3567496c5ff3f90de31de8bdf2e5ec00e68c38990c7691",
+        "changed_during_hash": false,
+        "registered_sha256": "d8e4e8edeb3b1be5bb3567496c5ff3f90de31de8bdf2e5ec00e68c38990c7691",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ger.1",
+          "anchor_train_end": "2026-10-09",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/ger.1/artifact.json",
+        "exists": true,
+        "bytes": 425214,
+        "sha256": "9d81229e3699c648596e4545e6670cf705ecfb92385c35f7f19444b641edc740",
+        "changed_during_hash": false,
+        "registered_sha256": "9d81229e3699c648596e4545e6670cf705ecfb92385c35f7f19444b641edc740",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ger.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "ita.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/ita.1/artifact.json",
+        "exists": true,
+        "bytes": 920595,
+        "sha256": "ca69b767362958577e22a4157c23613cb9b6e12604ffb20fcaa2b624413e6dbd",
+        "changed_during_hash": false,
+        "registered_sha256": "ca69b767362958577e22a4157c23613cb9b6e12604ffb20fcaa2b624413e6dbd",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "ita.1",
+          "anchor_train_end": "2026-09-20",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/ita.1/artifact.json",
+        "exists": true,
+        "bytes": 520787,
+        "sha256": "f005920710f0124a37ab75e448a96c141bb9b3024d40b444a6445bc6dea34cb5",
+        "changed_during_hash": false,
+        "registered_sha256": "f005920710f0124a37ab75e448a96c141bb9b3024d40b444a6445bc6dea34cb5",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "ita.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "jpn.1": {
+      "current": {
+        "path": "/workspace/WCPP/reports/japan-korea-20261010/jpn.1-artifact.json",
+        "exists": true,
+        "bytes": 42478,
+        "sha256": "995f8686ff6348e5f0c6b40a8838a714c4118036968285d01e188e6db29f4ab2",
+        "changed_during_hash": false,
+        "registered_sha256": "995f8686ff6348e5f0c6b40a8838a714c4118036968285d01e188e6db29f4ab2",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-MAIN-1.1",
+          "train_end": "2026-10-09",
+          "cohort": "jpn.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/systematic-20261015-final-extended-003/jpn.1/artifact.json",
+        "exists": true,
+        "bytes": 3965,
+        "sha256": "f5532bb519983e04eb44c6778df405aaa7420790f78c84b8b6047ea13011b12a",
+        "changed_during_hash": false,
+        "registered_sha256": "f5532bb519983e04eb44c6778df405aaa7420790f78c84b8b6047ea13011b12a",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-SYSTEMATIC-RESEARCH-0.1",
+          "cohort": "jpn.1",
+          "created_at": "2026-10-15T06:00:06.989216+00:00",
+          "core_training": {
+            "fit_end": "2026-10-10",
+            "fit_n": 1152
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/reports/systematic-optimization-20261015/datasets/extended-001/manifest.json",
+            "exists": true,
+            "bytes": 1197,
+            "sha256": "59a3eb9a3bb96a2004f4fcbfc2bcdfa5953ca5d6dfd9063aadb3bc573ad75b48",
+            "changed_during_hash": false,
+            "reference_key": "dataset"
+          }
+        ]
+      },
+      "current_engine": "v4_main_compat",
+      "test_engine": "systematic_candidate"
+    },
+    "kor.1": {
+      "current": {
+        "path": "/workspace/WCPP/reports/japan-korea-20261010/kor.1-artifact.json",
+        "exists": true,
+        "bytes": 158288,
+        "sha256": "f2c9a03bf4ddaa7bcb4eabaf2cb94434f9694e18d26dd6721af602e65aa9dd62",
+        "changed_during_hash": false,
+        "registered_sha256": "f2c9a03bf4ddaa7bcb4eabaf2cb94434f9694e18d26dd6721af602e65aa9dd62",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-MAIN-1.1",
+          "train_end": "2026-10-09",
+          "cohort": "kor.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/systematic-20261015-final-extended-003/kor.1/artifact.json",
+        "exists": true,
+        "bytes": 3194,
+        "sha256": "6b6d9bd66bb2f7dcb1f214407ed027f720d6cd4f823c120061ed1b172631014c",
+        "changed_during_hash": false,
+        "registered_sha256": "6b6d9bd66bb2f7dcb1f214407ed027f720d6cd4f823c120061ed1b172631014c",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-SYSTEMATIC-RESEARCH-0.1",
+          "cohort": "kor.1",
+          "created_at": "2026-10-15T06:00:07.569760+00:00",
+          "core_training": {
+            "fit_end": "2026-10-09",
+            "fit_n": 777
+          }
+        },
+        "referenced_files": [
+          {
+            "path": "/workspace/WCPP/reports/systematic-optimization-20261015/datasets/extended-001/manifest.json",
+            "exists": true,
+            "bytes": 1197,
+            "sha256": "59a3eb9a3bb96a2004f4fcbfc2bcdfa5953ca5d6dfd9063aadb3bc573ad75b48",
+            "changed_during_hash": false,
+            "reference_key": "dataset"
+          }
+        ]
+      },
+      "current_engine": "v4_main_compat",
+      "test_engine": "systematic_candidate"
+    },
+    "ksa.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/ksa.1/artifact.json",
+        "exists": true,
+        "bytes": 840590,
+        "sha256": "4a59e33f7acce4da67b35b9dcee9d94abfd798bbb80fc9c25ef472fa8fba8dec",
+        "changed_during_hash": false,
+        "registered_sha256": "4a59e33f7acce4da67b35b9dcee9d94abfd798bbb80fc9c25ef472fa8fba8dec",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ksa.1",
+          "anchor_train_end": "2026-10-09",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/ksa.1/artifact.json",
+        "exists": true,
+        "bytes": 481721,
+        "sha256": "f3e45a331a3a0e7ad3cb0221ff3cb0cf45ea2a4bd6c6df55a5a4a58df96f1759",
+        "changed_during_hash": false,
+        "registered_sha256": "f3e45a331a3a0e7ad3cb0221ff3cb0cf45ea2a4bd6c6df55a5a4a58df96f1759",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ksa.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "mex.1:apertura:regular": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/mex-apertura-dual/artifact.json",
+        "exists": true,
+        "bytes": 538863,
+        "sha256": "9614858205e8d3dcc56951d957f012e1c4ca603198a8acf79036037ed65e017e",
+        "changed_during_hash": false,
+        "registered_sha256": "9614858205e8d3dcc56951d957f012e1c4ca603198a8acf79036037ed65e017e",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-28",
+          "cohort": "mex.1:apertura:regular",
+          "anchor_train_end": "2026-09-28",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/mex.1-apertura-regular/artifact.json",
+        "exists": true,
+        "bytes": 333068,
+        "sha256": "70d7e66f72c30717327223c47a49c5c3e6998e56a9dbc16fa111f0667cfcad9a",
+        "changed_during_hash": false,
+        "registered_sha256": "70d7e66f72c30717327223c47a49c5c3e6998e56a9dbc16fa111f0667cfcad9a",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-28",
+          "cohort": "mex.1:apertura:regular",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "ned.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/ned.1/artifact.json",
+        "exists": true,
+        "bytes": 745492,
+        "sha256": "1440e0242882cecc14d4486f88220270ae05d8bdbf00361384432f026e2d3738",
+        "changed_during_hash": false,
+        "registered_sha256": "1440e0242882cecc14d4486f88220270ae05d8bdbf00361384432f026e2d3738",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ned.1",
+          "anchor_train_end": "2026-10-09",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/ned.1/artifact.json",
+        "exists": true,
+        "bytes": 435284,
+        "sha256": "2442f03bbe7da265d546af20b9097ca52efbb2435f49a9479d1a88da699f30aa",
+        "changed_during_hash": false,
+        "registered_sha256": "2442f03bbe7da265d546af20b9097ca52efbb2435f49a9479d1a88da699f30aa",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "ned.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "nor.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/nor.1/artifact.json",
+        "exists": true,
+        "bytes": 969273,
+        "sha256": "7c980a4cf9f4a2c8f47f44eb761f5aa9b75e1933872406416c41e3840ce8ffd3",
+        "changed_during_hash": false,
+        "registered_sha256": "7c980a4cf9f4a2c8f47f44eb761f5aa9b75e1933872406416c41e3840ce8ffd3",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "nor.1",
+          "anchor_train_end": "2026-10-09",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/nor.1/artifact.json",
+        "exists": true,
+        "bytes": 544714,
+        "sha256": "086fd30bf2ba48fd246af72cd30476007f2e5684f2555f017463d210dbaf31af",
+        "changed_during_hash": false,
+        "registered_sha256": "086fd30bf2ba48fd246af72cd30476007f2e5684f2555f017463d210dbaf31af",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "nor.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "por.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/por.1/artifact.json",
+        "exists": true,
+        "bytes": 742463,
+        "sha256": "860c6244fed26c1685d5487797b243bc9873ac66fa7f747afe7c6d9b45290746",
+        "changed_during_hash": false,
+        "registered_sha256": "860c6244fed26c1685d5487797b243bc9873ac66fa7f747afe7c6d9b45290746",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "por.1",
+          "anchor_train_end": "2026-10-09",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/por.1/artifact.json",
+        "exists": true,
+        "bytes": 432843,
+        "sha256": "86e67de8d9244522e988439ab64041455ba08777d21fdd05558b6c2678999f56",
+        "changed_during_hash": false,
+        "registered_sha256": "86e67de8d9244522e988439ab64041455ba08777d21fdd05558b6c2678999f56",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-09",
+          "cohort": "por.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "swe.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/swe.1/artifact.json",
+        "exists": true,
+        "bytes": 995890,
+        "sha256": "ecaf574c2e639139a404ec1f30432c8b27576b310a285843455f2e264832dc27",
+        "changed_during_hash": false,
+        "registered_sha256": "ecaf574c2e639139a404ec1f30432c8b27576b310a285843455f2e264832dc27",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "swe.1",
+          "anchor_train_end": "2026-09-20",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/swe.1/artifact.json",
+        "exists": true,
+        "bytes": 557666,
+        "sha256": "f540e29e1f11457061b332118412145d8e3d9966c06d23eb9564acbcf34ec5d2",
+        "changed_during_hash": false,
+        "registered_sha256": "f540e29e1f11457061b332118412145d8e3d9966c06d23eb9564acbcf34ec5d2",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-09-20",
+          "cohort": "swe.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    },
+    "uefa.champions:NEW_FORMAT:league_phase": {
+      "current": {
+        "path": "/workspace/WCPP/models/ucl-dual-20261013/uefa.champions-NEW_FORMAT-league_phase/current-artifact.json",
+        "exists": true,
+        "bytes": 3174181,
+        "sha256": "30e1baf7f24f9db3ccf683179162d994a87f20f5048b5eb6ecb3d6e011589759",
+        "changed_during_hash": false,
+        "registered_sha256": "30e1baf7f24f9db3ccf683179162d994a87f20f5048b5eb6ecb3d6e011589759",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-09-10",
+          "cohort": "uefa.champions:NEW_FORMAT:league_phase",
+          "anchor_train_end": "2026-09-10",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ucl-dual-20261013/uefa.champions-NEW_FORMAT-league_phase/test-artifact.json",
+        "exists": true,
+        "bytes": 1612519,
+        "sha256": "82180940b19757779ea06c192a2600bd45a8c832ddf9fd08e6ea5a620cc4dd6e",
+        "changed_during_hash": false,
+        "registered_sha256": "82180940b19757779ea06c192a2600bd45a8c832ddf9fd08e6ea5a620cc4dd6e",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-UCL-0.1",
+          "train_end": "2026-09-10",
+          "cohort": "uefa.champions:NEW_FORMAT:league_phase",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-UCL-0.1"
+    },
+    "usa.1": {
+      "current": {
+        "path": "/workspace/WCPP/models/weighted-20261012/usa.1/artifact.json",
+        "exists": true,
+        "bytes": 1075199,
+        "sha256": "ff328c4edd392a31eb414ec0ba188290e56524506dd80cdd011e61da3b9188e7",
+        "changed_during_hash": false,
+        "registered_sha256": "ff328c4edd392a31eb414ec0ba188290e56524506dd80cdd011e61da3b9188e7",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-WEIGHTED-0.1",
+          "train_end": "2026-10-07",
+          "cohort": "usa.1",
+          "anchor_train_end": "2026-10-07",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "test": {
+        "path": "/workspace/WCPP/models/ml-20261012/usa.1/artifact.json",
+        "exists": true,
+        "bytes": 596531,
+        "sha256": "15d3c0f5d570792545b6659590a4be49666944af9be9248f26fcffde98620478",
+        "changed_during_hash": false,
+        "registered_sha256": "15d3c0f5d570792545b6659590a4be49666944af9be9248f26fcffde98620478",
+        "registry_hash_matches": true,
+        "metadata": {
+          "version": "WCPP-ML-0.1",
+          "train_end": "2026-10-07",
+          "cohort": "usa.1",
+          "core_training": {}
+        },
+        "referenced_files": []
+      },
+      "current_engine": "legacy_weighted_anchor",
+      "test_engine": "WCPP-ML-0.1"
+    }
+  },
+  "databases": [
+    {
+      "path": "/workspace/WCPP/data/unified/WCPP_统一赛事库.sqlite",
+      "exists": true,
+      "bytes": 1031159808,
+      "sha256": "3d2de1064536d8b4029e2df6bd3ec227af15324e7ff7803413046c74823fdaea",
+      "changed_during_hash": false
+    }
+  ],
+  "database_sidecars": [
+    {
+      "path": "/workspace/WCPP/data/unified/WCPP_统一赛事库.sqlite-wal",
+      "exists": false
+    },
+    {
+      "path": "/workspace/WCPP/data/unified/WCPP_统一赛事库.sqlite-shm",
+      "exists": false
+    }
+  ],
+  "scope": "IDENTITIES_ONLY_NOT_RUNTIME_BACKUP_OR_COMPLETE_DEPENDENCY_CLOSURE",
+  "accuracy_improvement_claimed": false
+}
