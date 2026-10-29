@@ -1,4 +1,5 @@
 -r runtime/v6/requirements.txt
+scikit-learn==1.8.0
 xgboost-cpu==3.4.1
 catboost==1.2.10
 optuna==5.0.0

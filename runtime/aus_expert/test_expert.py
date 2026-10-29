@@ -13,6 +13,7 @@ class ExpertTests(unittest.TestCase):
   fs=[dict(match_id=str(i),cohort='aus.1',competition='aus.1',date='2020-01-%02d'%i,season='2019/20',home='H',away='A',stage='regular',neutral=None) for i in range(1,10)];ys={x['match_id']:dict(home_goals=1,away_goals=0) for x in fs};target=fs[6];h=r.History(fs,ys,[],7);before,proof=h.vector(target,'2020-01-05');ys2=copy.deepcopy(ys)
   for key in ('5','6','7','8','9'):ys2[key]['home_goals']=99
   after,_=r.History(fs,ys2,[],7).vector(target,'2020-01-05');np.testing.assert_equal(before,after);self.assertEqual(proof['historical_match_ids'],['1','2','3','4'])
+ @unittest.skipUnless(r.DB.is_file(), 'external Australian historical database required')
  def test_append_only_import_rollback_and_legal_repeat(self):
   with tempfile.TemporaryDirectory() as td:
    t=Path(td);db=t/'canonical.sqlite';c=sqlite3.connect(db);src=r.dbconnect(readonly=True)

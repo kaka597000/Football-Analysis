@@ -7,7 +7,7 @@ SUITES=sorted({p.parent.relative_to(ROOT).as_posix()
 
 def main():
     env=dict(os.environ,OPENBLAS_NUM_THREADS='1', OMP_NUM_THREADS='1',
-             PYTHONPATH=str(ROOT/'runtime'))
+             PYTHONPATH=os.pathsep.join((str(ROOT/'runtime'), str(ROOT/'runtime/optimization'))))
     failures=[]
     for suite in SUITES:
         print('Testing '+suite,flush=True)
