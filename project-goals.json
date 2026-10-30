@@ -19,5 +19,7 @@
   "research_scope": ["statistical_score_distributions", "dixon_coles", "xg_xga_features", "machine_learning", "calibration", "validated_ensemble_weights", "deep_learning_experiments", "reinforcement_learning_experiments"],
   "guardrails": ["no_future_information", "no_invented_probabilities_or_features", "no_posthoc_version_selection", "independent_model_records", "actual_market_lines_only", "report_coverage_and_uncertainty", "no_accuracy_claim_from_training_or_refactoring"],
   "automatic_background_execution_enabled": false,
+  "automatic_background_execution_requested": true,
+  "automatic_background_deployment_status": "PENDING_PRIVATE_DATA_REPOSITORY_AND_GITHUB_SECRET_PERMISSIONS",
   "policy": "docs/project-goals.md"
 }

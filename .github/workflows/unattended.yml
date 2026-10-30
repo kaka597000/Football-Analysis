@@ -1,0 +1,62 @@
+name: WCPP unattended research
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [collect, train]
+        default: collect
+  schedule:
+    - cron: '17 */6 * * *'
+    - cron: '37 2 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: wcpp-private-research-state
+  cancel-in-progress: false
+jobs:
+  research:
+    if: vars.WCPP_UNATTENDED_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: code
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore private state
+        uses: actions/checkout@v4
+        with:
+          repository: kaka597000/Football-Analysis-Data
+          ssh-key: ${{ secrets.WCPP_DATA_DEPLOY_KEY }}
+          path: private-state
+          persist-credentials: true
+      - name: Install bounded CPU dependencies
+        run: python -m pip install -r code/requirements.txt lightgbm==4.6.0
+      - name: Run job
+        id: job
+        working-directory: code
+        env:
+          REQUESTED_MODE: ${{ inputs.mode }}
+          SCHEDULE_SPEC: ${{ github.event.schedule }}
+        run: |
+          mode=collect
+          if [ "$REQUESTED_MODE" = train ] || [ "$SCHEDULE_SPEC" = '37 2 * * *' ]; then mode=train; fi
+          python -m runtime.automation.run "$mode" --state-dir ../private-state
+      - name: Persist private state even after a failed job
+        if: always()
+        working-directory: private-state
+        run: |
+          git config user.name 'WCPP automation'
+          git config user.email 'wcpp-automation@users.noreply.github.com'
+          git add seed config runs raw snapshots candidates normalized-results.jsonl quarantine* 2>/dev/null || git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update private research state'
+            git push origin HEAD:main
+          fi
