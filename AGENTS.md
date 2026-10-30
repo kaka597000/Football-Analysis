@@ -2,7 +2,7 @@
 
 # WCPP 项目工作规则
 
-- **2026-10-30无人值守授权**：用户明确希望持续采集和训练，覆盖旧“不新建定时任务”限制，仅限本次有界免费方案。新增GitHub Actions采集与候选训练配置；私有数据仓库和专用部署密钥就绪、人工安装并验证前保持启用开关关闭。代码公开、数据私有；原活动模型不自动晋级，付费API/LLM/GPU不自动启用。参见docs/unattended-operation.md，部署状态不得冒称已上线。
+- **2026-10-30无人值守授权**：用户明确希望持续采集和训练，覆盖旧“不新建定时任务”限制；本次安装必须由代理在云端完成，无需用户电脑。真实私有仓库为`kaka597000/kaka597000-Football-Analysis-Data`。现连接无Secrets/Deploy keys权限，采用私有仓库自身GITHUB_TOKEN持久化、读取固定commit公开源码的Actions方案，不复制云端凭据。使用账户Actions额度，5分钟job上限；旧公开仓库Secret方案仅作停用备用，禁止两处重复定时。代码公开、数据私有，候选不自动晋级，付费API/LLM/GPU不自动启用。必须验证真实远端采集、训练与私有提交后才登记已部署。参见docs/unattended-operation.md。
 
 - **2026-10-30 FMA执行**：用户授权实施PRD适配，并明确需要更多智能体和分钟级模拟。赛事范围沿用现项目，数据沿用现有免费来源与实际免费权限，订阅后另评估；不以log-loss/RPS替代Primary Top1。已建立同矩阵joint/layered独立实验、五角色有界审查框架、独立分钟模拟及可配置共享免费额度账本。默认预测附selection_experiment元数据，原Primary和矩阵保持；角色无caller标NOT_RUN，分钟状态参数缺合格训练时禁用，不能将mock/基础泊松模拟说成已训练AI增益。进度与限制见docs/fma-implementation-20261030.md。不新建仓库/定时任务。
 

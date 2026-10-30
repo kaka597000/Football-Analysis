@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 
 CODE='kaka597000/Football-Analysis'
-DATA='kaka597000/Football-Analysis-Data'
+DATA='kaka597000/kaka597000-Football-Analysis-Data'
 
 
 def gh(*args, input_bytes=None):

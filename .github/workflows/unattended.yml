@@ -33,7 +33,7 @@ jobs:
       - name: Restore private state
         uses: actions/checkout@v4
         with:
-          repository: kaka597000/Football-Analysis-Data
+          repository: kaka597000/kaka597000-Football-Analysis-Data
           ssh-key: ${{ secrets.WCPP_DATA_DEPLOY_KEY }}
           path: private-state
           persist-credentials: true

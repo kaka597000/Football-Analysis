@@ -10,12 +10,15 @@ import sys
 REPO=Path(__file__).resolve().parents[2]
 
 
-def execute(state_dir, mode):
+def execute(state_dir, mode, *, max_collection_seconds=300):
+    if type(max_collection_seconds) is not int or not 30 <= max_collection_seconds <= 300:
+        raise ValueError('collection budget must be an integer from 30 to 300 seconds')
     root=Path(state_dir).resolve()
     if root==REPO or root.is_relative_to(REPO/'runtime'):
         raise ValueError('separate private data checkout required')
     scopes=json.loads((root/'config/scopes.json').read_text())
     policy={'max_cohorts':len(scopes),'max_requests':100,'lookback_days':2,'promotion':'NEVER',
+            'max_collection_seconds':max_collection_seconds,
             'data_sources':'existing public JSON endpoints only','paid_api_calls':False}
     stamp=datetime.now(timezone.utc);rid=stamp.strftime('%Y%m%dT%H%M%S')+'-'+mode
     status={'run_id':rid,'started_at':stamp.isoformat(),'mode':mode,'policy':policy,
@@ -29,7 +32,7 @@ def execute(state_dir, mode):
     try:
         if mode=='collect':
             from .collector import collect
-            status['result']=collect(root,scopes,lookback_days=2)
+            status['result']=collect(root,scopes,lookback_days=2,max_seconds=max_collection_seconds)
         elif mode=='train':
             from .trainer import train
             status['result']=train(root,max_cohorts=len(scopes))
@@ -50,4 +53,6 @@ def execute(state_dir, mode):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('mode',choices=('collect','train'));p.add_argument('--state-dir',required=True)
-    a=p.parse_args();r=execute(a.state_dir,a.mode);sys.exit(0 if r['status']=='COMPLETED' else 1)
+    p.add_argument('--max-collection-seconds',type=int,default=300)
+    a=p.parse_args();r=execute(a.state_dir,a.mode,max_collection_seconds=a.max_collection_seconds)
+    sys.exit(0 if r['status']=='COMPLETED' else 1)

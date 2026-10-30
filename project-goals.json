@@ -20,6 +20,6 @@
   "guardrails": ["no_future_information", "no_invented_probabilities_or_features", "no_posthoc_version_selection", "independent_model_records", "actual_market_lines_only", "report_coverage_and_uncertainty", "no_accuracy_claim_from_training_or_refactoring"],
   "automatic_background_execution_enabled": false,
   "automatic_background_execution_requested": true,
-  "automatic_background_deployment_status": "PENDING_PRIVATE_DATA_REPOSITORY_AND_GITHUB_SECRET_PERMISSIONS",
+  "automatic_background_deployment_status": "INSTALLING_PRIVATE_REPOSITORY_ACTIONS_NO_SECRETS",
   "policy": "docs/project-goals.md"
 }

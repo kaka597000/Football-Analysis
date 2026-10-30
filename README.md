@@ -41,7 +41,7 @@ python scripts/run_tests.py
 
 ## 结构
 
-无人值守采集/候选训练方案已备妥，当前等待私有数据仓库与GitHub Secrets权限配置，尚未启用后台。一次性安装、执行频率与停止方法见[部署说明](docs/unattended-operation.md)。
+无人值守采集/候选训练改用私有数据仓库自身的GitHub Actions运行，代理在云端安装，无需用户电脑或专用Secret。按固定源码commit运行，真实部署验证状态、执行频率与停止方法见[部署说明](docs/unattended-operation.md)。候选不自动替换当前/test。
 
 FMA隔离研究第一阶段：默认双模型输出新增joint/layered选分对照元数据；五角色证据审查、分钟模拟和共享免费额度保护分别提供研究接口。原Primary不由新实验覆盖，真实事件状态参数尚未训练，详见[实现与验证边界](docs/fma-implementation-20261030.md)。
 
