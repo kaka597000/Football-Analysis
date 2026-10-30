@@ -26,6 +26,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: private-state
+          # A queued dispatch carries an older event SHA; load latest serialized state.
+          ref: main
       - name: Read pinned public code
         uses: actions/checkout@v4
         with:

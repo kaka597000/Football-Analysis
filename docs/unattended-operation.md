@@ -5,7 +5,7 @@
 ## 当前状态
 
 用户已创建真实私有仓库`kaka597000/kaka597000-Football-Analysis-Data`并授权云端安装。原先期待的`Football-Analysis-Data`不是实际名称；不能根据该旧地址404认定用户没有创建仓库。
-现连接具有私有仓库内容和workflow权限，仍无Secrets/Deploy keys管理权限。因此改用私有仓库自身的Actions/GITHUB_TOKEN，不需要安装包、本地电脑、个人PAT或专用Secret。远端采集、训练及持久化验证结果以部署报告为准，未完成不得登记DEPLOYED。
+现连接具有私有仓库内容和workflow权限，仍无Secrets/Deploy keys管理权限。因此改用私有仓库自身的Actions/GITHUB_TOKEN，不需要安装包、本地电脑、个人PAT或专用Secret。已完成远端采集、训练及持久化验证，状态为DEPLOYED_PRIVATE_ACTIONS_VERIFIED；实际证据见[部署报告](unattended-deployment-20261030.md)。后续定时是否成功仍需以逐轮Actions及私有runs记录为准。
 
 ## 计划执行频率和资源
 
@@ -16,7 +16,7 @@
 
 运行使用GitHub账户自带的私有仓库Actions额度；每天5轮、31天按每轮5分钟计算上限775分钟，不含手动加跑与其他项目。账户剩余额度和计费设置本连接无权读取，不能承诺共享额度始终充足或基础设施绝无账单。未购买服务、设置付费预算、调用收费API或启用付费/GPU runner。
 
-GitHub实际调度可能延迟。GitHub公共仓库长期无活动可能停用schedule；本方案记录每轮成功时间，但不能承诺永不停止。原云端停止不会影响已正确安装的GitHub任务；本方案也不会让当前聊天或Luna在后台持续运行。
+GitHub实际调度可能延迟；额度耗尽、仓库设置或平台故障可能停止任务。本方案记录每轮成功时间，但不能承诺永不停止。原云端停止不会影响已正确安装的GitHub任务；本方案也不会让当前聊天或Luna在后台持续运行。
 本版训练是固定参数的统计模型研究，不是无人值守GPT调用、深度学习或GPU训练。模型晋级保持关闭。
 
 ## 存储和数据范围
@@ -31,7 +31,7 @@ GitHub实际调度可能延迟。GitHub公共仓库长期无活动可能停用sc
 
 ## 本地验证
 
-本轮全目录302项测试通过，源码/凭据与diff检查通过。远端CI状态以实际GitHub运行结果为准，不能把本地通过等同于已部署。
+本轮全目录306项测试通过，源码/凭据与diff检查通过；源码0741bfb的远端CI也通过。本地测试、远端CI和真实后台运行分别核验，不相互替代。
 
 导出9127条；首轮真实候选训练20队列完成，J1仅82条低于120门槛而跳过。全流程不修改active-model.json。
 一次真实采集烟雾：50请求、47成功、新增14条90分钟结果；45秒试验预算下约20秒结束（为下一次25秒timeout留余量）。部分赛事未扫描，盘口未取得，coverage_complete=false；不把这次报告称全量覆盖。
@@ -41,6 +41,7 @@ GitHub实际调度可能延迟。GitHub公共仓库长期无活动可能停用sc
 
 代理核查仓库为private，将已独立验证SHA256的seed和明确scopes上传；不覆盖已有不同种子。将模板的`__WCPP_CODE_REF__`替换为已推送的完整源码commit，安装为私有`.github/workflows/unattended.yml`。
 先关闭旧公开仓库的unattended workflow，避免重复定时；不影响公开Python测试CI。手动dispatch collect、确认远端成功并在私有runs查到状态；再dispatch train，核查候选、诊断和私有提交。两者成功后才能登记DEPLOYED。
+私有状态checkout明确指定`ref: main`，让排队任务读取前一任务刚保存的状态；不能用dispatch时的旧event SHA，否则即使串行也可能产生非快进推送失败。禁止force push解决此类问题。
 `scripts/setup_unattended.py`和旧zip保留为原公开执行/部署密钥方案的历史备用，当前方案不使用它们，不要求用户在任何电脑登录或安装。
 
 ## 停止、失败和恢复
