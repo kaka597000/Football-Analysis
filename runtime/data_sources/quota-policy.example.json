@@ -1,0 +1,7 @@
+{
+  "note": "Only merge quota_policies into a verified batch plan after checking actual free account limits. Null limits block configured providers; these are not measured allowances.",
+  "quota_policies": {
+    "the-odds-api": {"limit": null, "period": "month", "estimated_units": 2, "min_interval_seconds": 1},
+    "api-football": {"limit": null, "period": "day", "estimated_units": 1, "min_interval_seconds": 10}
+  }
+}

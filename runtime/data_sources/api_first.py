@@ -45,7 +45,7 @@ def pointer(value, path):
         return None
 
 
-def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep):
+def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep, quota_ledger=None):
     now = clock or (lambda: datetime.now(timezone.utc))
     cache = Path(cache_dir)
     cache.mkdir(parents=True, exist_ok=True)
@@ -62,6 +62,9 @@ def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep):
             for item in value:
                 safe_keys(item)
     safe_keys(plan)
+    quota_policies = plan.get('quota_policies', {})
+    if quota_policies and quota_ledger is None:
+        raise ValueError('configured quota policies require a shared ledger path')
     encoded = json.dumps(plan, ensure_ascii=False)
     for provider in PROVIDERS.values():
         for binding in ([provider['env']] if 'env' in provider else []) + provider.get('aliases', []):
@@ -126,7 +129,17 @@ def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep):
         delay = last_call.get(provider, 0) + interval - time.monotonic()
         if delay > 0:
             sleeper(delay)
-        item = fetcher(**arguments)
+        if provider in quota_policies:
+            try:
+                from .quota import QuotaLedger, run_with_quota
+            except ImportError:
+                from quota import QuotaLedger, run_with_quota
+            spec_policy = quota_policies[provider]
+            account = arguments.get('credential_binding') or PROVIDERS[provider].get('env', 'PUBLIC')
+            item = run_with_quota(QuotaLedger(quota_ledger), provider, account,
+                                 lambda: fetcher(**arguments), **spec_policy)
+        else:
+            item = fetcher(**arguments)
         last_call[provider] = time.monotonic()
         item['cache_hit'] = False
         call = item['call']
@@ -204,6 +217,7 @@ def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep):
             'supporting_requests': list(by_key.values()),
             'api_evidence': evidence, 'web_gap_tasks': gaps,
             'model_ingestion_performed': False, 'api_phase_complete': True,
+            'quota_guard': 'EXPLICIT_POLICIES_ONLY' if quota_policies else 'NOT_CONFIGURED_LEGACY_LIMITS_ONLY',
             'note': '网页任务只在接口阶段结束后生成；证据仍需主代理核验。'}
 
 
@@ -212,11 +226,12 @@ def main():
     p.add_argument('plan')
     p.add_argument('--cache-dir', required=True)
     p.add_argument('--out', required=True)
+    p.add_argument('--quota-ledger')
     a = p.parse_args()
     target = Path(a.out)
     if target.exists():
         raise FileExistsError(a.out)
-    result = run(json.loads(Path(a.plan).read_text()), a.cache_dir)
+    result = run(json.loads(Path(a.plan).read_text()), a.cache_dir, quota_ledger=a.quota_ledger)
     with target.open('x') as handle:
         json.dump(result, handle, ensure_ascii=False, indent=2, allow_nan=False)
     print(a.out)

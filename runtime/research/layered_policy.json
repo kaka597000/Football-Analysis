@@ -1,0 +1,14 @@
+{
+  "version": "WCPP-FMA-SELECTION-1",
+  "status": "EXPERIMENTAL_NOT_PRIMARY",
+  "total_bands": [[0, 1], [2, 3], [4, null]],
+  "direction_tie_order": ["home", "draw", "away"],
+  "score_tie_order": "home_goals_then_away_goals_ascending",
+  "direction_warning_below": 0.4,
+  "mean_mismatch_warning_above": 1.5,
+  "mass_tolerance": 1e-9,
+  "default_primary_changed": false,
+  "scope": "inherit_existing_project_and_free_sources",
+  "minimum_history_gate": "inherit_source_model_abstention",
+  "automatic_promotion": false
+}

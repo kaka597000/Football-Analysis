@@ -20,6 +20,8 @@ class DispatcherTests(unittest.TestCase):
    result=predict_active.run(fixture)
   self.assertEqual(result['current_model']['matrix'],current['matrix']);self.assertEqual(result['test_model']['matrix'],test['matrix']);self.assertEqual(result['current_model']['primary'],'1-0');self.assertEqual(result['test_model']['primary'],'1-1');self.assertEqual(result['upset_classifier']['status'],'ABSTAIN_INVALID_CLASSIFIER_INPUT_OR_ARTIFACT')
   self.assertFalse(result['execution_audit']['prediction_values_modified'])
+  self.assertFalse(result['selection_experiment']['primary_override'])
+  self.assertEqual(result['selection_experiment']['models']['current_model']['original_primary'],'1-0')
   self.assertEqual(result['execution_audit']['fixture_sha256'],predict_active.object_sha256(fixture))
   self.assertTrue(result['execution_audit']['entrypoint_sha256'])
   self.assertEqual(result['execution_audit']['source_identity']['status'],'GIT_IDENTIFIED')

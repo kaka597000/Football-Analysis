@@ -104,6 +104,21 @@ class ApiFirstTests(unittest.TestCase):
             self.collect(plan, folder)
         self.assertEqual([c['path'] for c in self.calls], ['/status', '/fixtures'])
 
+    def test_quota_is_only_reserved_for_network_after_cache_and_dedup(self):
+        from quota import QuotaLedger
+        plan=copy.deepcopy(self.plan)
+        plan['quota_policies']={'espn':{'limit':1,'period':'day'}}
+        with tempfile.TemporaryDirectory() as folder:
+            ledger=str(Path(folder)/'quota.sqlite')
+            a=run(plan,Path(folder)/'cache',fetcher=self.fetch,clock=lambda:self.now,
+                  sleeper=lambda _:None,quota_ledger=ledger)
+            run(plan,Path(folder)/'cache',fetcher=self.fetch,clock=lambda:self.now,
+                sleeper=lambda _:None,quota_ledger=ledger)
+            self.assertEqual(len(self.calls),1)
+            self.assertEqual(len([r for r in QuotaLedger(ledger).history()
+                                  if r['phase']=='RESERVE' and r['status']=='RESERVED']),1)
+            self.assertEqual(a['quota_guard'],'EXPLICIT_POLICIES_ONLY')
+
 
 if __name__ == '__main__':
     unittest.main()

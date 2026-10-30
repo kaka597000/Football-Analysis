@@ -41,6 +41,8 @@ python scripts/run_tests.py
 
 ## 结构
 
+FMA隔离研究第一阶段：默认双模型输出新增joint/layered选分对照元数据；五角色证据审查、分钟模拟和共享免费额度保护分别提供研究接口。原Primary不由新实验覆盖，真实事件状态参数尚未训练，详见[实现与验证边界](docs/fma-implementation-20261030.md)。
+
 |路径|职责|
 |---|---|
 |runtime/predict_active.py、active_route_engines.py|活动双模型路由、推理及执行身份审计|

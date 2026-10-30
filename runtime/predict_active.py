@@ -178,6 +178,8 @@ def run(fixture, registry_path=None):
     from research.score_distribution_audit import attach_pair as attach_audit
     attach_goals(output)
     attach_audit(output)
+    from research.layered_selector import compare_pair
+    output['selection_experiment'] = compare_pair(output)
     return output
 
 
