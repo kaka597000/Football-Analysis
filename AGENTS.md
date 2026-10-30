@@ -2,6 +2,8 @@
 
 # WCPP 项目工作规则
 
+- **2026-10-30项目长期目标**：持续优化模型代码，深入研究并验证足球分析方法，提高未来真实冻结样本的第一推荐精确比分、胜平负和实际盘口大小球命中率。Primary Top1是最高指标；70%/80%为尚未证明达到的目标。后续任务遵守[项目目标](docs/project-goals.md)及project-goals.json，按“采集核验→冻结→复盘诊断→独立实验→时间隔离验证→保留/切换/回滚→版本同步”执行。本次目标登记不代表启动后台任务或完成训练。
+
 - **2026-10-29采集与版本管理**：默认批量入口为 `python runtime/data_sources/cli.py --plan PLAN.json --cache-dir /workspace/WCPP/cache/api-first --out NEW.json`。先读适用接口/已有缓存，独立服务并行、同服务限速，按赛事/日期复用请求；API阶段结束后只把实际未补齐字段交给gpt-6-luna查公开网页。ESPN/FotMob公共JSON计入接口阶段；首发历史列表、空伤停、陈旧盘口不算已补齐。完整流程见docs/api-first-collection.md。完成一次可交付变更即测试、提交、推送并核验远端HEAD，按docs/version-management.md执行；不新建定时任务。此条替代先大范围网页搜索的旧流程。
 
 - **2026-10-19输出要求**：每批分析结尾列最推荐TOP3赛事，含胜平负、实际盘口大小球及唯一综合第一比分、排序理由；当前/test继续独立，名单和排序随分析赛前冻结，复盘单列且不替代全批统计。不足三场不强凑。完整规范见 docs/user-primary-score-requirements.md 的TOP3条款。

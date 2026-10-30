@@ -1,0 +1,23 @@
+{
+  "schema": "WCPP-PROJECT-GOALS-1",
+  "confirmed_at": "2026-10-30",
+  "timezone": "Asia/Shanghai",
+  "mission": "持续优化模型代码并深入研究和验证足球赛事分析方法，提高未来真实冻结样本的比分、胜平负及实际盘口大小球命中率",
+  "primary_metric": {
+    "id": "future_frozen_primary_exact_score_top1",
+    "priority": 1,
+    "target_rate": 0.70,
+    "target_status": "ASPIRATIONAL_NOT_PROVEN",
+    "population": "预先指定赛前冻结版本，90分钟赛果，当前/test/综合判断分别评估，保留全批覆盖与待定记录"
+  },
+  "secondary_metrics": [
+    {"id": "regulation_90_wdl_accuracy", "target_rate": 0.80, "target_status": "ASPIRATIONAL_NOT_PROVEN"},
+    {"id": "actual_line_total_full_win_rate", "target_rate": 0.80, "target_status": "ASPIRATIONAL_NOT_PROVEN", "definition": "全赢数/非走盘有效推荐数；半赢、半输、全输保留在分母，五类结算另列"}
+  ],
+  "required_tracks": ["current", "test", "comprehensive"],
+  "improvement_cycle": ["collect_and_verify", "predict_and_freeze", "review", "diagnose", "isolated_experiment", "temporal_paired_validation", "promote_or_retain_or_rollback", "version_and_sync"],
+  "research_scope": ["statistical_score_distributions", "dixon_coles", "xg_xga_features", "machine_learning", "calibration", "validated_ensemble_weights", "deep_learning_experiments", "reinforcement_learning_experiments"],
+  "guardrails": ["no_future_information", "no_invented_probabilities_or_features", "no_posthoc_version_selection", "independent_model_records", "actual_market_lines_only", "report_coverage_and_uncertainty", "no_accuracy_claim_from_training_or_refactoring"],
+  "automatic_background_execution_enabled": false,
+  "policy": "docs/project-goals.md"
+}
