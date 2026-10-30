@@ -1,0 +1,42 @@
+# Install in private data repository only; recipient is in private config.
+name: WCPP email results
+on:
+  workflow_run:
+    workflows: ['WCPP private unattended research']
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: wcpp-email-${{ github.event.workflow_run.id || github.run_id }}
+  cancel-in-progress: false
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: private-state
+          ref: main
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: kaka597000/Football-Analysis
+          ref: __WCPP_CODE_REF__
+          path: code
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Email digest or failure notice
+        working-directory: code
+        env:
+          WCPP_SMTP_PASSWORD: ${{ secrets.WCPP_SMTP_PASSWORD }}
+          IS_MANUAL_TEST: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          test_flag=
+          if [ "$IS_MANUAL_TEST" = true ]; then test_flag=--test; fi
+          python -m runtime.automation.email_notify --state-dir ../private-state \
+            --config ../private-state/config/notifications.json --event "$GITHUB_EVENT_PATH" $test_flag

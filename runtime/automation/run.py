@@ -3,6 +3,7 @@ import argparse
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -22,6 +23,8 @@ def execute(state_dir, mode, *, max_collection_seconds=300):
             'data_sources':'existing public JSON endpoints only','paid_api_calls':False}
     stamp=datetime.now(timezone.utc);rid=stamp.strftime('%Y%m%dT%H%M%S')+'-'+mode
     status={'run_id':rid,'started_at':stamp.isoformat(),'mode':mode,'policy':policy,
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
             'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),
             'source_worktree_dirty':bool(subprocess.check_output(['git','status','--porcelain'],cwd=REPO)),
             'seed_sha256':hashlib.sha256((root/'seed/training.json.gz').read_bytes()).hexdigest(),

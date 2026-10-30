@@ -22,5 +22,6 @@
   "automatic_background_execution_requested": true,
   "automatic_background_deployment_status": "DEPLOYED_PRIVATE_ACTIONS_VERIFIED",
   "automatic_background_deployment_report": "docs/unattended-deployment-20261030.md",
+  "email_notification_status": "PREPARED_NOT_DEPLOYED_SMTP_AND_GITHUB_AUTH_REQUIRED",
   "policy": "docs/project-goals.md"
 }
