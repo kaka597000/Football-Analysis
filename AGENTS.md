@@ -2,6 +2,8 @@
 
 # WCPP 项目工作规则
 
+- **2026-11-01原配方刷新研究**：新增独立入口`runtime/research/fixed_recipe_refresh.py`，只对已预登记意甲/瑞典队列刷新经原始响应核验的90分钟历史，current配方、test特征及alpha保持；不调用会重新选权重的旧train接口。四份研究候选已重拟合，覆盖为PARTIAL_BLOCKED、inactive；旧acceptance仅属于原工件，不验证新候选。真实私有集成检查在云端必须执行，公开CI缺资产时明确跳过该组，portable检查仍执行。见docs/fixed-recipe-refresh.md；不把赛后重载检查称为赛前回测，不改活动工件/注册表，不宣称准确率提升。
+
 - **2026-10-30邮件通知授权**：用户明确请求将定时采集/训练结果发到此前指定的本人邮箱，授权该用途的自动通知。默认每日训练汇总（含过去24小时采集量），采集/训练异常即时通知，成功采集不逐轮发信。收发地址只放私有配置，QQ SMTP授权码只放私有仓库Secret `WCPP_SMTP_PASSWORD`；不使用账户登录密码，不读取旧聊天密码，不将凭据写文件/日志。邮件模块/模板准备不等于已部署或已送达，必须真实安装及连通测试后报告状态。见docs/email-notifications.md。
 
 - **2026-10-30无人值守授权**：用户明确希望持续采集和训练，覆盖旧“不新建定时任务”限制；本次安装必须由代理在云端完成，无需用户电脑。真实私有仓库为`kaka597000/kaka597000-Football-Analysis-Data`。现连接无Secrets/Deploy keys权限，采用私有仓库自身GITHUB_TOKEN持久化、读取固定commit公开源码的Actions方案，不复制云端凭据。使用账户Actions额度，5分钟job上限；旧公开仓库Secret方案仅作停用备用，禁止两处重复定时。代码公开、数据私有，候选不自动晋级，付费API/LLM/GPU不自动启用。必须验证真实远端采集、训练与私有提交后才登记已部署。参见docs/unattended-operation.md。
