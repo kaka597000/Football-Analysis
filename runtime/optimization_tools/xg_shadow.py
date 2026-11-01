@@ -1,10 +1,15 @@
 """Fixed preregistered xG shadow refits and a separately frozen future track."""
 import argparse,importlib.util,json,sys
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'optimization'))
+_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(_ROOT/'optimization'))
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0,str(_ROOT))
+from league_tracks import reject_ood_in_europe_training
 from schema import save,file_hash,aware,now
 import candidate
 SCOPE=('eng.1','esp.1','ger.1','ita.1','fra.1')
+reject_ood_in_europe_training(SCOPE)
 def finalize(run,spec,out):
  run=Path(run);spec=Path(spec);spec.mkdir(exist_ok=False);p=json.loads((run/'protocol.json').read_text());cfg=next(c for c in p['candidates'] if c['name']=='M3-xg-a0.5');save(spec/'protocol.json',p)
  for code in SCOPE:

@@ -2,13 +2,19 @@
 import json
 import math
 import sqlite3
+import sys
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
+_RUNTIME = Path(__file__).resolve().parents[1]
+if str(_RUNTIME) not in sys.path:
+    sys.path.insert(0, str(_RUNTIME))
+from league_tracks import reject_ood_in_europe_training
 from audit import connect, csv_write
 from schema import digest, file_hash, fixture, save, now
 
 LEAGUES = {'eng.1':'EPL','esp.1':'La_liga','ger.1':'Bundesliga','ita.1':'Serie_A','fra.1':'Ligue_1'}
+reject_ood_in_europe_training(LEAGUES)
 SCOPE = {'eng.1':'ENG','esp.1':'ESP','ger.1':'GER','ita.1':'ITA','fra.1':'FRA'}
 EXPECTED = {'eng.1':380,'esp.1':380,'ita.1':380,'ger.1':306,'por.1':306,'eng.2':552,'ger.2':306,'ned.1':306}
 

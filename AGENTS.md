@@ -2,7 +2,7 @@
 
 # WCPP 项目工作规则
 
-- **2026-11-01亚洲三联赛域外研究轨**：A-League Men（`aus.1`）、J1 League（`jpn.1`）、K League 1（`kor.1`）在私有数据采集范围内，相对当前欧洲训练的实盘模型为 OOD 研究轨；不混入欧洲训练、不自动晋级 Champion，研究预测标 EXPERIMENTAL / OOD。详见 docs/asia-leagues-ood-research-tracks.md。
+- **2026-11-01域外研究轨**：A-League Men（`aus.1`）、J1 League（`jpn.1`）、K League 1（`kor.1`）、MLS（`usa.1`）相对欧洲五大联赛训练为各自独立的 OOD 研究轨；不混入欧洲训练、不互相并轨、不自动晋级 Champion，研究预测标 EXPERIMENTAL / OOD。详见 docs/asia-leagues-ood-research-tracks.md。
 
 - **2026-10-30无人值守授权**：用户明确希望持续采集和训练，覆盖旧“不新建定时任务”限制；本次安装必须由代理在云端完成，无需用户电脑。真实私有仓库为`kaka597000/kaka597000-Football-Analysis-Data`。现连接无Secrets/Deploy keys权限，采用私有仓库自身GITHUB_TOKEN持久化、读取固定commit公开源码的Actions方案，不复制云端凭据。使用账户Actions额度，5分钟job上限；旧公开仓库Secret方案仅作停用备用，禁止两处重复定时。代码公开、数据私有，候选不自动晋级，付费API/LLM/GPU不自动启用。必须验证真实远端采集、训练与私有提交后才登记已部署。参见docs/unattended-operation.md。
 

@@ -1,5 +1,11 @@
 # 变更记录
 
+## 2026-11-01 · 长期联赛研究地图
+
+- 欧洲域内仍是五大联赛 `eng.1`、`esp.1`、`ger.1`、`ita.1`、`fra.1`。
+- `jpn.1`、`kor.1`、`aus.1`、`usa.1` 各自为 EXPERIMENTAL / OOD，不混入欧洲训练，不自动晋级 Champion。`usa.1` 为美职联。
+- `runtime/league_tracks.py` 拒绝把这四条放进欧洲训练名单或标成可晋级。未训练，未改 Champion。详见 docs/asia-leagues-ood-research-tracks.md。
+
 ## 2026-11-01 · Egidi 混合研究候选
 
 - 新增 `runtime/research/egidi_blend/`：对角膨胀二元泊松加 Dixon–Coles、按联赛和时代拟合的 Shin 盘口混合、LightGBM LambdaMART 前十重排。
