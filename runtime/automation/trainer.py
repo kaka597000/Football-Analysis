@@ -13,6 +13,10 @@ import os
 from pathlib import Path
 import re
 import sys
+_RUNTIME = Path(__file__).resolve().parents[1]
+if str(_RUNTIME) not in sys.path:
+    sys.path.insert(0, str(_RUNTIME))
+from league_tracks import reject_ood_champion_promotion
 from urllib.parse import parse_qsl, urlsplit
 import uuid
 
@@ -243,6 +247,7 @@ def train(state_dir, max_cohorts=21, now=None):
                     'model_kind': 'team_poisson', 'cohort': cohort, 'core': final_core,
                     'created_at': now.isoformat(), 'data_cutoff': subset[-1]['date'], 'input_sha256': fingerprint,
                     'forecast_scope': scope, 'code_sha256': code_hash, 'automatic_promotion': False}
+                reject_ood_champion_promotion(cohort, artifact['automatic_promotion'])
                 _write(target/'artifact.json', artifact)
                 _write(target/'diagnostics.json', {'audit_start': boundary, 'fit_n': len(fit_rows),
                     'baseline': baseline, 'candidate': candidate,

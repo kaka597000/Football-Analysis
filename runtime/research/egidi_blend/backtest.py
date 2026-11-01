@@ -122,7 +122,7 @@ def main(argv=None):
                 'sqlite': str(DEFAULT_SQLITE),
                 'football_data_dir': 'CSVs named like 2024_E0.csv from football-data.co.uk divisions E0 SP1 I1 D1 F1',
                 'download_command': 'python runtime/research/egidi_blend/backtest.py --download-football-data /tmp/wcpp-egidi-fd --out /tmp/egidi-blend-report.json',
-                'asian_ood': 'aus.1, jpn.1 and kor.1 are evaluated only when present in jsonl or sqlite. This entrypoint does not call ESPN and does not invent a Korea slug.',
+                'ood_research': 'aus.1, jpn.1, kor.1 and usa.1 are evaluated only when present in jsonl or sqlite, each on its own track. This entrypoint does not call ESPN and does not invent a Korea or MLS slug.',
             },
         }
         out.write_text(json.dumps(_jsonable(report), ensure_ascii=False, indent=2))
@@ -141,12 +141,14 @@ def main(argv=None):
     report['headline'] = {
         'europe_pooled': _headline(report['metrics']['europe_pooled']),
         'ood_asia_pooled': _headline(report['metrics']['ood_asia_pooled']),
+        'ood_mls': _headline(report['metrics']['ood_mls']),
     }
-    if coverage['ood_asia_leagues_missing']:
+    missing = list(coverage['ood_asia_leagues_missing']) + list(coverage['ood_mls_missing'])
+    if missing:
         report['ood_note'] = (
-            'No rows were loaded for ' + ', '.join(coverage['ood_asia_leagues_missing'])
-            + '. They are out-of-domain tracks and are not filled from Europe or from an invented ESPN Korea feed. '
-            + 'Pass JSONL or the canonical sqlite that actually contains those leagues.'
+            'No rows were loaded for ' + ', '.join(missing)
+            + '. Each is its own out-of-domain track and is not filled from Europe, from another OOD league, or from an invented ESPN feed. '
+            + 'Pass JSONL or the canonical sqlite that actually contains that league.'
         )
     out.write_text(json.dumps(_jsonable(report), ensure_ascii=False, indent=2))
     if args.save_rows:

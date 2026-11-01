@@ -152,6 +152,8 @@ class LoaderTests(unittest.TestCase):
         self.assertEqual(rows['aus.1'].season_start, 2023)
         self.assertEqual(season_start_for('eng.1', '2024-08-16'), 2024)
         self.assertIsNone(season_start_for('jpn.1', '2026-03-01'))
+        self.assertEqual(season_start_for('usa.1', '2024-02-24'), 2024)
+        self.assertEqual(season_start_for('usa.1', '2024-10-19'), 2024)
 
     def test_downloader_source_does_not_call_espn(self):
         text = Path(__file__).resolve().parent.joinpath('load.py').read_text(encoding='utf-8')
@@ -213,6 +215,27 @@ class WalkForwardTests(unittest.TestCase):
                 self.assertTrue(fold['ranker_excludes_this_league'])
         self.assertTrue(all(row['league'] != 'aus.1' or row['ood'] for row in scored))
         self.assertTrue(any(row['league'] == 'eng.1' and not row['ood'] for row in scored))
+
+    def test_mls_cannot_enter_europe_weight_or_ranker_training(self):
+        from load import Match
+        from walkforward import OofRow, _train_ranker_on, select_weights
+        match = Match(
+            match_id='usa-1', league='usa.1', season='2016', season_start=2016,
+            date='2016-09-01', home='Alpha', away='Beta', home_goals=1, away_goals=0,
+            source='synthetic')
+        row = OofRow(match=match, lh=1.2, la=0.9, rho=0.0, share=0.0, pi=0.0, cold=False)
+        config = Config().tiny()
+        with self.assertRaises(RuntimeError):
+            select_weights([row], config)
+        with self.assertRaises(RuntimeError):
+            _train_ranker_on([row], {}, {}, config)
+        for code in ('aus.1', 'jpn.1', 'kor.1'):
+            other = Match(
+                match_id=code, league=code, season='2016', season_start=2016,
+                date='2016-09-02', home='Alpha', away='Beta', home_goals=0, away_goals=0,
+                source='synthetic')
+            with self.assertRaises(RuntimeError):
+                select_weights([OofRow(other, 1.1, 1.0, 0.0, 0.0, 0.0, False)], config)
 
 
 if __name__ == '__main__':

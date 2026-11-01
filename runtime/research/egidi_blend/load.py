@@ -13,7 +13,7 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from constants import ALL_LEAGUES, EUROPE, FOOTBALL_DATA_DIVISIONS, OOD_ASIA, season_start_for
+from constants import ALL_LEAGUES, EUROPE, FOOTBALL_DATA_DIVISIONS, OOD_ASIA, OOD_MLS, season_start_for
 from market import odds_from_mapping, parse_odd
 
 
@@ -379,4 +379,6 @@ def field_coverage(matches):
         'europe_leagues_present': [league for league in EUROPE if by_league[league]],
         'ood_asia_leagues_present': [league for league in OOD_ASIA if by_league[league]],
         'ood_asia_leagues_missing': [league for league in OOD_ASIA if not by_league[league]],
+        'ood_mls_present': [league for league in OOD_MLS if by_league[league]],
+        'ood_mls_missing': [league for league in OOD_MLS if not by_league[league]],
     }

@@ -1,9 +1,10 @@
-"""Rolling-origin walk-forward for the Europe top five, with Asian leagues held out.
+"""Rolling-origin walk-forward for the Europe top five, with OOD leagues held out.
 
 Blend weights and the LambdaMART ranker are fit only on Europe out-of-fold
-rows whose match date is strictly before the test cutoff. Asian leagues get
-their own Dixon–Coles fit and the already-fit Europe weights/ranker. They
-never enter those training sets.
+rows whose match date is strictly before the test cutoff. aus.1, jpn.1, kor.1
+and usa.1 each get their own Dixon–Coles fit and the already-fit Europe
+weights/ranker. They never enter those training sets and are not pooled
+together for the fit.
 """
 import hashlib
 import time
@@ -14,7 +15,8 @@ from pathlib import Path
 import numpy as np
 
 from blend import ZERO_WEIGHT, blend_batch, log_score
-from constants import EUROPE, OOD_ASIA, VERSION, era_of
+from constants import EUROPE, OOD_ASIA, OOD_MLS, OOD_RESEARCH_TRACKS, VERSION, era_of
+from league_tracks import reject_ood_in_europe_training
 from dixon_coles import fit_score_model, marginals, predict_matrices, score_matrices, topk_scores
 from market import cs_grid_from_odds, market_matrices
 from metrics import hits_from_lists, outcome_index, rps_rows, summarize
@@ -165,8 +167,7 @@ def select_weights(oof_rows, config, model_mats=None, market=None):
     rows = [oof_rows[i] for i in idxs]
     meta = {'even_seasons_only': used_even, 'n': len(rows),
             'leagues': sorted({row.match.league for row in rows})}
-    if any(league in OOD_ASIA for league in meta['leagues']):
-        raise RuntimeError('Asian OOD rows entered blend-weight fitting')
+    reject_ood_in_europe_training(meta['leagues'])
     if len(rows) < 8:
         table = {('*', '*'): dict(ZERO_WEIGHT, n=len(rows))}
         return table, meta
@@ -334,10 +335,10 @@ def _train_ranker_on(oof_rows, weight_table, prior_xg, config, model_mats=None, 
     rows = [oof_rows[i] for i in idxs]
     info_base = {'odd_seasons_only': used_odd, 'n_rows': len(rows),
                  'training_leagues': sorted({row.match.league for row in rows})}
-    if any(league in OOD_ASIA for league in info_base['training_leagues']):
-        raise RuntimeError('Asian OOD rows entered LambdaMART training')
+    reject_ood_in_europe_training(info_base['training_leagues'])
     if len(rows) < config.min_ranker_groups:
-        info_base.update({'trained': False, 'reason': 'thin_oof', 'includes_asian_ood': False})
+        info_base.update({'trained': False, 'reason': 'thin_oof', 'includes_asian_ood': False,
+                          'includes_ood_research': False})
         return None, info_base
     if model_mats is None or market is None:
         model_mats = _model_matrices(oof_rows, config)
@@ -385,6 +386,7 @@ def _train_ranker_on(oof_rows, weight_table, prior_xg, config, model_mats=None, 
     booster, info = train_ranker(features, labels, config)
     info.update(info_base)
     info['includes_asian_ood'] = False
+    info['includes_ood_research'] = False
     return booster, info
 
 
@@ -397,23 +399,22 @@ def _json_table(table):
 
 def walk_forward(matches, config):
     started = time.perf_counter()
-    matches = [m for m in matches if m.league in EUROPE or m.league in OOD_ASIA]
+    matches = [m for m in matches if m.league in EUROPE or m.league in OOD_RESEARCH_TRACKS]
     matches = sorted(matches, key=lambda m: (m.date, m.league, m.match_id))
     prior_xg = compute_prior_xg(matches)
     europe = defaultdict(list)
-    asia = defaultdict(list)
+    ood = defaultdict(list)
     for match in matches:
         if match.league in EUROPE:
             europe[match.league].append(match)
         else:
-            asia[match.league].append(match)
+            ood[match.league].append(match)
     print('Fitting Europe out-of-fold Dixon-Coles blocks', flush=True)
     oof = []
     for league in EUROPE:
         oof.extend(build_oof(europe[league], config))
     oof.sort(key=lambda row: (row.match.date, row.match.match_id))
-    if any(row.match.league in OOD_ASIA for row in oof):
-        raise RuntimeError('OOF builder leaked an Asian league')
+    reject_ood_in_europe_training(row.match.league for row in oof)
     print(f'Out-of-fold rows {len(oof)}; building score matrices once', flush=True)
     oof_mats = _model_matrices(oof, config) if oof else None
     oof_market = _market_views([row.match for row in oof], config.cap) if oof else None
@@ -492,8 +493,8 @@ def walk_forward(matches, config):
         })
         print(f'Europe origin {year} scored {len(fold_rows)} in {time.perf_counter() - origin_started:.1f}s', flush=True)
 
-    for league in OOD_ASIA:
-        league_rows = asia.get(league, [])
+    for league in OOD_RESEARCH_TRACKS:
+        league_rows = ood.get(league, [])
         seasons = sorted({m.season_start for m in league_rows})
         for year in seasons:
             prior_seasons = [s for s in seasons if s < year]
@@ -505,7 +506,7 @@ def walk_forward(matches, config):
             if len(train) < config.min_train_matches:
                 continue
             if max(m.date for m in train) >= cutoff:
-                raise RuntimeError('Asian training date is not before the test cutoff')
+                raise RuntimeError('OOD training date is not before the test cutoff')
             print(f'OOD {league} origin {year} cutoff {cutoff} n_test {len(season_rows)}', flush=True)
             (table, weight_meta), (booster, ranker_info) = tools_before(cutoff)
             model = fit_score_model(train, config, warm.get(league))
@@ -516,7 +517,8 @@ def walk_forward(matches, config):
                                     allow_league=False, ood=True)
             rows.extend(part)
             folds.append({
-                'scope': 'ood_asia', 'league': league, 'season_start': year, 'cutoff': cutoff,
+                'scope': 'ood_asia' if league in OOD_ASIA else 'ood_mls',
+                'league': league, 'season_start': year, 'cutoff': cutoff,
                 'n_test': len(part), 'train_end': model.train_end, 'train_rows': model.train_rows,
                 'rho': model.rho, 'share': model.share, 'pi': model.pi,
                 'leakage_guard_passed': True,
@@ -527,9 +529,10 @@ def walk_forward(matches, config):
             })
 
     europe_rows = [r for r in rows if not r['ood']]
-    asia_rows = [r for r in rows if r['ood']]
+    asia_rows = [r for r in rows if r['league'] in OOD_ASIA]
+    mls_rows = [r for r in rows if r['league'] in OOD_MLS]
     by_league = {}
-    for league in list(EUROPE) + list(OOD_ASIA):
+    for league in list(EUROPE) + list(OOD_RESEARCH_TRACKS):
         subset = [r for r in rows if r['league'] == league]
         if subset:
             by_league[league] = summarize(subset)
@@ -546,7 +549,7 @@ def walk_forward(matches, config):
         'method': {
             'score_model': 'diagonal-inflated bivariate Poisson with Dixon-Coles low-score tau',
             'market': 'Shin de-vig; correct-score grid when at least 8 prices exist, else Poisson matched to Shin 1X2 and OU 2.5',
-            'blend': 'per league and era on even Europe OOF seasons; Asian matches use Europe pooled weights only',
+            'blend': 'per league and era on even Europe OOF seasons; OOD matches use Europe pooled weights only',
             'ranker': 'LightGBM lambdarank on blended top-10, trained on odd Europe OOF seasons',
             'walk_forward': 'expanding origin over every season after min_prior_seasons; cutoff is the first test-match date',
             'baselines': ['dixon_coles', 'market_shin', 'always_1_1'],
@@ -556,12 +559,15 @@ def walk_forward(matches, config):
             'min_prior_seasons': config.min_prior_seasons,
             'cap': config.cap,
             'asian_ood': list(OOD_ASIA),
+            'mls_ood': list(OOD_MLS),
+            'ood_research': list(OOD_RESEARCH_TRACKS),
             'europe_train': list(EUROPE),
         },
         'folds': folds,
         'metrics': {
             'europe_pooled': summarize(europe_rows),
             'ood_asia_pooled': summarize(asia_rows),
+            'ood_mls': summarize(mls_rows),
             'by_league': by_league,
             'europe_by_season': by_season,
         },

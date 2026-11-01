@@ -1,11 +1,22 @@
-"""Fixed research scope. Asian leagues stay out of blend and ranker training."""
+"""Fixed research scope. OOD leagues stay out of blend and ranker training."""
+import sys
 from dataclasses import dataclass
+from pathlib import Path
+
+_RUNTIME = Path(__file__).resolve().parents[2]
+if str(_RUNTIME) not in sys.path:
+    sys.path.insert(0, str(_RUNTIME))
+
+from league_tracks import EUROPE_IN_DOMAIN, OOD_ASIA, OOD_MLS, OOD_RESEARCH_TRACKS
 
 
 VERSION = 'WCPP-EGIDI-BLEND-0.1'
+# Iteration order is part of the published research candidate. Membership must
+# stay the Big Five; do not append aus.1, jpn.1, kor.1 or usa.1 here.
 EUROPE = ('eng.1', 'esp.1', 'ita.1', 'ger.1', 'fra.1')
-OOD_ASIA = ('aus.1', 'jpn.1', 'kor.1')
-ALL_LEAGUES = EUROPE + OOD_ASIA
+if set(EUROPE) != set(EUROPE_IN_DOMAIN):
+    raise RuntimeError('Europe training tuple drifted from the in-domain Big Five')
+ALL_LEAGUES = EUROPE + OOD_RESEARCH_TRACKS
 
 # football-data.co.uk division codes already used by runtime/database/providers.py.
 # This module does not call ESPN and does not invent a Korea scoreboard slug.
@@ -37,9 +48,10 @@ def season_start_for(league, date):
     """Season key aligned with runtime/database/registry.py for these leagues.
 
     Cross-year leagues (Europe top five and A-League) roll in July.
-    K League uses the calendar year. J1 is a calendar year through 2025.
-    January–June 2026 J1 is the registry's unclassified transition and is
-    excluded (returns None) so it is not merged into 2026/27.
+    K League and MLS use the calendar year, matching registry kind "calendar".
+    J1 is a calendar year through 2025. January–June 2026 J1 is the registry's
+    unclassified transition and is excluded (returns None) so it is not merged
+    into 2026/27.
     """
     year = int(date[:4])
     month = int(date[5:7])
@@ -49,7 +61,7 @@ def season_start_for(league, date):
         if year == 2026 and month < 7:
             return None
         return year if month >= 7 else year - 1
-    if league == 'kor.1':
+    if league == 'kor.1' or league in OOD_MLS:
         return year
     if league in EUROPE or league == 'aus.1':
         return year if month >= 7 else year - 1

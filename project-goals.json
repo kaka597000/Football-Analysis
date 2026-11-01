@@ -21,5 +21,17 @@
   "automatic_background_execution_enabled": false,
   "automatic_background_execution_requested": true,
   "automatic_background_deployment_status": "INSTALLING_PRIVATE_REPOSITORY_ACTIONS_NO_SECRETS",
-  "policy": "docs/project-goals.md"
+  "policy": "docs/project-goals.md",
+  "league_research_map": {
+    "updated_at": "2026-11-01",
+    "timezone": "Asia/Shanghai",
+    "in_domain_europe": ["eng.1", "esp.1", "ger.1", "ita.1", "fra.1"],
+    "ood_research_tracks": ["jpn.1", "kor.1", "aus.1", "usa.1"],
+    "ood_label": "EXPERIMENTAL / OOD",
+    "isolation": "each OOD track stays out of Europe training and out of the other OOD tracks",
+    "automatic_champion_promotion": false,
+    "targets_status": "ASPIRATIONAL_NOT_PROVEN",
+    "primary_metric_unchanged": "future_frozen_primary_exact_score_top1",
+    "policy": "docs/asia-leagues-ood-research-tracks.md"
+  }
 }
