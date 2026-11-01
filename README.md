@@ -49,7 +49,7 @@ FMA隔离研究第一阶段：默认双模型输出新增joint/layered选分对�
 |---|---|
 |runtime/predict_active.py、active_route_engines.py|活动双模型路由、推理及执行身份审计|
 |runtime/v4、v5、v6、continental、aus_expert|当前模型及队列特定的独立test实现|
-|runtime/research|冻结、比分分布/单队进球、伤停解析、复盘与研究快照|
+|runtime/research|冻结、比分分布/单队进球、伤停解析、复盘与研究快照；`egidi_blend` 为未接入活动路由的研究候选|
 |runtime/data_sources|安全接口读取、接口优先批采集与过程数据匹配|
 |runtime/database、emperor_cup|赛事入库、身份与来源审计、杯赛扩展|
 |runtime/optimization、optimization_tools、v7、upset*、score_adjustment|独立研究、候选与诊断，不能仅因代码存在就称已用于Primary|
