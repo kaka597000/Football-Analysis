@@ -65,4 +65,4 @@ runtime/wcpp.py、v2/v3等保留为历史实现和测试依赖，不能把它们
 
 每次可交付修改完成后测试、提交、推送并核验远端HEAD；检查点和回滚方式见[版本管理规范](docs/version-management.md)。不新建定时任务。
 
-关键说明：[接口优先采集](docs/api-first-collection.md)、[双模型流程](docs/dual-model-workflow.md)、[冻结规范](docs/analysis-freeze-policy.md)、[比分分布审计](docs/score-distribution-adjustment.md)、[变更记录](CHANGELOG.md)。
+关键说明：[接口优先采集](docs/api-first-collection.md)、[双模型流程](docs/dual-model-workflow.md)、[冻结规范](docs/analysis-freeze-policy.md)、[比分分布审计](docs/score-distribution-adjustment.md)、[亚洲三联赛域外研究轨](docs/asia-leagues-ood-research-tracks.md)、[变更记录](CHANGELOG.md)。
