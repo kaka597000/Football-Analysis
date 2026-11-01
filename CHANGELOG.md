@@ -1,5 +1,11 @@
 # 变更记录
 
+## 2026-11-01 · Egidi 混合研究候选
+
+- 新增 `runtime/research/egidi_blend/`：对角膨胀二元泊松加 Dixon–Coles、按联赛和时代拟合的 Shin 盘口混合、LightGBM LambdaMART 前十重排。
+- 欧洲五大联赛滚动起点回测；`aus.1`、`jpn.1`、`kor.1` 只作分布外评估，不进入混合权重和排序训练。
+- 不接入 `predict_active` 或现有 v4–v7 引擎，不替换 Champion。回测说明见该目录 README。
+
 ## 2026-10-30 · 无需本地安装的私有Actions方案
 
 - 核实真实私有仓库名为kaka597000-Football-Analysis-Data，当前云端可读写；Secrets/Deploy keys权限仍不可用。
