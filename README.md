@@ -8,6 +8,8 @@
 
 ## 运行入口
 
+需要统一融合输出时，使用[当前/test融合入口](docs/unified-model-fusion.md)：`python runtime/fuse_models.py fixture.json --out NEW.json`。它保留两模型并追加独立融合参考；当前50/50为未训练研究基准，不能称已晋级的完整V2。
+
 先阅读[用户需求](docs/user-primary-score-requirements.md)与[执行规则](AGENTS.md)。默认入口读取外部活动注册表，目前为WCPP-DUAL-5，登记21个赛事队列。各队列实际引擎及当前/test工件不同，以注册表和[本次身份摘要](manifests/runtime-assets-20261029-queue-supplement.json)为准。
 
 ```bash
