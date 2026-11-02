@@ -14,6 +14,18 @@
 - 仅QQ SMTP SSL、单一指定收件人；授权码从Secret读取，缺失不连接，SMTP接受不冒称收件箱已送达。
 - 当前缺邮件授权码且GitHub连接返回401，尚未远端安装或实际发信；不影响已有采集/训练工作流。
 
+## 2026-11-01 · 长期联赛研究地图
+
+- 欧洲域内仍是五大联赛 `eng.1`、`esp.1`、`ger.1`、`ita.1`、`fra.1`。
+- `jpn.1`、`kor.1`、`aus.1`、`usa.1` 各自为 EXPERIMENTAL / OOD，不混入欧洲训练，不自动晋级 Champion。`usa.1` 为美职联。
+- `runtime/league_tracks.py` 拒绝把这四条放进欧洲训练名单或标成可晋级。未训练，未改 Champion。详见 docs/asia-leagues-ood-research-tracks.md。
+
+## 2026-11-01 · Egidi 混合研究候选
+
+- 新增 `runtime/research/egidi_blend/`：对角膨胀二元泊松加 Dixon–Coles、按联赛和时代拟合的 Shin 盘口混合、LightGBM LambdaMART 前十重排。
+- 欧洲五大联赛滚动起点回测；`aus.1`、`jpn.1`、`kor.1` 只作分布外评估，不进入混合权重和排序训练。
+- 不接入 `predict_active` 或现有 v4–v7 引擎，不替换 Champion。回测说明见该目录 README。
+
 ## 2026-10-30 · 无需本地安装的私有Actions方案
 
 - 核实真实私有仓库名为kaka597000-Football-Analysis-Data，当前云端可读写；Secrets/Deploy keys权限仍不可用。

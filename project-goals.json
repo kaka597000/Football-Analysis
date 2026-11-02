@@ -20,8 +20,20 @@
   "guardrails": ["no_future_information", "no_invented_probabilities_or_features", "no_posthoc_version_selection", "independent_model_records", "actual_market_lines_only", "report_coverage_and_uncertainty", "no_accuracy_claim_from_training_or_refactoring"],
   "automatic_background_execution_enabled": true,
   "automatic_background_execution_requested": true,
-  "automatic_background_deployment_status": "DEPLOYED_PRIVATE_ACTIONS_VERIFIED",
+  "automatic_background_deployment_status": "DEPLOYED_PRIVATE_ACTIONS_VERIFIED_RECENT_RUNS_NEED_RETEST",
   "automatic_background_deployment_report": "docs/unattended-deployment-20261030.md",
-  "email_notification_status": "PREPARED_NOT_DEPLOYED_SMTP_AND_GITHUB_AUTH_REQUIRED",
-  "policy": "docs/project-goals.md"
+  "email_notification_status": "PREPARED_NOT_DEPLOYED_SMTP_REQUIRED",
+  "policy": "docs/project-goals.md",
+  "league_research_map": {
+    "updated_at": "2026-11-01",
+    "timezone": "Asia/Shanghai",
+    "in_domain_europe": ["eng.1", "esp.1", "ger.1", "ita.1", "fra.1"],
+    "ood_research_tracks": ["jpn.1", "kor.1", "aus.1", "usa.1"],
+    "ood_label": "EXPERIMENTAL / OOD",
+    "isolation": "each OOD track stays out of Europe training and out of the other OOD tracks",
+    "automatic_champion_promotion": false,
+    "targets_status": "ASPIRATIONAL_NOT_PROVEN",
+    "primary_metric_unchanged": "future_frozen_primary_exact_score_top1",
+    "policy": "docs/asia-leagues-ood-research-tracks.md"
+  }
 }
