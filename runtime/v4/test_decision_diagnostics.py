@@ -83,6 +83,24 @@ class DecisionTests(unittest.TestCase):
         out=assess_decision(f);self.assertEqual(out['documented_blocks'],15)
 
 
+class LineupUncertaintyTests(unittest.TestCase):
+    def test_unannounced_lineup_with_scenarios_is_documented_not_official(self):
+        f=fixture();b={'status':'unknown','lineup_status':'unannounced',
+            'summary':'Official XI not published','official_confirmed':False,
+            'scenario_analysis':'Compare regular starters with rotation; direction unchanged',
+            'uncertainty':'Full XI unavailable; do not claim confirmed starters',
+            'material_selection_risk':False,
+            'evidence':[{'source_url':'https://example.org/team-news','source_tier':'L2',
+                         'query_time':f['cutoff_at'],'supports_field':['lineup']}]}
+        f['decision_evidence']={'home':{'lineup':b}}
+        self.assertTrue(assess_decision(f)['blocks']['home']['lineup']['documented'])
+        self.assertFalse(b['official_confirmed'])
+        b['material_selection_risk']=True
+        self.assertFalse(assess_decision(f)['blocks']['home']['lineup']['documented'])
+        b['material_selection_risk']=False;b.pop('scenario_analysis')
+        self.assertFalse(assess_decision(f)['blocks']['home']['lineup']['documented'])
+
+
 class DiagnosticTests(unittest.TestCase):
     def test_calibration_and_residuals_known_answer(self):
         f,r=sample();out=diagnose([f],[r],3)

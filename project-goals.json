@@ -106,5 +106,12 @@
       "keep_abstentions_and_pending_results_visible"
     ],
     "background_status": "沿用已有任务授权；本次仅登记目标，未启动或验证后台训练"
+  },
+  "analysis_preferences": {
+    "confirmed_at": "2026-11-02",
+    "market_movement": "prioritize_verified_same_bookmaker_same_line_price_history",
+    "lineup_dependency": "reduced; unannounced XI is not an automatic veto; scenario analysis required",
+    "numeric_weights_changed": false,
+    "policy": "docs/market-and-lineup-policy.md"
   }
 }

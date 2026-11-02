@@ -180,6 +180,8 @@ def run(fixture, registry_path=None):
     attach_audit(output)
     from research.layered_selector import compare_pair
     output['selection_experiment'] = compare_pair(output)
+    from research.market_movement import analyze as analyze_market
+    output['market_movement'] = analyze_market(fixture)
     return output
 
 
