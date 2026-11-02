@@ -45,7 +45,7 @@ def mix(matrices,w,temperature=1.):
     m=m**(1/temperature);return m/m.sum()
 
 
-def train(rows, *, regularization=.1):
+def train(rows, *, regularization=.1, include_diagnostics=True):
     if not np.isfinite(regularization) or regularization<0:raise ValueError('nonnegative finite penalty required')
     if len(rows)<100:raise ValueError('at least 100 development observations required')
     if len({r['cohort'] for r in rows})!=1:raise ValueError('one league per experiment')
@@ -95,10 +95,10 @@ def train(rows, *, regularization=.1):
         'temperature':temperature,'regularization':regularization,
         'split':{'fit_n':len(fit),'calibration_n':len(calibration),'diagnostic_n':len(diagnostic),
                  'gate_fit_before':c1,'temperature_fit_before':c2},
-        'diagnostics':{'equal_weight':score(predict(diagnostic,equal=True)),
+        'diagnostics':({'equal_weight':score(predict(diagnostic,equal=True)),
                        'dynamic':score(predict(diagnostic)),
                        'dynamic_calibrated':score(predict(diagnostic,temperature)),
-                       'first_expert':score([matrix(r['matrices'][0]) for r in diagnostic])},
+                       'first_expert':score([matrix(r['matrices'][0]) for r in diagnostic])} if include_diagnostics else None),
         'promotion':'DO_NOT_PROMOTE','historical_asof_certified':False,
         'notice':'Already-inspected retrospective development data; not untouched/prospective results. '
                  'No player-impact coefficients fitted; no active-model writes.'}
