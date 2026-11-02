@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-BINDINGS = ('WCPP_5DOLLAR_API_KEY', 'WCPP_FOOTBALL_DATA_API_KEY',
+BINDINGS = ('WCPP_BSD_API_KEY', 'WCPP_OPENFOOT_API_KEY', 'WCPP_5DOLLAR_API_KEY', 'WCPP_FOOTBALL_DATA_API_KEY',
             'football_data', 'Football_data_api', 'WCPP_API_FOOTBALL_KEY',
             '_apifootball', 'dashboard_api_football', 'Apifootballcom_APIKEY',
             'apifootball', 'apifootball2', 'WCPP_APIFOOTBALLCOM_API_KEY',
