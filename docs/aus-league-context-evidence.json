@@ -1,0 +1,37 @@
+{
+  "date_bjt": "2026-10-16",
+  "database": "/workspace/WCPP/data/unified/WCPP_统一赛事库.sqlite",
+  "mode": "read-only descriptive",
+  "query": "select season,count(*) n,avg(h90+a90) mean_total,avg(case when h90>0 and a90>0 then 1.0 else 0 end) btts,avg(case when h90+a90>=4 then 1.0 else 0 end) four_plus from matches where competition='aus.1' and training_eligible=1 and stage in ('regular','regular-season') group by season order by season desc limit 4",
+  "rows": [
+    {
+      "season": "2025/26",
+      "n": 156,
+      "mean_total": 2.8653846153846154,
+      "btts": 0.5961538461538461,
+      "four_plus": 0.34615384615384615
+    },
+    {
+      "season": "2024/25",
+      "n": 169,
+      "mean_total": 3.289940828402367,
+      "btts": 0.621301775147929,
+      "four_plus": 0.4437869822485207
+    },
+    {
+      "season": "2023/24",
+      "n": 162,
+      "mean_total": 3.3333333333333335,
+      "btts": 0.6234567901234568,
+      "four_plus": 0.4012345679012346
+    },
+    {
+      "season": "2022/23",
+      "n": 156,
+      "mean_total": 3.0576923076923075,
+      "btts": 0.6346153846153846,
+      "four_plus": 0.3782051282051282
+    }
+  ],
+  "model_parameters_changed": false
+}

@@ -1,0 +1,10 @@
+numpy==2.3.5
+scipy==1.17.0
+scikit-learn==1.8.0
+lightgbm==4.6.0
+xgboost-cpu==3.4.1
+catboost==1.2.10
+statsmodels==0.15.0
+optuna==5.0.0
+gymnasium==1.4.0
+stable-baselines3==2.9.0

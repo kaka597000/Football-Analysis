@@ -1,0 +1,104 @@
+{
+  "status": "AUTHENTICATED_WITH_VERIFIED_SCOPE_LIMITS",
+  "default_storage": "raw_staging_before_identity_and_time_audit",
+  "providers": {
+    "5dollar": {
+      "base_url": "https://api.5dollarfootballapi.com/v1",
+      "credential_env": "WCPP_5DOLLAR_API_KEY",
+      "role": "primary_actual_odds_and_bulk_fixture_history",
+      "observed_plan_20261012": "community",
+      "authenticated_status_verified": true
+    },
+    "football-data": {
+      "base_url": "https://api.football-data.org/v4",
+      "credential_env": "WCPP_FOOTBALL_DATA_API_KEY",
+      "role": "crosscheck_schedule_results_standings_scorers",
+      "documented_free_major_leagues": [
+        "PL",
+        "BL1",
+        "PD",
+        "SA",
+        "FL1"
+      ],
+      "account_permissions_verified": true,
+      "reference": "https://docs.football-data.org/general/v4/index.html",
+      "credential_env_aliases": [
+        "football_data",
+        "Football_data_api"
+      ],
+      "last_http_status": 200,
+      "binding_domain_check": "new_runtime_binding_success",
+      "preferred_working_binding": "football_data",
+      "account_authentication_verified": true,
+      "verified_current_data": [
+        "PL matches 2026",
+        "PL/BL1/PD/SA/FL1 standings"
+      ],
+      "verification_report": "/workspace/WCPP/reports/new-api-retest-20261012-152152/summary.json"
+    },
+    "api-football": {
+      "base_url": "https://v3.football.api-sports.io",
+      "credential_env": "WCPP_API_FOOTBALL_KEY",
+      "role": "lineups_injuries_events_statistics_and_odds_crosscheck",
+      "historical_seasons_and_xg_require_actual_field_check": true,
+      "account_permissions_verified": true,
+      "reference": "https://www.api-football.com/documentation-v3",
+      "credential_env_aliases": [
+        "_apifootball",
+        "dashboard_api_football",
+        "Apifootballcom_APIKEY",
+        "apifootball"
+      ],
+      "last_http_status": 200,
+      "binding_domain_check": "runtime_binding_success_secret_dashboard_domain_not_api_verified",
+      "preferred_working_binding": "_apifootball",
+      "account_authentication_verified": true,
+      "observed_plan": "Free",
+      "daily_request_limit": 100,
+      "verified_fixture_seasons": [
+        2024
+      ],
+      "provider_declared_allowed_seasons": [
+        2022,
+        2023,
+        2024
+      ],
+      "current_2026_fixture_access": false,
+      "actual_odds_coverage_verified": false,
+      "verification_report": "/workspace/WCPP/reports/api-football-retest-20261012-200625/summary.json",
+      "previous_verification_report": "/workspace/WCPP/reports/new-api-retest-20261012-152152/summary.json",
+      "last_failure_kind": null,
+      "current_connection_verified": true,
+      "current_authentication_verification": "VERIFIED",
+      "current_readiness": "AVAILABLE_WITH_SCOPE_LIMITS",
+      "configured_secret_domain_correct": false,
+      "last_tested_at_utc8": "2026-10-12T20:06:25.372683+08:00",
+      "prior_retest_report": "/workspace/WCPP/reports/api-football-retest-20261012-195508/summary.json",
+      "runtime_spec_revision": "45",
+      "runtime_credential_readiness": "ready",
+      "diagnostic_report": "/workspace/WCPP/reports/api-football-diagnosis-20261012-161049/summary.json",
+      "unauthenticated_provider_json_verified": true,
+      "synthetic_invalid_key_provider_json_verified": true,
+      "exact_security_rule_known": false,
+      "diagnosis_completed_at_utc8": "2026-10-12T16:11:37+08:00",
+      "previous_failure_kind": "CLOUDFLARE_HTML_ACCESS_BLOCK",
+      "per_minute_request_limit": 10
+    },
+    "open-football-simulator": {
+      "website": "https://open-football.org/zh",
+      "about_url": "https://open-football.org/zh/about",
+      "repository": "https://github.com/ZOXEXIVO/open-football",
+      "observed_http_status": 200,
+      "role": "simulation_reference_only",
+      "data_kind": "SIMULATED_WORLD_WITH_REAL_AND_GENERATED_DATA",
+      "observed_simulation_date": "2030-05-18",
+      "real_fixture_data_api_verified": false,
+      "eligible_for_canonical_ingestion": false,
+      "eligible_for_real_match_training": false,
+      "access_method": "public_web_pages",
+      "api_required": false,
+      "credential_required": false,
+      "user_confirmed_website": "https://open-football.org/zh"
+    }
+  }
+}
