@@ -93,12 +93,13 @@ class LineupUncertaintyTests(unittest.TestCase):
             'evidence':[{'source_url':'https://example.org/team-news','source_tier':'L2',
                          'query_time':f['cutoff_at'],'supports_field':['lineup']}]}
         f['decision_evidence']={'home':{'lineup':b}}
-        self.assertTrue(assess_decision(f)['blocks']['home']['lineup']['documented'])
+        from research.lineup_evidence import assess
+        self.assertTrue(assess(b,f)['documented'])
         self.assertFalse(b['official_confirmed'])
         b['material_selection_risk']=True
-        self.assertFalse(assess_decision(f)['blocks']['home']['lineup']['documented'])
+        self.assertFalse(assess(b,f)['documented'])
         b['material_selection_risk']=False;b.pop('scenario_analysis')
-        self.assertFalse(assess_decision(f)['blocks']['home']['lineup']['documented'])
+        self.assertFalse(assess(b,f)['documented'])
 
 
 class DiagnosticTests(unittest.TestCase):

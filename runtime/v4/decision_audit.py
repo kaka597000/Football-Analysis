@@ -101,9 +101,7 @@ def assess_decision(fixture):
                     raise ValueError('explicit evidence status required')
                 if not isinstance(b.get('summary'), str) or not b['summary'].strip():
                     raise ValueError('summary/reason required')
-                lineup_uncertainty = (category == 'lineup' and status == 'unknown'
-                                      and b.get('lineup_status') == 'unannounced')
-                if status in ('unknown', 'conflict') and not lineup_uncertainty:
+                if status in ('unknown', 'conflict'):
                     raise ValueError(status + ': ' + b['summary'])
                 if status == 'not_applicable' and category != 'public_information':
                     raise ValueError('category cannot be waived; record unknown instead')
@@ -114,18 +112,10 @@ def assess_decision(fixture):
                     evidence_ok(e, fixture, category)
                 if category == 'paths' and not b.get('counterargument'):
                     raise ValueError('counterargument required for proposed path')
-                if category == 'lineup':
-                    if b.get('official_confirmed') is True:
-                        if (not any(e['source_tier'] == 'L1' for e in evidence)
-                                or len(b.get('starters', [])) != 11 or len(set(b['starters'])) != 11):
-                            raise ValueError('eleven unique official starters required')
-                    else:
-                        if (b.get('lineup_status') not in ('unannounced', 'projected')
-                                or not isinstance(b.get('scenario_analysis'), str)
-                                or not b['scenario_analysis'].strip()
-                                or not isinstance(b.get('uncertainty'), str) or not b['uncertainty'].strip()
-                                or b.get('material_selection_risk') is not False):
-                            raise ValueError('document lineup scenarios/uncertainty and resolve material selection risk')
+                if category == 'lineup' and (b.get('official_confirmed') is not True
+                        or not any(e['source_tier'] == 'L1' for e in evidence)
+                        or len(b.get('starters', [])) != 11 or len(set(b['starters'])) != 11):
+                    raise ValueError('eleven unique official starters required')
                 if category == 'process' and b.get('xg_origin') == 'narrative_inference':
                     raise ValueError('narrative-derived xG is not measured xG')
                 blocks[side][category] = {'documented': True, 'status': status}

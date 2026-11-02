@@ -182,6 +182,10 @@ def run(fixture, registry_path=None):
     output['selection_experiment'] = compare_pair(output)
     from research.market_movement import analyze as analyze_market
     output['market_movement'] = analyze_market(fixture)
+    from research.match_analysis import build as build_match_analysis
+    output['match_analysis'] = build_match_analysis(fixture, output,
+        current_artifact=json.loads(artifact_path.read_text()),
+        test_artifact=json.loads(test_artifact_path.read_text()) if test_artifact_path else {})
     return output
 
 
@@ -189,11 +193,14 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('fixture'); p.add_argument('--out', required=True)
     p.add_argument('--registry')
+    p.add_argument('--report', help='New Markdown path for the eight-module evidence report')
     p.add_argument('--freeze-root', default='/workspace/WCPP/forecasts/issued-analyses')
     p.add_argument('--stage', choices=['prematch', 'live'], default='prematch')
     a = p.parse_args()
     fixture = json.loads(Path(a.fixture).read_text())
     # Reject an existing output before producing any new freeze revision.
+    if a.report and (Path(a.report).exists() or Path(a.report).resolve() == Path(a.out).resolve()):
+        raise FileExistsError(a.report)
     if Path(a.out).exists():
         raise FileExistsError(a.out)
     output = run(fixture, a.registry)
@@ -209,6 +216,10 @@ def main():
                                    track='current-test-pair', root=a.freeze_root)
     with Path(a.out).open('x') as f:
         json.dump(output, f, ensure_ascii=False, indent=2, allow_nan=False)
+    if a.report:
+        from research.match_analysis import render
+        with Path(a.report).open('x') as f:
+            f.write(render(output['match_analysis']))
     print(a.out)
 
 

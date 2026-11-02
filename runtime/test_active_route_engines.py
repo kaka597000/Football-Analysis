@@ -48,6 +48,13 @@ class ActiveRouteEngineTests(unittest.TestCase):
         self.assertTrue(all(x['canonical_team_id'] in known
                             for x in mapping['mappings'].values()))
 
+    @unittest.skipUnless(REGISTRY.is_file(), 'external active registry required')
+    def test_active_anchor_still_matches_hash_locked_engine(self):
+        import predict_active
+        route=json.loads(REGISTRY.read_text())['models']['eng.1']
+        artifact=json.loads(Path(route['artifact_path']).read_text())
+        self.assertEqual(artifact['anchor']['code_hash'], predict_active.legacy.code_hash())
+
     def test_zero_padding_preserves_all_probability_values(self):
         a = np.asarray([[.4, .1], [.2, .3]])
         b = np.zeros((3, 3)); b[:2, :2] = a
