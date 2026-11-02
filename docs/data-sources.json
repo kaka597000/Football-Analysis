@@ -152,6 +152,35 @@
       "audit_timezone": "Asia/Shanghai",
       "audit_report": "/workspace/WCPP/reports/market-flow-reference-20261013/官网参考核查.md",
       "bookmaker_scope": "UNVERIFIED"
+    },
+    {
+      "name": "BSD Football API",
+      "documentation": "https://sports.bzzoiro.com/docs/football/",
+      "credential_env": "WCPP_BSD_API_KEY",
+      "purpose": "候选赛程、过程、xG、射门图、阵容、赔率；按权限实测",
+      "role": "候选API，文档已核验；账户鉴权未验证",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "OpenFootAPI",
+      "documentation": "https://openfootapi.com/docs",
+      "credential_env": "WCPP_OPENFOOT_API_KEY",
+      "purpose": "候选赛程与高级xG/首发/赔率；高级字段依订阅",
+      "role": "候选API；完整新密钥已在聊天收到，未落盘/绑定/鉴权；与旧Open Football模拟器不同",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "FootyStats",
+      "url": "https://footystats.org/",
+      "purpose": "候选赛后xG及球队统计；公开页面不等于所有字段免费",
+      "role": "本轮首页HTTP访问失败，尚未验证字段覆盖",
+      "connection_verified_this_run": false
+    },
+    {
+      "name": "ScanGoal",
+      "purpose": "用户提供的实时列表团队xG候选",
+      "role": "官方域名与实际字段覆盖待核实，不猜API地址",
+      "connection_verified_this_run": false
     }
   ],
   "betfair": {
@@ -216,5 +245,6 @@
       "matches_after": 41383,
       "formal_kpi_added": 0
     }
-  }
+  },
+  "credential_storage_policy": "文档只登记来源、变量名、鉴权方式及状态；不存储密钥值。新源需求已登记到安全配置草稿，未填值/发布前不视为可用。"
 }

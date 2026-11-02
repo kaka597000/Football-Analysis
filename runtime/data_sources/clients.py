@@ -8,6 +8,12 @@ from urllib.parse import urlencode
 from urllib.request import Request, HTTPRedirectHandler, build_opener
 
 PROVIDERS = {
+    'bsd': {'base': 'https://sports.bzzoiro.com/api/v2',
+            'env': 'WCPP_BSD_API_KEY', 'header': 'Authorization',
+            'prefix': 'Token ', 'probe': '/events/'},
+    'openfoot': {'base': 'https://openfootapi.com/v1',
+                 'env': 'WCPP_OPENFOOT_API_KEY', 'header': 'Authorization',
+                 'prefix': 'Bearer ', 'probe': '/matches'},
     'apifootball-com': {'base': 'https://apiv3.apifootball.com',
                        'env': 'WCPP_APIFOOTBALLCOM_API_KEY',
                        'aliases': ['apifootball2'], 'query_key': 'APIkey',
@@ -36,6 +42,8 @@ PROVIDERS = {
 PRIVATE = {'key', 'api_key', 'apikey', 'token', 'authorization', 'access_token',
            'secret', 'x-auth-token', 'x-apisports-key', 'x-rapidapi-key'}
 ALLOWED = {
+    'bsd': ('/events', '/leagues', '/teams', '/players'),
+    'openfoot': ('/matches', '/competitions', '/standings', '/search'),
     'apifootball-com': ('/',),
     '5dollar': ('/status', '/fixtures', '/leagues'),
     'the-odds-api': ('/sports',),

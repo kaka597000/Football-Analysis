@@ -14,6 +14,19 @@ class Response(io.BytesIO):
 
 
 class Tests(unittest.TestCase):
+    def test_bsd_and_openfoot_header_schemes_and_missing_bindings(self):
+        for provider,binding,prefix in [('bsd','WCPP_BSD_API_KEY','Token '),('openfoot','WCPP_OPENFOOT_API_KEY','Bearer ')]:
+            with patch.dict(os.environ,{},clear=True):
+                r=fetch(provider,opener=lambda *a,**k:self.fail('network with missing secret'))
+                self.assertEqual(r['call']['error_code'],'ENV_BINDING_MISSING')
+            def opener(req,**kwargs):
+                self.assertEqual(req.get_header('Authorization'),prefix+'SYNTHETIC_CREDENTIAL_ONLY')
+                return Response({'data':[]})
+            with patch.dict(os.environ,{binding:'SYNTHETIC_CREDENTIAL_ONLY'},clear=True):
+                r=fetch(provider,opener=opener)
+            self.assertTrue(r['call']['authenticated'])
+            self.assertNotIn('SYNTHETIC_CREDENTIAL_ONLY',json.dumps(r))
+
     def test_query_authenticated_services_never_persist_key_or_redirect_it(self):
         for provider, binding, path, params, parameter in (
                 ('the-odds-api', 'manyzhishu_theodds_sports', '/sports', {}, 'apiKey'),

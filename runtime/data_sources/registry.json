@@ -99,6 +99,39 @@
       "api_required": false,
       "credential_required": false,
       "user_confirmed_website": "https://open-football.org/zh"
+    },
+    "bsd": {
+      "base_url": "https://sports.bzzoiro.com/api/v2",
+      "credential_env": "WCPP_BSD_API_KEY",
+      "documentation": "https://sports.bzzoiro.com/docs/football/",
+      "auth_scheme": "Authorization: Token <secret>",
+      "documentation_http_status_20261102": 200,
+      "credential_status": "RECEIVED_IN_CHAT_NOT_STORED_OR_BOUND",
+      "authenticated_status_verified": false,
+      "role": "candidate_fixture_process_xg_shotmap_lineup_odds",
+      "documented_scope_not_account_verified": true
+    },
+    "openfoot": {
+      "base_url": "https://openfootapi.com/v1",
+      "credential_env": "WCPP_OPENFOOT_API_KEY",
+      "documentation": "https://openfootapi.com/docs",
+      "auth_scheme": "Authorization: Bearer <secret>",
+      "documentation_http_status_20261102": 200,
+      "credential_status": "COMPLETE_REPLACEMENT_RECEIVED_IN_CHAT_NOT_STORED_OR_BOUND",
+      "authenticated_status_verified": false,
+      "documented_starter_scope": [
+        "fixtures",
+        "competitions",
+        "standings",
+        "search"
+      ],
+      "documented_developer_scope": [
+        "events",
+        "lineups",
+        "xg_shotmaps",
+        "odds"
+      ],
+      "source_dependency_notice": "Docs cite FotMob and other providers; overlapping data is not independent corroboration"
     }
   }
 }
