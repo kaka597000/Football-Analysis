@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@playwright/mcp": "0.0.84",
+    "agent-browser": "0.41.1"
+  }
+}

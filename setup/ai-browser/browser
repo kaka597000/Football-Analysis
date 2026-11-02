@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export AGENT_BROWSER_SOCKET_DIR=/workspace/ai-browser/run
+export AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
+export AGENT_BROWSER_CA_CERT=/workspace/ai-browser/proxy-ca.pem
+export AGENT_BROWSER_ARGS=--no-sandbox
+exec /workspace/ai-browser/node_modules/.bin/agent-browser "$@"

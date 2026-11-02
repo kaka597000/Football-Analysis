@@ -1,0 +1,25 @@
+{
+  "purpose": "Local recovery and lineup revision identities; full runtime assets remain outside source Git",
+  "files": [
+    {
+      "path": "/workspace/wcpp-transfer-20261102/RESTORE-ACCEPTANCE.md",
+      "bytes": 2563,
+      "sha256": "2ef10c6aebd4e9249f6045b876ef450a17b2a65b489b4a99489b0071a452450d"
+    },
+    {
+      "path": "/workspace/WCPP/reports/portland-lineup-20261102-1006/\u9996\u53d1\u540e\u7efc\u5408\u5206\u6790.md",
+      "bytes": 5970,
+      "sha256": "bf012a2fe6cf42ed966d60e40d8a804b5f15ebe61ce6b8ca40971ebefa473dc4"
+    },
+    {
+      "path": "/workspace/WCPP/reports/portland-lineup-20261102-1006/comprehensive-receipt.json",
+      "bytes": 361,
+      "sha256": "179bb2fd5e837bafc805dc7b5741c9fa3085c87ee908fb966064a7f624dc3bca"
+    },
+    {
+      "path": "/workspace/WCPP/reports/portland-lineup-20261102-1006/pair-official.json",
+      "bytes": 233480,
+      "sha256": "21f84a820e1f2cc6bac3d01c74adc93c6ba63e6cfe57d59451603b61b7f0246a"
+    }
+  ]
+}
