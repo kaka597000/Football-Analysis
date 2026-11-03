@@ -24,7 +24,7 @@ class ReplayTests(unittest.TestCase):
   row={'match_id':'past','cohort':'eng.1','stage':'regular','score_basis':'regulation_90','kickoff_at':self.row['event_kickoff_at'],'observed_at':self.now.isoformat(),'home_goals':1,'away_goals':0}
   self.assertFalse(eligible_labels([row],self.target)[0])
  def test_label_finished_status_is_verified_against_retained_response(self):
-  raw={'events':[{'id':'past','status':{'period':2,'type':{'completed':True,'name':'STATUS_FULL_TIME'}},'competitions':[{'competitors':[{'homeAway':'home','team':{'id':'A'},'score':'1'},{'homeAway':'away','team':{'id':'B'},'score':'0'}]}]}]}
+  raw={'events':[{'id':'past','date':self.row['event_kickoff_at'],'status':{'period':2,'type':{'completed':True,'name':'STATUS_FULL_TIME'}},'competitions':[{'competitors':[{'homeAway':'home','team':{'id':'A'},'score':'1'},{'homeAway':'away','team':{'id':'B'},'score':'0'}]}]}]}
   path=self.root/'label.json';path.write_text(json.dumps(raw),encoding='utf-8')
   captured=self.row['observed_at']
   row={'match_id':'espn:past','cohort':'eng.1','stage':'regular','event_status':'FT','score_basis':'regulation_90','kickoff_at':self.row['event_kickoff_at'],'observed_at':captured,'home':'espn:A','away':'espn:B','home_goals':1,'away_goals':0,'evidence':{'url':'https://site.api.espn.com/synthetic','file':'label.json','sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'query_time':captured,'identity_verified':True}}

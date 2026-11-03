@@ -81,7 +81,11 @@ def _finished_espn_label(row,evidence,path):
         event=matches[0]
     if str(event.get('id'))!=event_id or len(event.get('competitions',[]))!=1:
         raise ValueError('retained result identity conflict')
-    competition=event['competitions'][0];status=competition.get('status') or event.get('status') or {}
+    competition=event['competitions'][0]
+    source_kickoff=competition.get('date') or event.get('date')
+    if source_kickoff is None or aware(source_kickoff)!=aware(row['kickoff_at']):
+        raise ValueError('retained kickoff conflict')
+    status=competition.get('status') or event.get('status') or {}
     if (status.get('type',{}).get('completed') is not True
             or status.get('type',{}).get('name')!='STATUS_FULL_TIME' or status.get('period')!=2):
         raise ValueError('retained source is not finished regulation time')
