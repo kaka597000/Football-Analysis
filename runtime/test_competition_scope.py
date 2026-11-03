@@ -15,4 +15,11 @@ class ScopeTests(unittest.TestCase):
   reg={'models':{k:{} for k in ['eng.1','swe.1','bra.1']}}
   original=json.dumps(reg);r=inventory(reg)
   self.assertIn('bra.1',r['historical_only_routes']);self.assertEqual(original,json.dumps(reg))
+ def test_regular_aliases_share_existing_route_without_rewriting_source(self):
+  rows=[{'cohort':'aus.1','stage':'regular'},{'cohort':'aus.1','stage':'regular-season'}]
+  original=json.dumps(rows);training_rows(rows);self.assertEqual(original,json.dumps(rows))
+ def test_malformed_identities_return_false(self):
+  from competition_scope import permitted
+  for item in (None,{'cohort':None},{'cohort':[]},{'cohort':'eng.1','competition':[]}):
+   self.assertFalse(permitted(item))
 if __name__=='__main__':unittest.main()
