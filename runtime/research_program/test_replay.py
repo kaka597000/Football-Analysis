@@ -37,4 +37,14 @@ class ReplayTests(unittest.TestCase):
   path.write_text(json.dumps(raw),encoding='utf-8');row['evidence']['sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
   with self.assertRaises(ValueError):eligible_labels([row],self.target,self.root)
 
+ def test_summary_without_period_requires_two_explicit_regulation_halves(self):
+  captured=self.row['observed_at']
+  raw={'format':{'regulation':{'periods':2}},'header':{'id':'past','competitions':[{'date':self.row['event_kickoff_at'],'status':{'type':{'completed':True,'name':'STATUS_FULL_TIME'}},'competitors':[{'homeAway':'home','team':{'id':'A'},'score':'1','linescores':[{'displayValue':'0'},{'displayValue':'1'}]},{'homeAway':'away','team':{'id':'B'},'score':'0','linescores':[{'displayValue':'0'},{'displayValue':'0'}]}]}]}}
+  path=self.root/'summary.json';path.write_text(json.dumps(raw),encoding='utf-8')
+  row={'match_id':'espn:past','cohort':'eng.1','stage':'regular','event_status':'FT','score_basis':'regulation_90','kickoff_at':self.row['event_kickoff_at'],'observed_at':captured,'home':'espn:A','away':'espn:B','home_goals':1,'away_goals':0,'evidence':{'url':'https://site.api.espn.com/synthetic','file':'summary.json','sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'query_time':captured,'identity_verified':True}}
+  self.assertEqual(len(eligible_labels([row],self.target,self.root)[0]),1)
+  raw['header']['competitions'][0]['competitors'][0]['linescores'].append({'displayValue':'0'})
+  path.write_text(json.dumps(raw),encoding='utf-8');row['evidence']['sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
+  with self.assertRaises(ValueError):eligible_labels([row],self.target,self.root)
+
 if __name__=='__main__':unittest.main()
