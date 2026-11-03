@@ -1,0 +1,5 @@
+# Source hashes are byte-based; checkouts must preserve canonical LF on Windows.
+*.py text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf

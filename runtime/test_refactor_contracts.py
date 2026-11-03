@@ -54,9 +54,12 @@ class PublicationTests(unittest.TestCase):
             with self.assertRaises(ValueError):save({'value':2},f,stage='prematch',track='synthetic',root=d,idempotency_key='id')
 
     def test_explicit_registry_wins_over_environment(self):
-        with patch.dict('os.environ',{'WCPP_RUNTIME_ROOT':'/tmp/synthetic-root','WCPP_ACTIVE_MODEL':'/tmp/env.json'}):
-            self.assertEqual(registry_path('/tmp/explicit.json'),Path('/tmp/explicit.json'))
-            self.assertEqual(registry_path(),Path('/tmp/env.json'))
+        with tempfile.TemporaryDirectory() as d:
+            base=Path(d).resolve();explicit=base/'explicit.json';env=base/'env.json'
+            with patch.dict('os.environ',{'WCPP_RUNTIME_ROOT':str(base),'WCPP_ACTIVE_MODEL':str(env)}):
+                self.assertEqual(registry_path(str(explicit)),explicit)
+                self.assertEqual(registry_path(),env)
+
 
 class AsOfTests(unittest.TestCase):
     def test_collection_timestamp_cannot_replace_first_known(self):
