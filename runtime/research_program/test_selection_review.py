@@ -23,4 +23,16 @@ class SelectionTests(unittest.TestCase):
  def test_duplicate_matches_do_not_double_count(self):
   entry,result=self.data()
   with self.assertRaises(ValueError):compare([entry,entry],[result])
+ def test_pending_and_abstained_keep_each_version_denominator(self):
+  entry,result=self.data();r=compare([entry],[])
+  group=r['by_model_version']['current_model:SYNTHETIC']
+  self.assertEqual(group['population'],1);self.assertEqual(group['pending'],1)
+  self.assertEqual(group['comprehensive_coverage'],1.);self.assertIsNone(group['settled_pair_coverage'])
+  entry['comprehensive']['payload']['primary']=None
+  entry['comprehensive']['record_sha256']=digest({k:v for k,v in entry['comprehensive'].items() if k!='record_sha256'})
+  group=compare([entry],[result])['by_model_version']['current_model:SYNTHETIC']
+  self.assertEqual(group['population'],1);self.assertEqual(group['settled'],1)
+  self.assertEqual(group['paired_n'],0);self.assertEqual(group['comprehensive_abstained'],1)
+  self.assertEqual(group['comprehensive_coverage'],0.)
+
 if __name__=='__main__':unittest.main()
