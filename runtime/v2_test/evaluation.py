@@ -29,7 +29,7 @@ def evaluate(rows):
     columns=['exact_top1','exact_top3','exact_top5','score_log_loss','score_brier','wdl_brier','wdl_rps','wdl_accuracy']
     result={'n':len(rows),'metrics':dict(zip(columns,map(float,np.mean(stats,axis=0)))),
        'calibration_bins':[{'n':len(b),'mean_probability':float(np.mean([x[0] for x in b])),'hit_rate':float(np.mean([x[1] for x in b]))} for b in bins if b],
-       'primary':{'n':len(primary),'coverage':len(primary)/len(rows),'accuracy':sum(x[0] for x in primary)/len(primary) if primary else None,'net_hits_vs_probability_top1_same_subset':sum(int(x[0])-int(x[1]) for x in primary)},
+       'primary':{'n':len(primary),'hits':sum(x[0] for x in primary),'coverage':len(primary)/len(rows),'accuracy':sum(x[0] for x in primary)/len(primary) if primary else None,'full_population_accuracy':sum(x[0] for x in primary)/len(rows),'net_hits_vs_probability_top1_same_subset':sum(int(x[0])-int(x[1]) for x in primary)},
        'market_paired_n':len(market),'market_paired_brier':{k:float(np.mean([r[k] for r in market])) for k in ['model_brier','market_brier']} if market else None,
        'tail':{},'notice':'Inputs must already be time-held-out, source-verified first-freeze records; this function cannot certify their provenance. No filtered subset replaces full-population metrics. Total-line five-way settlement uses existing paired_review, not a guessed line.'}
     for name in sorted(set(x[0] for x in tails)):

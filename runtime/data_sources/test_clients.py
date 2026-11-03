@@ -87,6 +87,18 @@ class Tests(unittest.TestCase):
             result=fetch('api-football',opener=lambda *a,**k:self.fail('unexpected request'))
         self.assertEqual(result['call']['error_code'],'ENV_BINDING_MISSING')
 
+    def test_current_cloud_aliases_are_credential_safe(self):
+        cases=[('bsd','bsd',{'events':[]}),('openfoot','openfoot',{'matches':[]}),
+               ('5dollar','_5DOLLARS',{'success':1,'data':[]}),
+               ('the-odds-api','THE_ODDS',[]),('football-data','footballdata_org',{'competitions':[]}),
+               ('api-football','APIFOOTBALL',{'errors':[],'response':[]})]
+        for provider,binding,body in cases:
+            with self.subTest(provider=provider),patch.dict(os.environ,{binding:'CURRENT_ALIAS_TEST_ONLY'},clear=True):
+                r=fetch(provider,opener=lambda *a,**k:Response(body))
+                self.assertTrue(r['call']['authenticated'])
+                self.assertEqual(r['call']['credential_binding_name'],binding)
+                self.assertNotIn('CURRENT_ALIAS_TEST_ONLY',json.dumps(r))
+
     def test_explicit_binding_is_used_and_cannot_cross_providers(self):
         def opener(req, **kwargs):
             self.assertEqual(req.get_header('X-apisports-key'), 'SELECTED_TEST_ONLY')

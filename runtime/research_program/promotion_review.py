@@ -93,17 +93,20 @@ def assess(plan_record,rows,audit_receipts=None):
         if any(type(x) is not int or not 0<=x<=40 for x in (h,a)):raise ValueError('regulation score')
         actual=f'{h}-{a}';pair=[]
         for role,p in predictions.items():
-            evaluated[role].append({'matrix':p['matrix'],'home_goals':h,'away_goals':a})
+            evaluation_row={'matrix':p['matrix'],'home_goals':h,'away_goals':a}
             hit=p.get('primary')==actual;pair.append(hit)
             if p.get('primary') is not None:
                 matched=re.fullmatch(r'(\d{1,2})-(\d{1,2})',p['primary'])
                 if not matched:raise ValueError('unique Primary required')
                 ph,pa=map(int,matched.groups());matrix=np.asarray(p['matrix'],float)
+                if p['primary']!=f'{ph}-{pa}':raise ValueError('canonical Primary score required')
                 if matrix.ndim!=2 or ph>=matrix.shape[0] or pa>=matrix.shape[1]:raise ValueError('Primary outside support')
                 probability=float(matrix[ph,pa])
                 if not 0<=probability<=1:raise ValueError('Primary probability')
                 if p.get('primary_probability') is not None and not math.isclose(p['primary_probability'],probability,abs_tol=1e-9):raise ValueError('Primary probability mismatch')
                 primary_confidence[role].append((probability,hit))
+                evaluation_row['primary_score']=[ph,pa]
+            evaluated[role].append(evaluation_row)
             if role=='candidate':selected+=p.get('primary') is not None
         hits.append(pair)
     if rows:
