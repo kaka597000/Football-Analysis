@@ -15,7 +15,7 @@ class Phase1CallGraphTest(unittest.TestCase):
                                    capture_output=True, text=True)
         payload = json.loads(completed.stdout)
         calls = {(row['file'], row['calls']) for row in payload['edges']}
-        self.assertIn(('runtime/predict_active.py', 'legacy.predict'), calls)
+        self.assertIn(('runtime/prediction_engine.py', 'legacy.predict'), calls)
         self.assertIn(('runtime/v6/ml_model.py', 'ml_matrix'), calls)
         self.assertEqual(payload['fusion']['alpha_grid'], [0.25, 0.5, 0.75, 1.0])
         self.assertIn('egidi', payload['absent_from_predict_active_run'])

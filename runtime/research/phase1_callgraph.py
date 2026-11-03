@@ -16,21 +16,21 @@ RUNTIME = ROOT / 'runtime'
 
 # (file relative to repo, function, symbol that must be called, status)
 EDGES = (
-    ('runtime/predict_active.py', 'run', 'legacy.predict', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'predict_v4_compat', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'predict_generic_poisson', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'predict_systematic_candidate', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'predict_aus_expert', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'ml_predict', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'align_matrix_support', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'build_packets', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'upset_attach', 'PARTIAL'),
-    ('runtime/predict_active.py', 'run', 'candidate_run', 'PARTIAL'),
-    ('runtime/predict_active.py', 'run', 'attach_goals', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'attach_audit', 'LIVE'),
-    ('runtime/predict_active.py', 'run', 'compare_pair', 'PARTIAL'),
-    ('runtime/predict_active.py', 'run', 'analyze_market', 'PARTIAL'),
-    ('runtime/predict_active.py', 'run', 'build_match_analysis', 'PARTIAL'),
+    ('runtime/prediction_engine.py', 'predict_models', 'legacy.predict', 'LIVE'),
+    ('runtime/prediction_engine.py', 'predict_models', 'predict_v4_compat', 'LIVE'),
+    ('runtime/prediction_engine.py', 'predict_models', 'predict_generic_poisson', 'LIVE'),
+    ('runtime/prediction_engine.py', 'predict_models', 'predict_systematic_candidate', 'LIVE'),
+    ('runtime/prediction_engine.py', 'predict_models', 'predict_aus_expert', 'LIVE'),
+    ('runtime/prediction_engine.py', 'predict_models', 'ml_predict', 'LIVE'),
+    ('runtime/prediction_engine.py', 'predict_models', 'align_matrix_support', 'LIVE'),
+    ('runtime/prediction_service.py', 'run', 'build_packets', 'LIVE'),
+    ('runtime/prediction_service.py', 'run', 'upset_attach', 'PARTIAL'),
+    ('runtime/prediction_service.py', 'run', 'candidate_run', 'PARTIAL'),
+    ('runtime/prediction_diagnostics.py', 'attach', 'attach_goals', 'LIVE'),
+    ('runtime/prediction_diagnostics.py', 'attach', 'attach_audit', 'LIVE'),
+    ('runtime/prediction_diagnostics.py', 'attach', 'compare_pair', 'PARTIAL'),
+    ('runtime/prediction_diagnostics.py', 'attach', 'analyze_market', 'PARTIAL'),
+    ('runtime/prediction_diagnostics.py', 'attach', 'build_match_analysis', 'PARTIAL'),
     ('runtime/predict_active.py', 'main', 'save', 'LIVE'),
     ('runtime/v6/ml_model.py', 'predict', 'feature_matrix', 'LIVE'),
     ('runtime/v6/ml_model.py', 'predict', 'ml_matrix', 'LIVE'),
@@ -94,8 +94,7 @@ def load_edges():
             'line': fn.lineno,
             'status': status,
         })
-    run = _function(cache['runtime/predict_active.py'], 'run')
-    source = ast.get_source_segment(path_text(ROOT / 'runtime/predict_active.py'), run) or ''
+    source = '\n'.join(path_text(ROOT / name) for name in ('runtime/prediction_engine.py', 'runtime/prediction_service.py', 'runtime/prediction_diagnostics.py'))
     absent = [name for name in ABSENT_FROM_RUN if name not in source]
     if len(absent) != len(ABSENT_FROM_RUN):
         present = [name for name in ABSENT_FROM_RUN if name in source]

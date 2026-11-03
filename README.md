@@ -1,5 +1,7 @@
 # Football-Analysis · WCPP
 
+当前状态以 [CURRENT_STATE.md](CURRENT_STATE.md) 为导航；架构见 [ARCHITECTURE.md](ARCHITECTURE.md)，操作见 [OPERATIONS.md](OPERATIONS.md)。以下历史队列数量以现场注册表和新基线为准。
+
 项目长期目标：持续优化模型代码，深入研究并验证足球分析方法，提高未来冻结样本的第一推荐精确比分、胜平负及实际盘口大小球命中率。以Primary Top1为最高指标，目标与验证规则见[项目目标](docs/project-goals.md)和[机器可读配置](project-goals.json)。
 
 足球赛前分析与可复现研究：当前模型/test模型独立并行，保留比分矩阵、唯一Primary、胜平负及实际盘口大小球。综合人工判断另轨保存，全部发布分析追加冻结，复盘不事后择优。
