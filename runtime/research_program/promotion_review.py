@@ -19,6 +19,7 @@ def _primary_calibration(values):
 
 def _audit_receipts(plan_record,rows,receipts):
     expected=digest(sorted(plan_record['payload']['eligible_match_ids']))
+    package_hash=digest(sorted(rows,key=lambda row:row['match_id']))
     latest=max((aware(r['result']['observed_at']) for r in rows),default=aware(plan_record['recorded_at']))
     tracks={'actual-line-validation-audit':'INDEPENDENT_ACTUAL_LINE_FIVE_WAY_AUDIT_REQUIRED',
             'asof-source-validation-audit':'INDEPENDENT_SOURCE_ASOF_AUDIT_REQUIRED'}
@@ -27,7 +28,7 @@ def _audit_receipts(plan_record,rows,receipts):
         receipt=verify(receipt);body=receipt['payload'];track=receipt['track']
         if track not in tracks or track in valid:raise ValueError('unique independent audit types required')
         if (receipt.get('stage')!='review' or body.get('plan_record_sha256')!=plan_record['record_sha256']
-                or body.get('validation_ids_sha256')!=expected or body.get('decision')!='PASSED'
+                or body.get('validation_ids_sha256')!=expected or body.get('validation_package_sha256')!=package_hash or body.get('decision')!='PASSED'
                 or body.get('cohort')!=plan_record['payload']['cohort'] or body.get('stage')!=plan_record['payload']['stage']
                 or not latest<=aware(receipt['recorded_at'])<=datetime.now(timezone.utc)):
             raise ValueError('post-validation audit binding or chronology conflict')
