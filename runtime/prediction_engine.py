@@ -35,6 +35,8 @@ def source_identity():
 
 
 def predict_models(fixture, registry_path=None):
+    from competition_scope import require
+    require(fixture)
     from runtime_config import registry_path as resolve_registry
     path = resolve_registry(registry_path)
     registry = json.loads(path.read_text())

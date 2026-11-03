@@ -79,6 +79,8 @@ def _load(state_dir, now):
     scopes = json.loads(scopes_path.read_text())
     if not isinstance(scopes, list) or len({x['cohort'] for x in scopes}) != len(scopes):
         raise ValueError('explicit unique scope list required')
+    from competition_scope import permitted
+    scopes=[x for x in scopes if permitted(x)]
     mapping = {x['cohort']: x for x in scopes}
     for s in scopes:
         if not s.get('competition') or not isinstance(s.get('stages'), list) or not s['stages']:
@@ -107,6 +109,8 @@ def _load(state_dir, now):
     selected = {}; conflicts = set(); quarantine = []; excluded = []
     for raw, seed_row in incoming:
         mid = raw.get('match_id')
+        if not permitted(raw):
+            excluded.append({'match_id':mid,'reason':'OUTSIDE_FORMAL_18_SCOPE_HISTORY_RETAINED'});continue
         try:
             scope = mapping.get(raw.get('cohort'))
             if scope is None or raw.get('competition') != scope['competition'] or raw.get('stage') not in scope['stages']:

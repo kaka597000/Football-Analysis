@@ -17,8 +17,10 @@ def execute(state_dir, mode, *, max_collection_seconds=300):
     root=Path(state_dir).resolve()
     if root==REPO or root.is_relative_to(REPO/'runtime'):
         raise ValueError('separate private data checkout required')
-    scopes=json.loads((root/'config/scopes.json').read_text())
-    policy={'max_cohorts':len(scopes),'max_requests':100,'lookback_days':2,'promotion':'NEVER',
+    from competition_scope import permitted
+    original_scopes=json.loads((root/'config/scopes.json').read_text())
+    scopes=[s for s in original_scopes if permitted(s)]
+    policy={'max_cohorts':len(scopes),'historical_only_scopes_skipped':len(original_scopes)-len(scopes),'max_requests':100,'lookback_days':2,'promotion':'NEVER',
             'max_collection_seconds':max_collection_seconds,
             'data_sources':'existing public JSON endpoints only','paid_api_calls':False}
     stamp=datetime.now(timezone.utc);rid=stamp.strftime('%Y%m%dT%H%M%S')+'-'+mode

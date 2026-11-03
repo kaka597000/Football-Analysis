@@ -69,8 +69,8 @@ print('DIRECT_ADAPTER_FIT_OK')
         from prediction_engine import predict_models
         from fuse_models import fuse
         now=datetime.now(timezone.utc);kickoff=now+timedelta(days=1)
-        fixture={'match_id':'SYNTHETIC_GENERIC','cohort':'synthetic.1',
-                 'competition':'synthetic.1','gender':'male','age':'senior',
+        fixture={'match_id':'SYNTHETIC_GENERIC','cohort':'aus.1',
+                 'competition':'aus.1','gender':'male','age':'senior',
                  'stage':'regular','phase':'PreMatch','identity_verified':True,
                  'date':kickoff.date().isoformat(),'home':'A','away':'B','neutral':False,
                  'cutoff_at':(now-timedelta(minutes=1)).isoformat(),'kickoff_at':kickoff.isoformat()}
@@ -81,11 +81,11 @@ print('DIRECT_ADAPTER_FIT_OK')
                 artifact={'version':'SYNTHETIC_'+role,'role':role,'engine_contract':'WCPP-GENERIC-POISSON-ROUTE-1',
                           'model_kind':'constant','core':{'constant':[1.4,1.], 'fit_n':100,'fit_end':'2025-01-01'},
                           'created_at':(now-timedelta(days=2)).isoformat(),
-                          'forecast_scope':{'cohort':'synthetic.1','competition':'synthetic.1','stages':['regular']},
+                          'forecast_scope':{'cohort':'aus.1','competition':'aus.1','stages':['regular']},
                           'dataset_manifest':str(manifest),'dataset_manifest_sha256':hashlib.sha256(manifest.read_bytes()).hexdigest()}
                 path=root/(role+'.json');path.write_text(json.dumps(artifact),encoding='utf-8')
                 route[prefix+'artifact_path']=str(path);route[prefix+'artifact_sha256']=hashlib.sha256(path.read_bytes()).hexdigest()
-            registry=root/'registry.json';registry.write_text(json.dumps({'version':'SYNTHETIC','status':'ACTIVE_RESEARCH','models':{'synthetic.1':route}}),encoding='utf-8')
+            registry=root/'registry.json';registry.write_text(json.dumps({'version':'SYNTHETIC','status':'ACTIVE_RESEARCH','models':{'aus.1':route}}),encoding='utf-8')
             state=predict_models(fixture,registry)
             pair={'match_id':fixture['match_id'],'current_model':state['current'],'test_model':state['experimental'],
                   'execution_audit':{role:{'engine':'generic_poisson','artifact_sha256':route[prefix+'artifact_sha256']}

@@ -1,3 +1,4 @@
+"""Synthetic disposable histories; none are football validation samples."""
 """Synthetic software tests, not model quality evidence."""
 from datetime import datetime, timedelta, timezone
 import gzip
@@ -13,10 +14,10 @@ from trainer import train
 class TrainerTests(unittest.TestCase):
     def seed(self,root):
         (root/'seed').mkdir();(root/'config').mkdir()
-        (root/'config/scopes.json').write_text(json.dumps([{'cohort':'SYNTHETIC','competition':'SYNTHETIC','stages':['regular']}]))
+        (root/'config/scopes.json').write_text(json.dumps([{'cohort':'eng.1','competition':'eng.1','stages':['regular']}]))
         rows=[]
         for i in range(160):
-            rows.append({'match_id':str(i),'cohort':'SYNTHETIC','competition':'SYNTHETIC','stage':'regular',
+            rows.append({'match_id':str(i),'cohort':'eng.1','competition':'eng.1','stage':'regular',
                          'date':(datetime(2020,1,1)+timedelta(days=i)).date().isoformat(),
                          'home':'A' if i%2 else 'B','away':'B' if i%2 else 'A',
                          'home_goals':i%4,'away_goals':i%3,'neutral':None,
@@ -74,7 +75,7 @@ class TrainerTests(unittest.TestCase):
             with gzip.open(root/'seed/training.json.gz','wt') as f:json.dump(rows,f)
             manifest={'created_at':'2021-01-01T00:00:00Z',
                       'seed_sha256':hashlib.sha256((root/'seed/training.json.gz').read_bytes()).hexdigest(),
-                      'sources':[{'cohort':'SYNTHETIC','source_artifact_sha256':sha}]}
+                      'sources':[{'cohort':'eng.1','source_artifact_sha256':sha}]}
             (root/'seed/manifest.json').write_text(json.dumps(manifest))
             incremental=dict(rows[0],match_id='fake-live',date='2020-09-01',known_at='2021-01-01T00:00:00Z')
             (root/'normalized-results.jsonl').write_text(json.dumps(incremental)+'\n')

@@ -1,0 +1,33 @@
+{
+  "scope_count": 18,
+  "retained_active_routes": [
+    "eng.1",
+    "esp.1",
+    "ger.1",
+    "ita.1",
+    "fra.1",
+    "ned.1",
+    "swe.1",
+    "nor.1",
+    "usa.1",
+    "uefa.champions:NEW_FORMAT:league_phase",
+    "jpn.1",
+    "kor.1",
+    "aus.1",
+    "afc.champions:ELITE:league_phase"
+  ],
+  "historical_only_routes": [
+    "mex.1:apertura:regular",
+    "por.1",
+    "bra.1",
+    "ksa.1",
+    "eng.2"
+  ],
+  "missing_competitions": [
+    "fifa.world",
+    "fin.1",
+    "uefa.europa",
+    "uefa.europa.conf"
+  ],
+  "registry_modified": false
+}

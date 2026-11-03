@@ -1,6 +1,9 @@
 """Train, predict, freeze and review the independent main model."""
 import argparse, json
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+from competition_scope import require, training_rows
 from main_model import train, predict, freeze
 from review import evaluate
 from context_learning import train_context
@@ -24,13 +27,13 @@ def main():
     t = commands.add_parser('lookup-research'); t.add_argument('--theme',required=True); t.add_argument('--out',required=True)
     a = p.parse_args()
     if a.command == 'train':
-        artifact,report = train(read(a.history)); directory = Path(a.directory); directory.mkdir(parents=True,exist_ok=True)
+        artifact,report = train(training_rows(read(a.history))); directory = Path(a.directory); directory.mkdir(parents=True,exist_ok=True)
         for name,value in [('artifact',artifact),('report',report)]:
             with (directory/(name+'.json')).open('x') as f: json.dump(value,f,ensure_ascii=False,indent=2,allow_nan=False)
         print(json.dumps({'directory':str(directory),'selected_recipe':artifact['selected_recipe'], 'test':{k:{kk:vv for kk,vv in v.items() if kk!='records'} for k,v in report['test'].items()}},ensure_ascii=False))
     elif a.command == 'freeze': print(freeze(read(a.artifact),read(a.draft),a.directory))
     else:
-        if a.command == 'predict': value = predict(read(a.artifact),read(a.fixture))
+        if a.command == 'predict': value = predict(read(a.artifact),require(read(a.fixture)))
         elif a.command == 'audit-decision':
             from decision_audit import assess_decision
             value = assess_decision(read(a.fixture))

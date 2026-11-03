@@ -1,0 +1,18 @@
+import json,unittest
+from pathlib import Path
+from competition_scope import policy,require,inventory,training_rows
+class ScopeTests(unittest.TestCase):
+ def test_exact_scope_and_pending_routes(self):
+  self.assertEqual(len(policy()['competitions']),18)
+  for code in ('swe.1','fin.1','uefa.europa','uefa.europa.conf','fifa.world'):
+   require({'cohort':code})
+ def test_retired_wrong_identity_and_afc2_rejected(self):
+  for fixture in [{'cohort':k} for k in ('bra.1','eng.2','ksa.1','mex.1','por.1','afc.cup:CHAMPIONS_TWO:group_stage')]+[{'cohort':'eng.1','gender':'women'},{'cohort':'eng.1','age':'U21'},{'cohort':'eng.1','competition':'bra.1'},{'cohort':'fifa.world','stage':'qualifying'},{'cohort':'eng.1','score_basis':'extra_time'}]:
+   with self.subTest(fixture=fixture),self.assertRaises(ValueError):require(fixture)
+ def test_phase_history_cannot_mix(self):
+  with self.assertRaises(ValueError):training_rows([{'cohort':'fin.1','stage':'regular'},{'cohort':'fin.1','stage':'championship'}])
+ def test_default_registry_reports_four_gaps_without_mutation(self):
+  reg={'models':{k:{} for k in ['eng.1','swe.1','bra.1']}}
+  original=json.dumps(reg);r=inventory(reg)
+  self.assertIn('bra.1',r['historical_only_routes']);self.assertEqual(original,json.dumps(reg))
+if __name__=='__main__':unittest.main()
