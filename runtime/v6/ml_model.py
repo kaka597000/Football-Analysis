@@ -11,6 +11,7 @@ import lightgbm as lgb
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / 'v5'))
 from weighted_model import legacy, chronological_split
 

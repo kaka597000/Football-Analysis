@@ -1,0 +1,79 @@
+{
+  "schema": "WCPP-REGISTRY-RECONCILIATION-1",
+  "captured_at": "2026-11-03T01:59:00.458862+00:00",
+  "default": {
+    "version": "WCPP-DUAL-4",
+    "routes": 19,
+    "registry_sha256": "923e34fc44cda33fe965498a24a2435abb37a01a80c539108d8ec20d490bf013"
+  },
+  "incoming": {
+    "version": "WCPP-DUAL-5",
+    "routes": 21,
+    "registry_sha256": "7c53ac2f7b3b5c856beb6590c274b006f2cdc8d4c49625fe6beef16b2e9a1590"
+  },
+  "common_routes": 19,
+  "common_artifact_hashes_equal": true,
+  "extra_routes": [
+    {
+      "cohort": "afc.cup:CHAMPIONS_TWO:group_stage",
+      "current_engine": "generic_poisson",
+      "test_engine": "generic_poisson",
+      "artifacts": [
+        {
+          "role": "current",
+          "original_path": "/workspace/WCPP/models/afc2-group-20261029-r2/current-artifact.json",
+          "retained_path": "/workspace/recovered-workspace-20261102/incoming-20261102/WCPP/models/afc2-group-20261029-r2/current-artifact.json",
+          "sha256": "ae388db40e998bb0d9ca935e1ca403b414da68c1a07855d313e23d758dbe4665",
+          "registry_hash_matches": true,
+          "required_dataset_manifest": "/workspace/WCPP/models/afc2-group-20261029-r2/manifest.json",
+          "required_dataset_manifest_sha256": "65b081cd579aac16516b2828e57e4d8b6e064c69a130d87899157b848b647aac",
+          "dependency_exists_default": false,
+          "dependency_exists_incoming": false
+        },
+        {
+          "role": "test",
+          "original_path": "/workspace/WCPP/models/afc2-group-20261029-r2/test-artifact.json",
+          "retained_path": "/workspace/recovered-workspace-20261102/incoming-20261102/WCPP/models/afc2-group-20261029-r2/test-artifact.json",
+          "sha256": "75c2c77b99cc366651c146eef95e92498035762dafaf122b641700cc97efc9e3",
+          "registry_hash_matches": true,
+          "required_dataset_manifest": "/workspace/WCPP/models/afc2-group-20261029-r2/manifest.json",
+          "required_dataset_manifest_sha256": "65b081cd579aac16516b2828e57e4d8b6e064c69a130d87899157b848b647aac",
+          "dependency_exists_default": false,
+          "dependency_exists_incoming": false
+        }
+      ],
+      "admission_status": "BLOCKED_MISSING_HASH_LOCKED_DATASET_MANIFEST"
+    },
+    {
+      "cohort": "eng.league_cup:single_leg",
+      "current_engine": "generic_poisson",
+      "test_engine": "generic_poisson",
+      "artifacts": [
+        {
+          "role": "current",
+          "original_path": "/workspace/WCPP/models/efl-cup-20261029-r3/current-artifact.json",
+          "retained_path": "/workspace/recovered-workspace-20261102/incoming-20261102/WCPP/models/efl-cup-20261029-r3/current-artifact.json",
+          "sha256": "3e608caf414d3c68b4100894a18cbaf196123110826f54a9c8d48c3fe5a5efad",
+          "registry_hash_matches": true,
+          "required_dataset_manifest": "/workspace/WCPP/models/efl-cup-20261029-r3/manifest.json",
+          "required_dataset_manifest_sha256": "3a27220e638b7559625cbacede9bdceaed183b822030f8f2b35091e4ec146299",
+          "dependency_exists_default": false,
+          "dependency_exists_incoming": false
+        },
+        {
+          "role": "test",
+          "original_path": "/workspace/WCPP/models/efl-cup-20261029-r3/test-artifact.json",
+          "retained_path": "/workspace/recovered-workspace-20261102/incoming-20261102/WCPP/models/efl-cup-20261029-r3/test-artifact.json",
+          "sha256": "e2fcdebe8bf984abb8bacee4f722a746ca4d57e9ef79b0239d2782371f6c23fb",
+          "registry_hash_matches": true,
+          "required_dataset_manifest": "/workspace/WCPP/models/efl-cup-20261029-r3/manifest.json",
+          "required_dataset_manifest_sha256": "3a27220e638b7559625cbacede9bdceaed183b822030f8f2b35091e4ec146299",
+          "dependency_exists_default": false,
+          "dependency_exists_incoming": false
+        }
+      ],
+      "admission_status": "BLOCKED_MISSING_HASH_LOCKED_DATASET_MANIFEST"
+    }
+  ],
+  "activation_changed": false
+}

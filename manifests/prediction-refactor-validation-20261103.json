@@ -12,9 +12,64 @@
   "historical_integration_assets_missing": true,
   "remaining_external_validation": [
     "historical fixed-recipe evidence missing",
-    "Windows CI pending"
+    "two incoming route dataset manifests missing",
+    "main protection API unavailable (403)"
   ],
   "shared_ml_training_regression": "Both adapters: identical actual LightGBM model_to_string and residual matrices versus original source",
   "publication_recovery": "fault injection and concurrent chain tests",
-  "full_suite_tests": 402
+  "full_suite_tests": 407,
+  "windows_ci": {
+    "status": "success",
+    "commit": "6b60cee7f52bff8a6097902dc745ab308cfe0ceb",
+    "run_url": "https://github.com/kaka597000/Football-Analysis/actions/runs/41561357209",
+    "scope": "PR5 merged main portable suite; latest fix CI recorded in PR6"
+  },
+  "pr5_main_test_count": 403,
+  "pr5_main_skips_note": "15 skip records in GitHub clean CI, including a skipped test class; not complete production validation",
+  "review_fixes": [
+    "explicit UTF-8 freeze reads",
+    "standalone ML runtime-root bootstrap",
+    "actual generated_at for normalized special routes",
+    "audit uses current_engine/test_engine and dispatcher defaults"
+  ],
+  "full_suite_scope": "local complete suite, runtime assets retained, one historical evidence test class skipped",
+  "review_fix_baseline_commit": "6b60cee7f52bff8a6097902dc745ab308cfe0ceb",
+  "review_fix_portable_ci": {
+    "tested_code_commit": "dbbafa69c49cde20a16fed9f81a6b5bf9f980e14",
+    "run_url": "https://github.com/kaka597000/Football-Analysis/actions/runs/41563411213",
+    "ubuntu": "success",
+    "windows": "success",
+    "tests": 11
+  },
+  "strict_integration": {
+    "status": "FAILED_MISSING_HISTORICAL_EVIDENCE",
+    "command": "python scripts/run_tests.py --layer integration",
+    "failed_suite": "runtime/research (integration skip prohibited)",
+    "skipped_test_class": "test_fixed_recipe_refresh.RefreshTests",
+    "not_production_ready": true
+  },
+  "review_fix_full_ci": {
+    "tested_code_commit": "dbbafa69c49cde20a16fed9f81a6b5bf9f980e14",
+    "run_url": "https://github.com/kaka597000/Football-Analysis/actions/runs/41563411213",
+    "status": "success",
+    "reported_test_count": 407,
+    "skip_record_count": 15,
+    "skip_records": [
+      "test_active_anchor_still_matches_hash_locked_engine (test_active_route_engines.ActiveRouteEngineTests.test_active_anchor_still_matches_hash_locked_engine) ... skipped 'external active registry required'",
+      "test_afc_elite_route_is_phase_isolated (test_active_route_engines.ActiveRouteEngineTests.test_afc_elite_route_is_phase_isolated) ... skipped 'external active registry required'",
+      "test_four_requested_routes_are_hash_locked (test_active_route_engines.ActiveRouteEngineTests.test_four_requested_routes_are_hash_locked) ... skipped 'external active registry required'",
+      "test_today_afc_provider_team_map_has_no_cold_start_target (test_active_route_engines.ActiveRouteEngineTests.test_today_afc_provider_team_map_has_no_cold_start_target) ... skipped 'external AFC artifacts required'",
+      "test_append_only_import_rollback_and_legal_repeat (test_expert.ExpertTests.test_append_only_import_rollback_and_legal_repeat) ... skipped 'external Australian historical database required'",
+      "test_invalid_observed_process_rejected (test_ucl.Tests.test_invalid_observed_process_rejected) ... skipped 'external UCL historical dataset required'",
+      "test_mixed_eras_stages_rejected (test_ucl.Tests.test_mixed_eras_stages_rejected) ... skipped 'external UCL historical dataset required'",
+      "test_neutral_unknown_rejected (test_ucl.Tests.test_neutral_unknown_rejected) ... skipped 'external UCL historical dataset required'",
+      "test_partial_process_preserves_real_sot_and_possession (test_ucl.Tests.test_partial_process_preserves_real_sot_and_possession) ... skipped 'external UCL historical dataset required'",
+      "test_target_or_same_date_process_not_used (test_ucl.Tests.test_target_or_same_date_process_not_used) ... skipped 'external UCL historical dataset required'",
+      "setUpClass (test_fixed_recipe_refresh.RefreshTests) ... skipped 'private integration assets unavailable: /workspace/WCPP/models/weighted-20261012/ita.1/artifact.json, /workspace/WCPP/models/ml-20261012/ita.1/artifact.json, /workspace/WCPP/reports/auto-optimization-20261101/history/rows.json, /workspace/WCPP/reports/auto-optimization-20261101/history/coverage.json, /workspace/WCPP/reports/auto-optimization-20261101/history/raw'",
+      "test_future_quote_or_bad_hash_rejected (test_predict.PredictionTest.test_future_quote_or_bad_hash_rejected) ... skipped 'external upset model registry required'",
+      "test_local_artifact_inference_and_input_isolation (test_predict.PredictionTest.test_local_artifact_inference_and_input_isolation) ... skipped 'external upset model registry required'",
+      "test_missing_and_untrained (test_predict.PredictionTest.test_missing_and_untrained) ... skipped 'external upset model registry required'",
+      "test_test_outcomes_do_not_select_models_blends_or_hyperparameters (test_validation.ValidationTest.test_test_outcomes_do_not_select_models_blends_or_hyperparameters) ... skipped 'external upset training history and prior report required'"
+    ]
+  }
 }

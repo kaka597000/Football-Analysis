@@ -44,15 +44,28 @@ def database_profile(path):
     out['quick_check']=c.execute('pragma quick_check').fetchone()[0];c.close();return out
 
 
+def route_engine(route, role):
+    """Match prediction_engine dispatch, including implicit historical routes."""
+    if role == 'current':
+        return route.get('current_engine', 'legacy_weighted_anchor')
+    if not route.get('test_artifact_path'):
+        return 'v5.weighted_model.predict'
+    if route.get('test_engine'):
+        return route['test_engine']
+    if route.get('test_version') == 'WCPP-ML-UCL-0.1':
+        return 'continental.ucl_ml.predict'
+    return 'v6.ml_model.predict'
+
+
 def run(registry_path,db_path):
-    reg=json.loads(Path(registry_path).read_text());routes=[]
+    reg=json.loads(Path(registry_path).read_text(encoding='utf-8'));routes=[]
     for cohort,route in reg['models'].items():
         models={}
         for prefix in ('','test_'):
-            p=Path(route[prefix+'artifact_path']);a=json.loads(p.read_text());history=a.get('history') or a.get('anchor',{}).get('history') or []
-            models[prefix or 'current']={'path':str(p),'actual_sha256':sha(p),'registered_sha256':route[prefix+'artifact_sha256'],
-              'hash_matches':sha(p)==route[prefix+'artifact_sha256'],'version':a.get('version'),
-              'engine':route.get(prefix+'engine','legacy_anchor' if not prefix else a.get('version')),
+            p=Path(route.get(prefix+'artifact_path') or route['artifact_path']);a=json.loads(p.read_text(encoding='utf-8'));history=a.get('history') or a.get('anchor',{}).get('history') or []
+            models[prefix or 'current']={'path':str(p),'actual_sha256':sha(p),'registered_sha256':(route.get(prefix+'artifact_sha256') or route['artifact_sha256']),
+              'hash_matches':sha(p)==(route.get(prefix+'artifact_sha256') or route['artifact_sha256']),'version':a.get('version'),
+              'engine':route_engine(route, 'test' if prefix else 'current'),
               'train_end':a.get('train_end') or a.get('core',{}).get('fit_end'),
               'history':profile_history(history),'history_embedded':bool(history),
               'declared_xg_training_rows':a.get('feature_xg_match_count'),

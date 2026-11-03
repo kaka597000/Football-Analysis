@@ -51,11 +51,12 @@ def _prematch_clock(fixture, *, built_at=None):
 def _normalized(raw, fixture, *, version, role, artifact_path,
                 model_status=None, training_cutoff=None):
     """Return one common prediction schema without changing probabilities."""
+    generated_at = raw.get("generated_at") or datetime.now(timezone.utc).isoformat()
     status = str(raw.get("status", model_status or "PREDICTED"))
     matrix = raw.get("matrix")
     if matrix is None or status.upper().startswith("ABSTAIN"):
         return {
-            "version": version, "role": role, "status": status,
+            "version": version, "role": role, "status": status, "generated_at": generated_at,
             "reason": raw.get("reason", "MODEL_ABSTAIN"), "input": fixture,
             "matrix": None, "primary": None, "formal_kpi_eligible": False,
             "training_data_cutoff": training_cutoff,
@@ -82,7 +83,7 @@ def _normalized(raw, fixture, *, version, role, artifact_path,
     }
     result = dict(raw)
     result.update({
-        "version": version, "role": role, "status": status,
+        "version": version, "role": role, "status": status, "generated_at": generated_at,
         "input": fixture, "matrix": m.tolist(), "matrix_hash": digest(m.tolist()),
         "primary": primary, "primary_probability": float(m[h, a]),
         "top3": [{"score": f"{i // m.shape[1]}-{i % m.shape[1]}",

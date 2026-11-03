@@ -83,13 +83,13 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=N
         records = sorted(folder.glob('[0-9]*.json'))
         previous_hash = None
         for path in records:
-            previous = verify(json.loads(path.read_text()))
+            previous = verify(json.loads(path.read_text(encoding='utf-8')))
             if previous['previous_sha256'] != previous_hash:
                 raise ValueError('freeze chain mismatch')
             previous_hash = previous['record_sha256']
         if idempotency_key is not None:
             for path in records:
-                prior = verify(json.loads(path.read_text()))
+                prior = verify(json.loads(path.read_text(encoding='utf-8')))
                 if prior.get('idempotency_key') == idempotency_key:
                     if prior['fixture'] != fixture or prior['payload'] != payload:
                         raise ValueError('publication idempotency conflict')
@@ -138,7 +138,7 @@ def main():
     parser.add_argument('--track', required=True)
     parser.add_argument('--root', default=DEFAULT_ROOT)
     args = parser.parse_args()
-    data = json.loads(Path(args.input).read_text())
+    data = json.loads(Path(args.input).read_text(encoding='utf-8'))
     print(json.dumps(save(data['payload'], data['fixture'], stage=args.stage,
                           track=args.track, root=args.root), ensure_ascii=False))
 

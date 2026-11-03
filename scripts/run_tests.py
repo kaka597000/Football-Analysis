@@ -24,7 +24,7 @@ def main():
     suites = ['runtime'] if args.layer == 'portable' else SUITES
     for suite in suites:
         print('Testing '+suite,flush=True)
-        modules=(['test_refactor_contracts'] if args.layer == 'portable' else sorted(p.stem for p in (ROOT/suite).glob('test_*.py')))
+        modules=(['test_refactor_contracts','test_review_contracts'] if args.layer == 'portable' else sorted(p.stem for p in (ROOT/suite).glob('test_*.py')))
         result=subprocess.run([sys.executable,'-m','unittest','-v',*modules],cwd=ROOT/suite,env=env, capture_output=args.layer=='integration', text=True)
         if args.layer=='integration':
             print(result.stdout, end='');print(result.stderr, end='')
