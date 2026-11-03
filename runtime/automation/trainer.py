@@ -109,9 +109,11 @@ def _load(state_dir, now):
     selected = {}; conflicts = set(); quarantine = []; excluded = []
     for raw, seed_row in incoming:
         mid = raw.get('match_id')
-        if not permitted(raw):
-            excluded.append({'match_id':mid,'reason':'OUTSIDE_FORMAL_18_SCOPE_HISTORY_RETAINED'});continue
         try:
+            if not isinstance(raw.get('cohort'),str) or not raw['cohort'] or not isinstance(raw.get('competition'),str):
+                raise ValueError('INVALID_SCOPE_IDENTITY')
+            if not permitted(raw):
+                excluded.append({'match_id':mid,'reason':'OUTSIDE_FORMAL_18_SCOPE_HISTORY_RETAINED'});continue
             scope = mapping.get(raw.get('cohort'))
             if scope is None or raw.get('competition') != scope['competition'] or raw.get('stage') not in scope['stages']:
                 raise ValueError('UNSUPPORTED_SCOPE')

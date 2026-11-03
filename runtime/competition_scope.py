@@ -12,8 +12,12 @@ def policy():
     return value
 
 def permitted(item):
+    if not isinstance(item,dict):return False
     cohort=item.get('cohort','')
+    if not isinstance(cohort,str):return False
+    if 'competition' in item and not isinstance(item['competition'],str):return False
     code=item.get('competition') or cohort.split(':',1)[0]
+    if not isinstance(code,str):return False
     if cohort and code!=cohort.split(':',1)[0]:return False
     if code not in {r['code'] for r in policy()['competitions']}:return False
     if item.get('gender','men') not in ('men','male') or item.get('age','senior')!='senior':return False
@@ -33,7 +37,10 @@ def training_rows(rows):
     phased={r['code'] for r in policy()['competitions'] if r['requires_phase_identity']}
     if any(r['cohort'].split(':')[0] in phased and not r.get('stage') for r in rows):
         raise ValueError('explicit historical phase required before training')
-    identities={(r['cohort'],r.get('stage')) for r in rows}
+    from v4.competition_router import classify
+    classified=[classify(r) for r in rows]
+    if any(not r['complete'] for r in classified):raise ValueError('unverified competition phase')
+    identities={r['route_key'] for r in classified}
     if len(identities)!=1:raise ValueError('one competition cohort and explicit phase per training run')
     return rows
 

@@ -86,4 +86,12 @@ class TrainerTests(unittest.TestCase):
             with self.assertRaises(ValueError):train(root,now=datetime(2022,1,1,tzinfo=timezone.utc))
 
 
+    def test_null_cohort_is_quarantined_without_aborting_valid_training(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);self.seed(root)
+            (root/'normalized-results.jsonl').write_text(json.dumps({'match_id':'bad-row','cohort':None})+'\n')
+            result=train(root,now=datetime(2022,1,1,tzinfo=timezone.utc))
+            self.assertEqual(result['accepted_rows'],160)
+            self.assertEqual(result['quarantined'],1)
+
 if __name__=='__main__':unittest.main()
