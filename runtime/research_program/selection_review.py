@@ -10,6 +10,8 @@ def compare(entries,results):
     actual={};seen=set();rows=[];groups={};pending=[];selected=0
     for result in results:
         if result['match_id'] in actual:raise ValueError('duplicate result')
+        if result.get('status') not in ('completed','FT') and result.get('event_status')!='FT':
+            raise ValueError('explicit completed result required')
         if result.get('score_basis')!='regulation_90':raise ValueError('regulation result required')
         public_url(result['source_url'])
         if any(type(result.get(k)) is not int or not 0<=result[k]<=40 for k in ('home_goals','away_goals')):raise ValueError('actual score')
