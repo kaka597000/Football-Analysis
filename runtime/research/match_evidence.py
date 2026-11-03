@@ -28,5 +28,3 @@ def evidence_block(block, fixture):
         if not aware(e['known_at'])<=aware(e['query_time'])<=aware(block['as_of'])<=cutoff:raise ValueError('source time')
     if block['status']=='scenario' and (not block.get('scenarios') or not block.get('uncertainty')):raise ValueError('scenario uncertainty')
     return {k:copy.deepcopy(block[k]) for k in ('status','summary','facts','sources','missing','scenarios','uncertainty') if k in block}
-
-
