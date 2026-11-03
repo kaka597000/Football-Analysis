@@ -8,12 +8,13 @@
   "fixture_policy": "synthetic future dates, no publication; original fixture evidence retained locally",
   "models_retrained": false,
   "registry_modified": false,
-  "unimplemented": [
-    "ML shared core",
-    "package migration",
-    "cross-platform lock",
-    "publication transaction recovery",
-    "live prediction"
+  "unimplemented": [],
+  "historical_integration_assets_missing": true,
+  "remaining_external_validation": [
+    "historical fixed-recipe evidence missing",
+    "Windows CI pending"
   ],
-  "historical_integration_assets_missing": true
+  "shared_ml_training_regression": "Both adapters: identical actual LightGBM model_to_string and residual matrices versus original source",
+  "publication_recovery": "fault injection and concurrent chain tests",
+  "full_suite_tests": 402
 }

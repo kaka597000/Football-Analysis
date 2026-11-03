@@ -10,6 +10,10 @@ python scripts/run_tests.py
 
 输出必须使用新路径。CLI追加双模型冻结，run仅返回对象，不发布。恢复入口及资产身份应与当前环境清单核验。
 
-尚待处理：预测引擎仍以赛前为范围，CLI旧live选项并不证明支持滚球；fcntl锁尚未跨平台抽象；冻结后交付文件失败没有事务恢复；first_known_at缺失不能认证历史as-of回测；公开CI缺资产的跳过不等于真实集成通过。
+完整重构说明见 [六阶段交付](docs/refactor-completion-20261103.md)。
 
-本轮优先实施PR-01至PR-03；ML共享核心、统一路径契约及跨平台测试属于后续PR-04至PR-06。未启用分支保护、未改定时任务或模型参数。
+恢复失败交付：`python runtime/predict_active.py --out NEW.json --resume-publication`。
+
+跨平台检查：`python scripts/run_tests.py --layer portable`；真实运行资产严格检查：`python scripts/run_tests.py --layer integration`（任何跳过均失败）。
+
+历史first_known缺失仍未补齐，历史固定配方证据缺失必须恢复后才能通过严格集成。源码重构不代表模型训练完成或准确率提高。

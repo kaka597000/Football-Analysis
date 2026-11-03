@@ -31,7 +31,7 @@ EDGES = (
     ('runtime/prediction_diagnostics.py', 'attach', 'compare_pair', 'PARTIAL'),
     ('runtime/prediction_diagnostics.py', 'attach', 'analyze_market', 'PARTIAL'),
     ('runtime/prediction_diagnostics.py', 'attach', 'build_match_analysis', 'PARTIAL'),
-    ('runtime/predict_active.py', 'main', 'save', 'LIVE'),
+    ('runtime/publication.py', 'publish', 'save', 'LIVE'),
     ('runtime/v6/ml_model.py', 'predict', 'feature_matrix', 'LIVE'),
     ('runtime/v6/ml_model.py', 'predict', 'ml_matrix', 'LIVE'),
     ('runtime/v6/ml_model.py', 'predict', 'legacy.distribution', 'LIVE'),
