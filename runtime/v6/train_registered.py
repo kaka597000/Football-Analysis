@@ -17,9 +17,12 @@ def main():
     p.add_argument('--cohort',help='Optional single already registered cohort')
     a=p.parse_args();root=Path(a.out)
     registry=json.loads(Path(a.registry).read_text());summary=[]
+    from competition_scope import permitted, require
+    if a.cohort:require({'cohort':a.cohort})
     if a.cohort and a.cohort not in registry['models']:raise ValueError('unregistered cohort')
     root.mkdir(parents=True,exist_ok=False)
     for cohort,entry in registry['models'].items():
+        if not permitted({'cohort':cohort}):continue
         if a.cohort and cohort!=a.cohort:continue
         source=Path(entry['artifact_path'])
         if hashlib.sha256(source.read_bytes()).hexdigest()!=entry['artifact_sha256']:

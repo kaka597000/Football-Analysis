@@ -1,0 +1,118 @@
+{
+  "schema": "WCPP-ANALYSIS-SCOPE-1",
+  "effective_date": "2026-11-03",
+  "gender": "men",
+  "age": "senior",
+  "score_basis": "regulation_90",
+  "automatic_model_promotion": false,
+  "competitions": [
+    {
+      "code": "eng.1",
+      "name": "英超",
+      "requires_phase_identity": false,
+      "active_route_gap": false
+    },
+    {
+      "code": "esp.1",
+      "name": "西甲",
+      "requires_phase_identity": false,
+      "active_route_gap": false
+    },
+    {
+      "code": "ger.1",
+      "name": "德甲",
+      "requires_phase_identity": false,
+      "active_route_gap": false
+    },
+    {
+      "code": "ita.1",
+      "name": "意甲",
+      "requires_phase_identity": false,
+      "active_route_gap": false
+    },
+    {
+      "code": "fra.1",
+      "name": "法甲",
+      "requires_phase_identity": false,
+      "active_route_gap": false
+    },
+    {
+      "code": "jpn.1",
+      "name": "日职J1",
+      "requires_phase_identity": true,
+      "active_route_gap": false
+    },
+    {
+      "code": "kor.1",
+      "name": "韩K1",
+      "requires_phase_identity": true,
+      "active_route_gap": false
+    },
+    {
+      "code": "aus.1",
+      "name": "澳超",
+      "requires_phase_identity": true,
+      "active_route_gap": false
+    },
+    {
+      "code": "usa.1",
+      "name": "美职联MLS",
+      "requires_phase_identity": true,
+      "active_route_gap": false
+    },
+    {
+      "code": "fin.1",
+      "name": "芬超",
+      "requires_phase_identity": true,
+      "active_route_gap": true
+    },
+    {
+      "code": "nor.1",
+      "name": "挪超",
+      "requires_phase_identity": false,
+      "active_route_gap": false
+    },
+    {
+      "code": "swe.1",
+      "name": "瑞典超",
+      "requires_phase_identity": false,
+      "active_route_gap": false
+    },
+    {
+      "code": "ned.1",
+      "name": "荷甲",
+      "requires_phase_identity": true,
+      "active_route_gap": false
+    },
+    {
+      "code": "uefa.champions",
+      "name": "欧冠",
+      "requires_phase_identity": true,
+      "active_route_gap": false
+    },
+    {
+      "code": "uefa.europa",
+      "name": "欧联杯",
+      "requires_phase_identity": true,
+      "active_route_gap": true
+    },
+    {
+      "code": "uefa.europa.conf",
+      "name": "欧协联",
+      "requires_phase_identity": true,
+      "active_route_gap": true
+    },
+    {
+      "code": "afc.champions",
+      "name": "亚冠精英",
+      "requires_phase_identity": true,
+      "active_route_gap": false
+    },
+    {
+      "code": "fifa.world",
+      "name": "世界杯正赛",
+      "requires_phase_identity": true,
+      "active_route_gap": true
+    }
+  ]
+}

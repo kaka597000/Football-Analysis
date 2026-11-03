@@ -40,6 +40,16 @@ class RunTests(unittest.TestCase):
             self.assertEqual(result['status'],'FAILED')
             self.assertNotIn('SENSITIVE_RESPONSE_BODY',json.dumps(result))
 
+    def test_workflow_module_launch_without_pythonpath(self):
+        import os,subprocess
+        with tempfile.TemporaryDirectory() as folder:
+            root=self.state(folder)
+            code="import runpy,sys;from unittest.mock import patch;sys.argv=['runtime.automation.run','collect','--state-dir',sys.argv[1]];\nwith patch('runtime.automation.collector.collect',return_value={'successful_requests':1}):runpy.run_module('runtime.automation.run',run_name='__main__')"
+            env=dict(os.environ);env.pop('PYTHONPATH',None)
+            result=subprocess.run([sys.executable,'-c',code,str(root)],cwd=Path(__file__).resolve().parents[2],env=env,capture_output=True,text=True,timeout=30)
+            self.assertEqual(result.returncode,0,result.stderr)
+            self.assertEqual(len(list((root/'runs').glob('*.json'))),1)
+
     def test_bad_seed_stops_before_network(self):
         with tempfile.TemporaryDirectory() as folder:
             root=self.state(folder);(root/'seed/training.json.gz').write_bytes(b'CHANGED')

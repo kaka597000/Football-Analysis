@@ -3,6 +3,8 @@ import json,hashlib,sys
 from pathlib import Path
 from datetime import datetime,timezone
 ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
+from competition_scope import training_rows
 sys.path.insert(0,str(ROOT/'v5'));import weighted_model as weighted
 sys.path.insert(0,str(ROOT/'continental'));import ucl_ml as ml
 
@@ -27,7 +29,7 @@ def main():
   if len(cohorts)!=1:raise ValueError('input file is not one cohort')
   cohort=next(iter(cohorts));folder=out/cohort.replace(':','-');folder.mkdir()
   try:
-   rows=validate(rows);artifact,report=weighted.train(rows);test,test_report=ml.train(rows)
+   rows=training_rows(validate(rows));artifact,report=weighted.train(rows);test,test_report=ml.train(rows)
   except ValueError as e:
    reports.append({'cohort':cohort,'status':'NOT_REGISTERABLE','reason':str(e),'rows':len(rows)});print(json.dumps(reports[-1]),flush=True);continue
   for name,obj in [('current-artifact',artifact),('current-report',report),('test-artifact',test),('test-report',test_report)]:
