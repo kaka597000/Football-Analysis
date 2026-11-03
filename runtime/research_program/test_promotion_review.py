@@ -25,7 +25,7 @@ class GateTests(unittest.TestCase):
     if role=='current':p={'current_model':p,'execution_audit':{'current':{'artifact_sha256':'a'*64},'fixture_sha256':digest(f)}}
     return seal({'track':'current-test-pair' if role=='current' else 'challenger-independent','fixture':copy.deepcopy(f),'stage':'prematch','evaluation_slot':'FIRST_PREMATCH','recorded_at':(cutoff+timedelta(seconds=20)).isoformat(),'payload':p})
    rows.append({'match_id':str(i),'current_record':record('current',[[1.,0.],[0.,0.]],'0-0'),'candidate_record':record('candidate',[[0.,0.],[1.,0.]],'1-0'),'result':{'status':'completed','match_id':str(i),'home_goals':1,'away_goals':0,'score_basis':'regulation_90','source_url':'https://example.test/synthetic','observed_at':now.isoformat()}})
-  receipts=[seal({'track':track,'stage':'review','recorded_at':now.isoformat(),'payload':{'plan_record_sha256':plan['record_sha256'],'validation_ids_sha256':digest(sorted(plan['payload']['eligible_match_ids'])),'decision':'PASSED','cohort':'eng.1','stage':'regular'}}) for track in ('actual-line-validation-audit','asof-source-validation-audit')]
+  receipts=[seal({'track':track,'stage':'review','recorded_at':now.isoformat(),'payload':{'plan_record_sha256':plan['record_sha256'],'validation_ids_sha256':digest(sorted(plan['payload']['eligible_match_ids'])),'validation_package_sha256':digest(sorted(rows,key=lambda row:row['match_id'])),'decision':'PASSED','cohort':'eng.1','stage':'regular'}}) for track in ('actual-line-validation-audit','asof-source-validation-audit')]
   return plan,rows,receipts
  def test_no_registration_or_missing_population_cannot_promote(self):
   self.assertEqual(assess(None,[])['status'],'BLOCKED')
@@ -54,9 +54,14 @@ class GateTests(unittest.TestCase):
   for row in rows:
    for role in ('current','candidate'):
     rec=row[role+'_record'];p=rec['payload']['current_model'] if role=='current' else rec['payload'];p['matrix']=matrix;p['matrix_hash']=digest(matrix);seal(rec)
+  for receipt in receipts:
+   receipt['payload']['validation_package_sha256']=digest(sorted(rows,key=lambda row:row['match_id']));seal(receipt)
   report=assess(plan,rows,receipts)
   self.assertIn('PRIMARY_CONFIDENCE_CALIBRATION_REGRESSION',report['reasons'])
   self.assertAlmostEqual(report['actual_primary_calibration']['candidate']['ece'],.6)
+ def test_receipts_cannot_be_reused_after_result_change(self):
+  plan,rows,receipts=self.package();rows[0]['result']['home_goals']=0
+  with self.assertRaisesRegex(ValueError,'audit binding'):assess(plan,rows,receipts)
  def test_duplicate_universe_cannot_approve(self):
   p=self.plan();p['payload']['eligible_match_ids']*=2;seal(p)
   with self.assertRaises(ValueError):assess(p,[])
