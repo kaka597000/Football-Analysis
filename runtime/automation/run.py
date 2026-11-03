@@ -17,7 +17,7 @@ def execute(state_dir, mode, *, max_collection_seconds=300):
     root=Path(state_dir).resolve()
     if root==REPO or root.is_relative_to(REPO/'runtime'):
         raise ValueError('separate private data checkout required')
-    from competition_scope import permitted
+    from ..competition_scope import permitted
     original_scopes=json.loads((root/'config/scopes.json').read_text())
     scopes=[s for s in original_scopes if permitted(s)]
     policy={'max_cohorts':len(scopes),'historical_only_scopes_skipped':len(original_scopes)-len(scopes),'max_requests':100,'lookback_days':2,'promotion':'NEVER',
