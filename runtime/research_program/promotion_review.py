@@ -10,7 +10,32 @@ from v2_test.data_contract import digest,public_url
 from v2_test.evaluation import evaluate
 
 
-def assess(plan_record,rows):
+def _primary_calibration(values):
+    bins=[[] for _ in range(10)]
+    for probability,hit in values:bins[min(int(probability*10),9)].append((probability,hit))
+    return {'n':len(values),'ece':sum(len(b)*abs(np.mean([v[0] for v in b])-np.mean([v[1] for v in b])) for b in bins if b)/len(values) if values else None,
+            'bins':[{'n':len(b),'probability':float(np.mean([v[0] for v in b])),'hit_rate':float(np.mean([v[1] for v in b]))} for b in bins if b]}
+
+
+def _audit_receipts(plan_record,rows,receipts):
+    expected=digest(sorted(plan_record['payload']['eligible_match_ids']))
+    latest=max((aware(r['result']['observed_at']) for r in rows),default=aware(plan_record['recorded_at']))
+    tracks={'actual-line-validation-audit':'INDEPENDENT_ACTUAL_LINE_FIVE_WAY_AUDIT_REQUIRED',
+            'asof-source-validation-audit':'INDEPENDENT_SOURCE_ASOF_AUDIT_REQUIRED'}
+    valid=set()
+    for receipt in receipts or []:
+        receipt=verify(receipt);body=receipt['payload'];track=receipt['track']
+        if track not in tracks or track in valid:raise ValueError('unique independent audit types required')
+        if (receipt.get('stage')!='review' or body.get('plan_record_sha256')!=plan_record['record_sha256']
+                or body.get('validation_ids_sha256')!=expected or body.get('decision')!='PASSED'
+                or body.get('cohort')!=plan_record['payload']['cohort'] or body.get('stage')!=plan_record['payload']['stage']
+                or not latest<=aware(receipt['recorded_at'])<=datetime.now(timezone.utc)):
+            raise ValueError('post-validation audit binding or chronology conflict')
+        valid.add(track)
+    return [reason for track,reason in tracks.items() if track not in valid]
+
+
+def assess(plan_record,rows,audit_receipts=None):
     blocked=[];summary={};metrics={}
     if plan_record is None:
         return {'status':'BLOCKED','reasons':['NO_IMMUTABLE_PREREGISTRATION'],'automatic_promotion':False}
@@ -27,7 +52,7 @@ def assess(plan_record,rows):
     ids=[r['match_id'] for r in rows]
     if len(set(ids))!=len(ids):raise ValueError('duplicate validation match')
     if set(ids)!=set(universe):blocked.append('INCOMPLETE_PREDECLARED_POPULATION')
-    evaluated={'current':[],'candidate':[]};hits=[];selected=0;fixture_keys=set()
+    evaluated={'current':[],'candidate':[]};hits=[];selected=0;fixture_keys=set();primary_confidence={'current':[],'candidate':[]}
     for row in rows:
         fixture=None;predictions={}
         for role in ('current','candidate'):
@@ -39,6 +64,9 @@ def assess(plan_record,rows):
                     or f['match_id']!=row['match_id'] or f['cohort']!=plan['cohort'] or f.get('stage')!=plan['stage']):
                 raise ValueError('first prematch scope/phase required')
             if fixture is not None and fixture!=f:raise ValueError('same fixture and cutoff required')
+            if p.get('input')!=f:raise ValueError('actual prediction input does not match frozen fixture')
+            for value in (p.get('input_sha256'),record['payload'].get('execution_audit',{}).get('fixture_sha256')):
+                if value is not None and value!=digest(p['input']):raise ValueError('prediction input checksum mismatch')
             require(f)
             if f.get('identity_verified') is not True or f.get('age')!='senior' or f.get('gender') not in ('men','male'):
                 raise ValueError('verified adult male identity required')
@@ -50,7 +78,7 @@ def assess(plan_record,rows):
             if artifact!=plan[role+'_artifact_sha256']:raise ValueError('locked model artifact required')
             if digest(p['matrix'])!=p['matrix_hash']:raise ValueError('matrix checksum mismatch')
             predictions[role]=p
-        key=(fixture['cohort'],fixture['stage'],fixture['kickoff_at'],fixture['home'],fixture['away'])
+        key=(fixture['cohort'],fixture['stage'],kickoff,fixture['home'],fixture['away'])
         if key in fixture_keys:raise ValueError('duplicate fixture under different IDs')
         fixture_keys.add(key)
         result=row['result'];public_url(result['source_url'])
@@ -65,7 +93,16 @@ def assess(plan_record,rows):
         actual=f'{h}-{a}';pair=[]
         for role,p in predictions.items():
             evaluated[role].append({'matrix':p['matrix'],'home_goals':h,'away_goals':a})
-            pair.append(p.get('primary')==actual)
+            hit=p.get('primary')==actual;pair.append(hit)
+            if p.get('primary') is not None:
+                matched=re.fullmatch(r'(\d{1,2})-(\d{1,2})',p['primary'])
+                if not matched:raise ValueError('unique Primary required')
+                ph,pa=map(int,matched.groups());matrix=np.asarray(p['matrix'],float)
+                if matrix.ndim!=2 or ph>=matrix.shape[0] or pa>=matrix.shape[1]:raise ValueError('Primary outside support')
+                probability=float(matrix[ph,pa])
+                if not 0<=probability<=1:raise ValueError('Primary probability')
+                if p.get('primary_probability') is not None and not math.isclose(p['primary_probability'],probability,abs_tol=1e-9):raise ValueError('Primary probability mismatch')
+                primary_confidence[role].append((probability,hit))
             if role=='candidate':selected+=p.get('primary') is not None
         hits.append(pair)
     if rows:
@@ -83,19 +120,16 @@ def assess(plan_record,rows):
             if metrics['candidate']['metrics'][key]>metrics['current']['metrics'][key]+tolerance:blocked.append('QUALITY_REGRESSION:'+key)
         if metrics['candidate']['metrics']['wdl_accuracy']<metrics['current']['metrics']['wdl_accuracy']:
             blocked.append('WDL_DIRECTION_REGRESSION')
-        def ece(report):
-            return sum(b['n']*abs(b['mean_probability']-b['hit_rate']) for b in report['calibration_bins'])/report['n']
-        if ece(metrics['candidate'])>ece(metrics['current'])+plan['ece_tolerance']:
+        calibration={role:_primary_calibration(values) for role,values in primary_confidence.items()}
+        if any(v['ece'] is None for v in calibration.values()):blocked.append('PRIMARY_CALIBRATION_UNAVAILABLE')
+        elif calibration['candidate']['ece']>calibration['current']['ece']+plan['ece_tolerance']:
             blocked.append('PRIMARY_CONFIDENCE_CALIBRATION_REGRESSION')
         for tail in metrics['current']['tail']:
             if metrics['candidate']['tail'][tail]['brier']>metrics['current']['tail'][tail]['brier']+plan['tail_brier_tolerance']:
                 blocked.append('TAIL_CALIBRATION_REGRESSION:'+tail)
-    # Never infer actual-line value from a score or a fixed 2.5 surrogate.
-    if not re.fullmatch('[0-9a-f]{64}',plan.get('actual_line_audit_receipt_sha256') or ''):
-        blocked.append('INDEPENDENT_ACTUAL_LINE_FIVE_WAY_AUDIT_REQUIRED')
-    if not re.fullmatch('[0-9a-f]{64}',plan.get('asof_source_audit_receipt_sha256') or ''):
-        blocked.append('INDEPENDENT_SOURCE_ASOF_AUDIT_REQUIRED')
+    blocked.extend(_audit_receipts(plan_record,rows,audit_receipts))
     return {'schema':'WCPP-PROSPECTIVE-REVIEW-GATE-1','status':'BLOCKED' if blocked else 'READY_FOR_INDEPENDENT_REVIEW',
             'reasons':blocked,'paired_primary':summary,'probability_metrics':metrics,
+            'actual_primary_calibration':{role:_primary_calibration(values) for role,values in primary_confidence.items()},
             'automatic_promotion':False,'activation_modified':False,
             'notice':'Receipt references and supplied source facts require independent review. Passing this software gate never certifies truth or authorizes a registry switch.'}

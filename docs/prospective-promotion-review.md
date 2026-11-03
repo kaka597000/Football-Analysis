@@ -9,3 +9,5 @@ research_program/promotion_review.py 只建立审查前门槛，从不写活动�
 即使所有软件检查满足，也只返回READY_FOR_INDEPENDENT_REVIEW。哈希回执及来源真实性仍须审查，不能由调用方自称“已验证”就自动部署。当前没有这样的未来独立验证包，实际状态BLOCKED；没有晋级。
 
 版本和回滚沿用 docs/version-management.md：保留模型与源代码身份、独立候选及旧冻结；晋级另开PR、逐赛事检查并人工审查。每联赛监控Top1、WDL、真实线结算、覆盖和校准；旧版本不删。不能通过此函数修改Current/Test、永久lambda或冠军。
+
+预登记不包含未来审查回执。实际线及as-of审查在验证完成后，以独立review冻结记录输入，绑定原计划record SHA及完整验证ID集合哈希；时间不得早于最终赛果观察。实际预测input必须与外层fixture一致，提供的输入哈希也需核验。唯一Primary置信校准按其对应矩阵概率单列，不用矩阵众数校准替代；重复赛事键使用归一化真实开球时间。
