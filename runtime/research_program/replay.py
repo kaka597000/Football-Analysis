@@ -75,6 +75,9 @@ def _finished_espn_label(row,evidence,path):
     raw=json.loads(path.read_text(encoding='utf-8'));event_id=row['match_id'].removeprefix('espn:')
     if 'header' in raw:
         event=raw['header']
+        source_league=event.get('league',{}).get('slug')
+        if source_league is not None and source_league!=row['cohort'].split(':')[0]:
+            raise ValueError('retained league identity conflict')
     else:
         matches=[event for event in raw.get('events',[]) if str(event.get('id'))==event_id]
         if len(matches)!=1:raise ValueError('retained result identity conflict')
