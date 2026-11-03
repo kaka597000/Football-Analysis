@@ -29,4 +29,15 @@ class Tests(unittest.TestCase):
         with patch('research.minute_simulator.simulate',return_value={'status':'SYNTHETIC_ENGINE_RESULT'}) as engine:
             r=self.build(f,p);self.assertEqual(r['modules']['research']['execution']['minute_simulation']['status'],'SYNTHETIC_ENGINE_RESULT');self.assertEqual(engine.call_args.kwargs['as_of'],f['cutoff_at'])
             req['state']['minute']=20;engine.reset_mock();r=self.build(f,p);engine.assert_not_called();self.assertEqual(r['modules']['research']['execution']['minute_simulation']['status'],'REFUSED_INVALID_OR_UNTRAINED_INPUT')
+    def test_report_is_detached_from_mutable_evidence_and_model_outputs(self):
+        f,p,b=self.inputs()
+        p['current_model']['team_goal_analysis']={'home':{'mean':1.25}}
+        f['analysis_modules']={'xg':b}
+        report=self.build(f,p)
+        before=render(report)
+        b['facts']['recent_xg']=99
+        b['sources'][0]['source_url']='https://example.test/changed'
+        p['current_model']['team_goal_analysis']['home']['mean']=99
+        self.assertEqual(render(report),before)
+
 if __name__=='__main__':unittest.main()
