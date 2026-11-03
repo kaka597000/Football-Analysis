@@ -22,4 +22,11 @@ class MarketTests(unittest.TestCase):
  def test_comparison_preserves_full_denominator(self):
   r=paired_wdl([{'match_id':'a','market_wdl':[.7,.2,.1],'current_wdl':[.2,.5,.3],'actual_wdl':0},{'match_id':'b'}])
   self.assertEqual(r['population'],2);self.assertEqual(r['paired_n'],1);self.assertEqual(r['coverage'],.5);self.assertEqual(r['net_wdl_hits_market_vs_current'],1)
+ def test_timezone_aliases_cannot_invent_a_price_movement(self):
+  a=self.row();b=copy.deepcopy(a)
+  b['value']['quoted_at']=datetime.fromisoformat(a['value']['quoted_at']).astimezone(timezone(timedelta(hours=8))).isoformat()
+  r=self.build([a,b]);self.assertEqual(r['comparisons'][0]['snapshots'],1);self.assertIsNone(r['comparisons'][0]['price_change'])
+  b['value']['odds']['home']=2.1
+  for rows in ([a,b],[b,a]):
+   with self.assertRaises(ValueError):self.build(rows)
 if __name__=='__main__':unittest.main()

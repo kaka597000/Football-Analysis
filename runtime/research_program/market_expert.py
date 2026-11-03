@@ -24,10 +24,11 @@ def baseline(rows,target,evidence_root,*,bookmaker,max_age_seconds=60,now=None):
         if quote['bookmaker']!=bookmaker:reject('other_bookmaker');continue
         key=(row['provider'],quote['bookmaker'],quote['market'],quote.get('line'))
         group=groups.setdefault(key,{})
-        previous=group.get(quote['quoted_at'])
+        quote_time=aware(quote['quoted_at'])
+        previous=group.get(quote_time)
         if previous and previous['value']['odds']!=quote['odds']:
             raise ValueError('conflicting same-book same-line source quote')
-        group[quote['quoted_at']]=row
+        group[quote_time]=row
     comparisons=[];h2h=[]
     for key,group in groups.items():
         ordered=sorted(group.values(),key=lambda r:aware(r['value']['quoted_at']))

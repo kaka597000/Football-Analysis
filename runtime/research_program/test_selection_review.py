@@ -12,7 +12,7 @@ class SelectionTests(unittest.TestCase):
   m=[[.1,.1],[.6,.2]];prediction={'matrix':m,'matrix_hash':digest(m),'primary':'1-0','version':'SYNTHETIC'}
   pair=record({'current_model':prediction,'test_model':prediction},'current-test-pair')
   comp=record({'primary':'1-1','current_test_reference':{'freeze_id':pair['freeze_id'],'sha256':pair['record_sha256']}},'comprehensive')
-  result={'match_id':'SYNTHETIC','home_goals':1,'away_goals':1,'score_basis':'regulation_90','source_url':'https://example.test/result','observed_at':now.isoformat()}
+  result={'status':'completed','match_id':'SYNTHETIC','home_goals':1,'away_goals':1,'score_basis':'regulation_90','source_url':'https://example.test/result','observed_at':now.isoformat()}
   return {'pair':pair,'comprehensive':comp},result
  def test_net_hit_and_pending_denominator(self):
   entry,result=self.data();r=compare([entry],[result]);self.assertEqual(r['by_model_version']['current_model:SYNTHETIC']['net_hits'],1)

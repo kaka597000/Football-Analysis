@@ -8,6 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from competition_scope import require
 from research_program.challengers import experiment
+from v2_test.data_contract import aware
 from prediction_engine import source_identity
 
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -20,6 +21,9 @@ def train(registry_path,out,cohorts):
         if before!=route['artifact_sha256']:raise ValueError('source artifact checksum mismatch')
         source=json.loads(path.read_text(encoding='utf-8'));history=source.get('history') or source.get('anchor',{}).get('history')
         if not history:raise ValueError('retained source history missing')
+        now=datetime.now(timezone.utc)
+        if any(r['date']>=now.date().isoformat() or not r.get('observed_at') or aware(r['observed_at'])>now for r in history):
+            raise ValueError('future/today labels or unavailable source capture rejected')
         result=experiment(history)
         result['provenance']={'source_artifact_sha256':before,'source_registry_sha256':sha(registry_path),
             'source_identity':source_identity(),'history_training_end':max(r['date'] for r in history),
