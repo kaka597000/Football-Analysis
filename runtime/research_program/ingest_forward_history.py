@@ -22,7 +22,11 @@ def normalize(rows,root):
         relative=Path(r['score_evidence']);path=(root/relative).resolve()
         if relative.is_absolute() or not path.is_relative_to(root) or not path.is_file():raise ValueError('retained response path')
         if hashlib.sha256(path.read_bytes()).hexdigest()!=r['score_evidence_sha256']:raise ValueError('retained checksum')
-        raw=json.loads(path.read_text(encoding='utf-8'));comp=raw['header']['competitions'][0]
+        raw=json.loads(path.read_text(encoding='utf-8'))
+        league=raw['header'].get('league') or {}
+        if league.get('slug')!=r['cohort'] or league.get('isTournament') is not False:
+            raise ValueError('retained league identity or regular format conflict')
+        comp=raw['header']['competitions'][0]
         neutral=comp.get('neutralSite')
         if type(neutral) is not bool or r.get('neutral_site') is not neutral:raise ValueError('explicit matching venue state required')
         kickoff=comp['date'];captured=aware(r['observed_at'])
