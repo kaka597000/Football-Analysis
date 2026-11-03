@@ -12,9 +12,24 @@
   "historical_integration_assets_missing": true,
   "remaining_external_validation": [
     "historical fixed-recipe evidence missing",
-    "Windows CI pending"
+    "two incoming route dataset manifests missing",
+    "main protection API unavailable (403)"
   ],
   "shared_ml_training_regression": "Both adapters: identical actual LightGBM model_to_string and residual matrices versus original source",
   "publication_recovery": "fault injection and concurrent chain tests",
-  "full_suite_tests": 402
+  "full_suite_tests": 402,
+  "windows_ci": {
+    "status": "success",
+    "commit": "181c447",
+    "run_url": "https://github.com/kaka597000/Football-Analysis/actions/runs/41561357209",
+    "scope": "PR5 merged main portable suite; latest fix CI recorded in PR6"
+  },
+  "pr5_main_test_count": 403,
+  "pr5_main_skips_note": "15 skip records in GitHub clean CI, including a skipped test class; not complete production validation",
+  "review_fixes": [
+    "explicit UTF-8 freeze reads",
+    "standalone ML runtime-root bootstrap",
+    "actual generated_at for normalized special routes",
+    "audit uses current_engine/test_engine and dispatcher defaults"
+  ]
 }

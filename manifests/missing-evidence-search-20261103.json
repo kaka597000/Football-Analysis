@@ -1,0 +1,37 @@
+{
+  "schema": "WCPP-MISSING-EVIDENCE-SEARCH-1",
+  "fixed_snapshot_commit": "466fd626a47481e70b176a9a69c58224d7d1bf63",
+  "snapshot_file_manifest_sha256": "b1a80f06cdd236ffaf17e57aa3533d6a52b358b64278f17104075a659796e445",
+  "paths": [
+    {
+      "suffix_or_prefix": "auto-optimization-20261101/history/rows.json",
+      "matches_in_fixed_snapshot": []
+    },
+    {
+      "suffix_or_prefix": "auto-optimization-20261101/history/coverage.json",
+      "matches_in_fixed_snapshot": []
+    },
+    {
+      "suffix_or_prefix": "auto-optimization-20261101/history/raw/",
+      "matches_in_fixed_snapshot": []
+    },
+    {
+      "suffix_or_prefix": "afc2-group-20261029-r2/manifest.json",
+      "matches_in_fixed_snapshot": []
+    },
+    {
+      "suffix_or_prefix": "efl-cup-20261029-r3/manifest.json",
+      "matches_in_fixed_snapshot": []
+    }
+  ],
+  "searched": [
+    "restored default runtime",
+    "retained incoming runtime",
+    "fixed snapshot inventory and file hashes",
+    "final delta inventory",
+    "remote fixed base tree and earliest handoff tag"
+  ],
+  "recovery_status": "NOT_PRESENT_IN_VERIFIED_AVAILABLE_BACKUP",
+  "fabricated_replacements": false,
+  "strict_integration_status": "BLOCKED_MISSING_HISTORICAL_EVIDENCE"
+}

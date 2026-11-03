@@ -3,11 +3,11 @@
   "adapters": {
     "v6/ml_model.py": {
       "legacy_sha256": "5addc5e139f89de361cc9e14d47cb62ebf4b70a896778d9a9aa5d9d911ba8767",
-      "refactored_sha256": "56da6e12873c3a54a0c3c84cc380ee0f3f0aae52e856f3b3f7b265afabae2df3"
+      "refactored_sha256": "9ebbc3594ac96edd57ea58672eb48cea2d59892de45cb63a27a56bf68b4fda98"
     },
     "continental/ucl_ml.py": {
       "legacy_sha256": "03b75587669d84e0837e501240789e4741a9887d9139406f39167b19e6e92f5a",
-      "refactored_sha256": "824668de7ce73aa615ef81735676971a31417932647ca09168e62b87768059dd"
+      "refactored_sha256": "1dcd9aa84070c9e1b0ff11262edd5f94112404d341cad09eaf67cc2139a17a3d"
     }
   },
   "dependencies": {
