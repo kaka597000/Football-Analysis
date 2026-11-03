@@ -87,13 +87,24 @@ def _finished_espn_label(row,evidence,path):
         raise ValueError('retained kickoff conflict')
     status=competition.get('status') or event.get('status') or {}
     if (status.get('type',{}).get('completed') is not True
-            or status.get('type',{}).get('name')!='STATUS_FULL_TIME' or status.get('period')!=2):
+            or status.get('type',{}).get('name')!='STATUS_FULL_TIME'):
         raise ValueError('retained source is not finished regulation time')
+    period=status.get('period')
+    if period is not None and period!=2:raise ValueError('source includes non-regulation periods')
+    if period is None and raw.get('format',{}).get('regulation',{}).get('periods')!=2:
+        raise ValueError('explicit regulation format required when period missing')
     for side in ('home','away'):
         competitors=[c for c in competition.get('competitors',[]) if c.get('homeAway')==side]
         if len(competitors)!=1:raise ValueError('retained team identity')
         team=competitors[0]
         if row[side]!='espn:'+str(team['team']['id']):raise ValueError('retained team identity')
+        halves=team.get('linescores')
+        if halves is not None and len(halves)!=2:raise ValueError('extra time or incomplete halves')
+        if period is None:
+            if not halves or len(halves)!=2:raise ValueError('explicit two-half source scores required')
+            try:half_score=sum(int(v['displayValue']) for v in halves)
+            except (KeyError,ValueError,TypeError):raise ValueError('non-integer half scores')
+            if half_score!=row[side+'_goals']:raise ValueError('half/total score conflict')
         score=team.get('score')
         if isinstance(score,dict):score=score.get('displayValue')
         if not isinstance(score,(str,int)) or str(score)!=str(row[side+'_goals']):
