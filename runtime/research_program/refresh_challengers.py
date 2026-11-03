@@ -42,6 +42,9 @@ def refresh(registry_path,collection_root,out,cohorts):
         if sha(source)!=route['artifact_sha256']:raise ValueError('source artifact checksum')
         value=json.loads(source.read_text(encoding='utf-8'));base=value.get('history') or value.get('anchor',{}).get('history')
         if not base:raise ValueError('retained baseline history required')
+        now=datetime.now(timezone.utc)
+        if any(r['date']>=now.date().isoformat() or not r.get('observed_at') or aware(r['observed_at'])>now for r in base):
+            raise ValueError('baseline contains future labels or unavailable capture')
         try:rows,audit=merge_rows(base,[r for r in new if r['cohort']==cohort])
         except ValueError as error:
             summary.append({'cohort':cohort,'status':'BLOCKED_SOURCE_CONFLICT','reason':str(error)});continue
