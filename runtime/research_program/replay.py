@@ -4,6 +4,7 @@ from datetime import datetime,timedelta,timezone
 import hashlib
 import json
 from pathlib import Path
+from urllib.parse import urlsplit
 from competition_scope import require
 from v2_test.data_contract import aware,digest,validate,public_url
 from publication import deliver
@@ -67,6 +68,49 @@ def save_snapshot(value,folder):
     return str(path)
 
 
+def _finished_espn_label(row,evidence,path):
+    """Verify retained event identity, full-time state and regulation scores."""
+    if urlsplit(evidence['url']).hostname not in {'site.api.espn.com','site.web.api.espn.com'}:
+        raise ValueError('label source adapter unavailable')
+    raw=json.loads(path.read_text(encoding='utf-8'));event_id=row['match_id'].removeprefix('espn:')
+    if 'header' in raw:
+        event=raw['header']
+    else:
+        matches=[event for event in raw.get('events',[]) if str(event.get('id'))==event_id]
+        if len(matches)!=1:raise ValueError('retained result identity conflict')
+        event=matches[0]
+    if str(event.get('id'))!=event_id or len(event.get('competitions',[]))!=1:
+        raise ValueError('retained result identity conflict')
+    competition=event['competitions'][0]
+    source_kickoff=competition.get('date') or event.get('date')
+    if source_kickoff is None or aware(source_kickoff)!=aware(row['kickoff_at']):
+        raise ValueError('retained kickoff conflict')
+    status=competition.get('status') or event.get('status') or {}
+    if (status.get('type',{}).get('completed') is not True
+            or status.get('type',{}).get('name')!='STATUS_FULL_TIME'):
+        raise ValueError('retained source is not finished regulation time')
+    period=status.get('period')
+    if period is not None and period!=2:raise ValueError('source includes non-regulation periods')
+    if period is None and raw.get('format',{}).get('regulation',{}).get('periods')!=2:
+        raise ValueError('explicit regulation format required when period missing')
+    for side in ('home','away'):
+        competitors=[c for c in competition.get('competitors',[]) if c.get('homeAway')==side]
+        if len(competitors)!=1:raise ValueError('retained team identity')
+        team=competitors[0]
+        if row[side]!='espn:'+str(team['team']['id']):raise ValueError('retained team identity')
+        halves=team.get('linescores')
+        if halves is not None and len(halves)!=2:raise ValueError('extra time or incomplete halves')
+        if period is None:
+            if not halves or len(halves)!=2:raise ValueError('explicit two-half source scores required')
+            try:half_score=sum(int(v['displayValue']) for v in halves)
+            except (KeyError,ValueError,TypeError):raise ValueError('non-integer half scores')
+            if half_score!=row[side+'_goals']:raise ValueError('half/total score conflict')
+        score=team.get('score')
+        if isinstance(score,dict):score=score.get('displayValue')
+        if not isinstance(score,(str,int)) or str(score)!=str(row[side+'_goals']):
+            raise ValueError('retained source score conflict')
+
+
 def eligible_labels(rows,target,evidence_root=None):
     """Label availability, not result day alone, decides eligibility."""
     require(target);cutoff=aware(target['cutoff_at']);seen=set();accepted=[];excluded=Counter()
@@ -78,6 +122,8 @@ def eligible_labels(rows,target,evidence_root=None):
             excluded['scope_or_phase']+=1;continue
         if row['match_id']==target['match_id']:
             excluded['target_label']+=1;continue
+        if row.get('event_status')!='FT':
+            excluded['not_explicitly_finished']+=1;continue
         if row.get('score_basis')!='regulation_90' or not row.get('observed_at'):
             excluded['uncertified_label']+=1;continue
         if aware(row['observed_at'])>cutoff or aware(row['kickoff_at'])+timedelta(minutes=90)>cutoff:
@@ -96,5 +142,6 @@ def eligible_labels(rows,target,evidence_root=None):
             raise ValueError('label evidence identity, capture or checksum mismatch')
         if any(type(row.get(k)) is not int or row[k]<0 for k in ('home_goals','away_goals')):
             raise ValueError('invalid regulation score')
+        _finished_espn_label(row,evidence,path)
         accepted.append(row)
     return accepted,dict(excluded)
