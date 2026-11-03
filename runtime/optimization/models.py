@@ -25,6 +25,13 @@ def design(rows,teams):
    for k,v in vals.items():rr.append(2*i+side);cc.append(k);vv.append(v)
  return sparse.csr_matrix((vv,(rr,cc)),shape=(2*len(rows),3+2*n))
 
+def _poisson_objective(b,X,y,w,penalty):
+ # Differentiate the same clipped objective supplied to the optimizer. At the
+ # two kinks use zero; gradient checks deliberately avoid those points.
+ linear=np.asarray(X@b);eta=np.clip(linear,-5,4);mu=np.exp(eta)
+ active=(linear>-5)&(linear<4)
+ return float(np.sum(w*(mu-y*eta))+.5*np.sum(penalty*b*b)),np.asarray(X.T@(w*(mu-y)*active))+penalty*b
+
 def fit_core(rows,half_life=365,ridge=20):
  if len(rows)<80:raise ValueError('insufficient core history')
  rows=sorted(rows,key=lambda r:(r['date'],r['match_id']));teams=sorted({r[k] for r in rows for k in ('home','away')});X=design(rows,teams)
@@ -32,8 +39,7 @@ def fit_core(rows,half_life=365,ridge=20):
  end=date.fromisoformat(rows[-1]['date']);w=np.repeat([2**(-(end-date.fromisoformat(r['date'])).days/half_life) for r in rows],2)
  penalty=np.full(X.shape[1],float(ridge));penalty[:3]=[.001,1.,1.]
  def loss(b):
-  eta=np.clip(X@b,-5,4);mu=np.exp(eta)
-  return float(np.sum(w*(mu-y*eta))+.5*np.sum(penalty*b*b)),np.asarray(X.T@(w*(mu-y)))+penalty*b
+  return _poisson_objective(b,X,y,w,penalty)
  b=np.zeros(X.shape[1]);b[0]=math.log(max(.1,y.mean()))
  result=minimize(loss,b,jac=True,method='L-BFGS-B',options={'maxiter':200,'ftol':1e-9})
  if not result.success:raise ValueError('core convergence: '+result.message)

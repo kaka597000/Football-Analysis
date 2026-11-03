@@ -59,6 +59,22 @@ class GateTests(unittest.TestCase):
   report=assess(plan,rows,receipts)
   self.assertIn('PRIMARY_CONFIDENCE_CALIBRATION_REGRESSION',report['reasons'])
   self.assertAlmostEqual(report['actual_primary_calibration']['candidate']['ece'],.6)
+  primary=report['probability_metrics']['candidate']['primary']
+  self.assertEqual(primary['hits'],30);self.assertEqual(primary['n'],30)
+  self.assertEqual(primary['full_population_accuracy'],1.)
+  self.assertEqual(report['probability_metrics']['candidate']['metrics']['exact_top1'],0.)
+ def test_missing_primary_stays_missing_in_full_population(self):
+  plan,rows,_=self.package()
+  rows[0]['candidate_record']['payload']['primary']=None;seal(rows[0]['candidate_record'])
+  report=assess(plan,rows)
+  p=report['probability_metrics']['candidate']['primary']
+  self.assertEqual(p['n'],29);self.assertEqual(p['hits'],29)
+  self.assertEqual(p['accuracy'],1.);self.assertEqual(p['coverage'],29/30)
+  self.assertEqual(p['full_population_accuracy'],29/30)
+  self.assertIn('PRIMARY_COVERAGE_BELOW_PLAN',report['reasons'])
+ def test_noncanonical_primary_cannot_disagree_between_evaluators(self):
+  plan,rows,_=self.package();rows[0]['candidate_record']['payload']['primary']='01-00';seal(rows[0]['candidate_record'])
+  with self.assertRaisesRegex(ValueError,'canonical Primary'):assess(plan,rows)
  def test_receipts_cannot_be_reused_after_result_change(self):
   plan,rows,receipts=self.package();rows[0]['result']['home_goals']=0
   with self.assertRaisesRegex(ValueError,'audit binding'):assess(plan,rows,receipts)
