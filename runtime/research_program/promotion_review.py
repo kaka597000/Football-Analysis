@@ -33,6 +33,8 @@ def assess(plan_record,rows):
         for role in ('current','candidate'):
             record=verify(row[role+'_record']);f=record['fixture'];p=record['payload']
             if role=='current':p=p['current_model']
+            expected_track='current-test-pair' if role=='current' else 'challenger-independent'
+            if record.get('track')!=expected_track:raise ValueError('independent frozen tracks required')
             if (record['stage']!='prematch' or record['evaluation_slot']!='FIRST_PREMATCH'
                     or f['match_id']!=row['match_id'] or f['cohort']!=plan['cohort'] or f.get('stage')!=plan['stage']):
                 raise ValueError('first prematch scope/phase required')
@@ -52,6 +54,8 @@ def assess(plan_record,rows):
         if key in fixture_keys:raise ValueError('duplicate fixture under different IDs')
         fixture_keys.add(key)
         result=row['result'];public_url(result['source_url'])
+        if result.get('status') not in ('completed','FT') and result.get('event_status')!='FT':
+            raise ValueError('explicit completed regulation result required')
         if result['match_id']!=row['match_id'] or result.get('score_basis')!='regulation_90':raise ValueError('result identity')
         if not kickoff<=aware(result['observed_at'])<=datetime.now(timezone.utc):raise ValueError('result capture')
         from datetime import timedelta

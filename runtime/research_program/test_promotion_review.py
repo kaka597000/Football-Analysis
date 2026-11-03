@@ -25,8 +25,8 @@ class GateTests(unittest.TestCase):
    def record(role,matrix,primary):
     p={'version':'BASE' if role=='current' else 'CAND','generated_at':(cutoff+timedelta(seconds=10)).isoformat(),'matrix':matrix,'matrix_hash':digest(matrix),'primary':primary,'artifact_sha256':'b'*64}
     if role=='current':p={'current_model':p,'execution_audit':{'current':{'artifact_sha256':'a'*64}}}
-    return seal({'fixture':f,'stage':'prematch','evaluation_slot':'FIRST_PREMATCH','recorded_at':(cutoff+timedelta(seconds=20)).isoformat(),'payload':p})
-   rows.append({'match_id':str(i),'current_record':record('current',[[1.,0.],[0.,0.]],'0-0'),'candidate_record':record('candidate',[[0.,0.],[1.,0.]],'1-0'),'result':{'match_id':str(i),'home_goals':1,'away_goals':0,'score_basis':'regulation_90','source_url':'https://example.test/synthetic','observed_at':now.isoformat()}})
+    return seal({'track':'current-test-pair' if role=='current' else 'challenger-independent','fixture':f,'stage':'prematch','evaluation_slot':'FIRST_PREMATCH','recorded_at':(cutoff+timedelta(seconds=20)).isoformat(),'payload':p})
+   rows.append({'match_id':str(i),'current_record':record('current',[[1.,0.],[0.,0.]],'0-0'),'candidate_record':record('candidate',[[0.,0.],[1.,0.]],'1-0'),'result':{'status':'completed','match_id':str(i),'home_goals':1,'away_goals':0,'score_basis':'regulation_90','source_url':'https://example.test/synthetic','observed_at':now.isoformat()}})
   report=assess(plan,rows);self.assertEqual(report['status'],'READY_FOR_INDEPENDENT_REVIEW');self.assertFalse(report['automatic_promotion']);self.assertFalse(report['activation_modified'])
   plan.pop('record_sha256');plan['recorded_at']=now.isoformat();seal(plan)
   with self.assertRaises(ValueError):assess(plan,rows)
