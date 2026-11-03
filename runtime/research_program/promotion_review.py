@@ -27,7 +27,7 @@ def assess(plan_record,rows):
     ids=[r['match_id'] for r in rows]
     if len(set(ids))!=len(ids):raise ValueError('duplicate validation match')
     if set(ids)!=set(universe):blocked.append('INCOMPLETE_PREDECLARED_POPULATION')
-    evaluated={'current':[],'candidate':[]};hits=[];selected=0
+    evaluated={'current':[],'candidate':[]};hits=[];selected=0;fixture_keys=set()
     for row in rows:
         fixture=None;predictions={}
         for role in ('current','candidate'):
@@ -37,6 +37,9 @@ def assess(plan_record,rows):
                     or f['match_id']!=row['match_id'] or f['cohort']!=plan['cohort'] or f.get('stage')!=plan['stage']):
                 raise ValueError('first prematch scope/phase required')
             if fixture is not None and fixture!=f:raise ValueError('same fixture and cutoff required')
+            require(f)
+            if f.get('identity_verified') is not True or f.get('age')!='senior' or f.get('gender') not in ('men','male'):
+                raise ValueError('verified adult male identity required')
             fixture=f;cutoff,kickoff=aware(f['cutoff_at']),aware(f['kickoff_at'])
             if not registered<cutoff<=aware(p['generated_at'])<=aware(record['recorded_at'])<kickoff:
                 raise ValueError('preregistration, capture or freeze chronology conflict')
@@ -45,6 +48,9 @@ def assess(plan_record,rows):
             if artifact!=plan[role+'_artifact_sha256']:raise ValueError('locked model artifact required')
             if digest(p['matrix'])!=p['matrix_hash']:raise ValueError('matrix checksum mismatch')
             predictions[role]=p
+        key=(fixture['cohort'],fixture['stage'],fixture['kickoff_at'],fixture['home'],fixture['away'])
+        if key in fixture_keys:raise ValueError('duplicate fixture under different IDs')
+        fixture_keys.add(key)
         result=row['result'];public_url(result['source_url'])
         if result['match_id']!=row['match_id'] or result.get('score_basis')!='regulation_90':raise ValueError('result identity')
         if not kickoff<=aware(result['observed_at'])<=datetime.now(timezone.utc):raise ValueError('result capture')
