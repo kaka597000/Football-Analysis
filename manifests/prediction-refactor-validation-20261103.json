@@ -1,0 +1,20 @@
+{
+  "scope": "engineering_refactor_only",
+  "baseline_commit": "46f08272252f05365494ccc1a7da6d14f173bb29",
+  "artifact_references_checked": 38,
+  "hash_matches": 38,
+  "real_artifact_route_comparisons": 7,
+  "comparison": "full output recursively equal except generated_at",
+  "fixture_policy": "synthetic future dates, no publication; original fixture evidence retained locally",
+  "models_retrained": false,
+  "registry_modified": false,
+  "unimplemented": [],
+  "historical_integration_assets_missing": true,
+  "remaining_external_validation": [
+    "historical fixed-recipe evidence missing",
+    "Windows CI pending"
+  ],
+  "shared_ml_training_regression": "Both adapters: identical actual LightGBM model_to_string and residual matrices versus original source",
+  "publication_recovery": "fault injection and concurrent chain tests",
+  "full_suite_tests": 402
+}

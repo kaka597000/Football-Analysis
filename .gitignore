@@ -29,3 +29,7 @@ checkpoints/
 *.pkl
 *.parquet
 *.jsonl
+
+# Recoverable local prediction publication journals
+*.publication.json
+*.publication.json.lock

@@ -1,5 +1,7 @@
 # Football-Analysis · WCPP
 
+当前状态以 [CURRENT_STATE.md](CURRENT_STATE.md) 为导航；架构见 [ARCHITECTURE.md](ARCHITECTURE.md)，操作见 [OPERATIONS.md](OPERATIONS.md)。以下历史队列数量以现场注册表和新基线为准。
+
 项目长期目标：持续优化模型代码，深入研究并验证足球分析方法，提高未来冻结样本的第一推荐精确比分、胜平负及实际盘口大小球命中率。以Primary Top1为最高指标，目标与验证规则见[项目目标](docs/project-goals.md)和[机器可读配置](project-goals.json)。
 
 足球赛前分析与可复现研究：当前模型/test模型独立并行，保留比分矩阵、唯一Primary、胜平负及实际盘口大小球。综合人工判断另轨保存，全部发布分析追加冻结，复盘不事后择优。
@@ -7,6 +9,8 @@
 当前说明更新于2026-10-29。唯一最高KPI是未来真实冻结Primary精确比分Top1，尚未证明达到70%；工程重构和训练完成不等于预测改善。原Champion V21.5不是目前恢复运行的模型。
 
 ## 运行入口
+
+需要统一融合输出时，使用[当前/test融合入口](docs/unified-model-fusion.md)：`python runtime/fuse_models.py fixture.json --out NEW.json`。它保留两模型并追加独立融合参考；当前50/50为未训练研究基准，不能称已晋级的完整V2。
 
 先阅读[用户需求](docs/user-primary-score-requirements.md)与[执行规则](AGENTS.md)。默认入口读取外部活动注册表，目前为WCPP-DUAL-5，登记21个赛事队列。各队列实际引擎及当前/test工件不同，以注册表和[本次身份摘要](manifests/runtime-assets-20261029-queue-supplement.json)为准。
 
@@ -58,6 +62,8 @@ FMA隔离研究第一阶段：默认双模型输出新增joint/layered选分对�
 runtime/wcpp.py、v2/v3等保留为历史实现和测试依赖，不能把它们的旧README当当前默认入口。
 
 ## 数据与版本管理
+
+公开网站、xG/xGA、官方消息及赔率来源见[公开来源总表](docs/public-data-sources.md)；来源登记与实际连通、字段覆盖、模型使用分别核验。
 
 源码、配置、测试、规范和身份摘要进入Git；密钥、数据库、原始API/网页快照、冻结输出、大型工件及缓存独立保留。`manifests/`中的哈希为实测，但身份摘要不等于资产备份，克隆仓库仍需匹配外部工件与数据。
 

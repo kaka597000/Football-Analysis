@@ -31,7 +31,8 @@
       "name": "FotMob、Sofascore",
       "purpose": "赛果、过程数据、xG、阵容和近期表现",
       "role": "L2交叉核验",
-      "connection_verified_this_run": false
+      "connection_verified_this_run": false,
+      "granularity_note": "FotMob比赛卡片球队总xG，部分赛事另有射门图；Sofascore逐次射门xG候选，覆盖逐场核验。用户提示FotMob低级别覆盖较弱、Sofascore免费版有广告，本次未复验。"
     },
     {
       "name": "Flashscore、ESPN、Sky Sports",
@@ -174,13 +175,37 @@
       "url": "https://footystats.org/",
       "purpose": "候选赛后xG及球队统计；公开页面不等于所有字段免费",
       "role": "本轮首页HTTP访问失败，尚未验证字段覆盖",
-      "connection_verified_this_run": false
+      "connection_verified_this_run": false,
+      "access_method": "public_website",
+      "free_field_coverage_verified_this_update": false
     },
     {
       "name": "ScanGoal",
       "purpose": "用户提供的实时列表团队xG候选",
       "role": "官方域名与实际字段覆盖待核实，不猜API地址",
-      "connection_verified_this_run": false
+      "connection_verified_this_run": false,
+      "user_reported_features": [
+        "进行中比赛列表团队xG",
+        "多场扫描",
+        "无广告"
+      ],
+      "coverage_claim_verified_this_update": false
+    },
+    {
+      "name": "Understat",
+      "url": "https://understat.com/",
+      "purpose": "覆盖赛事的赛后历史xG/xGA及射门资料",
+      "access_method": "public_website",
+      "connection_verified_this_run": false,
+      "registration_note": "来源登记不代表本次已取得字段；赛后数据不能回填同场赛前特征"
+    },
+    {
+      "name": "FBref",
+      "url": "https://fbref.com/",
+      "purpose": "赛后球队/球员历史统计及xG/xGA候选，当前提供方与字段需实查",
+      "access_method": "public_website",
+      "connection_verified_this_run": false,
+      "registration_note": "来源登记不代表本次已取得字段；赛后数据不能回填同场赛前特征"
     }
   ],
   "betfair": {
@@ -246,5 +271,8 @@
       "formal_kpi_added": 0
     }
   },
-  "credential_storage_policy": "文档只登记来源、变量名、鉴权方式及状态；不存储密钥值。新源需求已登记到安全配置草稿，未填值/发布前不视为可用。"
+  "credential_storage_policy": "文档只登记来源、变量名、鉴权方式及状态；不存储密钥值。新源需求已登记到安全配置草稿，未填值/发布前不视为可用。",
+  "public_sources_catalog": "docs/public-data-sources.md",
+  "public_sources_documentation_updated_at": "2026-11-02",
+  "public_sources_update_note": "用户补充公开网站用途；本次只更新文档，未重新测试连通性、广告、免费范围或赛事字段覆盖。既有验证字段保留原历史含义。"
 }

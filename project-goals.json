@@ -113,5 +113,33 @@
     "lineup_dependency": "reduced; unannounced XI is not an automatic veto; scenario analysis required",
     "numeric_weights_changed": false,
     "policy": "docs/market-and-lineup-policy.md"
+  },
+  "v2_test_program": {
+    "authorized_at": "2026-11-02",
+    "branch": "v2-test/audit-20261102",
+    "policy": "docs/v2-roadmap.md",
+    "phase1_status": "AUDIT_AND_EVALUATION_FOUNDATION_COMPLETE",
+    "rolling_backtest_status": "NOT_RUN_ASOF_DATA_NOT_CERTIFIED",
+    "dynamic_fusion_status": "NOT_TRAINED_NOT_ACTIVE",
+    "probability_quality_gates": [
+      "score_log_loss",
+      "brier",
+      "calibration",
+      "wdl_rps"
+    ],
+    "business_outcomes": [
+      "full_population_primary_top1",
+      "predeclared_filtered_top1_with_coverage",
+      "wdl_accuracy",
+      "actual_line_five_way_totals"
+    ],
+    "source_time_policy": "no invented first_known_at; backfill is not prospective evidence",
+    "reference_targets": "Historical 70%/80% remain reference aspirations, not universal acceptance criteria or promises",
+    "phases": [
+      "audit",
+      "source_backed_features_and_market_experts",
+      "nested_temporal_fusion_calibration_selector",
+      "prospective_review_and_validated_evolution"
+    ]
   }
 }

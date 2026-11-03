@@ -28,7 +28,8 @@ CONFIG = {'warmup_matches': 60, 'num_boost_round': 70, 'residual_cap': .4,
 
 
 def code_hash():
-    return legacy.digest({'ml': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    from model_source_identity import source_hash
+    return legacy.digest({'ml': source_hash(__file__),
                           'legacy': legacy.code_hash(), 'lightgbm': lgb.__version__})
 
 
@@ -108,22 +109,13 @@ def rolling_items(rows, targets):
 
 
 def fit_booster(items):
-    if len(items) < 30: raise ValueError('insufficient real feature targets')
-    features = np.concatenate([it['features'] for it in items])
-    goals = np.array([it['row'][k] for it in items for k in ('home_goals','away_goals')])
-    offsets = np.log(np.array([v for it in items for v in it['rates']]))
-    params = {k: CONFIG[k] for k in ('objective', 'seed', 'num_leaves', 'min_data_in_leaf', 'learning_rate', 'lambda_l2')}
-    params.update(verbosity=-1, num_threads=1, deterministic=True, force_col_wise=True)
-    ds = lgb.Dataset(features, label=goals, init_score=offsets, feature_name=FEATURES)
-    booster = lgb.train(params, ds, num_boost_round=CONFIG['num_boost_round'])
-    return booster
+    from ml_core import fit_booster as fit
+    return fit(items, CONFIG, FEATURES)
 
 
 def ml_matrix(booster, features, rates, rho):
-    delta = np.clip(booster.predict(features, raw_score=True, num_threads=1),
-                    -CONFIG['residual_cap'], CONFIG['residual_cap'])
-    adjusted = np.clip(np.array(rates)*np.exp(delta), .05, 12.)
-    return legacy.matrix(float(adjusted[0]), float(adjusted[1]), 'dixon_coles', rho), delta
+    from ml_core import ml_matrix as matrix
+    return matrix(booster, features, rates, rho, CONFIG, legacy)
 
 
 def evaluate(items, booster, alpha):
@@ -184,6 +176,13 @@ def train(rows):
                 'acceptance':report['acceptance'], 'formal_validation':False,
                 'formal_kpi_eligible':False,'feature_xg_match_count':report['feature_xg_match_count']}
     artifact['feature_process_match_count'] = report['feature_process_match_count']
+    from asof_contract import audit_feature_availability
+    artifact['feature_availability_audit'] = audit_feature_availability(rows)
+    artifact['training_lineage'] = {
+        'deployment_refit_includes_diagnostic_fold': True,
+        'diagnostic_test_used_for_alpha_selection': False,
+        'diagnostic_is_prospective': False,
+        'source_identity_policy': 'VERIFIED_SHARED_CORE_COMPATIBILITY_V1'}
     return artifact, report
 
 

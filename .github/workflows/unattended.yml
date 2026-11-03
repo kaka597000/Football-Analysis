@@ -6,9 +6,6 @@ on:
         type: choice
         options: [collect, train]
         default: collect
-  schedule:
-    - cron: '17 */6 * * *'
-    - cron: '37 2 * * *'
 permissions:
   contents: read
 concurrency:

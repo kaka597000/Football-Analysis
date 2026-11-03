@@ -1,3 +1,5 @@
+> 历史状态文档：当前入口和工件身份请先读 [CURRENT_STATE.md](../CURRENT_STATE.md)。本文保留历史记录。
+
 HELLO BOSS
 
 ## 2026-10-10：当前研究运行版本1.2
