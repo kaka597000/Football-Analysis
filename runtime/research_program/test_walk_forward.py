@@ -2,7 +2,7 @@ import copy
 from datetime import date,timedelta
 import unittest
 import numpy as np
-from research_program.walk_forward import splits,predict_block
+from research_program.walk_forward import splits,predict_block,reference_contract
 
 
 class WalkForwardTests(unittest.TestCase):
@@ -31,6 +31,14 @@ class WalkForwardTests(unittest.TestCase):
             self.assertTrue(all(r['date'][:7]==origin[:7] for r in targets))
         rows=self.rows();duplicate=dict(rows[0],match_id='alias');rows.append(duplicate)
         with self.assertRaises(ValueError):list(splits(rows))
+
+    def test_missing_current_never_silently_becomes_a_current_comparison(self):
+        with self.assertRaises(ValueError):reference_contract(None)
+        r=reference_contract(None,True)
+        self.assertEqual(r['reference_label'],'RESEARCH_CONSTANT_NO_CURRENT_ROUTE')
+        self.assertIsNone(r['current_artifact_sha256'])
+        rows=self.rows();a=predict_block(rows[:90],rows[91:94],'constant')
+        for _,models,_ in a:self.assertAlmostEqual(models['current_recipe'].sum(),1.)
 
 
 if __name__=='__main__':unittest.main()
