@@ -17,6 +17,7 @@ ASIAN = 'https://asianodds.org/d/events?sport=fb'
 MAX_REQUESTS = 100
 REGULAR = {'eng.1','eng.2','esp.1','ger.1','fra.1','ita.1','ned.1','por.1',
            'bra.1','swe.1','ksa.1','nor.1','usa.1','aus.1','kor.1','jpn.1'}
+PHASED_RESEARCH = {'uefa.europa', 'uefa.europa.conf', 'fifa.world'}
 CUP_STAGES = {'first-round':'first round','second-round':'second round',
               'third-round':'third round','fourth-round':'fourth round',
               'quarterfinals':'quarterfinal'}
@@ -57,7 +58,7 @@ def normalize_scopes(scopes):
     for scope in scopes:
         item=dict(scope)
         if not item.get('competition') or not item.get('cohort'): raise ValueError('scope identity required')
-        if item['competition'] not in REGULAR | {'mex.1','eng.league_cup','afc.cup','afc.champions','uefa.champions'}:
+        if item['competition'] not in REGULAR | PHASED_RESEARCH | {'mex.1','eng.league_cup','afc.cup','afc.champions','uefa.champions'}:
             raise ValueError('competition has no registered unattended adapter')
         if item.get('gender', 'men') not in ('men','male') or item.get('age','senior')!='senior':
             raise ValueError('only registered adult male scopes supported')
@@ -71,6 +72,11 @@ def phase_for(scope, event):
     comp=scope['competition'];cohort=scope['cohort'];season=event.get('season',{})
     text=' '.join(str(season.get(k,'')) for k in ('name','slug','type')).lower().replace('_',' ').replace('-',' ')
     stages=scope['stages']
+    if comp in PHASED_RESEARCH:
+        # Native slug must exactly match the configured phase; no substring
+        # match can turn a semifinal into a final or a knockout into a league.
+        slug = season.get('slug')
+        return slug if isinstance(slug, str) and slug in stages else None
     if comp=='eng.league_cup':
         for stage, needle in CUP_STAGES.items():
             if needle in text and stage in stages:return stage
@@ -106,6 +112,10 @@ def regulation_row(scope, event, summary, captured_at, raw_ref):
     if aware(c['date'])!=aware(event.get('date',c['date'])):raise ValueError('kickoff conflict')
     if aware(c['date'])>=aware(captured_at):raise ValueError('future result')
     merged=dict(event,**header)
+    if scope['competition'] in PHASED_RESEARCH:
+        # Scoreboards retain native phase slug; header season often contains
+        # only year/type/name. Keep that exact phase after event reconciliation.
+        merged['season']=dict(header.get('season',{}), slug=event.get('season',{}).get('slug'))
     stage=phase_for(scope,merged)
     if stage is None:raise ValueError('phase or era not compatible')
     teams={t.get('homeAway'):t for t in c.get('competitors',[])}

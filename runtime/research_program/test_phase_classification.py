@@ -32,3 +32,11 @@ class Tests(unittest.TestCase):
         self.assertFalse(classify(fixture('invented.cup'))['complete'])
         row=fixture();row['evidence']['summary_url']='https://example.org/report'
         self.assertFalse(classify(row)['complete'])
+
+    def test_legacy_group_stage_does_not_pool_with_league_phase(self):
+        for code in ('uefa.europa', 'uefa.europa.conf'):
+            old=fixture(code, 'group-stage');new=fixture(code, 'league-phase')
+            self.assertTrue(classify(old)['complete'])
+            self.assertNotEqual(classify(old)['route_key'],classify(new)['route_key'])
+            with self.assertRaisesRegex(ValueError,'one competition'):
+                training_rows([old,new])

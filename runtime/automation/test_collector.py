@@ -28,6 +28,19 @@ class CollectorTests(unittest.TestCase):
         self.assertIsNone(phase_for(self.scope,{'season':{'name':'Semifinals'}}))
         self.assertIsNone(phase_for({'competition':'jpn.1','cohort':'jpn.1','stages':['regular']},{'date':'2026-05-01','season':{'name':'J1 League'}}))
 
+    def test_research_phase_uses_exact_native_slug(self):
+        scope={'competition':'uefa.europa','cohort':'uefa.europa','stages':['league-phase']}
+        self.assertEqual(phase_for(scope,{'season':{'slug':'league-phase'}}),'league-phase')
+        self.assertIsNone(phase_for(scope,{'season':{'slug':'knockout-round-playoffs','name':'League Phase'}}))
+        self.assertIsNone(phase_for(scope,{'season':{'name':'League Phase'}}))
+
+    def test_research_phase_survives_header_without_slug(self):
+        scope={'competition':'uefa.europa','cohort':'uefa.europa','stages':['league-phase']}
+        self.event['season']['slug']='league-phase'
+        self.summary['header']['season']={'name':'UEFA Europa League, League Phase'}
+        r=regulation_row(scope,self.event,self.summary,self.now.isoformat(),{})
+        self.assertEqual(r['stage'],'league-phase')
+
     def test_collect_deduplicates_sources_and_results_and_keeps_private_raw(self):
         calls=[]
         def fetch(url,headers=None):
