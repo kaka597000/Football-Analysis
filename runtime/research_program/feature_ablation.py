@@ -49,12 +49,14 @@ def valid_pair(a, b):
                and math.isfinite(v) and v >= 0 for v in (a, b))
 
 
-def build_features(records, window=10, min_history=3):
+def build_features(records, window=10, min_history=3, max_xg_age_days=None):
     """All history updates occur after the complete date block is evaluated.
 
     Missing xG is never an observation of zero. Histories retain their latest
     source match IDs and dates, so stale coverage and exclusion can be inspected.
     """
+    if max_xg_age_days is not None and (type(max_xg_age_days) is not int or max_xg_age_days < 1):
+        raise ValueError('positive integer xG age required')
     if window < min_history or min_history < 1:
         raise ValueError('window must be >= min_history >= 1')
     histories = defaultdict(lambda: {'goals': deque(maxlen=window), 'xg': deque(maxlen=window)})
@@ -74,6 +76,9 @@ def build_features(records, window=10, min_history=3):
                 excluded.append({'match_id': r['match_id'], 'reason': 'MISSING_90_MINUTE_LABEL'})
                 continue
             teams = [histories[(group_key(r), r[k])] for k in ('home_team_id', 'away_team_id')]
+            if max_xg_age_days is not None:
+                oldest = (datetime.fromisoformat(date) - timedelta(days=max_xg_age_days)).date().isoformat()
+                teams = [dict(t, xg=[v for v in t['xg'] if oldest <= v['date'] < date]) for t in teams]
             counts = [[len(t[k]) for k in ('goals', 'xg')] for t in teams]
             if min(min(c) for c in counts) < min_history:
                 excluded.append({'match_id': r['match_id'], 'reason': 'INSUFFICIENT_PRIOR_HISTORY',
@@ -250,17 +255,17 @@ def market_gate(records):
             'reason': 'No historical market model trained; never use capture time or closing label as quote timestamp.'}
 
 
-def run(records, out_dir, input_sha256, source_metadata):
+def run(records, out_dir, input_sha256, source_metadata, max_xg_age_days=None):
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     # Existing experiment outputs are immutable; a new invocation needs a new path.
     if (out / 'protocol.json').exists():
         raise FileExistsError('Experiment path already contains protocol.json')
-    protocol = dict(PROTOCOL, input_sha256=input_sha256, source_metadata=source_metadata,
+    protocol = dict(PROTOCOL, max_xg_age_days=max_xg_age_days, input_sha256=input_sha256, source_metadata=source_metadata,
                     created_at_beijing=datetime.now(timezone(timedelta(hours=8))).isoformat())
     (out / 'protocol.json').write_text(json.dumps(protocol, indent=2, ensure_ascii=False)+'\n')
     selected = [r for r in records if r['competition'] in PROTOCOL['competitions']]
-    prepared, excluded = build_features(selected, PROTOCOL['window_matches'], PROTOCOL['min_history_matches'])
+    prepared, excluded = build_features(selected, PROTOCOL['window_matches'], PROTOCOL['min_history_matches'], max_xg_age_days)
     predictions, fits, skipped = [], [], []
     groups = defaultdict(list)
     for r in prepared:
@@ -329,11 +334,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--records', required=True)
     parser.add_argument('--out', required=True)
+    parser.add_argument('--max-xg-age-days', type=int)
     args = parser.parse_args()
     raw = Path(args.records).read_bytes()
     dataset = json.loads(raw)
     summary = run(dataset['records'], args.out, sha256(raw).hexdigest(),
-                  {k: dataset[k] for k in ('schema_version', 'source_database_sha256', 'counts')})
+                  {k: dataset[k] for k in ('schema_version', 'source_database_sha256', 'counts')}, args.max_xg_age_days)
     print(json.dumps({'coverage': summary['coverage'], 'overall': summary['overall']}, indent=2))
 
 
