@@ -37,7 +37,7 @@ def training_rows(rows):
     phased={r['code'] for r in policy()['competitions'] if r['requires_phase_identity']}
     if any(r['cohort'].split(':')[0] in phased and not r.get('stage') for r in rows):
         raise ValueError('explicit historical phase required before training')
-    from v4.competition_router import classify
+    from research_program.phase_classification import classify
     classified=[classify(r) for r in rows]
     if any(not r['complete'] for r in classified):raise ValueError('unverified competition phase')
     identities={r['route_key'] for r in classified}

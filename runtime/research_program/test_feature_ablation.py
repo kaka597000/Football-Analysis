@@ -59,6 +59,17 @@ class FeatureAblationTests(unittest.TestCase):
         rows += [fixture(4, '2020-01-04', stage='playoffs'), fixture(5, '2020-01-05', home='C')]
         self.assertEqual(build_features(rows)[0], [])
 
+    def test_freshness_filters_dependencies_before_paired_eligibility(self):
+        rows = [fixture(1, '2020-01-01'), fixture(2, '2020-04-01'),
+                fixture(3, '2020-04-02'), fixture(4, '2020-04-03'), fixture(5, '2020-04-04')]
+        prepared, excluded = build_features(rows, max_xg_age_days=90)
+        self.assertEqual([r['match_id'] for r in prepared], ['5'])
+        self.assertEqual([d['match_id'] for d in prepared[0]['dependencies']['home']['xg']], ['2','3','4'])
+        self.assertEqual(len(prepared[0]['dependencies']['home']['goals']), 4)
+        self.assertEqual(len(prepared[0]['base_x']), len(prepared[0]['plus_xg_x']))
+        with self.assertRaises(ValueError):
+            build_features(rows, max_xg_age_days=0)
+
     def test_duplicate_fixture_rejected(self):
         with self.assertRaises(ValueError):
             build_features([fixture(1, '2020-01-01')]*2)

@@ -47,8 +47,8 @@ def predict_block(prior, targets, reference_kind='weighted_baseline'):
     if not prior or any(r['date'] >= origin for r in prior):
         raise ValueError('training must precede the entire target month')
     prior = challengers.prepare(prior)
-    checked = legacy.history(copy.deepcopy(prior))
     if reference_kind == 'weighted_baseline':
+        checked = legacy.history(copy.deepcopy(prior))
         core = legacy.fit_baseline(checked)
     elif reference_kind == 'constant':
         means = np.clip([np.mean([r[k] for r in prior]) for k in ('home_goals','away_goals')],.08,8.)
