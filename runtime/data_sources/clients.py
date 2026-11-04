@@ -36,9 +36,12 @@ PROVIDERS = {
     'api-football': {'base': 'https://v3.football.api-sports.io',
                      'env': 'WCPP_API_FOOTBALL_KEY', 'header': 'x-apisports-key',
                      'aliases': ['APIFOOTBALL', '_apifootball', 'dashboard_api_football',
-                                 'Apifootballcom_APIKEY', 'apifootball'],
+                                 'apifootball'],
                      'probe': '/status'},
 }
+# Historical name is ambiguous between two distinct providers. Do not route it
+# automatically, but still redact its value if echoed by another provider.
+QUARANTINED_CREDENTIAL_NAMES = ('Apifootballcom_APIKEY',)
 PRIVATE = {'key', 'api_key', 'apikey', 'token', 'authorization', 'access_token',
            'secret', 'x-auth-token', 'x-apisports-key', 'x-rapidapi-key'}
 ALLOWED = {
@@ -88,6 +91,7 @@ def fetch(provider, path=None, params=None, opener=None, credential_binding=None
         raise ValueError('credentials must not be query parameters')
     all_keys = [os.environ.get(n) for s in PROVIDERS.values()
                 for n in ([s['env']] if 'env' in s else []) + s.get('aliases', [])]
+    all_keys.extend(os.environ.get(n) for n in QUARANTINED_CREDENTIAL_NAMES)
     if any(secret and secret in str(v) for secret in all_keys for v in [path, *params.values()]):
         raise ValueError('credential in query value')
     url = spec['base'] + path + ('?' + urlencode(params) if params else '')
