@@ -3,8 +3,8 @@ from urllib.parse import urlparse
 from v4.competition_router import classify as activity_classify
 
 PHASES = {
-    'uefa.europa': {'league-phase', 'knockout-round-playoffs', 'round-of-16', 'quarterfinals', 'semifinals', 'final'},
-    'uefa.europa.conf': {'league-phase', 'knockout-round-playoffs', 'round-of-16', 'quarterfinals', 'semifinals', 'final'},
+    'uefa.europa': {'group-stage', 'league-phase', 'knockout-round-playoffs', 'round-of-16', 'quarterfinals', 'semifinals', 'final'},
+    'uefa.europa.conf': {'group-stage', 'league-phase', 'knockout-round-playoffs', 'round-of-16', 'quarterfinals', 'semifinals', 'final'},
     'fifa.world': {'group-stage', 'round-of-32', 'round-of-16', 'quarterfinals', 'semifinals', 'final', '3rd-place-match'},
 }
 
