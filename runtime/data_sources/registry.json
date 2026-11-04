@@ -46,7 +46,6 @@
       "credential_env_aliases": [
         "_apifootball",
         "dashboard_api_football",
-        "Apifootballcom_APIKEY",
         "apifootball"
       ],
       "last_http_status": 200,

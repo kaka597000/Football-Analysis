@@ -64,14 +64,17 @@ class Tests(unittest.TestCase):
             result = fetch('api-football', opener=opener)
         self.assertEqual(result['call']['credential_binding_name'], '_apifootball')
 
-    def test_configured_alias_is_used_when_standard_variable_absent(self):
-        def opener(req,**kwargs):
-            self.assertEqual(req.get_header('X-apisports-key'),'TEST_ALIAS_ONLY')
-            return Response({'errors':{},'response':{'subscription':{'plan':'test-only'}}})
+    def test_ambiguous_legacy_binding_is_never_automatically_routed(self):
         with patch.dict(os.environ,{'Apifootballcom_APIKEY':'TEST_ALIAS_ONLY'},clear=True):
-            r=fetch('api-football',opener=opener)
-        self.assertTrue(r['call']['api_success'])
-        self.assertEqual(r['call']['credential_binding_name'],'Apifootballcom_APIKEY')
+            r=fetch('api-football',opener=lambda *a,**k:self.fail('ambiguous key sent'))
+            self.assertEqual(r['call']['error_code'],'ENV_BINDING_MISSING')
+            with self.assertRaises(ValueError):
+                fetch('api-football',credential_binding='Apifootballcom_APIKEY')
+            with self.assertRaises(ValueError):
+                fetch('apifootball-com',path='/',params={'action':'get_countries'},
+                      credential_binding='Apifootballcom_APIKEY')
+            with self.assertRaises(ValueError):
+                fetch('espn',params={'team':'TEST_ALIAS_ONLY'})
 
     def test_new_runtime_variable_takes_priority_over_old_proxy_alias(self):
         def opener(req,**kwargs):
@@ -104,10 +107,10 @@ class Tests(unittest.TestCase):
             self.assertEqual(req.get_header('X-apisports-key'), 'SELECTED_TEST_ONLY')
             return Response({'errors': [], 'response': []})
         with patch.dict(os.environ, {'dashboard_api_football': 'DEFAULT_TEST_ONLY',
-                                    'Apifootballcom_APIKEY': 'SELECTED_TEST_ONLY'}, clear=True):
+                                    '_apifootball': 'SELECTED_TEST_ONLY'}, clear=True):
             result = fetch('api-football', opener=opener,
-                           credential_binding='Apifootballcom_APIKEY')
-            self.assertEqual(result['call']['credential_binding_name'], 'Apifootballcom_APIKEY')
+                           credential_binding='_apifootball')
+            self.assertEqual(result['call']['credential_binding_name'], '_apifootball')
             with self.assertRaises(ValueError):
                 fetch('api-football', opener=lambda *a, **k: self.fail('unexpected request'),
                       credential_binding='football_data')
