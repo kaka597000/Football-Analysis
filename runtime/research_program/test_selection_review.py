@@ -14,6 +14,17 @@ class SelectionTests(unittest.TestCase):
   comp=record({'primary':'1-1','current_test_reference':{'freeze_id':pair['freeze_id'],'sha256':pair['record_sha256']}},'comprehensive')
   result={'status':'completed','match_id':'SYNTHETIC','home_goals':1,'away_goals':1,'score_basis':'regulation_90','source_url':'https://example.test/result','observed_at':now.isoformat()}
   return {'pair':pair,'comprehensive':comp},result
+ def test_unavailable_version_retains_abstain_population(self):
+  entry,result=self.data()
+  for prediction in entry['pair']['payload'].values():
+   prediction.update(version=None,matrix=None,matrix_hash=None,primary=None)
+  entry['pair']['record_sha256']=digest({k:v for k,v in entry['pair'].items() if k!='record_sha256'})
+  entry['comprehensive']['payload']['current_test_reference']['sha256']=entry['pair']['record_sha256']
+  entry['comprehensive']['record_sha256']=digest({k:v for k,v in entry['comprehensive'].items() if k!='record_sha256'})
+  r=compare([entry],[result]);g=r['by_model_version']['current_model:UNAVAILABLE']
+  self.assertEqual(g['population'],1);self.assertEqual(g['settled'],1)
+  self.assertEqual(g['model_available'],0);self.assertEqual(g['paired_n'],0)
+  self.assertEqual(r['comprehensive_hits'],1)
  def test_net_hit_and_pending_denominator(self):
   entry,result=self.data();r=compare([entry],[result]);self.assertEqual(r['by_model_version']['current_model:SYNTHETIC']['net_hits'],1)
   r=compare([entry],[]);self.assertEqual(len(r['pending']),1);self.assertEqual(r['population'],1)
