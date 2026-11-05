@@ -55,7 +55,7 @@ def compare(entries,results):
                         raise ValueError('frozen matrix integrity')
                     mode=np.unravel_index(m.argmax(),m.shape);stat=f'{mode[0]}-{mode[1]}'
                     if prediction['primary']!=stat:raise ValueError('statistical Primary does not match frozen matrix mode')
-                key=name+':'+prediction['version']
+                key=name+':'+(prediction.get('version') or 'UNAVAILABLE')
                 values=groups.setdefault(key,{'population':0,'settled':0,'pending':0,'model_available':0,
                     'comprehensive_selected':0,'comprehensive_abstained':0,'paired_n':0,
                     'statistical_hits_all_settled':0,'statistical_hits':0,'comprehensive_hits':0,
