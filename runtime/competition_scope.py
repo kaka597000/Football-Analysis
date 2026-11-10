@@ -7,8 +7,12 @@ CONFIG = Path(__file__).resolve().parents[1]/'configs/analysis-scope.json'
 def policy():
     value=json.loads(CONFIG.read_text(encoding='utf-8'))
     codes=[r['code'] for r in value['competitions']]
-    if len(codes)!=18 or len(set(codes))!=18:
-        raise ValueError('exactly 18 unique competition identities required')
+    expected=value.get('expected_competition_count')
+    if type(expected) is not int or expected<=0:
+        raise ValueError('positive configured competition count required')
+    if (any(not isinstance(code,str) or not code.strip() for code in codes)
+            or len(codes)!=expected or len(set(codes))!=expected):
+        raise ValueError(f'exactly {expected} unique competition identities required')
     return value
 
 def permitted(item):
@@ -23,12 +27,12 @@ def permitted(item):
     if item.get('gender','men') not in ('men','male') or item.get('age','senior')!='senior':return False
     if item.get('score_basis','regulation_90')!='regulation_90':return False
     if code=='afc.champions' and ':ELITE:' not in cohort:return False
-    if code=='fifa.world' and item.get('stage') in ('qualifying','qualification','friendly'):return False
+    if code in ('fifa.world','uefa.nations') and item.get('stage') in ('qualifying','qualification','friendly'):return False
     return True
 
 def require(item):
     if not permitted(item):
-        raise ValueError('outside 18-competition adult-men regulation-90 formal scope; historical assets retained')
+        raise ValueError('outside configured adult-men regulation-90 formal scope; historical assets retained')
     return item
 
 def training_rows(rows):
@@ -47,7 +51,7 @@ def training_rows(rows):
 def inventory(registry):
     codes={r['code'] for r in policy()['competitions']}
     active=[k for k in registry['models'] if permitted({'cohort':k})]
-    return {'scope_count':18,'retained_active_routes':active,
+    return {'scope_count':len(codes),'retained_active_routes':active,
             'historical_only_routes':[k for k in registry['models'] if k not in active],
             'missing_competitions':sorted(codes-{k.split(':')[0] for k in active}),
             'registry_modified':False}
