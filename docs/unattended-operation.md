@@ -2,7 +2,11 @@
 
 用户授权：2026-10-30，北京时间。此授权允许本方案的有界自动任务，覆盖旧“不新增定时任务”的约束。
 
-## 当前状态
+## 2026-11-10 状态复核
+
+实时 GitHub metadata 返回数据仓库 `private=false`，与部署时的私有要求冲突；当前不能继续以“已确认私有”描述该仓库。任务仍在运行，但固定源码尚未包含本地近期修复。实测主采集预算为 90 秒、训练范围为 17 队列。详见[训练鲜度与运行审计](operational-audit-20261110.md)。本轮没有变更可见性、推送或部署。
+
+## 历史部署状态（2026-10-30）
 
 用户已创建真实私有仓库`kaka597000/kaka597000-Football-Analysis-Data`并授权云端安装。原先期待的`Football-Analysis-Data`不是实际名称；不能根据该旧地址404认定用户没有创建仓库。
 现连接具有私有仓库内容和workflow权限，仍无Secrets/Deploy keys管理权限。因此改用私有仓库自身的Actions/GITHUB_TOKEN，不需要安装包、本地电脑、个人PAT或专用Secret。已完成远端采集、训练及持久化验证，状态为DEPLOYED_PRIVATE_ACTIONS_VERIFIED；实际证据见[部署报告](unattended-deployment-20261030.md)。后续定时是否成功仍需以逐轮Actions及私有runs记录为准。

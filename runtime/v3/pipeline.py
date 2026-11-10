@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime, timezone, timedelta
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'v2'))
 from model import research_predict, aware, digest, matrix, probabilities, total_settlement
-from evidence import fit_context, validate_context
+from training_inputs import fit_context, validate_context
 from context import assess, VERSION
 
 FEATURE_CONTRACT = 'source-backed-context-1'

@@ -6,6 +6,7 @@ import sys
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from competition_scope import require, training_rows
 from weighted_model import train, predict
+from training_inputs import history_inputs
 
 
 def main():
@@ -15,7 +16,7 @@ def main():
     t = sub.add_parser('predict'); t.add_argument('artifact'); t.add_argument('fixture'); t.add_argument('--out', required=True)
     a = p.parse_args()
     if a.command == 'train':
-        artifact, report = train(training_rows(json.loads(Path(a.history).read_text(encoding="utf-8"))))
+        artifact, report = train(history_inputs(training_rows(json.loads(Path(a.history).read_text(encoding="utf-8")))))
         directory = Path(a.directory); directory.mkdir(parents=True, exist_ok=True)
         for name, obj in [('artifact', artifact), ('report', report)]:
             with (directory/(name+'.json')).open('x') as f: json.dump(obj, f, ensure_ascii=False, indent=2, allow_nan=False)

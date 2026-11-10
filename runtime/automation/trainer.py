@@ -19,6 +19,7 @@ if str(_RUNTIME) not in sys.path:
 from league_tracks import reject_ood_champion_promotion
 from urllib.parse import parse_qsl, urlsplit
 import uuid
+import zlib
 
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 os.environ['OMP_NUM_THREADS'] = '1'
@@ -74,6 +75,87 @@ def code_fingerprint():
     return digest({p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in paths})
 
 
+def _verify_raw_result(row, state_dir, cache):
+    """Verify referenced ESPN bytes before accepting an incremental label.
+
+    Unreferenced legacy rows remain explicitly unverified. A declared reference
+    is mandatory evidence: missing/corrupt/unsupported raw data is quarantined.
+    """
+    ref = row.get('raw_reference')
+    if ref is None:
+        return 'LEGACY_NO_RAW_REFERENCE'
+    try:
+        path = (state_dir / ref['path']).resolve()
+        if not path.is_relative_to(state_dir.resolve()):
+            raise ValueError('RAW_SOURCE_PATH_OUTSIDE_STATE')
+        expected = ref['sha256']
+        if not isinstance(expected, str) or not re.fullmatch(r'[0-9a-f]{64}', expected):
+            raise ValueError('RAW_SOURCE_INVALID_HASH')
+        key = (str(path), expected)
+        if key not in cache:
+            with (gzip.open(path, 'rb') if path.suffix == '.gz' else path.open('rb')) as handle:
+                data = handle.read(20_000_001)
+            if len(data) > 20_000_000 or hashlib.sha256(data).hexdigest() != expected:
+                raise ValueError('RAW_SOURCE_CHECKSUM_MISMATCH')
+            cache[key] = json.loads(data)
+        summary = cache[key]
+        url = urlsplit(row['source_url'])
+        if (url.hostname != 'site.api.espn.com'
+                or url.path != '/apis/site/v2/sports/soccer/' + row['competition'] + '/summary'):
+            raise ValueError('RAW_SOURCE_UNSUPPORTED_ADAPTER')
+        header = summary['header']
+        event_id = str(header['id'])
+        league = header.get('league', {}).get('slug')
+        if league is not None and league != row['competition']:
+            raise ValueError('RAW_SOURCE_LEAGUE_IDENTITY_MISMATCH')
+        if row['match_id'] != 'espn:' + event_id or dict(parse_qsl(url.query)).get('event') != event_id:
+            raise ValueError('RAW_SOURCE_MATCH_IDENTITY_MISMATCH')
+        competitions = header['competitions']
+        if len(competitions) != 1:
+            raise ValueError('RAW_SOURCE_COMPETITION_AMBIGUOUS')
+        match = competitions[0]
+        if 'id' in match and str(match['id']) != event_id:
+            raise ValueError('RAW_SOURCE_MATCH_IDENTITY_MISMATCH')
+        status = match['status']['type']
+        if status.get('completed') is not True or summary['format']['regulation']['periods'] != 2:
+            raise ValueError('RAW_SOURCE_REGULATION_NOT_VERIFIED')
+        kickoff = aware(match['date'])
+        if kickoff.date().isoformat() != row['date'] or ('kickoff_at' in row and aware(row['kickoff_at']) != kickoff):
+            raise ValueError('RAW_SOURCE_KICKOFF_MISMATCH')
+        teams = match['competitors']
+        if len(teams) != 2 or {t.get('homeAway') for t in teams} != {'home', 'away'}:
+            raise ValueError('RAW_SOURCE_TEAMS_AMBIGUOUS')
+        def goal(value):
+            if isinstance(value, bool):
+                raise ValueError('RAW_SOURCE_INVALID_SCORE')
+            number = float(value)
+            if not number.is_integer() or not 0 <= number <= 40:
+                raise ValueError('RAW_SOURCE_INVALID_SCORE')
+            return int(number)
+        for team in teams:
+            side = team['homeAway']
+            if row[side] != 'espn:' + str(team['team']['id']):
+                raise ValueError('RAW_SOURCE_TEAM_IDENTITY_MISMATCH')
+            periods = team.get('linescores', [])
+            if len(periods) < 2:
+                raise ValueError('RAW_SOURCE_PERIOD_SCORES_MISSING')
+            regulation = sum(goal(p.get('value', p.get('displayValue'))) for p in periods[:2])
+            if regulation != row[side + '_goals']:
+                raise ValueError('RAW_SOURCE_REGULATION_LABEL_CONFLICT')
+            if status.get('name') == 'STATUS_FULL_TIME':
+                if len(periods) != 2 or goal(team['score']) != regulation:
+                    raise ValueError('RAW_SOURCE_FT_PERIOD_CONFLICT')
+            elif status.get('name') not in ('STATUS_FINAL_AET', 'STATUS_FINAL_PEN'):
+                raise ValueError('RAW_SOURCE_STATUS_UNSUPPORTED')
+        return 'VERIFIED_RAW_REGULATION_90'
+    except (OSError, EOFError, KeyError, TypeError, ValueError, AttributeError,
+            OverflowError, zlib.error) as exc:
+        reason = str(exc)
+        if not reason.startswith('RAW_SOURCE_'):
+            reason = 'RAW_SOURCE_UNREADABLE_OR_INVALID'
+        raise ValueError(reason) from None
+
+
 def _load(state_dir, now):
     scopes_path = state_dir/'config/scopes.json'
     scopes = json.loads(scopes_path.read_text())
@@ -106,7 +188,7 @@ def _load(state_dir, now):
     if incremental.exists():
         with incremental.open() as f:
             incoming.extend((json.loads(line), False) for line in f if line.strip())
-    selected = {}; conflicts = set(); quarantine = []; excluded = []
+    selected = {}; conflicts = set(); quarantine = []; excluded = []; raw_cache = {}
     for raw, seed_row in incoming:
         mid = raw.get('match_id')
         try:
@@ -150,6 +232,8 @@ def _load(state_dir, now):
                     raise ValueError('CREDENTIAL_BEARING_SOURCE')
             row = {k: raw[k] for k in ('match_id', 'cohort', 'competition', 'stage', 'date', 'home', 'away', 'home_goals', 'away_goals')}
             row['neutral'] = raw.get('neutral')
+            row['source_evidence_status'] = ('RETROSPECTIVE_SEED' if seed_row else
+                                             _verify_raw_result(raw, state_dir, raw_cache))
             key = (row['cohort'], row['competition'], row['stage'], row['date'], row['home'], row['away'])
             label = (row['home_goals'], row['away_goals'])
             if key in selected:
@@ -158,9 +242,10 @@ def _load(state_dir, now):
                     quarantine.append({'match_id': mid, 'reason': 'CONFLICTING_90_MINUTE_LABELS'})
                 continue
             selected[key] = row
-        except (ValueError, KeyError, TypeError):
+        except (ValueError, KeyError, TypeError) as exc:
+            reason = str(exc) if str(exc).startswith('RAW_SOURCE_') else 'ROW_FAILED_IDENTITY_TIME_SCOPE_OR_LABEL_VALIDATION'
             quarantine.append({'match_id': mid if isinstance(mid, str) else None,
-                               'reason': 'ROW_FAILED_IDENTITY_TIME_SCOPE_OR_LABEL_VALIDATION'})
+                               'reason': reason})
     rows = sorted((v for k, v in selected.items() if k not in conflicts), key=lambda r: (r['date'], r['match_id']))
     return scopes, rows, quarantine, excluded
 
@@ -209,6 +294,8 @@ def train(state_dir, max_cohorts=21, now=None):
                              state_dir/'normalized-results.jsonl') if p.is_file()},
                'scope_count': len(scopes), 'accepted_rows': len(rows),
                'quarantined': len(quarantine), 'excluded_by_time': excluded,
+               'source_evidence_counts': {status: sum(r['source_evidence_status'] == status for r in rows)
+                   for status in sorted({r['source_evidence_status'] for r in rows})},
                'diagnostic_scope': 'RETROSPECTIVE_CHRONOLOGICAL_NOT_PROSPECTIVE_ASOF_RECONSTRUCTION',
                'active_models_modified': False, 'automatic_promotion': False, 'cohorts': []}
     engine = None; attempted = 0
@@ -247,7 +334,8 @@ def train(state_dir, max_cohorts=21, now=None):
                     'created_at': now.isoformat(), 'rows': len(subset), 'train_start': subset[0]['date'],
                     'train_end': subset[-1]['date'], 'scope': scope,
                     'first_known_at_policy': 'EXPLICIT_CAPTURE_FOR_NEW_ROWS_SEED_RETROSPECTIVE',
-                    'source_records': [{'match_id': r['match_id'], 'date': r['date']} for r in subset]}
+                    'source_records': [{'match_id': r['match_id'], 'date': r['date'],
+                                        'source_evidence_status': r['source_evidence_status']} for r in subset]}
                 _write(target/'manifest.json',manifest)
                 artifact = {'schema': VERSION, 'version': VERSION, 'status': 'CANDIDATE_RESEARCH_ONLY',
                     'model_kind': 'team_poisson', 'cohort': cohort, 'core': final_core,
