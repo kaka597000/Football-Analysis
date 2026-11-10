@@ -1,6 +1,6 @@
 {
   "schema": "WCPP-ANALYSIS-SCOPE-1",
-  "effective_date": "2026-11-03",
+  "effective_date": "2026-11-10",
   "gender": "men",
   "age": "senior",
   "score_basis": "regulation_90",
@@ -113,6 +113,13 @@
       "name": "世界杯正赛",
       "requires_phase_identity": true,
       "active_route_gap": true
+    },
+    {
+      "code": "uefa.nations",
+      "name": "欧国联",
+      "requires_phase_identity": true,
+      "active_route_gap": true
     }
-  ]
+  ],
+  "expected_competition_count": 19
 }
