@@ -39,7 +39,14 @@ def pointer(value, path):
     try:
         for bit in path[1:].split('/'):
             bit = bit.replace('~1', '/').replace('~0', '~')
-            value = value[int(bit)] if isinstance(value, list) else value[bit]
+            if isinstance(value, list):
+                # RFC 6901 array indices: no Python negative-index semantics,
+                # signs, whitespace, or leading zeroes.
+                if not bit or not bit.isascii() or not bit.isdecimal() or (len(bit) > 1 and bit[0] == '0'):
+                    return None
+                value = value[int(bit)]
+            else:
+                value = value[bit]
         return value
     except (KeyError, IndexError, TypeError, ValueError):
         return None

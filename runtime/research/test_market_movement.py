@@ -14,4 +14,23 @@ class Tests(unittest.TestCase):
     def test_untimed_future_wrong_identity_or_invalid_odds_rejected(self):
         for key,value in [('quoted_at',None),('quoted_at','2026-01-03T10:00:00Z'),('match_id','other'),('decimal_odds',{'over':float('nan'),'under':1.9})]:
             f=self.fixture();f['market_snapshots'][1][key]=value;self.assertEqual(analyze(f)['rejected_snapshots'],1);self.assertEqual(analyze(f)['comparisons'],[])
+
+    def test_conflicting_same_instant_prices_never_select_by_input_order(self):
+        f=self.fixture();duplicate=copy.deepcopy(f['market_snapshots'][-1])
+        duplicate['quoted_at']='2026-01-01T19:00:00+08:00'
+        duplicate['decimal_odds']['over']=1.7
+        f['market_snapshots'].append(duplicate)
+        for snapshots in (f['market_snapshots'],list(reversed(f['market_snapshots']))):
+            r=analyze(dict(f,market_snapshots=snapshots))
+            self.assertEqual(r['comparisons'],[])
+            self.assertEqual(r['conflicting_quote_groups'],1)
+            self.assertEqual(r['rejected_snapshots'],2)
+
+    def test_identical_duplicates_do_not_hide_valid_movement(self):
+        f=self.fixture();f['market_snapshots'][-1]['decimal_odds']['over']=1.8
+        f['market_snapshots'].append(copy.deepcopy(f['market_snapshots'][-1]))
+        r=analyze(f)
+        self.assertEqual(len(r['comparisons']),1)
+        self.assertEqual(r['conflicting_quote_groups'],0)
+        self.assertAlmostEqual(r['comparisons'][0]['decimal_odds_change']['over'],-.1)
 if __name__=='__main__':unittest.main()

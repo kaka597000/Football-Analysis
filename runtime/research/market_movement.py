@@ -12,6 +12,7 @@ def aware(value):
 
 def analyze(fixture):
     result={'status':'NO_SNAPSHOTS','comparisons':[],'rejected_snapshots':0,
+            'conflicting_quote_groups':0,
             'prediction_modified':False,'money_flow_inferred':False}
     groups={}
     for row in fixture.get('market_snapshots',[]):
@@ -32,6 +33,17 @@ def analyze(fixture):
             groups.setdefault(key,[]).append(row)
         except (KeyError,ValueError,TypeError,AttributeError):result['rejected_snapshots']+=1
     for (book,market,line),rows in groups.items():
+        by_time = {}
+        for row in rows:
+            by_time.setdefault(aware(row['quoted_at']), []).append(row)
+        conflicts = [bucket for bucket in by_time.values()
+                     if len({tuple(sorted(r['decimal_odds'].items())) for r in bucket}) > 1]
+        if conflicts:
+            # The provider has assigned different prices to the same instant.
+            # Input order must not decide which price becomes the endpoint.
+            result['conflicting_quote_groups'] += 1
+            result['rejected_snapshots'] += sum(len(bucket) for bucket in conflicts)
+            continue
         rows.sort(key=lambda x:aware(x['quoted_at']))
         first,last=rows[0],rows[-1]
         if aware(first['quoted_at'])==aware(last['quoted_at']):continue

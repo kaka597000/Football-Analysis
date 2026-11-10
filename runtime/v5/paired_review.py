@@ -43,14 +43,16 @@ def review(pairs, results):
                  'formal_kpi_eligible': False, 'kickoff_conflict': pair.get('kickoff_conflict')}
         for name, f in zip(('当前模型', 'test模型'), forecasts):
             settlement = None
-            if f['total']:
+            if f.get('total'):
                 import numpy as np
                 point = np.zeros((51, 51)); point[h, a] = 1.
                 probs = legacy.total_settlement(point, f['total']['quote']['line'], f['total']['reference_direction'])
                 settlement = next(k for k, v in probs.items() if v == 1.)
             entry['models'][name] = {'version':f.get('version','UNSPECIFIED'),
-                                     'primary_hit': f['primary'] == f'{h}-{a}',
-                                     'wdl_hit': f['wdl_reference'] == actual,
+                                     'primary_hit': (f.get('primary') == f'{h}-{a}'
+                                                     if f.get('primary') is not None else None),
+                                     'wdl_hit': (f.get('wdl_reference') == actual
+                                                 if f.get('wdl_reference') in ('主胜', '平局', '客胜') else None),
                                      'total_settlement': settlement}
         rows.append(entry)
     summary = {}
@@ -58,8 +60,17 @@ def review(pairs, results):
         values = [r['models'][name] for r in rows]
         from collections import Counter
         def counts(items):
-            return {'settled':len(items),'primary_hits':sum(v['primary_hit'] for v in items),
-                    'wdl_hits':sum(v['wdl_hit'] for v in items),
+            primary = [v for v in items if v['primary_hit'] is not None]
+            wdl = [v for v in items if v['wdl_hit'] is not None]
+            totals = [v for v in items if v['total_settlement'] is not None]
+            return {'settled':len(items),
+                    'primary_eligible':len(primary),
+                    'primary_abstentions':len(items)-len(primary),
+                    'primary_hits':sum(v['primary_hit'] for v in primary),
+                    'wdl_eligible':len(wdl),
+                    'wdl_abstentions':len(items)-len(wdl),
+                    'wdl_hits':sum(v['wdl_hit'] for v in wdl),
+                    'total_eligible':len(totals),
                     'total_settlements':dict(Counter(v['total_settlement'] for v in items if v['total_settlement']))}
         versions = {v['version'] for v in values}
         grouped = {ver:counts([v for v in values if v['version']==ver]) for ver in sorted(versions)}
@@ -67,5 +78,6 @@ def review(pairs, results):
                          if len(versions)<=1 else {'settled':len(values),
                          'aggregation_status':'MIXED_VERSIONS_NO_POOLED_ACCURACY','by_version':grouped})
     return {'models': summary, 'paired_rows': rows, 'pending': pending,
+            'scope': len(seen), 'finished': len(rows), 'pending_count': len(pending),
             'selection_policy': 'NO_BEST_OF_TWO_NO_RETROSPECTIVE_SWITCH',
             'formal_kpi_added': 0, 'target_attainment_proven': False}

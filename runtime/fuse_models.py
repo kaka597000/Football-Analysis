@@ -7,6 +7,7 @@ joint-score experts and never receive an invented matrix or weight.
 import argparse
 from datetime import datetime, timezone
 import json
+import math
 import re
 from pathlib import Path
 import numpy as np
@@ -22,12 +23,31 @@ def fuse(pair, *, now=None):
         raise ValueError('identical fixture, source and cutoff inputs required')
     if fixture.get('identity_verified') is not True or fixture.get('phase')!='PreMatch':
         raise ValueError('verified pre-match identity required')
+    if fixture.get('score_basis', 'regulation_90') != 'regulation_90':
+        raise ValueError('regulation-90 score basis required')
     cutoff,kickoff=aware(fixture['cutoff_at']),aware(fixture['kickoff_at'])
     if not cutoff<=now<kickoff:raise ValueError('future pre-match fixture required')
     components=[];arrays=[]
     for name,p in [('current',a),('test',b)]:
+        for field in ('status', 'recommendation_status'):
+            status = str(p.get(field, '')).upper()
+            if status.startswith(('ABSTAIN', 'REJECT', 'BLOCKED', 'ERROR', 'UNAVAILABLE', 'NOT_EXECUTED')):
+                raise ValueError('source expert refused prediction')
+        overflow = p.get('overflow', 0)
+        if isinstance(overflow, bool) or not isinstance(overflow, (int, float)) or not math.isfinite(overflow) or overflow != 0:
+            raise ValueError('unresolved overflow cannot identify exact scores')
+        # Legacy experts omit these fields; any explicit declaration must match
+        # the joint home-goals x away-goals regulation score interpretation.
+        if p.get('score_basis', 'regulation_90') != 'regulation_90':
+            raise ValueError('expert score basis mismatch')
+        if 'matrix_axes' in p and p['matrix_axes'] not in (
+                ['home_goals', 'away_goals'], {'home_goals': 0, 'away_goals': 1}):
+            raise ValueError('expert matrix axes mismatch')
+        for field in ('model_observed_at', 'model_built_at'):
+            if p.get(field) is not None and aware(p[field]) > cutoff:
+                raise ValueError('expert artifact available after cutoff')
         if not cutoff<=aware(p['generated_at'])<=now:raise ValueError('invalid expert generation time')
-        m=p.get('matrix');summary=summarize_matrix(m)
+        m=p.get('matrix');summarize_matrix(m)
         if object_sha256(m)!=p.get('matrix_hash'):raise ValueError('expert matrix hash mismatch')
         provenance=pair['execution_audit'][name]
         sha=provenance['artifact_sha256']
@@ -53,18 +73,24 @@ def fuse(pair, *, now=None):
             if qt<=query<=cutoff and 0<=(cutoff-qt).total_seconds()<=60:
                 checked=legacy.quote_check(q,fixture)
                 if checked:
-                    total={'quote':checked,'over':legacy.total_settlement(m,checked['line'],'over'),
-                           'under':legacy.total_settlement(m,checked['line'],'under')}
+                    # The legacy settlement routine assumes square support.
+                    # Pad only its input; zeros preserve every event probability.
+                    size = max(m.shape)
+                    settlement_matrix = np.pad(m, [(0, size - n) for n in m.shape])
+                    total={'quote':checked,'over':legacy.total_settlement(settlement_matrix,checked['line'],'over'),
+                           'under':legacy.total_settlement(settlement_matrix,checked['line'],'under')}
                     total_status='MATRIX_SETTLEMENT_ONLY_NOT_BETTING_EV'
             else:total_status='QUOTE_STALE_OR_TIME_CONFLICT'
     return {'version':'WCPP-UNIFIED-FUSION-REFERENCE-0.1','status':'EXPERIMENTAL_NOT_PROMOTED',
         'match_id':fixture['match_id'],'cohort':fixture['cohort'],'input':fixture,
         'generated_at':now.isoformat(),'policy':'UNTRAINED_CURRENT_TEST_EQUAL_WEIGHT',
         'components':components,'matrix':m.tolist(),'matrix_hash':object_sha256(m.tolist()),
+        'matrix_axes':['home_goals','away_goals'],'score_basis':'regulation_90','overflow':0,
         'primary':f'{primary[0]}-{primary[1]}','primary_type':'STATISTICAL_MODE_NOT_COMPREHENSIVE_PRIMARY',
         'wdl':wdl,'team_goal_analysis':summarize_matrix(m.tolist()),'total':total,'total_status':total_status,
         'expert_similarity':{'total_variation':float(np.abs(arrays[0]-arrays[1]).sum()/2),
-            'same_statistical_primary':a['primary']==b['primary']},
+            'same_statistical_primary':bool(np.unravel_index(arrays[0].argmax(), arrays[0].shape) ==
+                                             np.unravel_index(arrays[1].argmax(), arrays[1].shape))},
         'excluded_from_probability_fusion':['upset-classifiers: different target space',
             'ML-0.2 and rejected fusion/calibration candidates: not accepted',
             'untrained player/market/selector modules: no qualified joint matrix',

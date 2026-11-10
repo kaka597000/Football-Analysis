@@ -65,3 +65,31 @@ REAL_SAMPLES每条必须包含fixture（当时完整赛前证据）、cohort/kic
 2026-10-07六场竞彩：五场有6个可观察实力特征，芬超缺完整场地分层资料；所有场次首发、完整赛程、战意证据或独立身份核验不足，因此全部OBSERVE，研究冻结拒绝。基线矩阵均与原稿相同，原预测保留。真实合格上下文训练样本0，数值修正尚未启用。
 
 synthetic测试只验证程序行为，不用于训练实际模型或宣称预测准确率。
+
+### Checked training entry points (2026-11-10)
+
+`pipeline.train_context` now uses `v2/training_inputs.py` for both fitting and
+validation. This retains `prepare_samples`' fixture/source audit and normalizes
+copied timestamps to UTC before legacy string comparisons or date splits.
+
+The corresponding `v4/cli.py train-context` command dispatches through
+`v4/checked_context_learning.py`. It first executes the original freeze/hash,
+baseline-contract and source checks, then applies the shared training-input
+checks. `v4/cli.py train`, `v5/cli.py train`, and `v6/cli.py` also normalize and
+validate copied history after their existing competition-scope gate.
+
+Residual boundaries:
+
+- Direct calls to hash-locked `v2/model.py`, `v2/evidence.py`,
+  `v4/main_model.py`, `v4/context_learning.py`, `v5/weighted_model.py`, and
+  `v6/ml_model.py` retain their original behavior. New research jobs should use
+  the checked CLI/training entries; arbitrary callers are not globally patched.
+- `optimization/legacy.py` deliberately marks observation time as
+  `UNKNOWN_RETROSPECTIVE`, sorts and audits score rows, and runs isolated
+  retrospective equation replays. Passing that data through the verified-time
+  adapter would falsely conflate unknown first-known times with available
+  observations. It remains retrospective and ineligible as prospective proof.
+- The legacy core files remain byte-identical to preserve registered artifact
+  code hashes. No active weight, artifact, old forecast, or historical validation
+  claim is rewritten. These checks prevent invalid training inputs; they do not
+  establish an accuracy improvement.

@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+from training_inputs import history_inputs
 from pathlib import Path
 
 import numpy as np
@@ -51,7 +52,7 @@ def market_experiment(model,family,temp,cal,select,test):
             'max_kl':.02,'reason':'Historical quote observation times cannot be reconstructed; prospective policy remains disabled'}
 
 def run(path):
-    rows=json.loads(path.read_text());train,cal,selection,test=partitions(rows)
+    rows=history_inputs(json.loads(path.read_text()));train,cal,selection,test=partitions(rows)
     model=fit_nuisance(fit_strength(train),train);baseline=fit_baseline(train)
     candidates=[]
     for family in FAMILIES:
