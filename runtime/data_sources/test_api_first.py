@@ -5,7 +5,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from api_first import run
+from api_first import run, pointer
 
 
 class ApiFirstTests(unittest.TestCase):
@@ -118,6 +118,22 @@ class ApiFirstTests(unittest.TestCase):
             self.assertEqual(len([r for r in QuotaLedger(ledger).history()
                                   if r['phase']=='RESERVE' and r['status']=='RESERVED']),1)
             self.assertEqual(a['quota_guard'],'EXPLICIT_POLICIES_ONLY')
+
+    def test_array_pointer_rejects_python_negative_and_noncanonical_indices(self):
+        data = {'events': [{'id': 'first'}, {'id': 'last'}]}
+        for invalid in ['-1', '+1', '01', ' 1', '-', '١']:
+            self.assertIsNone(pointer(data, '/events/' + invalid + '/id'))
+        self.assertEqual(pointer(data, '/events/0/id'), 'first')
+        self.assertEqual(pointer({'01': 'valid object key'}, '/01'), 'valid object key')
+
+    def test_negative_index_cannot_satisfy_identity_check(self):
+        plan = copy.deepcopy(self.plan)
+        plan['fields'] = [self.field('lineup', 'one')]
+        plan['fields'][0]['candidates'][0]['identity_checks'] = [
+            {'pointer': '/data/lineup/-1', 'equals': 1}]
+        with tempfile.TemporaryDirectory() as folder:
+            result = self.collect(plan, folder)
+        self.assertEqual(len(result['web_gap_tasks']), 1)
 
 
 if __name__ == '__main__':

@@ -6,7 +6,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from model import aware,digest,research_predict
-from evidence import evidence_before,fit_context,validate_context
+from evidence import evidence_before
+from training_inputs import fit_context,validate_context
 
 def read(path):return json.loads(Path(path).read_text())
 

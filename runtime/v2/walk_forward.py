@@ -1,5 +1,6 @@
 """Fixed monthly expanding-window diagnostic. Does not reselect the distribution."""
 import json
+from training_inputs import history_inputs
 import math
 from pathlib import Path
 import numpy as np
@@ -8,7 +9,7 @@ from model import fit_strength,fit_nuisance,fit_baseline,get_matrix,metrics,part
 ROOT=Path(__file__).resolve().parents[2] / 'reports' / 'model-upgrade-v2'
 
 def run(path):
-    rows=json.loads(path.read_text());cohort=rows[0]['cohort']
+    rows=history_inputs(json.loads(path.read_text()));cohort=rows[0]['cohort']
     previous=json.loads((ROOT/(cohort+'-benchmark.json')).read_text())
     *_,test=partitions(rows);start=test[0]['date'];family=previous['selected_family'];temp=previous['selected_temperature']
     months=sorted({r['date'][:7] for r in test});folds=[]

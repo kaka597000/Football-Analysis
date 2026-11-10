@@ -53,3 +53,24 @@ python cli.py freeze ARTIFACT.json DRAFT.json --directory data/v2/research-freez
 ## 验证解释
 
 全部历史验证均是现在查询的历史重建，不是历史冻结回放。英超6个赛季每季380场；ESPN年度返回覆盖未获独立完整性认证。首次获知时间缺失，不能伪造。静态留出与逐月滚动对照结果均公开；滚动检查在查看静态结果后新增，不能称为全新未看过的测试。当前没有稳定Top1改善证据，所有候选DO_NOT_PROMOTE。
+
+### Training input checks (2026-11-10)
+
+The `benchmark.py`, `walk_forward.py`, and CLI `fit-context` /
+`validate-context` entry points now normalize copied observation timestamps to
+UTC before fitting or splitting. This prevents mixed timezone strings from
+selecting an earlier instant as the artifact's latest observation or assigning
+the same instant to different split days. Historical match dates are validated
+as calendar dates and sorted before fitting, including the baseline estimator.
+
+Context training also rejects mixed cohorts across the full train/validation
+scope, results observed less than 90 minutes after kickoff, invalid goal labels,
+nonfinite/nonpositive baseline rates, and nonfinite selected features. These
+checks do not certify historical first-known availability; verified sources and
+true time-isolated evaluation remain required.
+
+`training_inputs.py` is the checked entry for new training jobs. The legacy
+`model.py` and `evidence.py` modules remain byte-identical to preserve active
+artifact code hashes. Direct legacy imports do not gain these entry checks;
+use the checked training entry points. No weights, registered artifacts,
+prediction matrices, or prior freezes are modified by these changes.

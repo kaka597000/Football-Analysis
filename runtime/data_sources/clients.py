@@ -70,6 +70,28 @@ def scrub(value, secrets):
     return value
 
 
+def response_metadata(response, secrets):
+    """Retain safe diagnostics on success and failure; never retain error HTML."""
+    headers = getattr(response, 'headers', {}) or {}
+    lowered = {k.lower(): v for k, v in headers.items()}
+    return scrub({
+        'content_type': lowered.get('content-type'),
+        'cf_ray': lowered.get('cf-ray'),
+        'quota_headers': {k: v for k, v in lowered.items()
+                          if k.startswith(('x-ratelimit', 'x-requests', 'retry-after'))},
+    }, secrets)
+
+
+def authentication_status(provider, path, success):
+    # These catalog endpoints work without credentials; success does not prove
+    # that a supplied key was checked. Add new public resources explicitly.
+    if PROVIDERS[provider].get('public'):
+        return 'PUBLIC_ENDPOINT'
+    if provider == 'football-data' and path.rstrip('/') == '/competitions':
+        return 'UNVERIFIED_PUBLIC_CATALOG'
+    return 'CREDENTIAL_ACCEPTED' if success else 'UNVERIFIED'
+
+
 class NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
@@ -97,6 +119,7 @@ def fetch(provider, path=None, params=None, opener=None, credential_binding=None
     url = spec['base'] + path + ('?' + urlencode(params) if params else '')
     log = {'provider': provider, 'url': url, 'query_time': datetime.now(timezone.utc).isoformat(),
            'http_status': None, 'api_success': False, 'authenticated': False,
+           'authentication_status': 'UNVERIFIED',
            'fixture_mapping_verified': False, 'model_ingestion_performed': False}
     bindings = ([spec['env']] if 'env' in spec else []) + spec.get('aliases',[])
     if credential_binding is not None and credential_binding not in bindings:
@@ -118,24 +141,41 @@ def fetch(provider, path=None, params=None, opener=None, credential_binding=None
         with (opener or build_opener(NoRedirect()).open)(req, timeout=25) as response:
             if hasattr(response, 'geturl') and response.geturl().split('?')[0] != url.split('?')[0]:
                 return {'call': dict(log, error_code='UNEXPECTED_REDIRECT'), 'response': None}
+            log['http_status'] = response.status
+            log.update(response_metadata(response, all_keys))
             raw = response.read(20_000_001)
             if len(raw) > 20_000_000: raise ValueError('response too large')
             data = scrub(json.loads(raw), all_keys)
             if not isinstance(data, (dict, list)):
                 raise ValueError('structured provider response required')
-            log['http_status'] = response.status
-            headers = getattr(response, 'headers', {})
-            log['quota_headers'] = scrub({k: v for k, v in headers.items()
-                                    if k.lower().startswith(('x-ratelimit', 'x-requests', 'retry-after'))}, all_keys)
+
         errors = (data.get('errors') or data.get('error') or data.get('errorCode')) if isinstance(data, dict) else None
         if provider == '5dollar' and (not isinstance(data, dict) or data.get('success') != 1):
             errors = True
-        log.update(api_success=not bool(errors), authenticated=not bool(errors) and not spec.get('public', False))
+        auth = authentication_status(provider, path, not bool(errors))
+        log.update(api_success=not bool(errors), authenticated=auth == 'CREDENTIAL_ACCEPTED',
+                   authentication_status=auth)
         if errors: log['error_code'] = 'PROVIDER_ERROR'
         log['response_sha256'] = hashlib.sha256(json.dumps(data, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
         return {'call': log, 'response': data}
     except HTTPError as exc:
         log.update(http_status=exc.code, error_code='HTTP_ERROR')
+        log.update(response_metadata(exc, all_keys))
+        # Error pages may echo credentials or personal data. Persist only a
+        # coarse format classifier; no body, URL, or exception string.
+        try:
+            raw = exc.read(65536)
+            try:
+                json.loads(raw)
+                log['response_format'] = 'JSON'
+            except (ValueError, TypeError):
+                log['response_format'] = ('HTML' if b'<html' in raw.lower()
+                                           or 'text/html' in (log['content_type'] or '').lower()
+                                           else 'OTHER')
+        except (OSError, ValueError, AttributeError):
+            log['response_format'] = 'UNKNOWN'
+        finally:
+            exc.close()
     except (URLError, TimeoutError, OSError): log['error_code'] = 'NETWORK_ERROR'
     except (ValueError, TypeError, AttributeError): log['error_code'] = 'INVALID_RESPONSE'
     return {'call': log, 'response': None}

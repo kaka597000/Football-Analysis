@@ -98,7 +98,7 @@ class Tests(unittest.TestCase):
         for provider,binding,body in cases:
             with self.subTest(provider=provider),patch.dict(os.environ,{binding:'CURRENT_ALIAS_TEST_ONLY'},clear=True):
                 r=fetch(provider,opener=lambda *a,**k:Response(body))
-                self.assertTrue(r['call']['authenticated'])
+                self.assertEqual(r['call']['authenticated'], provider != 'football-data')
                 self.assertEqual(r['call']['credential_binding_name'],binding)
                 self.assertNotIn('CURRENT_ALIAS_TEST_ONLY',json.dumps(r))
 
@@ -142,6 +142,46 @@ class Tests(unittest.TestCase):
         self.assertIsNone(NoRedirect().redirect_request(None,None,302,'',{},'https://evil.test'))
         with patch.dict(os.environ,{'WCPP_API_FOOTBALL_KEY':'TEST_ONLY'}):
             with self.assertRaises(ValueError):fetch('api-football',params={'q':'TEST_ONLY'})
+
+    def test_public_catalog_does_not_certify_key_authentication(self):
+        with patch.dict(os.environ, {'footballdata_org': 'SYNTHETIC_ONLY'}, clear=True):
+            catalog = fetch('football-data', opener=lambda *a, **k: Response({'competitions': []}))
+            matches = fetch('football-data', '/matches', opener=lambda *a, **k: Response({'matches': []}))
+        self.assertTrue(catalog['call']['api_success'])
+        self.assertFalse(catalog['call']['authenticated'])
+        self.assertEqual(catalog['call']['authentication_status'], 'UNVERIFIED_PUBLIC_CATALOG')
+        self.assertTrue(matches['call']['authenticated'])
+
+    def test_html_denial_retains_safe_diagnostics_without_body_or_secret(self):
+        key = 'SYNTHETIC_EDGE_SECRET'
+        def denied(*a, **k):
+            raise HTTPError('https://example.test/?apiKey=' + key, 403, key,
+                            {'Content-Type': 'text/html', 'CF-Ray': 'synthetic-ray',
+                             'Retry-After': '60', 'Set-Cookie': key},
+                            io.BytesIO(('<html>blocked ' + key + '</html>').encode()))
+        with patch.dict(os.environ, {'apifootball': key}, clear=True):
+            result = fetch('api-football', opener=denied)
+        call = result['call']
+        self.assertEqual(call['http_status'], 403)
+        self.assertEqual(call['content_type'], 'text/html')
+        self.assertEqual(call['cf_ray'], 'synthetic-ray')
+        self.assertEqual(call['quota_headers']['retry-after'], '60')
+        self.assertEqual(call['response_format'], 'HTML')
+        self.assertEqual(call['authentication_status'], 'UNVERIFIED')
+        self.assertIsNone(result['response'])
+        self.assertNotIn(key, json.dumps(result))
+        self.assertNotIn('Set-Cookie', json.dumps(result))
+
+    def test_invalid_json_preserves_http_status_for_diagnosis(self):
+        response = io.BytesIO(b'<html>maintenance</html>')
+        response.status = 200
+        response.headers = {'Content-Type': 'text/html'}
+        with patch.dict(os.environ, {}, clear=True):
+            result = fetch('espn', opener=lambda *a, **k: response)
+        self.assertEqual(result['call']['http_status'], 200)
+        self.assertEqual(result['call']['content_type'], 'text/html')
+        self.assertEqual(result['call']['error_code'], 'INVALID_RESPONSE')
+        self.assertFalse(result['call']['api_success'])
 
 
 if __name__=='__main__':unittest.main()
