@@ -96,7 +96,10 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=N
                     return {'freeze_id': prior['freeze_id'], 'recorded_at': prior['recorded_at'],
                             'path': str(path), 'sha256': prior['record_sha256'],
                             'evaluation_slot': prior['evaluation_slot']}
-        if stage == 'prematch' and now >= kickoff:
+        # Lock contention and chain verification can cross kickoff. Do not use
+        # the time captured before waiting as the issued record's timestamp.
+        now = datetime.now(ZoneInfo('Asia/Shanghai'))
+        if cutoff > now or (stage == 'prematch' and now >= kickoff):
             raise ValueError('invalid cutoff or late prematch freeze')
         version = len(records) + 1
         record = dict(scope, schema='WCPP-ISSUED-FREEZE-1',
@@ -117,6 +120,10 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=N
         try:
             with os.fdopen(fd, 'wb') as handle:
                 handle.write(encoded(record)); handle.flush(); os.fsync(handle.fileno())
+            # Large payload serialization/fsync may also cross the boundary.
+            commit_time = datetime.now(ZoneInfo('Asia/Shanghai'))
+            if cutoff > commit_time or (stage == 'prematch' and commit_time >= kickoff):
+                raise ValueError('invalid cutoff or late prematch freeze')
             os.link(temporary, target)
             if os.name != 'nt':
                 directory_fd = os.open(folder, os.O_RDONLY)

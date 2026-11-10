@@ -54,6 +54,31 @@ class FreezeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 save({}, fixture, stage='prematch', track='test', root=root)
 
+    def test_waiting_or_serialization_past_kickoff_cannot_freeze(self):
+        fixture = self.fixture()
+        kickoff = datetime.fromisoformat(fixture['kickoff_at'])
+        early, late = kickoff-timedelta(seconds=1), kickoff+timedelta(seconds=1)
+        for times in ([early, late], [early, early, late]):
+            with self.subTest(times=times), tempfile.TemporaryDirectory() as root:
+                with patch('analysis_freeze.datetime') as clock:
+                    clock.now.side_effect = times
+                    clock.fromisoformat.side_effect = datetime.fromisoformat
+                    with self.assertRaisesRegex(ValueError, 'late prematch'):
+                        save({}, fixture, stage='prematch', track='test', root=root)
+                self.assertEqual(list(Path(root).glob('*/*.json')), [])
+                self.assertEqual(list(Path(root).glob('*/.pending-*')), [])
+
+    def test_existing_idempotent_freeze_can_resume_after_kickoff(self):
+        with tempfile.TemporaryDirectory() as root:
+            fixture = self.fixture()
+            first = save({}, fixture, stage='prematch', track='test', root=root, idempotency_key='same')
+            with patch('analysis_freeze.datetime') as clock:
+                clock.now.return_value = datetime.fromisoformat(fixture['kickoff_at'])+timedelta(hours=1)
+                clock.fromisoformat.side_effect = datetime.fromisoformat
+                resumed = save({}, fixture, stage='prematch', track='test', root=root, idempotency_key='same')
+            self.assertEqual(resumed, first)
+            self.assertEqual(len(list(Path(root).glob('*/*.json'))), 1)
+
     def test_default_cli_saves_exact_pair_before_output(self):
         sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
         import predict_active
