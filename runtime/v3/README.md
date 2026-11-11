@@ -17,7 +17,7 @@
 
 ## 运行
 
-环境已具备Python、numpy和scipy，依赖沿用../v2/requirements.txt，无新增服务或密钥要求。
+环境已具备Python、numpy和scipy，依赖统一使用仓库根目录 requirements.txt，无新增服务或密钥要求。
 
 ```bash
 OPENBLAS_NUM_THREADS=1 python -m unittest discover -s runtime/v3 -p 'test_*.py' -v

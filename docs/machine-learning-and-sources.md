@@ -11,7 +11,7 @@
 安装与验证：
 
 ```bash
-python -m pip install -r requirements.txt -r runtime/v6/requirements.txt
+python -m pip install -r requirements.txt -r requirements-test.txt
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -m unittest discover -s runtime/v6 -p 'test_*.py'
 python -m unittest discover -s runtime/data_sources -p 'test_*.py'
 ```
