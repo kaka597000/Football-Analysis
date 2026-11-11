@@ -1,0 +1,6 @@
+interface:
+  display_name: "context-wcpp-odds-evidence"
+  short_description: "在WCPP项目核查足球赔率快照、同机构盘口水位变化及盘口证据质量时使用。"
+  default_prompt: "核查这批比赛的赔率变化，区分可用报价、陈旧数据和缺项。"
+policy:
+  allow_implicit_invocation: true
