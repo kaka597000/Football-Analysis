@@ -32,3 +32,7 @@ python -m runtime.jleague_cup.cli predict --artifact /absolute/current-artifact.
 数据库、模型目录和输出拒绝覆盖。manifest中`sources`须为真实缓存原文的raw_path/raw_sha256/source_url/query_time；仅支持核准的BetExplorer日联杯地址。研究fixture必须匹配工件的competition、cohort、era、stage、tie_format和leg，显式成年男子，不能含目标比分；日期必须在训练截止之后。程序不会将这种离线研究诊断称为已核验的赛前发布。
 
 正式赛事分析继续按用户核心需求核查近期过程、伤停、真实盘口、赛制及双回合总比分，按当前/test/综合轨规则独立保存。缺少通过验收的数值工件时如实保留缺口，不能使用其他赛事模型补位。本次不新建定时任务、不发布环境、不宣称准确率提升。
+
+## 2026-11-11八强补齐
+
+已新增机制对齐的八强首/次回合独立候选与扩展库存，旧edition工件保留。规则边界、训练与验证结果、调用及未来冻结见[八强双回合研究](jleague-cup-quarterfinal-research.md)。候选可运行不等于已通过活动模型验收。
