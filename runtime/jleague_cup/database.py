@@ -51,24 +51,25 @@ def build(manifest,out):
                  'gender':'men','age':'senior','score_basis':'regulation_90','neutral':None}
             row.update(home=team(row['home_name']),away=team(row['away_name']))
             if sid is not None:row['evidence']=captured[sid]
-            for d in details.get(url.rstrip('/'),[]):
-                row['period_evidence']=d
-                try:verify_row(row);break
-                except (ValueError,TypeError,KeyError,OSError):continue
-            try:
-                f=verify_row(row);row.update(f);row['verified']=True;reason='VERIFIED_REGULATION_AND_PHASE;VENUE_UNKNOWN'
-            except (ValueError,TypeError,KeyError,OSError) as e:
-                row['verified']=False;reason=str(e);issues.append((url,reason,row))
-            row['reason']=reason;candidates.append((row,sid))
+            period_sources=details.get(url.rstrip('/'),[]) if fact.get('home_90') is None else []
+            for detail in period_sources or [None]:
+                variant=dict(row)
+                if detail is not None:variant['period_evidence']=detail
+                try:
+                    f=verify_row(variant);variant.update(f);variant['verified']=True;reason='VERIFIED_REGULATION_AND_PHASE;VENUE_UNKNOWN'
+                except (ValueError,TypeError,KeyError,OSError) as e:
+                    variant['verified']=False;reason=str(e);issues.append((url,reason,variant))
+                variant['reason']=reason;candidates.append((variant,sid))
         good=[(r,s) for r,s in candidates if r['verified']]
-        identities={(r['date'],r['home_name'],r['away_name'],r['home_90'],r['away_90'],r['stage'],r['leg']) for r,_ in good}
+        identities={(r['date'],r['home_name'],r['away_name'],r['home_90'],r['away_90'],
+                     r.get('home_et'),r.get('away_et'),r.get('home_pen'),r.get('away_pen'),r['stage'],r['leg']) for r,_ in good}
         conflict=len(identities)>1
         selected,sid=(good or candidates)[0]
         valid=selected['verified'] and not conflict
         if conflict:issues.append((url,'SOURCE_RESULT_OR_PHASE_CONFLICT',selected))
         row={**selected,'era':'edition-'+str(selected['season']),'research_eligible':valid,'neutral':None}
         if not valid:
-            row.update(home_90=None,away_90=None)
+            row.update(home_90=None,away_90=None,home_et=None,away_et=None,home_pen=None,away_pen=None)
             row['reason']='SOURCE_RESULT_OR_PHASE_CONFLICT' if conflict else selected['reason']
         for side in ('home','away'):c.execute('INSERT OR IGNORE INTO teams VALUES(?,?)',(row[side],row[side+'_name']))
         c.execute('INSERT INTO matches VALUES('+','.join('?' for _ in range(22))+')',(

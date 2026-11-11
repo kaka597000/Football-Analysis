@@ -53,6 +53,22 @@ class CupTests(unittest.TestCase):
         r=e.periods(s,url);self.assertEqual((r['home_90'],r['away_90'],r['home_et']),(1,1,1))
         with self.assertRaises(ValueError):e.periods(s.replace('2:1</span>','3:1</span>'),url)
 
+    def test_conflicting_period_sources_cannot_select_labels_by_input_order(self):
+        with tempfile.TemporaryDirectory() as d:
+            listing,row=self.capture(d,score='2:1 AfE',heading='Final',year=2024)
+            variants=[]
+            for i,partial in enumerate(('(1:0, 0:1, 1:0)','(0:0, 0:0, 2:1)')):
+                text='<link rel="canonical" href="'+row['event_url']+'"><input id="isFinished" value="1"><span id="js-eventstage">After Extra Time</span><span id="js-partial">'+partial+'</span><span id="js-score">2:1</span>'
+                path=Path(d)/('detail'+str(i)+'.html');path.write_text(text)
+                variants.append({'raw_path':str(path),'raw_sha256':e.sha(path),'source_url':row['event_url'],'query_time':'2026-10-10T00:00:00Z'})
+            for i,order in enumerate((variants,list(reversed(variants)))):
+                path=Path(d)/('cup'+str(i)+'.sqlite');db.build({'sources':[listing]+order},path)
+                self.assertEqual(db.rows(path),[])
+                with db.connect(path) as c:
+                    record=c.execute('SELECT research_eligible,home_90,away_90,reason FROM matches').fetchone()
+                    self.assertEqual(tuple(record),(0,None,None,'SOURCE_RESULT_OR_PHASE_CONFLICT'))
+                    self.assertEqual(c.execute('SELECT COUNT(*) FROM observations').fetchone()[0],2)
+
     def test_unknown_venue_has_own_indicator_and_real_models_fit(self):
         rows=[]
         for i in range(30):
