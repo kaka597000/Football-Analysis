@@ -1,0 +1,6 @@
+interface:
+  display_name: "context-wcpp-review-walk-forward"
+  short_description: "在WCPP项目结算已冻结足球预测、复盘失误或设计滚动时间验证时使用。"
+  default_prompt: "复盘已冻结比赛，分别统计各轨结果并给出下一轮验证决定。"
+policy:
+  allow_implicit_invocation: true

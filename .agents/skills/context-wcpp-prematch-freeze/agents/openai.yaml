@@ -1,0 +1,6 @@
+interface:
+  display_name: "context-wcpp-prematch-freeze"
+  short_description: "在WCPP项目进行足球赛前分析、独立双模型调用、综合判断和发布前冻结时使用。"
+  default_prompt: "分析下一批比赛，核查模型适用性并冻结赛前结论。"
+policy:
+  allow_implicit_invocation: true

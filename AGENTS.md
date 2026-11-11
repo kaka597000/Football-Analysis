@@ -40,3 +40,7 @@
 - **2026-11-02最新分析偏好**：重点关注同机构、同盘线、真实时点的水位变化；降低阵容依赖，未公布真实首发不默认阻断分析。使用可靠伤停及轮换情景，明确未知；重大未解决人员风险仍待定。市场仅为证据，不虚设权重、不把价格当资金流；详见docs/market-and-lineup-policy.md。此条覆盖旧的“必须官方首发才能分析”的笼统要求，旧冻结不回改。
 
 - **2026-11-02 V2 Test授权**：按用户上传方案分阶段执行，先实际架构与数据审计，再独立专家/动态融合/校准/选择器。当前/test保持对照；无first-known历史不能认证as-of回测。概率质量与校准为重要晋级约束，完整Primary、WDL、真实线大小球与覆盖率分别报告，不以70%作全量承诺。执行说明docs/v2-roadmap.md。
+
+## 足球项目Skills与存储入口（2026-11-11）
+
+执行适用任务时读取对应项目技能：赛前分析/冻结用[context-wcpp-prematch-freeze](.agents/skills/context-wcpp-prematch-freeze/SKILL.md)，赛后复盘/滚动验证用[context-wcpp-review-walk-forward](.agents/skills/context-wcpp-review-walk-forward/SKILL.md)，赔率快照/水位核查用[context-wcpp-odds-evidence](.agents/skills/context-wcpp-odds-evidence/SKILL.md)。现有权威规则优先，技能复用现有实现，不另定义指标。GitHub源码及数据仓库继续作为权威版本，Drive只作报告/表格副本，Sheets只展示Python结果，Notion暂缓；详见[存储分工](docs/football-storage-and-skills.md)。未获得实际Drive工具及上传回执不得宣称已上传。模型可用性须实测加载而非只看注册表，最近核查见[日职联与欧国联](docs/j1-nations-model-readiness-20261111.md)。
