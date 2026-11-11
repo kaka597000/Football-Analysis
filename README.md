@@ -73,4 +73,4 @@ runtime/wcpp.py、v2/v3等保留为历史实现和测试依赖，不能把它们
 
 关键说明：[接口优先采集](docs/api-first-collection.md)、[双模型流程](docs/dual-model-workflow.md)、[冻结规范](docs/analysis-freeze-policy.md)、[比分分布审计](docs/score-distribution-adjustment.md)、[域外联赛研究轨](docs/asia-leagues-ood-research-tracks.md)、[变更记录](CHANGELOG.md)。
 
-正式新增分析范围已扩展为[19项赛事白名单](docs/analysis-scope-18.md)，配置见 configs/analysis-scope.json；14项有活动路由、5项明确缺口。新增[欧国联独立数据库](docs/nations-league-database.md)，纳入范围不代表模型已训练。注册表仍保留历史19队列。
+正式新增分析范围已扩展为[20项赛事白名单](docs/analysis-scope-18.md)，配置见 configs/analysis-scope.json；14项有活动路由、6项明确缺口。新增[欧国联独立数据库](docs/nations-league-database.md)与[日联杯数据及研究工件](docs/jleague-cup.md)，范围准入、研究训练和活动模型验收分别登记。注册表仍保留历史19队列。

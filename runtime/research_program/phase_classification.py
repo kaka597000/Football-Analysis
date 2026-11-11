@@ -11,6 +11,9 @@ PHASES = {
 
 def classify(row):
     code = row.get('cohort', '').split(':')[0]
+    if code == 'jpn.league_cup' or row.get('competition') == 'jpn.league_cup':
+        from jleague_cup.evidence import classify as cup_classify
+        return cup_classify(row)
     if code == 'uefa.nations' or row.get('competition') == 'uefa.nations':
         from research_program.nations_phase import classify as nations_classify
         return nations_classify(row)
