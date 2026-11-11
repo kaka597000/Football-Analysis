@@ -1,6 +1,6 @@
 {
   "schema": "WCPP-ANALYSIS-SCOPE-1",
-  "effective_date": "2026-11-10",
+  "effective_date": "2026-11-11",
   "gender": "men",
   "age": "senior",
   "score_basis": "regulation_90",
@@ -119,7 +119,13 @@
       "name": "欧国联",
       "requires_phase_identity": true,
       "active_route_gap": true
+    },
+    {
+      "code": "jpn.league_cup",
+      "name": "日本联赛杯（日联杯）",
+      "requires_phase_identity": true,
+      "active_route_gap": true
     }
   ],
-  "expected_competition_count": 19
+  "expected_competition_count": 20
 }

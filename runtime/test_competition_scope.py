@@ -5,9 +5,9 @@ from unittest.mock import patch
 from competition_scope import policy,require,inventory,training_rows
 class ScopeTests(unittest.TestCase):
  def test_exact_scope_and_pending_routes(self):
-  self.assertEqual(len(policy()['competitions']),19)
-  self.assertEqual(policy()['expected_competition_count'],19)
-  for code in ('swe.1','fin.1','uefa.europa','uefa.europa.conf','fifa.world','uefa.nations'):
+  self.assertEqual(len(policy()['competitions']),20)
+  self.assertEqual(policy()['expected_competition_count'],20)
+  for code in ('swe.1','fin.1','uefa.europa','uefa.europa.conf','fifa.world','uefa.nations','jpn.league_cup'):
    require({'cohort':code})
  def test_retired_wrong_identity_and_afc2_rejected(self):
   for fixture in [{'cohort':k} for k in ('bra.1','eng.2','ksa.1','mex.1','por.1','afc.cup:CHAMPIONS_TWO:group_stage')]+[{'cohort':'eng.1','gender':'women'},{'cohort':'eng.1','age':'U21'},{'cohort':'eng.1','competition':'bra.1'},{'cohort':'fifa.world','stage':'qualifying'},{'cohort':'eng.1','score_basis':'extra_time'}]:
@@ -27,10 +27,10 @@ class ScopeTests(unittest.TestCase):
    self.assertFalse(permitted(item))
  def test_original_identities_preserved_and_nations_route_pending(self):
   expected={'eng.1','esp.1','ger.1','ita.1','fra.1','jpn.1','kor.1','aus.1','usa.1','fin.1','nor.1','swe.1','ned.1','uefa.champions','uefa.europa','uefa.europa.conf','afc.champions','fifa.world'}
-  rows=policy()['competitions'];self.assertEqual({r['code'] for r in rows}-{ 'uefa.nations'},expected)
+  rows=policy()['competitions'];self.assertEqual({r['code'] for r in rows}-{'uefa.nations','jpn.league_cup'},expected)
   nations=next(r for r in rows if r['code']=='uefa.nations')
   self.assertTrue(nations['active_route_gap']);self.assertTrue(nations['requires_phase_identity'])
-  report=inventory({'models':{'eng.1':{}}});self.assertEqual(report['scope_count'],19)
+  report=inventory({'models':{'eng.1':{}}});self.assertEqual(report['scope_count'],20)
   self.assertIn('uefa.nations',report['missing_competitions'])
   for stage in ('friendly','qualifying','qualification'):
    with self.assertRaises(ValueError):require({'cohort':'uefa.nations','stage':stage})
