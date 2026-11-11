@@ -1,0 +1,93 @@
+{
+  "schema": "ROLLING-STATE-SHADOW-REBUILT-DELIVERY-1",
+  "rebuilt_at_beijing": "2026-11-11T08:33:55.993090+08:00",
+  "source_base": "20467d2e2e9adec6c98ada7520926b5518e65b9e",
+  "data_commit": "b106c810a1debe6e47646131a2beb10bf730091b",
+  "old_local_commit_unavailable": "14b94f7693bab43120e4729e54814cc87bb46be4",
+  "recovery_method": "RECONSTRUCTED_SOURCE_FROM_RETAINED_IMPLEMENTATION_AND_REVIEW_RECORDS; REAL_DATA_REDOWNLOADED_AND_RERUN",
+  "scope_status": "OBSERVED_CAPTURE_SCOPE_NOT_FULL_OFFICIAL_SCHEDULE_CERTIFICATION",
+  "origin_at": "2026-11-05T00:00:00+00:00",
+  "evaluation_at": "2026-11-10T16:00:00+00:00",
+  "cutoff_policy": "Fixed daily UTC clock: 00:00:00; independent of future fixture captures.",
+  "scope_n": 16,
+  "paired_scored_n": 3,
+  "fixed": {
+    "N_pred": 3,
+    "N_abstain": 13,
+    "hits": 0,
+    "top1_rate": 0.0,
+    "wdl_hit": 0.0,
+    "coverage": 0.1875,
+    "score_log_loss": 2.668074864062813,
+    "wdl_brier": 0.7606736622354363,
+    "total_bias": 1.4661102085645237
+  },
+  "rolling": {
+    "N_pred": 3,
+    "N_abstain": 13,
+    "hits": 0,
+    "top1_rate": 0.0,
+    "wdl_hit": 0.0,
+    "coverage": 0.1875,
+    "score_log_loss": 2.6775782794134044,
+    "wdl_brier": 0.7694292632767811,
+    "total_bias": 1.4692093574751006
+  },
+  "net_hits": 0,
+  "week_block_ci": {
+    "method": "ISO_WEEK_BLOCK_PERCENTILE_BOOTSTRAP",
+    "level": 0.95,
+    "n_blocks": 1,
+    "replicates": 2000,
+    "seed": 20261015,
+    "metrics": {},
+    "standard_errors": {},
+    "status": "INSUFFICIENT_WEEK_BLOCKS"
+  },
+  "quarantined_results": [
+    {
+      "match_id": "espn:697148",
+      "reason": "RAW_SOURCE_REGULATION_LABEL_CONFLICT"
+    },
+    {
+      "match_id": "espn:697149",
+      "reason": "RAW_SOURCE_REGULATION_LABEL_CONFLICT"
+    }
+  ],
+  "verified_result_count": 578,
+  "source_files": {
+    "requests.jsonl": "019b25aed3a6988954908ce1a125e1f25a7f38afaf05b61cf5e6b3247ac95f4c",
+    "normalized-results.jsonl": "97fa429c6a08b7e0f2f198d76173019b2dc085bc5b1f9c00d4cfd72efd60f1a7"
+  },
+  "artifact_hashes": {
+    "input.json": "3445adf9efeb81d26507f7615a4a5ebb9dedc76dfbe02eccab0ecfe331fad6e6",
+    "input-audit.json": "5bdd6efdab07cc814b68f55996a5a7267c818ca9c8de29cccb421ced1e0c5b09",
+    "replay.json": "54ab2849a12cd8df0c8d70bd5ee088ead8cdcc4c8227a36c644c24b3996f55dc",
+    "reconstruction-verification.json": "7aaa3dfd9acf07c7d3f978f1a957f27d3e8f2583c47fcea120585d0f2667dd8c"
+  },
+  "reconstruction_verification": {
+    "real_input_permutation_invariant": true,
+    "prior_report_canonical_sha256": "bbc693e974af12617d925fab9acc5887db0da5d93ac27598d1f276e28166e892",
+    "rebuilt_report_canonical_sha256": "bbc693e974af12617d925fab9acc5887db0da5d93ac27598d1f276e28166e892",
+    "exact_previous_report_reproduction": true
+  },
+  "materialization": {
+    "data_commit": "b106c810a1debe6e47646131a2beb10bf730091b",
+    "reference_files": 624,
+    "verified_files": 624,
+    "failures": []
+  },
+  "tests": {
+    "new_tests_passed": 22,
+    "aggregate_tests_run": 672,
+    "aggregate_external_asset_skips": 16,
+    "aggregate_failures": 0,
+    "aggregate_suites": 23,
+    "private_integration": "NOT_RUN_EXTERNAL_RUNTIME_ASSETS_NOT_RESTORED"
+  },
+  "review": "Independent reconstruction review found no blocker; all three previous fixes retained",
+  "active_changed": false,
+  "automatic_promotion": false,
+  "formal_validation": false,
+  "publication": "LOCAL_COMMIT_FOR_PARENT_INTEGRATION; NO_STANDALONE_PUSH"
+}
