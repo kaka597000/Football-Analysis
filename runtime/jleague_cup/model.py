@@ -108,8 +108,9 @@ def predict(path,fixture):
         if fixture.get(k)!=artifact.get(k):raise ValueError('exact edition/phase/leg candidate required')
     if fixture.get('competition')!='jpn.league_cup' or fixture.get('gender') not in ('men','male') or fixture.get('age')!='senior':raise ValueError('explicit senior-men League Cup fixture required')
     if any(k in fixture for k in ('home_goals','away_goals','actual','result')):raise ValueError('target labels prohibited')
+    datetime.strptime(fixture['date'],'%Y-%m-%d')
     if fixture['date']<=artifact['core']['fit_end']:raise ValueError('target before training end')
-    if fixture.get('neutral') not in (True,False,None):raise ValueError('three-state venue required')
+    if fixture.get('neutral') is not None and type(fixture['neutral']) is not bool:raise ValueError('three-state venue required')
     m,mu=distribution(artifact['core'],fixture)
     mode=[int(v) for v in np.unravel_index(m.argmax(),m.shape)]
     return {'version':artifact['version'],'status':'RESEARCH_DIAGNOSTIC_NOT_VERIFIED_PREMATCH',

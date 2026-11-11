@@ -64,5 +64,19 @@ class CupTests(unittest.TestCase):
             fitted=model.fit(rows,role);m,_=model.distribution(fitted,rows[-1]);self.assertAlmostEqual(float(m.sum()),1.)
         self.assertEqual(rows,original)
 
+    def test_research_loader_rejects_bad_date_numeric_venue_and_wrong_edition(self):
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);dep=root/'dependency.json';dep.write_text('{}')
+            scope={'cohort':'jpn.league_cup:edition-2025:round-of-128:single:0','era':'edition-2025',
+                   'stage':'round-of-128','tie_format':'single','leg':None}
+            artifact={**scope,'schema':'WCPP-JCUP-POISSON-1','version':'SYNTHETIC_TEST',
+                      'core':{'teams':[],'coefficients':[0.,0.,0.],'fit_end':'2025-01-01'}}
+            for k in ('protocol','dataset','engine'):artifact[k+'_path']=str(dep);artifact[k+'_sha256']=e.sha(dep)
+            path=root/'artifact.json';path.write_text(json.dumps(artifact))
+            f={**scope,'competition':'jpn.league_cup','gender':'men','age':'senior','date':'2025-02-01','neutral':None,'home':'a','away':'b'}
+            self.assertFalse(model.predict(path,f)['formal_kpi_eligible'])
+            for change in ({'neutral':0},{'date':'tomorrow'},{'era':'edition-2026'},{'home_goals':1}):
+                with self.subTest(change=change),self.assertRaises(ValueError):model.predict(path,{**f,**change})
+
 
 if __name__=='__main__':unittest.main()
