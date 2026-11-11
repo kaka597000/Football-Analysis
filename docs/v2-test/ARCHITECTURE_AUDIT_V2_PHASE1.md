@@ -16,7 +16,7 @@ python runtime/predict_active.py FIXTURE.json \
 
 CLI 在 `run()` 之后调用 `research.analysis_freeze.save`。`run()` 本身不冻结。`--stage live` 进不到滚球数值：各引擎要求 `cutoff < kickoff` 且 `kickoff > now`（`predict_active.py` 不单独放宽；`v4/main_model.py` `predict`、`v6/ml_model.py` `predict`、`active_route_engines._prematch_clock`）。开赛后再跑默认入口会在出矩阵前失败。冻结函数自己允许 `stage=live`，但默认 CLI 先调用 `run()`。
 
-`runtime/v4/cli.py`、`runtime/wcpp.py`、`models/main-v1/registry.json`（入口仍写 `runtime/v4/cli.py`，版本 `WCPP-MAIN-1.0`）不是 README 规定的默认入口。`docs/project-state.md` 里的 TFA / MPF / Selector 4.1 / Four-State / 动态 λ 链是目标描述，默认 `run()` 没有这些调用。
+`runtime/v4/cli.py`、`runtime/wcpp.py`、`models/main-v1/registry.json`（入口仍写 `runtime/v4/cli.py`，版本 `WCPP-MAIN-1.0`）不是 README 规定的默认入口。[原始交接正文](../archive/WCPP_统一主文档_2026-10-06_分享正文原样.md)里的 TFA / MPF / Selector 4.1 / Four-State / 动态 λ 链是目标描述，默认 `run()` 没有这些调用。
 
 ## 2. 活路径调用图
 

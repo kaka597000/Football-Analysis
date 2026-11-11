@@ -1,4 +1,4 @@
--r runtime/v6/requirements.txt
+lightgbm==4.6.0
 scikit-learn==1.8.0
 xgboost-cpu==3.4.1
 catboost==1.2.10

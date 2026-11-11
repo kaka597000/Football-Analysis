@@ -1,18 +1,12 @@
 # Football-Analysis · WCPP
 
-当前状态以 [CURRENT_STATE.md](CURRENT_STATE.md) 为导航；架构见 [ARCHITECTURE.md](ARCHITECTURE.md)，操作见 [OPERATIONS.md](OPERATIONS.md)。以下历史队列数量以现场注册表和新基线为准。
+足球赛前分析与可复现研究。当前模型/test独立运行，综合人工判断另轨保存；所有发布分析追加冻结，首次版本与修订分别评价。
 
-项目长期目标：持续优化模型代码，深入研究并验证足球分析方法，提高未来冻结样本的第一推荐精确比分、胜平负及实际盘口大小球命中率。以Primary Top1为最高指标，目标与验证规则见[项目目标](docs/project-goals.md)和[机器可读配置](project-goals.json)。
+[当前状态](CURRENT_STATE.md) · [模型与代码用途](models/README.md) · [架构](ARCHITECTURE.md) · [运行](OPERATIONS.md)
 
-足球赛前分析与可复现研究：当前模型/test模型独立并行，保留比分矩阵、唯一Primary、胜平负及实际盘口大小球。综合人工判断另轨保存，全部发布分析追加冻结，复盘不事后择优。
+## 运行
 
-当前说明更新于2026-10-29。唯一最高KPI是未来真实冻结Primary精确比分Top1，尚未证明达到70%；工程重构和训练完成不等于预测改善。原Champion V21.5不是目前恢复运行的模型。
-
-## 运行入口
-
-需要统一融合输出时，使用[当前/test融合入口](docs/unified-model-fusion.md)：`python runtime/fuse_models.py fixture.json --out NEW.json`。它保留两模型并追加独立融合参考；当前50/50为未训练研究基准，不能称已晋级的完整V2。
-
-先阅读[用户需求](docs/user-primary-score-requirements.md)与[执行规则](AGENTS.md)。默认入口读取外部活动注册表，目前为WCPP-DUAL-5，登记21个赛事队列。各队列实际引擎及当前/test工件不同，以注册表和[本次身份摘要](manifests/runtime-assets-20261029-queue-supplement.json)为准。
+先阅读 [执行规则](AGENTS.md) 和 [用户需求](docs/user-primary-score-requirements.md)。活动版本和工件路径读取外部注册表；克隆源码不能恢复完整运行资产。未知队列、工件哈希不符或身份不合格时不得静默换模型。
 
 ```bash
 python runtime/data_sources/cli.py --plan batch-plan.json \
@@ -22,16 +16,13 @@ python runtime/predict_active.py fixture.json \
   --out /workspace/WCPP/outputs/new-paired-prediction.json
 ```
 
-这些命令需要真实、已核验的输入及外部模型资产，仓库不提供伪造的生产参数或比赛ID。
-采集入口先适用API/缓存，再把缺项交Luna查网页；证据核验后才进入预测。
-预测CLI自动追加保存双模型冻结；程序化run()只返回数值，不等于已冻结。
-未知队列、工件哈希不符或不合格身份不得静默换模型。
+输入必须是真实、已核验的比赛。采集先适用API/缓存，再补网页缺项。预测CLI自动保存双模型冻结；程序化 `run()` 只计算。输出使用新路径，恢复失败交付见运行文档。
 
-赛事等级、男女、年龄、赛制、90分钟口径先区分；近期状态、对手强度、xG/xGA、战意、阵容伤停、休息旅行及盘口分别核查。缺数据时明确缺项，未训练模块不造权重。TOP3按规范冻结，不足三场不强凑。
+如需独立融合参考，见[融合入口](docs/unified-model-fusion.md)。当前等权融合为未训练研究基准，不替换两模型或综合判断。
 
 ## 安装与测试
 
-Python 3.12，测试依赖：
+Python 3.12；基础和测试依赖统一在仓库根目录维护：
 
 ```bash
 python -m pip install -r requirements.txt -r requirements-test.txt
@@ -39,40 +30,16 @@ python scripts/check_repository.py
 python scripts/run_tests.py
 ```
 
-所有测试目录独立进程运行，避免同名模块冲突。测试不发真实API请求。少量集成测试依赖WCPP外部工件或历史数据，缺少时明确跳过；实际云环境有资产时应运行。GitHub Actions执行同一检查，远端是否通过以实际CI状态为准。
+测试不发送真实API请求。外部资产缺失时普通检查明确跳过；有完整资产的云环境必须执行严格集成检查，命令见 [OPERATIONS.md](OPERATIONS.md)。可选深度学习实验另用 `runtime/research/requirements.txt`，不自动接入活动预测。
 
-完整Python实验依赖另见runtime/research/requirements.txt，深度学习与强化学习实验不自动接入活动预测。
+## 规则与资料
 
-## 结构
+- [赛事范围](docs/analysis-scope-18.md)：分类、阶段及90分钟口径先核实；准入不等于模型验收。
+- [项目目标](docs/project-goals.md)：未来完整冻结样本的Primary Top1为最高指标，70%/80%目标尚未证明达到。
+- [采集流程](docs/api-first-collection.md)与[公开来源](docs/public-data-sources.md)：来源登记、接口权限、字段覆盖、模型使用分别核验。
+- [冻结](docs/analysis-freeze-policy.md)、[比分审计](docs/score-distribution-adjustment.md)与[市场规则](docs/market-and-lineup-policy.md)：缺项不补造，实际盘口单列判断，TOP3不足不强凑。
+- [无人值守运行](docs/unattended-operation.md)：数据仓库Actions按固定源码运行，候选不自动晋级。
+- [流程Skills及存储](docs/football-storage-and-skills.md)：GitHub保存权威版本，展示副本须有实际写入与验证回执。
+- [版本管理](docs/version-management.md)与[变更记录](CHANGELOG.md)：测试、提交、推送并核验远端；历史记录追加保留。
 
-无人值守采集/候选训练改用私有数据仓库自身的GitHub Actions运行，代理在云端安装，无需用户电脑或专用Secret。按固定源码commit运行，真实部署验证状态、执行频率与停止方法见[部署说明](docs/unattended-operation.md)。候选不自动替换当前/test。
-
-FMA隔离研究第一阶段：默认双模型输出新增joint/layered选分对照元数据；五角色证据审查、分钟模拟和共享免费额度保护分别提供研究接口。原Primary不由新实验覆盖，真实事件状态参数尚未训练，详见[实现与验证边界](docs/fma-implementation-20261030.md)。
-
-|路径|职责|
-|---|---|
-|runtime/predict_active.py、active_route_engines.py|活动双模型路由、推理及执行身份审计|
-|runtime/v4、v5、v6、continental、aus_expert|当前模型及队列特定的独立test实现|
-|runtime/research|冻结、比分分布/单队进球、伤停解析、复盘与研究快照；`egidi_blend` 为未接入活动路由的研究候选|
-|runtime/data_sources|安全接口读取、接口优先批采集与过程数据匹配|
-|runtime/database、emperor_cup|赛事入库、身份与来源审计、杯赛扩展|
-|runtime/optimization、optimization_tools、v7、upset*、score_adjustment|独立研究、候选与诊断，不能仅因代码存在就称已用于Primary|
-|docs、manifests、scripts|规范、变更、运行资产身份及交付检查|
-
-runtime/wcpp.py、v2/v3等保留为历史实现和测试依赖，不能把它们的旧README当当前默认入口。
-
-## 数据与版本管理
-
-公开网站、xG/xGA、官方消息及赔率来源见[公开来源总表](docs/public-data-sources.md)；来源登记与实际连通、字段覆盖、模型使用分别核验。
-
-源码、配置、测试、规范和身份摘要进入Git；密钥、数据库、原始API/网页快照、冻结输出、大型工件及缓存独立保留。`manifests/`中的哈希为实测，但身份摘要不等于资产备份，克隆仓库仍需匹配外部工件与数据。
-
-密钥仅从环境变量读取，`.env.example`只有变量名。接口覆盖与权限按实际响应判断；APIfootball.com与API-Football/API-SPORTS不是同一个服务。中国体彩官方及镜像禁止访问，澳客允许。赔率变化不等于真实资金流量。
-
-每次可交付修改完成后测试、提交、推送并核验远端HEAD；检查点和回滚方式见[版本管理规范](docs/version-management.md)。不新建定时任务。
-
-关键说明：[接口优先采集](docs/api-first-collection.md)、[双模型流程](docs/dual-model-workflow.md)、[冻结规范](docs/analysis-freeze-policy.md)、[比分分布审计](docs/score-distribution-adjustment.md)、[域外联赛研究轨](docs/asia-leagues-ood-research-tracks.md)、[变更记录](CHANGELOG.md)。
-
-正式新增分析范围已扩展为[20项赛事白名单](docs/analysis-scope-18.md)，配置见 configs/analysis-scope.json；14项有活动路由、6项明确缺口。新增[欧国联独立数据库](docs/nations-league-database.md)与[日联杯数据及研究工件](docs/jleague-cup.md)，范围准入、研究训练和活动模型验收分别登记。注册表仍保留历史19队列。
-
-项目足球流程Skills与报告存储分工见 [执行入口](docs/football-storage-and-skills.md)；2026-11-11日职联及欧国联实际加载与验收核查见 [可用性和方案](docs/j1-nations-model-readiness-20261111.md)。
+密钥只从环境读取，禁止入库。数据库、冻结和大型工件在独立数据仓库/运行目录管理；`manifests/`只登记身份，不是完整备份。用户已接受公开数据仓库。中国体彩官方及镜像禁访，澳客允许；赔率变化不等于资金流。
