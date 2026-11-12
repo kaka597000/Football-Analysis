@@ -67,5 +67,5 @@ jobs:
         with:
           name: pr32-xg-scale-validation
           path: /tmp/xg-delivery
-          retention-days: 1
+          retention-days: 90
           if-no-files-found: error

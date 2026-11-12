@@ -18,7 +18,16 @@ def classify_failure(exc):
     if isinstance(reason, socket.gaierror):
         category, retryable = "DNS", True
     elif isinstance(reason, ssl.SSLError):
-        category, retryable = "TLS", False
+        result = {"category": "TLS", "http_status": None, "retryable": False}
+        code = getattr(reason, 'verify_code', None)
+        if type(code) is int:
+            result['tls_verify_code'] = code
+        known = {'CERTIFICATE_VERIFY_FAILED', 'UNEXPECTED_EOF_WHILE_READING',
+                 'TLSV1_ALERT_INTERNAL_ERROR', 'SSLV3_ALERT_HANDSHAKE_FAILURE',
+                 'WRONG_VERSION_NUMBER', 'TLSV1_ALERT_PROTOCOL_VERSION'}
+        value = getattr(reason, 'reason', None)
+        result['tls_reason'] = value if value in known else 'UNCLASSIFIED_TLS'
+        return result
     elif isinstance(reason, (TimeoutError, socket.timeout)):
         category, retryable = "TIMEOUT", True
     elif isinstance(reason, ConnectionError):

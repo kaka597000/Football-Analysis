@@ -1,12 +1,14 @@
-# Final strict pass includes the new native-scale xG tests.
-name: PR32 retained-asset verification
+name: Durable retained J1 recovery
 on:
+  workflow_dispatch:
   push:
-    branches: [research/elo-kelly-config-20261112]
-    paths: [.github/workflows/pr32-validation.yml]
+    branches: [feat/post32-runtime-validation-20261112]
+    paths:
+      - .github/workflows/pr32-validation.yml
+      - scripts/restore_retained_catalog.py
+      - scripts/predict_retained_j1.py
 permissions:
   contents: read
-  actions: read
 jobs:
   retained:
     runs-on: ubuntu-latest
@@ -16,46 +18,34 @@ jobs:
       OMP_NUM_THREADS: '1'
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: kaka597000/kaka597000-Football-Analysis-Data
+          ref: 0a39464455376a650c7f8778a5f40aba39b41044
+          path: durable-data
+          sparse-checkout: workspace-updates/20261112-post32
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt -r requirements-test.txt
-      - run: python -m pip install -r requirements-integration.txt
-      - name: Retrieve existing checksum-locked backups
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: kaka597000/Football-Analysis
+      - name: Fresh recovery from immutable repository archives
         run: |
-          gh run download 43170849651 -n pr32-recovered-assets -D /tmp/pr32-bundles/core
-          gh run download 43172475529 -n pr32-j1-history -D /tmp/pr32-bundles/j1
-          gh run download 43175273609 -n pr32-integration-assets -D /tmp/pr32-bundles/integration
-          gh run download 43173772795 -n pr32-retained-research -D /tmp/pr32-bundles/research
           sudo install -d -m 0755 -o "$(id -u)" -g "$(id -g)" /workspace
-      - name: Restore original assets without hash overrides
-        id: restore
-        run: python scripts/verify_pr32_retained.py restore --bundles /tmp/pr32-bundles --out /tmp/pr32-results
-      - name: Verify real J1 paired and partial inference
-        run: python scripts/verify_pr32_retained.py smoke --out /tmp/pr32-results
-      - name: Strict integration with real external assets
-        run: |
-          set -o pipefail
-          python scripts/run_tests.py --layer integration 2>&1 | tee /tmp/pr32-results/integration.log
-      - name: Reproduce fixed retrospective experiment
-        if: always() && steps.restore.outcome == 'success'
+          mkdir /tmp/retained-results
+          python scripts/restore_retained_catalog.py --catalog durable-data/workspace-updates/20261112-post32/recovery-catalog.json --workspace /workspace --cache /tmp/retained-cache --receipt /tmp/retained-results/restore.json
+          ln -s "$GITHUB_WORKSPACE" /workspace/Football-Analysis
+          python scripts/build_retained_j1_manifest.py --current-artifact /workspace/WCPP/reports/japan-korea-20261010/jpn.1-artifact.json --test-artifact /workspace/WCPP/models/systematic-20261015-final-extended-003/jpn.1/artifact.json --source-root /workspace/WCPP/runtime/retained-j1/source/runtime --evidence-dir /workspace/WCPP/reports/japan-korea-20261010/j1-history-summaries --source-commit b6242ba06ec8e23b1613bb9ed32397f6ebad0987 --out /tmp/retained-results/j1-compatibility.json
+      - name: Real artifacts and sandbox failure handling (synthetic fixture)
+        run: python scripts/verify_pr32_retained.py smoke --out /tmp/retained-results
+      - name: Recovery and publication regressions
         env:
           PYTHONPATH: runtime
-        run: python -m research_program.elo_kelly_ablation --manifest /workspace/WCPP/research/remaining-nine-20261105/market-ablation-input-manifest.json --out /tmp/pr32-results/elo-kelly
-      - name: Bounded public-source probe without credentials
-        if: always() && steps.restore.outcome == 'success'
-        run: python scripts/verify_pr32_retained.py probe --out /tmp/pr32-results
+        run: python -m unittest runtime.test_durable_recovery runtime.test_publication_recovery
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: pr32-real-validation
-          path: |
-            /tmp/pr32-results/*.json
-            /tmp/pr32-results/*.log
-            /tmp/pr32-results/elo-kelly
-            /tmp/pr32-results/live-probe/requests.jsonl
-          retention-days: 1
+          name: durable-j1-recovery-receipt
+          path: /tmp/retained-results
+          retention-days: 90
           if-no-files-found: error
