@@ -19,6 +19,7 @@ from ..research.analysis_freeze import digest, verify, aware
 from ..research_program import future_validation as fv
 from ..publication import atomic_json
 from ..storage_lock import exclusive_lock
+from .result_queue import ResultQueue
 
 SCHEMA = 'WCPP-PORTABLE-FUTURE-BUNDLE-1'
 UCL_SCHEMA = 'WCPP-PORTABLE-UCL-REVIEW-BUNDLE-1'
@@ -312,11 +313,15 @@ def _cycle(bundle, *, max_captures=3, max_result_requests=6, fetcher=None, now=N
     atomic_json(state/'state.json',extra)
     results=read(state/'results.json') if (state/'results.json').exists() else []; result_calls=0
     result_ids={r['match_id'] for r in results}
-    for mid,(identity,_) in sorted(registered.items()):
-        if mid in result_ids or mid not in captured or aware(identity['kickoff_at'])+timedelta(hours=2)>now: continue
+    polling = ResultQueue(state)
+    pending = [identity for mid,(identity,_) in registered.items()
+               if mid not in result_ids and mid in captured and mid.startswith('espn:')
+               and aware(identity['kickoff_at'])+timedelta(hours=2)<=now]
+    for identity in polling.order(pending):
+        mid = identity['match_id']
         if result_calls>=max_result_requests or time.monotonic()-started>max_seconds-8: break
-        if not mid.startswith('espn:'): continue
         code=identity['cohort'].split(':')[0];url=ESPN+code+'/summary?event='+mid.split(':')[1]
+        polling.mark(mid)
         try:
             result_calls+=1;raw=fetcher(url);body=json.loads(raw) if isinstance(raw,bytes) else raw
             record_time=datetime.now(timezone.utc).isoformat();c=body['header']['competitions'][0]
@@ -348,7 +353,8 @@ def _cycle(bundle, *, max_captures=3, max_result_requests=6, fetcher=None, now=N
         reviews.append(fv.review(plan,ps,[r for r in results if r['match_id']in ids],state))
     value={'schema':'WCPP-AUTOMATED-FUTURE-CYCLE-1','reviewed_at':datetime.now(timezone.utc).isoformat(),
            'bundle_sha256':m['manifest_sha256'],'population':len(registered),'captured_population':len(captured),
-           'new_captures':new_captures,'result_requests':result_calls,'completed':sum(r['completed']for r in reviews),
+           'new_captures':new_captures,'result_requests':result_calls,'result_attempted_ids':polling.attempted,
+           'completed':sum(r['completed']for r in reviews),
            'pending':sum(len(r['pending_results'])for r in reviews),'missing_first_pairs':sum(len(r['missing_first_pairs'])for r in reviews),
            'failures':failures,'cohort_reviews':reviews,'automatic_promotion':False,'active_model_modified':False}
     runs=state/'runs';runs.mkdir(exist_ok=True);out=runs/(datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f')+'.json')
@@ -433,11 +439,15 @@ def ucl_cycle(bundle, *, max_result_requests=2, max_seconds=20, fetcher=None, no
                 if len(body)>8_000_000:raise ValueError('response too large')
                 return body
         fetcher=fetcher or bounded_fetch
-        for identity in plan['payload']['fixtures_identity']:
+        polling = ResultQueue(state)
+        pending = [identity for identity in plan['payload']['fixtures_identity']
+                   if identity['match_id'] in captured and identity['match_id'] not in result_ids
+                   and aware(identity['kickoff_at'])+timedelta(hours=2)<=now]
+        for identity in polling.order(pending):
             mid=identity['match_id']
-            if mid not in captured or mid in result_ids or aware(identity['kickoff_at'])+timedelta(hours=2)>now:continue
             if calls>=max_result_requests or time.monotonic()-started>max_seconds-8:break
             url=ESPN+'uefa.champions/summary?event='+mid.removeprefix('espn:')
+            polling.mark(mid)
             try:
                 calls+=1;raw=fetcher(url);body=json.loads(raw)if isinstance(raw,bytes)else raw
                 c=body['header']['competitions'][0];teams={v['homeAway']:v for v in c['competitors']}
@@ -454,7 +464,8 @@ def ucl_cycle(bundle, *, max_result_requests=2, max_seconds=20, fetcher=None, no
                 results.append(result);result_ids.add(mid);atomic_json(state/'results.json',results)
             except(ValueError,KeyError,OSError,TypeError)as exc:failures.append({'match_id':mid,'status':'RESULT_NOT_CERTIFIED','error_type':type(exc).__name__})
         value=reviewer.review(m['protocol'],plan,packages,results,state)
-        value.update(reviewed_at=datetime.now(timezone.utc).isoformat(),result_requests=calls,failures=failures,
+        value.update(reviewed_at=datetime.now(timezone.utc).isoformat(),result_requests=calls,
+                     result_attempted_ids=polling.attempted,failures=failures,
                      bundle_sha256=m['manifest_sha256'],mode='REVIEW_ONLY_NO_NEW_INFERENCE')
         runs=state/'runs';runs.mkdir(exist_ok=True)
         atomic_json(runs/(datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%f')+'.json'),value)

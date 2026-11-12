@@ -15,11 +15,75 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'runtime'))
 from research_program.replay import _finished_espn_label
-from research.analysis_freeze import verify
+from research.analysis_freeze import verify, digest, aware
+
+
+def validate_predictions(predictions, records, protocol):
+    """Bind every scored row to the original first freeze and candidate node."""
+    population = {r['match_id']: r for r in protocol['population']}
+    if len(population) != len(protocol['population']):
+        raise ValueError('duplicate protocol identity')
+    seen = set()
+    for p in predictions:
+        mid = p['match_id']
+        if mid in seen:
+            raise ValueError('duplicate prediction identity')
+        seen.add(mid)
+        original = records[p['first_freeze_id']][1]
+        fixture = original['fixture']; planned = population[mid]
+        if (original['track'] != 'current-test-pair' or original['stage'] != 'prematch'
+                or original['evaluation_slot'] != 'FIRST_PREMATCH'
+                or original['match_id'] != mid or fixture['match_id'] != mid
+                or p['first_freeze_sha256'] != original['record_sha256']
+                or planned['record_sha256'] != original['record_sha256']
+                or p['cohort'] != fixture['cohort'] or p['kickoff_at'] != fixture['kickoff_at']
+                or p['input_cutoff_at'] != fixture['cutoff_at']
+                or not aware(fixture['cutoff_at']) <= aware(original['recorded_at']) < aware(fixture['kickoff_at'])):
+            raise ValueError('first freeze identity or time mismatch')
+        future = aware(fixture['kickoff_at']) > aware(protocol['created_at'])
+        if p['future'] is not future or planned['future'] is not future:
+            raise ValueError('historical/future segment mismatch')
+        if {float(a) for a in p['alphas']} != {0, .25, .5, .75, 1} or len(p['alphas']) != 5:
+            raise ValueError('fixed alpha grid required')
+        dc, ml = (np.asarray(p['components'][k], dtype=float) for k in ('dc', 'ml'))
+        current = np.asarray(original['payload']['current_model']['matrix'], dtype=float)
+        test = np.asarray(original['payload']['test_model']['matrix'], dtype=float)
+        for matrix in (dc, ml, current, test):
+            if (matrix.ndim != 2 or matrix.shape != current.shape or matrix.shape[0] != matrix.shape[1]
+                    or not np.isfinite(matrix).all() or (matrix < 0).any()
+                    or not np.isclose(matrix.sum(), 1, rtol=0, atol=1e-10)):
+                raise ValueError('invalid probability matrix')
+        alpha = p['original_alpha']
+        if type(alpha) not in (int, float) or not 0 <= alpha <= 1:
+            raise ValueError('invalid original alpha')
+        reconstructed = (1-alpha)*dc + alpha*ml
+        if not np.allclose(reconstructed, test, rtol=0, atol=1e-12):
+            raise ValueError('original frozen Test matrix mismatch')
+        pairs = [(p['current'], current), (p['test'], reconstructed)]
+        pairs += [(metrics, (1-float(a))*dc + float(a)*ml) for a, metrics in p['alphas'].items()]
+        if any(metrics['matrix_sha256'] != digest(matrix.tolist()) for metrics, matrix in pairs):
+            raise ValueError('reconstructed matrix checksum mismatch')
+        if future:
+            receipt = p['candidate_freeze']; candidate = records[receipt['freeze_id']][1]
+            expected = {k:v for k,v in p.items() if k != 'candidate_freeze'}
+            cf = candidate['fixture']
+            if (candidate['track'] != 'alpha-grid-candidate' or candidate['stage'] != 'prematch'
+                    or candidate['evaluation_slot'] != 'FIRST_PREMATCH'
+                    or candidate['record_sha256'] != receipt['sha256']
+                    or candidate['recorded_at'] != receipt['recorded_at']
+                    or candidate['match_id'] != mid or candidate['payload'] != expected
+                    or {k:v for k,v in cf.items() if k != 'cutoff_at'} != {k:v for k,v in fixture.items() if k != 'cutoff_at'}
+                    or not aware(protocol['created_at']) <= aware(cf['cutoff_at']) <= aware(candidate['recorded_at']) < aware(cf['kickoff_at'])):
+                raise ValueError('future candidate freeze mismatch')
+        elif 'candidate_freeze' in p:
+            raise ValueError('historical row cannot claim future candidate freeze')
 
 
 def evaluate(predictions, roots, freeze_root):
-    predictions = [json.loads(x) for x in Path(predictions).read_text().splitlines()]
+    prediction_path = Path(predictions)
+    protocol_path = prediction_path.with_name('protocol.json')
+    protocol = json.loads(protocol_path.read_text())
+    predictions = [json.loads(x) for x in prediction_path.read_text().splitlines()]
     wanted = {p['match_id'].removeprefix('espn:') for p in predictions}
     files = defaultdict(list)
     for root in roots:
@@ -29,8 +93,11 @@ def evaluate(predictions, roots, freeze_root):
     records = {}
     for path in Path(freeze_root).glob('*/000001.json'):
         r = json.loads(path.read_text())
-        if r.get('track') == 'current-test-pair':
+        if r.get('track') in {'current-test-pair', 'alpha-grid-candidate'}:
+            if r['freeze_id'] in records:
+                raise ValueError('duplicate freeze identity')
             records[r['freeze_id']] = (path, verify(r))
+    validate_predictions(predictions, records, protocol)
     results = []; excluded = Counter()
     for p in predictions:
         fixture = records[p['first_freeze_id']][1]['fixture']; labels = {}
@@ -69,6 +136,21 @@ def evaluate(predictions, roots, freeze_root):
                 'wdl_hit': int(wdl.argmax()) == y, 'wdl_brier': float(((wdl - np.eye(3)[y])**2).sum()),
                 'score_log_loss': float(-np.log(max(float(m[h, a]) if h < len(m) and a < len(m) else 0, 1e-15)))}
         results.append(item)
+    return {'groups': summarize(results), 'rows': results, 'missing': dict(excluded),
+            'groups_scope': 'POOLED_DIAGNOSTIC_ONLY; use segments for forward validation',
+            'segments': {name: summarize([r for r in results if r['future'] is future])
+                         for name, future in [('historical_reconstruction', False), ('future_frozen', True)]},
+            'prediction_sha256': hashlib.sha256(prediction_path.read_bytes()).hexdigest(),
+            'protocol_sha256': hashlib.sha256(protocol_path.read_bytes()).hexdigest(),
+            'original_protocol_population': len(protocol['population']),
+            'reconstructed_population': len(predictions),
+            'alpha_selected': None, 'promotion': False,
+            'primary': 'NOT_SCORED: independently frozen comprehensive selections not supplied',
+            'actual_line_settlement': 'NOT_SCORED: no verified paired real quotes supplied',
+            'historical_reconstruction_is_new_unseen_test': False}
+
+
+def summarize(results):
     groups = {}
     for cohort in ['ALL'] + sorted({r['cohort'] for r in results}):
         population = [r for r in results if cohort == 'ALL' or r['cohort'] == cohort]
@@ -90,12 +172,9 @@ def evaluate(predictions, roots, freeze_root):
                 for metric in ('wdl_brier', 'score_log_loss'):
                     arms[arm][metric] = float(np.mean([r['arms'][arm][metric] for r in settled]))
         groups[cohort] = {'population': len(population), 'settled': len(settled),
-                          'coverage': len(settled)/len(population), 'arms': arms}
-    return {'groups': groups, 'rows': results, 'missing': dict(excluded),
-            'alpha_selected': None, 'promotion': False,
-            'primary': 'NOT_SCORED: independently frozen comprehensive selections not supplied',
-            'actual_line_settlement': 'NOT_SCORED: no verified paired real quotes supplied',
-            'historical_reconstruction_is_new_unseen_test': False}
+                          'pending_or_missing': len(population)-len(settled),
+                          'coverage': len(settled)/len(population) if population else None, 'arms': arms}
+    return groups
 
 
 if __name__ == '__main__':

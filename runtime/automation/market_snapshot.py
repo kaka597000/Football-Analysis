@@ -4,7 +4,7 @@ This is a data channel, not an active-model or staking change. Only exact team
 names, home/away order and kickoff matches are admitted; aliases remain missing.
 """
 import argparse
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -83,9 +83,9 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
                 if len(outcomes) != len(names) or {x.get('name') for x in outcomes} != set(names):
                     excluded['incomplete_market'] += 1
                     continue
-                value = {'bookmaker': bookmaker['key'], 'market': key,
+                value = {'bookmaker': bookmaker.get('key'), 'market': key,
                          'quoted_at': market.get('last_update'),
-                         'odds': {names[x['name']]: x['price'] for x in outcomes}}
+                         'odds': {names[x['name']]: x.get('price') for x in outcomes}}
                 if key == 'totals':
                     lines = {x.get('point') for x in outcomes}
                     if len(lines) != 1:
@@ -108,6 +108,22 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
                     excluded['invalid_quote_or_timestamp'] += 1
                     continue
                 rows.append(row)
+        # All rows in this response share one capture time. Keep exact repeats
+        # once; conflicting versions of a book/market/line remain untrusted.
+        groups = defaultdict(dict)
+        for row in rows:
+            value = row['value']
+            group = groups[(value['bookmaker'], value['market'], value.get('line'))]
+            signature = json.dumps(value, sort_keys=True, allow_nan=False)
+            if signature in group:
+                excluded['duplicate_quote'] += 1
+            group[signature] = row
+        rows = []
+        for group in groups.values():
+            if len(group) > 1:
+                excluded['conflicting_market_group'] += 1
+            else:
+                rows.extend(group.values())
         snap = snapshot(rows, target, root, provider='the-odds-api',
                         market_max_age_seconds=MAX_AGE_SECONDS, now=now)
         snapshots.append(snap)

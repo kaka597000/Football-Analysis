@@ -76,6 +76,34 @@ class MarketSnapshotTests(unittest.TestCase):
             r = collect(Path(d) / 'run')
             self.assertEqual(r['status'], 'MISSING_CREDENTIAL'); fetch.assert_not_called()
 
+    def test_missing_price_or_bookmaker_preserves_other_books(self):
+        for missing in ('price', 'bookmaker'):
+            def mutate(odds, board):
+                books = odds[0]['bookmakers']; bad = deepcopy(books[0])
+                if missing == 'price':
+                    bad['key'] = 'broken'; bad['markets'][0]['outcomes'][0].pop('price')
+                else:
+                    bad.pop('key')
+                books.insert(0, bad)
+            r = self.run_case(mutate)
+            self.assertEqual(r['verified_quote_count'], 1)
+            self.assertEqual(r['excluded']['invalid_quote_or_timestamp'], 1)
+
+    def test_exact_duplicates_count_once(self):
+        r = self.run_case(lambda o,b: o[0]['bookmakers'].append(deepcopy(o[0]['bookmakers'][0])))
+        self.assertEqual(r['verified_quote_count'], 1)
+        self.assertEqual(r['excluded']['duplicate_quote'], 1)
+
+    def test_conflicting_book_rejected_without_discarding_other_books(self):
+        def mutate(o,b):
+            books = o[0]['bookmakers']; conflict = deepcopy(books[0]); good = deepcopy(books[0])
+            conflict['markets'][0]['outcomes'][0]['price'] = 2.1
+            good['key'] = 'unaffected'; books.extend([conflict, good])
+        r = self.run_case(mutate)
+        self.assertEqual(r['verified_quote_count'], 1)
+        self.assertEqual(r['excluded']['conflicting_market_group'], 1)
+        self.assertEqual(r['snapshots'][0]['observations'][0]['value']['bookmaker'], 'unaffected')
+
 
 if __name__ == '__main__':
     unittest.main()
