@@ -56,10 +56,10 @@ def market(row):
     return {'books':books,'payouts':payouts,'over25':over,'kelly_relative':kelly}
 
 
-def load(manifest_path):
+def load(manifest_path, *, seasons=None):
     manifest=json.loads(Path(manifest_path).read_text(encoding='utf-8'));rows=[];audit=[];seen=set()
     for source in manifest['sources']:
-        if source['season'] not in PROTOCOL['seasons']:continue
+        if source['season'] not in (PROTOCOL['seasons'] if seasons is None else seasons):continue
         league=source['league']
         if league not in PROTOCOL['leagues']:raise ValueError('unsupported league')
         raw=Path(source['path']).read_bytes();sha=hashlib.sha256(raw).hexdigest()
