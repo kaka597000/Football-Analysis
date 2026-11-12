@@ -8,50 +8,55 @@ permissions:
 jobs:
   recover:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify retained research packages
+      - name: Restore exact integration dependencies
         run: |
           python - <<'PY'
-          import hashlib,json,pathlib,urllib.request
-          out=pathlib.Path('/tmp/pr32-research');out.mkdir()
-          repo='kaka597000/kaka597000-Football-Analysis-Data';ref='9a7bb55ce149a5b7bc9a4a9684ac160f964c83d7'
-          base='https://raw.githubusercontent.com/'+repo+'/'+ref+'/'
+          import hashlib,io,json,pathlib,tarfile,urllib.request
+          out=pathlib.Path('/tmp/pr32-integration');out.mkdir()
+          repo='kaka597000/kaka597000-Football-Analysis-Data'
+          base='https://raw.githubusercontent.com/'+repo+'/'
           def get(url):
-              with urllib.request.urlopen(url,timeout=90) as r:return r.read()
-          receipts=[]
-          for name in ['20261105-remaining-nine-market','20261105-nine-items']:
-              prefix='workspace-updates/'+name+'/';folder=out/name;folder.mkdir()
-              raw=get(base+prefix+'manifest.json');m=json.loads(raw);(folder/'manifest.json').write_bytes(raw)
-              h=hashlib.sha256()
-              with (folder/'research.tar.gz').open('xb') as f:
-                  for p in m['ordered_parts']:
-                      b=get(base+prefix+p['path'])
-                      if len(b)!=p['bytes'] or hashlib.sha256(b).hexdigest()!=p['sha256']:raise ValueError('part hash mismatch')
-                      f.write(b);h.update(b)
-              if h.hexdigest()!=m['archive_sha256']:raise ValueError('archive mismatch')
-              (folder/'files.json').write_bytes(get(base+prefix+'files.json'))
-              (folder/'README.md').write_bytes(get(base+prefix+'README.md'))
-              receipts.append({'name':name,'archive_sha256':h.hexdigest()})
-          prefix='workspace-updates/20261110-four-cohort-refresh/'
-          folder=out/'four-cohort';folder.mkdir()
-          for name in ['delivery.json','evidence-manifest.json','protocol.json','summary.json','research-evidence.tar.gz']:
-              b=get(base+prefix+name);(folder/name).write_bytes(b)
-              receipts.append({'name':prefix+name,'download_sha256':hashlib.sha256(b).hexdigest()})
-          tree=json.loads(get('https://api.github.com/repos/'+repo+'/git/trees/'+ref+'?recursive=1'))
-          for item in tree['tree']:
-              if item['path'].startswith('.github/workflows/') and item['type']=='blob':
-                  b=get(base+item['path']);p=out/'workflows'/pathlib.PurePosixPath(item['path']).name;p.parent.mkdir(exist_ok=True);p.write_bytes(b)
-          (out/'receipts.json').write_text(json.dumps({'data_commit':ref,'packages':receipts,'active_modified':False},indent=2))
-          print('Retained packages verified; no new provider download or active model modification')
+              with urllib.request.urlopen(url,timeout=120) as r:return r.read()
+          groups=[('core','466fd626a47481e70b176a9a69c58224d7d1bf63','workspace-backup-20261102/incoming-core','8d6415a4d62a26edbe632620d76372e25eee61d038418ee96af3f155d8205e07'),
+                  ('models','a0635b6551ba7a31c524ba3b25aee7e0ccbb8430','models-history-parts','2ceee168753a3a039e96146b49906d77c5d16d95487e5d5be2a243738ac5f5c7'),
+                  ('audit','a0635b6551ba7a31c524ba3b25aee7e0ccbb8430','audit-history-parts','2cec2c908d1927852938f6d8a4d25309d27db1e6e8e8fc9c75d27c83a1d789f6')]
+          selected=[];receipts=[]
+          exact={'WCPP/data/unified/WCPP_统一赛事库.sqlite',
+                 'WCPP/models/active-routes-20261027/afc.champions-ELITE-league_phase/apifootballcom-team-map.json',
+                 'WCPP/reports/python-upset-20261013/enriched-history-research-xg.json',
+                 'WCPP/reports/ucl-onboarding-20261013/training-new-format-league_phase.json'}
+          prefixes=('WCPP/models/upset-0.2-20261013-r4/', 'WCPP/models/upset-20261013/esp.1/')
+          with tarfile.open(out/'integration-assets.tar.gz','w:gz') as dest:
+              for name,ref,folder,expected in groups:
+                  parts=json.loads(get('https://api.github.com/repos/'+repo+'/contents/'+folder+'?ref='+ref))
+                  parts=sorted([p for p in parts if '.part' in p['name']],key=lambda p:p['name'])
+                  archive=pathlib.Path('/tmp/'+name+'.tar.gz');h=hashlib.sha256()
+                  with archive.open('xb') as f:
+                      for p in parts:
+                          b=get(p['download_url']);blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
+                          if len(b)!=p['size'] or blob!=p['sha']:raise ValueError('part identity mismatch')
+                          f.write(b);h.update(b)
+                  if h.hexdigest()!=expected:raise ValueError('archive checksum mismatch')
+                  with tarfile.open(archive,'r:gz') as src:
+                      for member in src:
+                          if not member.isfile() or not (member.name in exact or member.name.startswith(prefixes)):continue
+                          if pathlib.PurePosixPath(member.name).is_absolute() or '..' in pathlib.PurePosixPath(member.name).parts:raise ValueError('invalid member')
+                          b=src.extractfile(member).read();dest.addfile(member,io.BytesIO(b))
+                          selected.append({'path':member.name,'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b),'archive':name})
+                  receipts.append({'archive':name,'sha256':h.hexdigest(),'source_commit':ref});archive.unlink()
+          (out/'selected.json').write_text(json.dumps(selected,indent=2,ensure_ascii=False))
+          (out/'receipts.json').write_text(json.dumps({'archives':receipts,'active_modified':False},indent=2))
+          print('Verified and restored',len(selected),'original integration dependencies')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: pr32-retained-research
-          path: /tmp/pr32-research
+          name: pr32-integration-assets
+          path: /tmp/pr32-integration
           retention-days: 1
           if-no-files-found: error
