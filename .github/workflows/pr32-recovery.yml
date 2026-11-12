@@ -8,76 +8,50 @@ permissions:
 jobs:
   recover:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Restore selected historical dataset with original checksum
+      - name: Verify retained research packages
         run: |
           python - <<'PY'
-          import hashlib, io, json, pathlib, subprocess, tarfile, urllib.request
-          out=pathlib.Path('/tmp/pr32-assets');out.mkdir()
-          repo='kaka597000/kaka597000-Football-Analysis-Data';ref='a0635b6551ba7a31c524ba3b25aee7e0ccbb8430'
+          import hashlib,json,pathlib,urllib.request
+          out=pathlib.Path('/tmp/pr32-research');out.mkdir()
+          repo='kaka597000/kaka597000-Football-Analysis-Data';ref='9a7bb55ce149a5b7bc9a4a9684ac160f964c83d7'
+          base='https://raw.githubusercontent.com/'+repo+'/'+ref+'/'
           def get(url):
-              with urllib.request.urlopen(url,timeout=120) as r:return r.read()
-          listing=json.loads(get('https://api.github.com/repos/'+repo+'/contents/audit-history-parts?ref='+ref))
-          parts=sorted([p for p in listing if '.part' in p['name']],key=lambda x:x['name'])
-          archive=pathlib.Path('/tmp/history.tar.gz');h=hashlib.sha256()
-          with archive.open('xb') as f:
-              for p in parts:
-                  b=get(p['download_url'])
-                  blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest()
-                  if len(b)!=p['size'] or blob!=p['sha']:raise ValueError('part Git blob mismatch')
-                  f.write(b);h.update(b)
-          if h.hexdigest()!='2cec2c908d1927852938f6d8a4d25309d27db1e6e8e8fc9c75d27c83a1d789f6':raise ValueError('archive mismatch')
-          selected=[];inventory=[]
-          prefixes=('WCPP/reports/systematic-optimization-20261015/datasets/extended-001/',
-                    'WCPP/reports/systematic-optimization-20261015/datasets/base-001/',
-                    'WCPP/reports/auto-optimization-20261101/history/',
-                    'WCPP/reports/japan-korea-20261010/',
-                    'WCPP/reports/5dollar-history-20261010/jpn.1',
-                    'WCPP/reports/jingcai-20261017-1400/list/espn-raw/espn-scoreboard-jpn.1',
-                    'WCPP/reports/python-upset-20261013/enriched-history.json')
-          with tarfile.open(archive,'r:gz') as src,tarfile.open(out/'history-selected.tar.gz','w:gz') as dest:
-              for t in src:
-                  inventory.append({'name':t.name,'bytes':t.size})
-                  if not t.isfile() or not t.name.startswith(prefixes):continue
-                  if pathlib.PurePosixPath(t.name).is_absolute() or '..' in pathlib.PurePosixPath(t.name).parts:raise ValueError('unsafe member')
-                  b=src.extractfile(t).read();dest.addfile(t,io.BytesIO(b));selected.append({'name':t.name,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
-          (out/'selected.json').write_text(json.dumps(selected,indent=2))
-          (out/'inventory.json').write_text(json.dumps(inventory,indent=2))
-          expected='111ee2301cb345844887865ff625eec5944fa74d06da0f359b97c95b38df9589'
-          match='b6242ba06ec8e23b1613bb9ed32397f6ebad0987'
-          names=subprocess.check_output(['git','ls-tree','-r','--name-only',match,'runtime/optimization'],text=True).splitlines()
-          values={pathlib.PurePosixPath(n).name:hashlib.sha256(subprocess.check_output(['git','show',match+':'+n])).hexdigest() for n in sorted(names) if n.endswith('.py') and not pathlib.PurePosixPath(n).name.startswith('test_') and len(pathlib.PurePosixPath(n).parts)==3}
-          actual=hashlib.sha256(json.dumps(values,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
-          if actual!=expected:raise ValueError('historical inference dependency checksum')
-          subprocess.run(['git','archive','--format=tar.gz','-o',str(out/'compatible-source.tar.gz'),match,'runtime'],check=True)
-          (out/'source-search.json').write_text(json.dumps({'expected':expected,'actual':actual,'matched_commit':match,'files':values},indent=2))
-          (out/'receipt.json').write_text(json.dumps({'backup_commit':ref,'archive_sha256':h.hexdigest(),'selected_count':len(selected),'matching_source_commit':match,'active_modified':False},indent=2))
-          dataref='9a7bb55ce149a5b7bc9a4a9684ac160f964c83d7'
-          tree=get('https://api.github.com/repos/'+repo+'/git/trees/'+dataref+'?recursive=1')
-          (out/'data-tree.json').write_bytes(tree)
-          print('Recovered',len(selected),'files; matched historical source:',match)
-          PY
-      - name: Test real free collection without deployment
-        run: |
-          python - <<'PY'
-          import json,pathlib
-          from runtime.automation.collector import collect
-          p=pathlib.Path('/tmp/pr32-assets/live-collection')
-          r=collect(p,[{'competition':'eng.1','cohort':'eng.1','stages':['regular']}],lookback_days=0,max_seconds=60)
-          print(json.dumps({k:v for k,v in r.items() if k!='new_rows'}))
+              with urllib.request.urlopen(url,timeout=90) as r:return r.read()
+          receipts=[]
+          for name in ['20261105-remaining-nine-market','20261105-nine-items']:
+              prefix='workspace-updates/'+name+'/';folder=out/name;folder.mkdir()
+              raw=get(base+prefix+'manifest.json');m=json.loads(raw);(folder/'manifest.json').write_bytes(raw)
+              h=hashlib.sha256()
+              with (folder/'research.tar.gz').open('xb') as f:
+                  for p in m['ordered_parts']:
+                      b=get(base+prefix+p['path'])
+                      if len(b)!=p['bytes'] or hashlib.sha256(b).hexdigest()!=p['sha256']:raise ValueError('part hash mismatch')
+                      f.write(b);h.update(b)
+              if h.hexdigest()!=m['archive_sha256']:raise ValueError('archive mismatch')
+              (folder/'files.json').write_bytes(get(base+prefix+'files.json'))
+              (folder/'README.md').write_bytes(get(base+prefix+'README.md'))
+              receipts.append({'name':name,'archive_sha256':h.hexdigest()})
+          prefix='workspace-updates/20261110-four-cohort-refresh/'
+          folder=out/'four-cohort';folder.mkdir()
+          for name in ['delivery.json','evidence-manifest.json','protocol.json','summary.json','research-evidence.tar.gz']:
+              b=get(base+prefix+name);(folder/name).write_bytes(b)
+              receipts.append({'name':prefix+name,'download_sha256':hashlib.sha256(b).hexdigest()})
+          tree=json.loads(get('https://api.github.com/repos/'+repo+'/git/trees/'+ref+'?recursive=1'))
+          for item in tree['tree']:
+              if item['path'].startswith('.github/workflows/') and item['type']=='blob':
+                  b=get(base+item['path']);p=out/'workflows'/pathlib.PurePosixPath(item['path']).name;p.parent.mkdir(exist_ok=True);p.write_bytes(b)
+          (out/'receipts.json').write_text(json.dumps({'data_commit':ref,'packages':receipts,'active_modified':False},indent=2))
+          print('Retained packages verified; no new provider download or active model modification')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: pr32-j1-history
-          path: /tmp/pr32-assets
+          name: pr32-retained-research
+          path: /tmp/pr32-research
           retention-days: 1
           if-no-files-found: error
