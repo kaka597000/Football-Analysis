@@ -197,15 +197,18 @@ def _recover_package(root, manifest, path, plan, match_id, state):
     return package
 
 
-def cycle(bundle, *, max_captures=3, max_result_requests=6, fetcher=None, now=None, max_seconds=45):
+def cycle(bundle, *, max_captures=3, max_result_requests=6, fetcher=None, now=None, max_seconds=45,
+          market_dir=None, market_providers=(), market_bookmakers=()):
     root=Path(bundle).resolve();check_bundle(root)
     state=root.parent/'state';state.mkdir(exist_ok=True)
     with exclusive_lock(state/'.cycle.lock'):
         return _cycle(root,max_captures=max_captures,max_result_requests=max_result_requests,
-                      fetcher=fetcher,now=now,max_seconds=max_seconds)
+                      fetcher=fetcher,now=now,max_seconds=max_seconds,market_dir=market_dir,
+                      market_providers=market_providers,market_bookmakers=market_bookmakers)
 
 
-def _cycle(bundle, *, max_captures=3, max_result_requests=6, fetcher=None, now=None, max_seconds=45):
+def _cycle(bundle, *, max_captures=3, max_result_requests=6, fetcher=None, now=None, max_seconds=45,
+           market_dir=None, market_providers=(), market_bookmakers=()):
     """Capture explicit queued targets and review every retained registered ID.
 
     No fixture discovery, qualitative recommendation, active-model switch or
@@ -302,9 +305,16 @@ def _cycle(bundle, *, max_captures=3, max_result_requests=6, fetcher=None, now=N
             rawpath.write_bytes(raw if isinstance(raw,bytes) else json.dumps(body).encode())
             f['neutral']=c['neutralSite'];f['cutoff_at']=capture_time
             f['sources']=[{'source_url':url,'query_time':capture_time,'source_tier':'L2','response_sha256':sha(rawpath),'supports_field':['identity','neutral','format']}]
+            journal=out.with_name(out.name+'.capture.json')
+            # Existing complete/partial captures keep their original inputs.
+            # Only a new unissued forecast may attach a retained source quote.
+            if market_dir is not None and not journal.exists():
+                from .market_bridge import attach_total_quote
+                f,_=attach_total_quote(f,market_dir,provider_order=market_providers,
+                                       bookmaker_order=market_bookmakers)
             if not fv.quote_audit(f)['eligible']:f.pop('total_quote',None)
             plan = verify(read(_receipt(root,m,registered[mid][1])['path']))
-            package = fv.capture(m['protocol'],plan,f,out,freeze_root=state/'freezes',resume=out.with_name(out.name+'.capture.json').exists())
+            package = fv.capture(m['protocol'],plan,f,out,freeze_root=state/'freezes',resume=journal.exists())
             packages.append(package); extra['packages'].append(package);captured.add(mid);new_captures.append(mid)
             atomic_json(state/'state.json',extra)
         except (ValueError,KeyError,OSError,TypeError) as exc:
@@ -476,6 +486,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='command',required=True)
     e=sub.add_parser('export');e.add_argument('--out',required=True);e.add_argument('--protocol',required=True);e.add_argument('--plans',required=True);e.add_argument('--packages',required=True);e.add_argument('--queue');e.add_argument('--dependencies-manifest')
     c=sub.add_parser('cycle');c.add_argument('--bundle',required=True);c.add_argument('--max-captures',type=int,default=3);c.add_argument('--max-result-requests',type=int,default=6);c.add_argument('--max-seconds',type=int,default=45)
+    c.add_argument('--market-dir');c.add_argument('--market-provider',action='append',default=[]);c.add_argument('--market-bookmaker',action='append',default=[])
     u=sub.add_parser('export-ucl');u.add_argument('--out',required=True);u.add_argument('--protocol',required=True);u.add_argument('--plan',required=True);u.add_argument('--packages',required=True)
     v=sub.add_parser('review-ucl');v.add_argument('--bundle',required=True);v.add_argument('--max-result-requests',type=int,default=2);v.add_argument('--max-seconds',type=int,default=20)
     a=p.parse_args()
@@ -486,6 +497,6 @@ def main():
     elif a.command=='review-ucl':
         m=ucl_cycle(a.bundle,max_result_requests=a.max_result_requests,max_seconds=a.max_seconds);print(json.dumps({k:m[k]for k in ('population','first_paired','completed','pending_results','missing_first_pairs')}))
     else:
-        m=cycle(a.bundle,max_captures=a.max_captures,max_result_requests=a.max_result_requests,max_seconds=a.max_seconds);print(json.dumps({k:m[k]for k in ('population','captured_population','new_captures','completed','pending','missing_first_pairs')}))
+        m=cycle(a.bundle,max_captures=a.max_captures,max_result_requests=a.max_result_requests,max_seconds=a.max_seconds,market_dir=a.market_dir,market_providers=a.market_provider,market_bookmakers=a.market_bookmaker);print(json.dumps({k:m[k]for k in ('population','captured_population','new_captures','completed','pending','missing_first_pairs')}))
 
 if __name__=='__main__':main()

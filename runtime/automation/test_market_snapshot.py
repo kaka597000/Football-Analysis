@@ -21,7 +21,7 @@ class MarketSnapshotTests(unittest.TestCase):
         board = {'leagues': [{'slug': 'uefa.nations'}], 'events': [{
             'id': '1', 'date': '2026-11-12T17:00Z', 'season': {'slug': 'league-phase'},
             'status': {'type': {'state': 'pre', 'completed': False}},
-            'competitions': [{'competitors': [
+            'competitions': [{'group': {'name': 'Group A1'}, 'competitors': [
                 {'homeAway': 'home', 'team': {'id': '10', 'displayName': 'Home'}},
                 {'homeAway': 'away', 'team': {'id': '20', 'displayName': 'Away'}}]}]}]}
         odds = [{'id': 'o1', 'sport_key': 'soccer_uefa_nations_league',
@@ -32,7 +32,8 @@ class MarketSnapshotTests(unittest.TestCase):
                      {'name': 'Under', 'price': 2.0, 'point': 2.5}]}]}]}]
         return odds, board
 
-    def run_case(self, mutate=lambda o, b: None, *, now=None, captured_at='2026-11-12T12:00:20Z'):
+    def run_case(self, mutate=lambda o, b: None, *, now=None, captured_at='2026-11-12T12:00:20Z',
+                 competition='uefa.nations'):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder); odds, board = self.inputs(root); mutate(odds, board)
             metas = []
@@ -41,7 +42,35 @@ class MarketSnapshotTests(unittest.TestCase):
                 metas.append({'file': p.name, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
                               'url': 'https://example.org/' + name, 'captured_at': captured_at})
             now = now or self.now
-            return build(root, *metas, cutoff=now.isoformat(), now=now)
+            return build(root, *metas, cutoff=now.isoformat(), now=now, competition=competition)
+
+    def test_real_group_identity_is_carried_to_prediction_bridge(self):
+        def mutate(odds, board):
+            board['events'][0]['competitions'][0]['group'] = {'name': 'GROUP C2'}
+        result = self.run_case(mutate)
+        target = result['snapshots'][0]['target']
+        self.assertEqual(target['cohort'], 'uefa.nations:C:league-phase')
+        self.assertEqual(target['competition'], 'uefa.nations')
+        self.assertEqual(target['stage'], 'league-phase')
+        self.assertEqual(result['snapshots'][0]['observations'][0]['cohort'], target['cohort'])
+
+    def test_domestic_scope_requires_matching_provider_and_regular_stage(self):
+        def mutate(odds, board):
+            board['leagues'][0]['slug'] = 'eng.1'
+            board['events'][0]['season']['slug'] = 'regular-season'
+            odds[0]['sport_key'] = 'soccer_epl'
+        result = self.run_case(mutate, competition='eng.1')
+        self.assertEqual(result['covered_fixture_count'], 1)
+        self.assertEqual(result['snapshots'][0]['target']['stage'], 'regular')
+        def wrong_stage(odds, board):
+            mutate(odds, board)
+            board['events'][0]['season']['slug'] = 'playoffs'
+        self.assertFalse(self.run_case(wrong_stage, competition='eng.1')['market_model_ready'])
+
+    def test_unverified_nations_grade_cannot_be_ready(self):
+        result = self.run_case(lambda o, b: b['events'][0]['competitions'][0].pop('group'))
+        self.assertFalse(result['market_model_ready'])
+        self.assertEqual(result['excluded']['missing_verified_nations_grade'], 1)
 
     def test_complete_same_line_keeps_real_quote_time(self):
         r = self.run_case(); self.assertTrue(r['market_model_ready'])
