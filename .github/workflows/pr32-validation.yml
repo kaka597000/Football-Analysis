@@ -19,6 +19,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt -r requirements-test.txt
+      - run: python -m pip install -r requirements-integration.txt
       - name: Retrieve existing checksum-locked backups
         env:
           GH_TOKEN: ${{ github.token }}
