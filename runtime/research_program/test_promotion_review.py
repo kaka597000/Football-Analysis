@@ -21,7 +21,7 @@ class GateTests(unittest.TestCase):
   for i in range(30):
    f={'match_id':str(i),'cohort':'eng.1','stage':'regular','identity_verified':True,'gender':'men','age':'senior','home':'A'+str(i),'away':'B'+str(i),'cutoff_at':cutoff.isoformat(),'kickoff_at':kickoff.isoformat()}
    def record(role,matrix,primary):
-    p={'input':copy.deepcopy(f),'input_sha256':digest(f),'version':'BASE' if role=='current' else 'CAND','generated_at':(cutoff+timedelta(seconds=10)).isoformat(),'matrix':matrix,'matrix_hash':digest(matrix),'primary':primary,'artifact_sha256':'b'*64}
+    p={'input':copy.deepcopy(f),'input_sha256':digest(f),'version':'BASE' if role=='current' else 'CAND','generated_at':(cutoff+timedelta(seconds=10)).isoformat(),'matrix':matrix,'matrix_hash':digest(matrix),'primary':primary,'artifact_sha256':'b'*64,'wdl_reference':'平局' if role=='current' else '主胜'}
     if role=='current':p={'current_model':p,'execution_audit':{'current':{'artifact_sha256':'a'*64},'fixture_sha256':digest(f)}}
     return seal({'track':'current-test-pair' if role=='current' else 'challenger-independent','fixture':copy.deepcopy(f),'stage':'prematch','evaluation_slot':'FIRST_PREMATCH','recorded_at':(cutoff+timedelta(seconds=20)).isoformat(),'payload':p})
    rows.append({'match_id':str(i),'current_record':record('current',[[1.,0.],[0.,0.]],'0-0'),'candidate_record':record('candidate',[[0.,0.],[1.,0.]],'1-0'),'result':{'status':'completed','match_id':str(i),'home_goals':1,'away_goals':0,'score_basis':'regulation_90','source_url':'https://example.test/synthetic','observed_at':now.isoformat()}})
@@ -75,9 +75,29 @@ class GateTests(unittest.TestCase):
  def test_noncanonical_primary_cannot_disagree_between_evaluators(self):
   plan,rows,_=self.package();rows[0]['candidate_record']['payload']['primary']='01-00';seal(rows[0]['candidate_record'])
   with self.assertRaisesRegex(ValueError,'canonical Primary'):assess(plan,rows)
+ def test_published_wdl_regression_cannot_hide_behind_better_matrix_direction(self):
+  plan,rows,_=self.package()
+  for row in rows:
+   row['current_record']['payload']['current_model']['wdl_reference']='主胜';seal(row['current_record'])
+   row['candidate_record']['payload']['wdl_reference']='客胜';seal(row['candidate_record'])
+  r=assess(plan,rows)
+  self.assertEqual(r['probability_metrics']['candidate']['metrics']['wdl_accuracy'],1.)
+  self.assertEqual(r['probability_metrics']['candidate']['frozen_wdl']['accuracy'],0.)
+  self.assertIn('WDL_DIRECTION_REGRESSION',r['reasons'])
+ def test_missing_frozen_wdl_does_not_fall_back_to_matrix_mode(self):
+  plan,rows,_=self.package()
+  for row in rows:
+   row['candidate_record']['payload'].pop('wdl_reference');seal(row['candidate_record'])
+  r=assess(plan,rows)
+  self.assertEqual(r['probability_metrics']['candidate']['frozen_wdl']['n'],0)
+  self.assertIn('FROZEN_WDL_DIRECTION_UNAVAILABLE',r['reasons'])
+  self.assertIn('WDL_COVERAGE_REGRESSION',r['reasons'])
  def test_receipts_cannot_be_reused_after_result_change(self):
   plan,rows,receipts=self.package();rows[0]['result']['home_goals']=0
   with self.assertRaisesRegex(ValueError,'audit binding'):assess(plan,rows,receipts)
+ def test_conflicting_final_and_live_status_cannot_promote(self):
+  plan,rows,receipts=self.package();rows[0]['result']['event_status']='LIVE'
+  with self.assertRaisesRegex(ValueError,'conflicting result status'):assess(plan,rows,receipts)
  def test_duplicate_universe_cannot_approve(self):
   p=self.plan();p['payload']['eligible_match_ids']*=2;seal(p)
   with self.assertRaises(ValueError):assess(p,[])

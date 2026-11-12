@@ -86,7 +86,7 @@
     "primary_metric_unchanged": "future_frozen_primary_exact_score_top1",
     "policy": "docs/asia-leagues-ood-research-tracks.md"
   },
-  "reconfirmed_at": "2026-11-02",
+  "reconfirmed_at": "2026-11-12",
   "continuous_optimization": {
     "status": "LONG_TERM_OBJECTIVE_CONFIRMED",
     "mission": "持续优化分析模型，提高胜平负、实际盘口大小球及唯一第一推荐比分的未来真实命中率",
@@ -105,7 +105,8 @@
       "report_uncertainty",
       "keep_abstentions_and_pending_results_visible"
     ],
-    "background_status": "沿用已有任务授权；本次仅登记目标，未启动或验证后台训练"
+    "background_status": "沿用已有任务授权；本次仅登记目标，未启动或验证后台训练",
+    "latest_execution_report": "docs/metric-optimization-20261112.md"
   },
   "analysis_preferences": {
     "confirmed_at": "2026-11-02",

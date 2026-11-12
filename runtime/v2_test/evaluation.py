@@ -5,7 +5,7 @@ import numpy as np
 
 def evaluate(rows):
     if not rows:raise ValueError('nonempty held-out rows required')
-    stats=[];market=[];tails=[];bins=[[] for _ in range(10)];primary=[]
+    stats=[];market=[];tails=[];bins=[[] for _ in range(10)];primary=[];frozen_wdl=[]
     for row in rows:
         m=np.asarray(row['matrix'],dtype=float);h,a=row['home_goals'],row['away_goals']
         if m.ndim!=2 or type(h) is not int or type(a) is not int or min(h,a)<0 or h>=m.shape[0] or a>=m.shape[1]:raise ValueError('score support')
@@ -14,13 +14,19 @@ def evaluate(rows):
         score_brier=float(np.square(flat).sum()-2*flat[target]+1)
         wdl=np.array([np.tril(m,-1).sum(),np.trace(m),np.triu(m,1).sum()]);wdl_y=0 if h>a else 1 if h==a else 2;one=np.eye(3)[wdl_y]
         stats.append([rank<=1,rank<=3,rank<=5,-math.log(max(float(flat[target]),1e-15)),score_brier,float(np.square(wdl-one).sum()),float(np.square(np.cumsum(wdl)[:-1]-np.cumsum(one)[:-1]).sum()/2),int(wdl.argmax())==wdl_y])
+        direction=row.get('wdl_reference')
+        if direction in ('主胜','平局','客胜'):
+            frozen_wdl.append((direction==('主胜','平局','客胜')[wdl_y],int(wdl.argmax())==wdl_y))
+        elif direction not in (None,'观望','ABSTAIN'):
+            raise ValueError('frozen WDL direction or explicit abstention required')
         conf=float(flat[order[0]]);bins[min(int(conf*10),9)].append((conf,rank==1))
         hg,ag=np.indices(m.shape)
         for name,mask,event in [('home3+',hg>=3,h>=3),('home4+',hg>=4,h>=4),('away3+',ag>=3,a>=3),('away4+',ag>=4,a>=4),('total4+',hg+ag>=4,h+a>=4),('total5+',hg+ag>=5,h+a>=5)]:
             p=float(m[mask].sum());tails.append((name,p,bool(event)))
         if row.get('primary_score') is not None:
             score=row['primary_score']
-            if not isinstance(score,list) or len(score)!=2 or any(type(x) is not int or x<0 for x in score):raise ValueError('primary')
+            if (not isinstance(score,list) or len(score)!=2 or any(type(x) is not int or x<0 for x in score)
+                    or score[0]>=m.shape[0] or score[1]>=m.shape[1]):raise ValueError('primary')
             primary.append((score==[h,a],rank==1))
         if row.get('market_wdl') is not None:
             p=np.asarray(row['market_wdl'],dtype=float)
@@ -30,6 +36,7 @@ def evaluate(rows):
     result={'n':len(rows),'metrics':dict(zip(columns,map(float,np.mean(stats,axis=0)))),
        'calibration_bins':[{'n':len(b),'mean_probability':float(np.mean([x[0] for x in b])),'hit_rate':float(np.mean([x[1] for x in b]))} for b in bins if b],
        'primary':{'n':len(primary),'hits':sum(x[0] for x in primary),'coverage':len(primary)/len(rows),'accuracy':sum(x[0] for x in primary)/len(primary) if primary else None,'full_population_accuracy':sum(x[0] for x in primary)/len(rows),'net_hits_vs_probability_top1_same_subset':sum(int(x[0])-int(x[1]) for x in primary)},
+       'frozen_wdl':{'n':len(frozen_wdl),'hits':sum(x[0] for x in frozen_wdl),'coverage':len(frozen_wdl)/len(rows),'accuracy':sum(x[0] for x in frozen_wdl)/len(frozen_wdl) if frozen_wdl else None,'full_population_accuracy':sum(x[0] for x in frozen_wdl)/len(rows),'net_hits_vs_probability_direction_same_subset':sum(int(x[0])-int(x[1]) for x in frozen_wdl)},
        'market_paired_n':len(market),'market_paired_brier':{k:float(np.mean([r[k] for r in market])) for k in ['model_brier','market_brier']} if market else None,
        'tail':{},'notice':'Inputs must already be time-held-out, source-verified first-freeze records; this function cannot certify their provenance. No filtered subset replaces full-population metrics. Total-line five-way settlement uses existing paired_review, not a guessed line.'}
     for name in sorted(set(x[0] for x in tails)):

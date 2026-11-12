@@ -1,6 +1,6 @@
 # 综合Primary同场净增命中
 
-research_program/selection_review.py 从实际冻结记录比较综合Primary与其引用的Current/Test。要求综合为首次赛前版本、引用的pair冻结ID与SHA精确一致、双方赛事/时间一致、矩阵哈希及统计众数一致、90分钟赛果及赛后观测时间有效。修订版不能重复增加比赛数；各模型版本分组，不择优组合。
+research_program/selection_review.py 从实际冻结记录比较综合Primary与其引用的Current/Test。要求综合为首次赛前版本、引用的pair冻结ID与SHA精确一致、双方赛事/时间一致、矩阵哈希有效、90分钟赛果及赛后观测时间有效。统计比分从冻结矩阵取众数，与实际发布Primary分别列示，合法选分不要求等于矩阵众数。无活动路由或缺少版本保留在UNAVAILABLE分组和待赛分母中。修订版不能重复增加比赛数；各模型版本分组，不择优组合。
 
 保留全批分母、待赛果、待定覆盖、改对、改错和净命中。综合引用的是较晚pair修订时，明确标注reference比较；不能替代各模型自身首次冻结的主KPI。市场方向与大小球继续由原paired_review独立结算，不由这个比分比较反推。
 

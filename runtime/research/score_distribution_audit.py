@@ -14,8 +14,9 @@ try:
 except ImportError:
     from team_goal_analysis import summarize_prediction
 
-VERSION = 'WCPP-SCORE-DISTRIBUTION-AUDIT-0.1'
+VERSION = 'WCPP-SCORE-DISTRIBUTION-AUDIT-0.2'
 PAIR_DIAGNOSTIC_VERSION = 'WCPP-CURRENT-TEST-DISAGREEMENT-0.1'
+RESEARCH_SCOPE = 'candidate_research'
 
 
 def parse_score(value):
@@ -224,6 +225,54 @@ def _reference(reference, *, expected_track, match_id, cutoff, verify_record):
     return record
 
 
+def _same_fixture(left, right, *, require_identity=False):
+    if (not isinstance(left, dict) or not isinstance(right, dict)
+            or not left.get('kickoff_at') or not right.get('kickoff_at')):
+        raise ValueError('paired reference requires fixture and kickoff')
+    if _aware(left['kickoff_at']) != _aware(right['kickoff_at']):
+        raise ValueError('paired reference kickoff mismatch')
+    for key in ('match_id', 'competition', 'cohort', 'home', 'away', 'phase'):
+        if require_identity and (not left.get(key) or not right.get(key)):
+            raise ValueError('candidate reference requires fixture identity: '+key)
+        if key in left and key in right and left[key] != right[key]:
+            raise ValueError('paired reference fixture identity mismatch: '+key)
+
+
+def _research_pair(payload, fixture, cutoff, verify_record):
+    """Read an explicit existing candidate schema without promoting its roles."""
+    record = _reference(payload.get('candidate_reference'),
+                        expected_track='nations-paired-candidates',
+                        match_id=fixture['match_id'], cutoff=cutoff,
+                        verify_record=verify_record)
+    _same_fixture(record['fixture'], fixture, require_identity=True)
+    if (record['payload'].get('active_route') is not False
+            or record['payload'].get('formal_kpi_eligible') is not False):
+        raise ValueError('explicit inactive research candidate pair required')
+    pair = {}
+    for role in ('current', 'test'):
+        prediction = record['payload'].get(role)
+        if not isinstance(prediction, dict) or prediction.get('role') != role:
+            raise ValueError('candidate pair role mismatch')
+        if (prediction.get('status') != 'TRAINED_CANDIDATE_RESEARCH_ONLY'
+                or prediction.get('formal_kpi_eligible') is not False):
+            raise ValueError('explicit research-only prediction required')
+        if not prediction.get('version') or not re.fullmatch(
+                r'[0-9a-f]{64}', str(prediction.get('artifact_sha256', ''))):
+            raise ValueError('candidate model version and artifact identity required')
+        _same_fixture(prediction.get('input', {}), record['fixture'], require_identity=True)
+        if not (_aware(prediction['input']['cutoff_at'])
+                <= _aware(prediction['generated_at']) <= _aware(record['recorded_at'])
+                < _aware(fixture['kickoff_at'])):
+            raise ValueError('candidate prediction chronology mismatch')
+        if not prediction.get('matrix_hash'):
+            raise ValueError('candidate source matrix hash required')
+        # summarize_prediction checks probability validity and the original hash.
+        if summarize_prediction(prediction)['status'] != 'AVAILABLE':
+            raise ValueError('both candidate score matrices required')
+        pair[role+'_model'] = prediction
+    return pair
+
+
 def audit_issued(payload, fixture, *, stage, track, verify_record):
     """Derive new-record audit metadata, preserving old payloads and their hashes.
 
@@ -233,15 +282,24 @@ def audit_issued(payload, fixture, *, stage, track, verify_record):
     if stage != 'prematch' or track not in ('comprehensive', 'top3-selection'):
         return None
     cutoff = _aware(fixture['cutoff_at'])
+    scope = payload.get('selection_scope', 'active_reference')
+    if scope not in ('active_reference', RESEARCH_SCOPE):
+        raise ValueError('unknown selection scope')
     if track == 'comprehensive':
+        if scope == RESEARCH_SCOPE:
+            pair = _research_pair(payload, fixture, cutoff, verify_record)
+            result = comprehensive_audit(payload, pair)
+            result.update(selection_scope=RESEARCH_SCOPE, formal_kpi_eligible=False,
+                          active_model_promotion=False,
+                          reference_track='nations-paired-candidates')
+            return result
         reference = payload.get('current_test_reference')
         if reference is None:
             return {'version': VERSION, 'status': 'UNAVAILABLE', 'top3_ready': False,
                     'reason': 'NO_VERIFIED_CURRENT_TEST_FREEZE_REFERENCE'}
         record = _reference(reference, expected_track='current-test-pair',
                             match_id=fixture['match_id'], cutoff=cutoff, verify_record=verify_record)
-        if _aware(record['fixture']['kickoff_at']) != _aware(fixture['kickoff_at']):
-            raise ValueError('paired reference kickoff mismatch')
+        _same_fixture(record['fixture'], fixture)
         return comprehensive_audit(payload, record['payload'])
     items = payload.get('top3')
     if not isinstance(items, list) or len(items) > 3:
@@ -256,10 +314,16 @@ def audit_issued(payload, fixture, *, stage, track, verify_record):
                             match_id=match_id, cutoff=cutoff, verify_record=verify_record)
         if not record.get('selection_audit', {}).get('top3_ready'):
             raise ValueError('TOP3 requires resolved score/zero-goal/total comparisons; freeze the full analysis first')
+        if record['selection_audit'].get('selection_scope', 'active_reference') != scope:
+            raise ValueError('TOP3 scope must match referenced comprehensive analysis')
         for key in ('primary', 'wdl', 'total_line', 'total_direction'):
             if item.get(key) != record['payload'].get(key):
                 raise ValueError('TOP3 recommendation differs from referenced comprehensive freeze: '+key)
         if _aware(fixture['kickoff_at']) > _aware(record['fixture']['kickoff_at']):
             raise ValueError('batch kickoff must not follow selected match kickoff')
-    return {'version': VERSION, 'status': 'COMPARISONS_DOCUMENTED', 'n': len(items),
-            'completeness_is_not_accuracy_evidence': True, 'numeric_output_modified': False}
+    result = {'version': VERSION, 'status': 'COMPARISONS_DOCUMENTED', 'n': len(items),
+              'completeness_is_not_accuracy_evidence': True, 'numeric_output_modified': False}
+    if scope == RESEARCH_SCOPE:
+        result.update(selection_scope=RESEARCH_SCOPE, formal_kpi_eligible=False,
+                      active_model_promotion=False)
+    return result

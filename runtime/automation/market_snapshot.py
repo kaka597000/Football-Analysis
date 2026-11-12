@@ -1,7 +1,7 @@
 """Bounded Nations League market collection with retained identity/time evidence.
 
-This is a data channel, not an active-model or staking change. Only exact team
-names, home/away order and kickoff matches are admitted; aliases remain missing.
+This is a data channel, not an active-model or staking change. Exact names or
+reviewed provider/team-ID aliases require the same sides, competition and kickoff.
 """
 import argparse
 from collections import Counter, defaultdict
@@ -23,6 +23,49 @@ except ModuleNotFoundError:
 ODDS = 'https://api.the-odds-api.com/v4/sports/soccer_uefa_nations_league/odds/'
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard'
 MAX_AGE_SECONDS = 60
+
+# Reviewed from retained raw responses, not transliteration/fuzzy matching. IDs
+# are national-team ESPN identities; no fixture ID is baked into future matching.
+ALIAS_REVIEW = {
+    'version': 'nations-national-teams-20261112-1',
+    'reviewed_at': '2026-11-12T13:43:21.438909+00:00',
+    'provider': 'the-odds-api', 'sport_key': 'soccer_uefa_nations_league',
+    'cohort': 'uefa.nations', 'phase': 'league-phase',
+    'raw_odds_sha256': '182c812ca39cb293058f4a6cf6904c16c76a2633127f2cea213ec45ef86a0224',
+    'identity_sha256': '27276f59f9abaa583098f4becad5bfc74b89b75b60f3525361c9927ff51e336e',
+    'archive': {
+        'repository': 'kaka597000/kaka597000-Football-Analysis-Data',
+        'commit': 'f7448c65ad358c8240dc3111850531d1abcb5ce3',
+        'file': 'workspace-updates/20261112-nations-prematch/nations-prematch-evidence.tar.gz',
+        'sha256': '0deb5a50e677e6f9bb05ffc9028217ba02d3fbb4909701045817cf334c298c76',
+        'review_file': 'WCPP/reports/nations-prematch-20261112-2135/data/odds-identity-crosswalk.json',
+    },
+    'teams': [
+        {'espn_id': '465', 'espn_name': 'Türkiye', 'provider_name': 'Turkey'},
+        {'espn_id': '450', 'espn_name': 'Czechia', 'provider_name': 'Czech Republic'},
+    ],
+}
+ALIAS_REVIEW_SHA256 = hashlib.sha256(json.dumps(
+    ALIAS_REVIEW, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+
+
+def team_identity(team, provider_name, cutoff):
+    """Return match evidence, or None. A reviewed name never admits another ID."""
+    relevant = [rule for rule in ALIAS_REVIEW['teams']
+                if provider_name in (rule['provider_name'], rule['espn_name'])
+                or team['displayName'] in (rule['provider_name'], rule['espn_name'])]
+    if relevant:
+        if len(relevant) != 1 or team['id'] != relevant[0]['espn_id']:
+            return None
+        rule = relevant[0]
+        if team['displayName'] != rule['espn_name']:
+            return None
+        if provider_name == rule['espn_name']:
+            return {}
+        if provider_name == rule['provider_name'] and aware(ALIAS_REVIEW['reviewed_at']) <= aware(cutoff):
+            return dict(rule)
+        return None
+    return {} if provider_name == team['displayName'] else None
 
 
 def write(path, value):
@@ -59,14 +102,25 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
         eligible.append((event, sides))
     snapshots, excluded, mappings = [], Counter(), []
     for event, sides in eligible:
-        matched = [o for o in odds if o.get('sport_key') == 'soccer_uefa_nations_league'
-                   and o.get('home_team') == sides['home']['displayName']
-                   and o.get('away_team') == sides['away']['displayName']
-                   and aware(o['commence_time']) == aware(event['date'])]
+        matched = []
+        for source in odds:
+            if (source.get('sport_key') != ALIAS_REVIEW['sport_key']
+                    or aware(source['commence_time']) != aware(event['date'])):
+                continue
+            identities = {side: team_identity(sides[side], source.get(side + '_team'), cutoff)
+                          for side in ('home', 'away')}
+            if all(value is not None for value in identities.values()):
+                matched.append((source, {side: value for side, value in identities.items() if value}))
         if len(matched) != 1:
             excluded['missing_or_ambiguous_identity'] += 1
             continue
-        source = matched[0]
+        source, aliases = matched[0]
+        alias_evidence = ({'review_version': ALIAS_REVIEW['version'],
+                           'review_sha256': ALIAS_REVIEW_SHA256,
+                           'reviewed_at': ALIAS_REVIEW['reviewed_at'], 'teams': aliases,
+                           'provider_source_names': {side: source[side + '_team'] for side in ('home', 'away')},
+                           'identity_source_names': {side: sides[side]['displayName'] for side in ('home', 'away')}}
+                          if aliases else None)
         target = {'cohort': 'uefa.nations', 'match_id': 'espn:' + event['id'],
                   'home_id': 'espn:' + sides['home']['id'], 'away_id': 'espn:' + sides['away']['id'],
                   'kickoff_at': event['date'], 'cutoff_at': cutoff}
@@ -102,6 +156,8 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
                                     'url': odds_meta['url'], 'query_time': odds_meta['captured_at'],
                                     'request_started_at': odds_meta.get('requested_at'),
                                     'identity_verified': True}}
+                if alias_evidence:
+                    row['identity_alias_review'] = alias_evidence
                 try:
                     validate(row, root, now=now)
                 except (ValueError, KeyError, TypeError):
@@ -127,9 +183,13 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
         snap = snapshot(rows, target, root, provider='the-odds-api',
                         market_max_age_seconds=MAX_AGE_SECONDS, now=now)
         snapshots.append(snap)
-        mappings.append({'match_id': target['match_id'], 'provider_match_id': source['id'],
-                         'home_id': target['home_id'], 'away_id': target['away_id'],
-                         'kickoff_at': target['kickoff_at'], 'identity_evidence_sha256': identity_meta['sha256']})
+        mapping = {'match_id': target['match_id'], 'provider_match_id': source['id'],
+                   'home_id': target['home_id'], 'away_id': target['away_id'],
+                   'kickoff_at': target['kickoff_at'], 'identity_evidence_sha256': identity_meta['sha256']}
+        if alias_evidence:
+            mapping['identity_alias_review'] = alias_evidence
+            mapping['odds_evidence_sha256'] = odds_meta['sha256']
+        mappings.append(mapping)
     count = sum(len(s['observations']) for s in snapshots)
     covered = sum(bool(s['observations']) for s in snapshots)
     return {'schema': 'WCPP-MARKET-CHANNEL-1', 'created_at': now.isoformat(),
@@ -139,6 +199,7 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
             'coverage_scope': 'ESPN Nations League league-phase future fixtures on requested UTC day',
             'source_odds_events': len(odds), 'market_max_age_seconds': MAX_AGE_SECONDS,
             'excluded': dict(excluded), 'identity_mappings': mappings, 'snapshots': snapshots,
+            'identity_alias_review': dict(ALIAS_REVIEW, sha256=ALIAS_REVIEW_SHA256),
             'tls_verification_disabled': False, 'active_model_changed': False,
             'quote_time_inferred_from_capture': False}
 

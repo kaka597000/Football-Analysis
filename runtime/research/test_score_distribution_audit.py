@@ -158,5 +158,96 @@ class DistributionAuditTests(unittest.TestCase):
             old['record_sha256']=digest(old)
             self.assertEqual(verify(old),old)
 
+    def candidate_fixture(self):
+        return dict(self.fixture(), competition='uefa.nations',
+                    cohort='uefa.nations:A:league-phase', home='espn:1',
+                    away='espn:2', phase='PreMatch')
+
+    def candidate_pair(self, fixture):
+        pair = {'active_route': False, 'formal_kpi_eligible': False}
+        for role in ('current', 'test'):
+            prediction = poisson_pair()
+            prediction.update(role=role, version='synthetic-'+role,
+                              artifact_sha256='a'*64,
+                              matrix_hash=digest(prediction['matrix']),
+                              input=copy.deepcopy(fixture),
+                              generated_at=datetime.now(timezone.utc).isoformat(),
+                              status='TRAINED_CANDIDATE_RESEARCH_ONLY',
+                              formal_kpi_eligible=False)
+            pair[role] = prediction
+        return pair
+
+    def research_payload(self, reference):
+        return {'primary': '1-0', 'wdl': '主胜', 'total_direction': '小',
+                'total_line': 2.5, 'candidate_reference': reference,
+                'selection_scope': 'candidate_research',
+                'selection_evidence': self.evidence()}
+
+    def test_candidate_research_top3_is_explicit_and_separate(self):
+        with tempfile.TemporaryDirectory() as root:
+            fixture = self.candidate_fixture()
+            pair = self.candidate_pair(fixture)
+            before = copy.deepcopy(pair)
+            ref = save(pair, fixture, stage='prematch',
+                       track='nations-paired-candidates', root=root)
+            raw = Path(ref['path']).read_bytes()
+            payload = self.research_payload(ref)
+            comp = save(payload, self.refresh(fixture), stage='prematch',
+                        track='comprehensive', root=root)
+            audit = verify(json.loads(Path(comp['path']).read_text()))['selection_audit']
+            self.assertTrue(audit['top3_ready'])
+            self.assertFalse(audit['formal_kpi_eligible'])
+            self.assertFalse(audit['active_model_promotion'])
+            item = {k: payload[k] for k in ('primary', 'wdl', 'total_line', 'total_direction')}
+            item.update(rank=1, match_id=fixture['match_id'], comprehensive_reference=comp)
+            batch = {'top3': [item]}
+            batch_fixture = dict(self.refresh(fixture), match_id='synthetic-batch')
+            with self.assertRaisesRegex(ValueError, 'scope'):
+                save(batch, batch_fixture, stage='prematch', track='top3-selection', root=root)
+            batch['selection_scope'] = 'candidate_research'
+            receipt = save(batch, batch_fixture, stage='prematch', track='top3-selection', root=root)
+            record = verify(json.loads(Path(receipt['path']).read_text()))
+            self.assertFalse(record['selection_audit']['formal_kpi_eligible'])
+            self.assertEqual(pair, before)
+            self.assertEqual(Path(ref['path']).read_bytes(), raw)
+            # A candidate reference alone cannot silently activate a new path.
+            del payload['selection_scope']
+            receipt = save(payload, self.refresh(fixture), stage='prematch',
+                           track='comprehensive', root=root)
+            self.assertFalse(json.loads(Path(receipt['path']).read_text())['selection_audit']['top3_ready'])
+
+    def test_candidate_research_requires_identity_chronology_and_original_matrix(self):
+        mutations = [
+            lambda p: p['test'].update(role='current'),
+            lambda p: p.update(active_route=True),
+            lambda p: p['test'].update(matrix_hash='b'*64),
+            lambda p: p['test']['input'].update(home='espn:99'),
+            lambda p: p['test']['input'].update(cohort='uefa.nations:B:league-phase'),
+            lambda p: p['test'].update(generated_at='2100-01-01T00:00:00Z'),
+            lambda p: p['test'].update(status='ABSTAIN'),
+        ]
+        for mutate in mutations:
+            with self.subTest(mutation=mutate), tempfile.TemporaryDirectory() as root:
+                fixture = self.candidate_fixture()
+                pair = self.candidate_pair(fixture)
+                mutate(pair)
+                ref = save(pair, fixture, stage='prematch', track='nations-paired-candidates', root=root)
+                with self.assertRaises(ValueError):
+                    save(self.research_payload(ref), self.refresh(fixture),
+                         stage='prematch', track='comprehensive', root=root)
+
+    def test_research_comparisons_and_abstentions_keep_existing_gate(self):
+        with tempfile.TemporaryDirectory() as root:
+            fixture = self.candidate_fixture()
+            ref = save(self.candidate_pair(fixture), fixture, stage='prematch',
+                       track='nations-paired-candidates', root=root)
+            for primary, evidence in [('1-0', {}), (None, self.evidence())]:
+                payload = self.research_payload(ref)
+                payload.update(primary=primary, selection_evidence=evidence)
+                receipt = save(payload, self.refresh(fixture), stage='prematch',
+                               track='comprehensive', root=root)
+                audit = json.loads(Path(receipt['path']).read_text())['selection_audit']
+                self.assertFalse(audit['top3_ready'])
+
 
 if __name__=='__main__': unittest.main()

@@ -28,12 +28,33 @@ class SelectionTests(unittest.TestCase):
  def test_net_hit_and_pending_denominator(self):
   entry,result=self.data();r=compare([entry],[result]);self.assertEqual(r['by_model_version']['current_model:SYNTHETIC']['net_hits'],1)
   r=compare([entry],[]);self.assertEqual(len(r['pending']),1);self.assertEqual(r['population'],1)
+ def reseal(self,entry):
+  entry['pair']['record_sha256']=digest({k:v for k,v in entry['pair'].items() if k!='record_sha256'})
+  entry['comprehensive']['payload']['current_test_reference']['sha256']=entry['pair']['record_sha256']
+  entry['comprehensive']['record_sha256']=digest({k:v for k,v in entry['comprehensive'].items() if k!='record_sha256'})
+ def test_missing_version_in_no_active_route_keeps_pending_population(self):
+  entry,_=self.data()
+  entry['pair']['payload']={k:{'primary':None,'matrix':None,'status':'ABSTAIN_NO_ACTIVE_ROUTE'} for k in ('current_model','test_model')}
+  self.reseal(entry);r=compare([entry],[])
+  self.assertEqual(r['population'],1);self.assertEqual(len(r['pending']),1)
+  self.assertEqual(r['by_model_version']['current_model:UNAVAILABLE']['model_available'],0)
+  self.assertIsNone(r['pending_rows'][0]['models']['current_model']['version'])
+ def test_issued_primary_and_matrix_mode_are_separate_comparisons(self):
+  entry,result=self.data()
+  for prediction in entry['pair']['payload'].values():prediction['primary']='1-1'
+  self.reseal(entry);r=compare([entry],[result]);m=r['rows'][0]['models']['current_model']
+  self.assertEqual(m['statistical_primary'],'1-0');self.assertFalse(m['statistical_hit'])
+  self.assertEqual(m['issued_primary'],'1-1');self.assertTrue(m['issued_primary_hit'])
+  self.assertEqual(r['by_model_version']['current_model:SYNTHETIC']['net_hits'],1)
  def test_reference_tampering_or_revision_selection_rejected(self):
   entry,result=self.data();entry['comprehensive']['evaluation_slot']='SEPARATE_REVISION_OR_STAGE';body={k:v for k,v in entry['comprehensive'].items() if k!='record_sha256'};entry['comprehensive']['record_sha256']=digest(body)
   with self.assertRaises(ValueError):compare([entry],[result])
  def test_duplicate_matches_do_not_double_count(self):
   entry,result=self.data()
   with self.assertRaises(ValueError):compare([entry,entry],[result])
+ def test_contradictory_result_status_cannot_settle_comprehensive(self):
+  entry,result=self.data();result['event_status']='LIVE'
+  with self.assertRaisesRegex(ValueError,'conflicting result status'):compare([entry],[result])
  def test_pending_and_abstained_keep_each_version_denominator(self):
   entry,result=self.data();r=compare([entry],[])
   group=r['by_model_version']['current_model:SYNTHETIC']
