@@ -52,17 +52,17 @@ jobs:
           (out/'selected.json').write_text(json.dumps(selected,indent=2))
           (out/'inventory.json').write_text(json.dumps(inventory,indent=2))
           expected='111ee2301cb345844887865ff625eec5944fa74d06da0f359b97c95b38df9589'
-          commits=subprocess.check_output(['git','rev-list','--all','--','runtime/optimization'],text=True).splitlines()
-          checks=[];match=None
-          for commit in commits:
-              names=subprocess.check_output(['git','ls-tree','-r','--name-only',commit,'runtime/optimization'],text=True).splitlines()
-              values={pathlib.PurePosixPath(n).name:hashlib.sha256(subprocess.check_output(['git','show',commit+':'+n])).hexdigest() for n in sorted(names) if n.endswith('.py') and not pathlib.PurePosixPath(n).name.startswith('test_') and len(pathlib.PurePosixPath(n).parts)==3}
-              key=hashlib.sha256(json.dumps(values,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
-              checks.append({'commit':commit,'optimization_code_hash':key})
-              if key==expected:
-                  match=commit;subprocess.run(['git','archive','--format=tar.gz','-o',str(out/'compatible-source.tar.gz'),commit,'runtime','configs'],check=True);break
-          (out/'source-search.json').write_text(json.dumps({'expected':expected,'matched_commit':match,'checked':checks},indent=2))
+          match='b6242ba06ec8e23b1613bb9ed32397f6ebad0987'
+          names=subprocess.check_output(['git','ls-tree','-r','--name-only',match,'runtime/optimization'],text=True).splitlines()
+          values={pathlib.PurePosixPath(n).name:hashlib.sha256(subprocess.check_output(['git','show',match+':'+n])).hexdigest() for n in sorted(names) if n.endswith('.py') and not pathlib.PurePosixPath(n).name.startswith('test_') and len(pathlib.PurePosixPath(n).parts)==3}
+          actual=hashlib.sha256(json.dumps(values,sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
+          if actual!=expected:raise ValueError('historical inference dependency checksum')
+          subprocess.run(['git','archive','--format=tar.gz','-o',str(out/'compatible-source.tar.gz'),match,'runtime'],check=True)
+          (out/'source-search.json').write_text(json.dumps({'expected':expected,'actual':actual,'matched_commit':match,'files':values},indent=2))
           (out/'receipt.json').write_text(json.dumps({'backup_commit':ref,'archive_sha256':h.hexdigest(),'selected_count':len(selected),'matching_source_commit':match,'active_modified':False},indent=2))
+          dataref='9a7bb55ce149a5b7bc9a4a9684ac160f964c83d7'
+          tree=get('https://api.github.com/repos/'+repo+'/git/trees/'+dataref+'?recursive=1')
+          (out/'data-tree.json').write_bytes(tree)
           print('Recovered',len(selected),'files; matched historical source:',match)
           PY
       - name: Test real free collection without deployment
@@ -75,6 +75,7 @@ jobs:
           print(json.dumps({k:v for k,v in r.items() if k!='new_rows'}))
           PY
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: pr32-j1-history
           path: /tmp/pr32-assets
