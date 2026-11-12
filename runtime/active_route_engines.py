@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -116,6 +117,13 @@ def predict_v4_compat(artifact_path, fixture):
     adapted["version"] = main_model.VERSION
     adapted["code_hash"] = main_model.code_hash()
     model_fixture = dict(fixture)
+    recovery_path = os.environ.get("WCPP_J1_COMPATIBILITY_MANIFEST")
+    if recovery_path and fixture.get("cohort") == "jpn.1":
+        from research_program.retained_j1 import load_manifest, fixture_for
+        recovery = load_manifest(recovery_path, "current")
+        if file_sha256(artifact_path) != recovery["current_sha256"]:
+            raise ValueError("J1 recovery does not match selected Current artifact")
+        model_fixture = fixture_for(recovery, fixture, "current")
     supplied_date = model_fixture.pop("date", None)
     if supplied_date and supplied_date != aware(fixture["kickoff_at"]).date().isoformat():
         raise ValueError("fixture date conflicts with kickoff timestamp")
@@ -133,6 +141,9 @@ def predict_v4_compat(artifact_path, fixture):
         "date_adapter": "removed redundant date field after equality check",
         "source_artifact_immutable": True,
     }
+    if recovery_path and fixture.get("cohort") == "jpn.1":
+        result["execution_adapter"]["team_mapping_manifest_sha256"] = recovery["manifest_sha256"]
+        result["execution_adapter"]["mapped_engine_team_ids"] = {s: model_fixture[s] for s in ("home", "away")}
     result["source_artifact_sha256"] = file_sha256(artifact_path)
     result["formal_kpi_eligible"] = False
     return result
@@ -143,7 +154,15 @@ def predict_systematic_candidate(artifact_path, fixture):
     import candidate
 
     _prematch_clock(fixture, built_at=json.loads(Path(artifact_path).read_text())["created_at"])
-    raw = candidate.calculate(artifact_path, fixture)
+    recovery_path = os.environ.get("WCPP_J1_COMPATIBILITY_MANIFEST")
+    if recovery_path and fixture.get("cohort") == "jpn.1":
+        from research_program.retained_j1 import load_manifest, calculate
+        recovery = load_manifest(recovery_path)
+        if file_sha256(artifact_path) != recovery["test_sha256"]:
+            raise ValueError("J1 recovery does not match selected Test artifact")
+        raw = calculate(recovery, fixture)
+    else:
+        raw = candidate.calculate(artifact_path, fixture)
     artifact = json.loads(Path(artifact_path).read_text())
     return _normalized(raw, fixture, version=raw.get("model", artifact["version"]),
                        role="TEST_SYSTEMATIC_RESEARCH", artifact_path=artifact_path,
