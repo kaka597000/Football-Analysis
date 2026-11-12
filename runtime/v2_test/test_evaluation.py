@@ -16,4 +16,15 @@ class Tests(unittest.TestCase):
         self.assertEqual(p['full_population_accuracy'],.5)
         p=evaluate(rows[1:])['primary']
         self.assertIsNone(p['accuracy']);self.assertEqual(p['full_population_accuracy'],0.)
+    def test_frozen_direction_is_not_score_direction_or_probability_mode(self):
+        row={'matrix':[[.4,.1],[.2,.3]],'home_goals':1,'away_goals':0,'primary_score':[1,0],'wdl_reference':'主胜'}
+        r=evaluate([row,dict(row,primary_score=None,wdl_reference=None)])
+        self.assertEqual(r['metrics']['wdl_accuracy'],0.)
+        self.assertEqual(r['frozen_wdl']['hits'],1);self.assertEqual(r['frozen_wdl']['n'],1)
+        self.assertEqual(r['frozen_wdl']['coverage'],.5)
+        self.assertEqual(r['frozen_wdl']['net_hits_vs_probability_direction_same_subset'],1)
+        self.assertEqual(evaluate([dict(row,wdl_reference=None)])['frozen_wdl']['n'],0)
+    def test_primary_outside_probability_support_is_not_a_valid_recommendation(self):
+        with self.assertRaisesRegex(ValueError,'primary'):
+            evaluate([{'matrix':[[1.]],'home_goals':0,'away_goals':0,'primary_score':[1,0]}])
 if __name__=='__main__':unittest.main()

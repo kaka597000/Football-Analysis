@@ -20,6 +20,10 @@ python runtime/predict_active.py fixture.json --out new-pair.json
 读取`/workspace/WCPP/runtime/active-model.json`。未登记赛事不得套用其他男女、年龄或阶段的模型。
 以`runtime/v5/paired_review.py`的`review(pairs,results)`独立复盘两边：相同赛果和样本，分别统计Top1、胜平负以及全赢/半赢/走盘/半输/全输；不同test版本分别统计，禁止合并为单一命中率。
 
+复盘结果须显式带`event_status=FT`或`status=completed/FT`，相互矛盾的状态拒绝结算。LIVE、延期、中断等保持待结算；缺少状态不能根据比分和时间推断完赛。每个版本同时保留全批、已结算、待结算和比分／胜平负／大小球各自覆盖率。大小球复用`future_validation.quote_audit`核验比赛、机构、盘口、双边赔率、真实报价与抓取时间，以及与冻结输入同一报价；缺项仅排除大小球并列出原因，比分和胜平负仍独立结算。严格全赢率为全赢数除以非走盘有效建议数，半赢和半输均保留在分母，五类结果完整列出。
+
+未来晋级预审单独检查冻结`wdl_reference`的同场方向命中与覆盖，缺失方向不会从比分或矩阵众数补算。`evaluation.metrics.wdl_accuracy`仍是概率矩阵方向诊断；实际发布方向见`frozen_wdl`，两者不能互相替代。
+
 已研究过的历史回测仅是开发诊断；即便测试轨运行未通过门槛的候选，也不能宣布正式升级或高准确率已验证。
 
 ## 2026-10-27活动路由补充

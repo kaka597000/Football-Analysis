@@ -10,6 +10,9 @@ def compare(entries,results):
     actual={};seen=set();rows=[];groups={};pending=[];pending_rows=[];selected=0;missing_pairs=0
     for result in results:
         if result['match_id'] in actual:raise ValueError('duplicate result')
+        statuses=[result[k] for k in ('status','event_status') if result.get(k) is not None]
+        if any(s in ('completed','FT') for s in statuses) and any(s not in ('completed','FT') for s in statuses):
+            raise ValueError('conflicting result status')
         if result.get('status') not in ('completed','FT') and result.get('event_status')!='FT':
             raise ValueError('explicit completed result required')
         if result.get('score_basis')!='regulation_90':raise ValueError('regulation result required')
@@ -54,7 +57,12 @@ def compare(entries,results):
                             or not np.isclose(m.sum(),1.) or digest(matrix)!=prediction['matrix_hash']):
                         raise ValueError('frozen matrix integrity')
                     mode=np.unravel_index(m.argmax(),m.shape);stat=f'{mode[0]}-{mode[1]}'
-                    if prediction['primary']!=stat:raise ValueError('statistical Primary does not match frozen matrix mode')
+                issued_primary=prediction.get('primary')
+                if issued_primary is not None:
+                    if not isinstance(issued_primary,str) or not re.fullmatch(r'(0|[1-9]\d?)-(0|[1-9]\d?)',issued_primary):
+                        raise ValueError('canonical issued model Primary required')
+                    ph,pa=map(int,issued_primary.split('-'))
+                    if matrix is None or ph>=m.shape[0] or pa>=m.shape[1]:raise ValueError('issued Primary outside frozen support')
                 key=name+':'+(prediction.get('version') or 'UNAVAILABLE')
                 values=groups.setdefault(key,{'population':0,'settled':0,'pending':0,'model_available':0,
                     'comprehensive_selected':0,'comprehensive_abstained':0,'paired_n':0,
@@ -69,8 +77,10 @@ def compare(entries,results):
                     values['paired_n']+=1;values['statistical_hits']+=a;values['comprehensive_hits']+=b
                     values['changed_right']+=b and not a;values['changed_wrong']+=a and not b
                     values['unchanged_or_both_wrong']+=a==b
-                row['models'][name]={'version':prediction['version'],'statistical_primary':stat,
+                row['models'][name]={'version':prediction.get('version'),'statistical_primary':stat,
                     'statistical_hit':None if stat is None or score is None else stat==score,
+                    'issued_primary':issued_primary,
+                    'issued_primary_hit':None if issued_primary is None or score is None else issued_primary==score,
                     'pair_evaluation_slot':pair['evaluation_slot']}
         if result is None:pending.append(mid);pending_rows.append(row)
         else:rows.append(row)

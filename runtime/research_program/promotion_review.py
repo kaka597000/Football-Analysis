@@ -53,7 +53,7 @@ def assess(plan_record,rows,audit_receipts=None):
     ids=[r['match_id'] for r in rows]
     if len(set(ids))!=len(ids):raise ValueError('duplicate validation match')
     if set(ids)!=set(universe):blocked.append('INCOMPLETE_PREDECLARED_POPULATION')
-    evaluated={'current':[],'candidate':[]};hits=[];selected=0;fixture_keys=set();primary_confidence={'current':[],'candidate':[]}
+    evaluated={'current':[],'candidate':[]};hits=[];wdl_hits=[];selected=0;fixture_keys=set();primary_confidence={'current':[],'candidate':[]}
     for row in rows:
         fixture=None;predictions={}
         for role in ('current','candidate'):
@@ -83,6 +83,9 @@ def assess(plan_record,rows,audit_receipts=None):
         if key in fixture_keys:raise ValueError('duplicate fixture under different IDs')
         fixture_keys.add(key)
         result=row['result'];public_url(result['source_url'])
+        statuses=[result[k] for k in ('status','event_status') if result.get(k) is not None]
+        if any(s in ('completed','FT') for s in statuses) and any(s not in ('completed','FT') for s in statuses):
+            raise ValueError('conflicting result status')
         if result.get('status') not in ('completed','FT') and result.get('event_status')!='FT':
             raise ValueError('explicit completed regulation result required')
         if result['match_id']!=row['match_id'] or result.get('score_basis')!='regulation_90':raise ValueError('result identity')
@@ -91,9 +94,10 @@ def assess(plan_record,rows,audit_receipts=None):
         if aware(result['observed_at'])<kickoff+timedelta(minutes=90):raise ValueError('regulation not complete')
         h,a=result['home_goals'],result['away_goals']
         if any(type(x) is not int or not 0<=x<=40 for x in (h,a)):raise ValueError('regulation score')
-        actual=f'{h}-{a}';pair=[]
+        actual=f'{h}-{a}';pair=[];wdl_pair=[];actual_wdl='主胜' if h>a else '客胜' if h<a else '平局'
         for role,p in predictions.items():
-            evaluation_row={'matrix':p['matrix'],'home_goals':h,'away_goals':a}
+            evaluation_row={'matrix':p['matrix'],'home_goals':h,'away_goals':a,'wdl_reference':p.get('wdl_reference')}
+            wdl_pair.append(p['wdl_reference']==actual_wdl if p.get('wdl_reference') in ('主胜','平局','客胜') else None)
             hit=p.get('primary')==actual;pair.append(hit)
             if p.get('primary') is not None:
                 matched=re.fullmatch(r'(\d{1,2})-(\d{1,2})',p['primary'])
@@ -109,6 +113,7 @@ def assess(plan_record,rows,audit_receipts=None):
             evaluated[role].append(evaluation_row)
             if role=='candidate':selected+=p.get('primary') is not None
         hits.append(pair)
+        wdl_hits.append(wdl_pair)
     if rows:
         metrics={role:evaluate(values) for role,values in evaluated.items()}
         changed_right=sum(b and not a for a,b in hits);changed_wrong=sum(a and not b for a,b in hits)
@@ -122,8 +127,15 @@ def assess(plan_record,rows,audit_receipts=None):
             tolerance=plan['quality_tolerances'][key]
             if type(tolerance) not in (int,float) or not math.isfinite(tolerance) or tolerance<0:raise ValueError('locked finite quality tolerance')
             if metrics['candidate']['metrics'][key]>metrics['current']['metrics'][key]+tolerance:blocked.append('QUALITY_REGRESSION:'+key)
-        if metrics['candidate']['metrics']['wdl_accuracy']<metrics['current']['metrics']['wdl_accuracy']:
+        directions={role:metrics[role]['frozen_wdl'] for role in ('current','candidate')}
+        if any(v['n']==0 for v in directions.values()):blocked.append('FROZEN_WDL_DIRECTION_UNAVAILABLE')
+        if directions['candidate']['n']<directions['current']['n']:blocked.append('WDL_COVERAGE_REGRESSION')
+        paired_directions=[(a,b) for a,b in wdl_hits if a is not None and b is not None]
+        if not paired_directions:blocked.append('NO_COMMON_FROZEN_WDL_DIRECTION')
+        if sum(b for a,b in paired_directions)<sum(a for a,b in paired_directions):
             blocked.append('WDL_DIRECTION_REGRESSION')
+        summary['paired_frozen_wdl']={'n':len(paired_directions),'current_hits':sum(a for a,b in paired_directions),
+                                     'candidate_hits':sum(b for a,b in paired_directions)}
         calibration={role:_primary_calibration(values) for role,values in primary_confidence.items()}
         if any(v['ece'] is None for v in calibration.values()):blocked.append('PRIMARY_CALIBRATION_UNAVAILABLE')
         elif calibration['candidate']['ece']>calibration['current']['ece']+plan['ece_tolerance']:

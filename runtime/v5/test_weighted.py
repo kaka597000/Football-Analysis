@@ -104,6 +104,7 @@ class WeightTests(unittest.TestCase):
                               'wdl_reference': '主胜' if h > a else '客胜', 'total': None})
         pair = {'match_id': fixture['match_id'], 'current_model': forecasts[0], 'test_model': forecasts[1]}
         result = {'match_id': fixture['match_id'], 'home_goals': 1, 'away_goals': 0,
+                  'event_status': 'FT',
                   'score_basis': 'regulation_90', 'source_url': 'https://example.org/test-only',
                   'observed_at': '2020-01-01T03:00:00+00:00'}
         output = review([pair], [result])
@@ -125,7 +126,7 @@ class WeightTests(unittest.TestCase):
                'generated_at':fixture['cutoff_at'],'primary':'1-0','wdl_reference':'主胜','total':None}
             pairs.append({'match_id':mid,'current_model':dict(f,version='WCPP-MAIN-1.2'),
                           'test_model':dict(f,version=ver)})
-            results.append({'match_id':mid,'home_goals':1,'away_goals':0,'score_basis':'regulation_90',
+            results.append({'match_id':mid,'home_goals':1,'away_goals':0,'score_basis':'regulation_90','event_status':'FT',
                             'source_url':'https://example.test/test-only','observed_at':'2020-01-01T03:00:00Z'})
         r=review(pairs,results)
         self.assertEqual(r['models']['当前模型']['primary_hits'],2)

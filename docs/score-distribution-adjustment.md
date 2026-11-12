@@ -61,6 +61,12 @@ python runtime/research/analysis_freeze.py /absolute/batch-top3-input.json \
 
 输入封装为 `{"fixture": {...}, "payload": {...}}`。TOP3 payload沿用 `top3` 数组，每项包含 `rank/match_id/primary/wdl/total_line/total_direction/comprehensive_reference`。
 
+### 未晋级候选的研究参考排序
+
+自2026-11-12起，欧国联已有真实双候选冻结可用于独立的研究参考TOP3。综合payload须显式指定 `selection_scope="candidate_research"` 和 `candidate_reference`，引用原 `nations-paired-candidates` 冻结。核验原冻结哈希、两轨角色、比赛/队列/主客身份、输入和生成时间、工件身份及矩阵哈希后，仍执行完全相同的比分、零球和实盘方向比较。
+
+TOP3批次也必须指定相同scope，不能混入默认活动模型参考榜。新审计固定标记 `formal_kpi_eligible=false`、`active_model_promotion=false`；这只允许如实展示有完整比较的研究参考，不是候选验收或模型晋级。省略scope仍走原活动双模型路径，缺失、待定、比较不全继续保留。旧分析与旧空榜不回写；修订只按实际时间追加。
+
 ## 校准研究与晋级
 
 `runtime/score_adjustment/` 已实际训练两种独立校准候选；19队列8963场，日期隔离5159/2385/1419。选择段两者各280/2385，原基准282/2385，且偏差门槛失败，锁定恒等C0。末段仅9队列有覆盖，不能称19队列均通过验证；历史已参与开发，不是未来未见实绩。C1/C2只绑定系统研究M2基准，不能套用到MAIN/ML冒充同一模型；未晋级，未进入当前/test路由。

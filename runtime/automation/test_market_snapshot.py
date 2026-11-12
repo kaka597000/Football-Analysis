@@ -9,9 +9,9 @@ import unittest
 from unittest.mock import patch
 
 if __package__:
-    from .market_snapshot import build, collect
+    from .market_snapshot import ALIAS_REVIEW, build, collect
 else:
-    from market_snapshot import build, collect
+    from market_snapshot import ALIAS_REVIEW, build, collect
 
 
 class MarketSnapshotTests(unittest.TestCase):
@@ -32,15 +32,16 @@ class MarketSnapshotTests(unittest.TestCase):
                      {'name': 'Under', 'price': 2.0, 'point': 2.5}]}]}]}]
         return odds, board
 
-    def run_case(self, mutate=lambda o, b: None):
+    def run_case(self, mutate=lambda o, b: None, *, now=None, captured_at='2026-11-12T12:00:20Z'):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder); odds, board = self.inputs(root); mutate(odds, board)
             metas = []
             for name, data in [('odds', odds), ('identity', board)]:
                 p = root / (name + '.json'); p.write_text(json.dumps(data))
                 metas.append({'file': p.name, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
-                              'url': 'https://example.org/' + name, 'captured_at': '2026-11-12T12:00:20Z'})
-            return build(root, *metas, cutoff=self.now.isoformat(), now=self.now)
+                              'url': 'https://example.org/' + name, 'captured_at': captured_at})
+            now = now or self.now
+            return build(root, *metas, cutoff=now.isoformat(), now=now)
 
     def test_complete_same_line_keeps_real_quote_time(self):
         r = self.run_case(); self.assertTrue(r['market_model_ready'])
@@ -103,6 +104,64 @@ class MarketSnapshotTests(unittest.TestCase):
         self.assertEqual(r['verified_quote_count'], 1)
         self.assertEqual(r['excluded']['conflicting_market_group'], 1)
         self.assertEqual(r['snapshots'][0]['observations'][0]['value']['bookmaker'], 'unaffected')
+
+    def alias_case(self, rule, *, side='home', mutate=lambda o, b: None, before_review=False):
+        def setup(odds, board):
+            team = board['events'][0]['competitions'][0]['competitors'][0 if side == 'home' else 1]['team']
+            team.update(id=rule['espn_id'], displayName=rule['espn_name'])
+            odds[0][side + '_team'] = rule['provider_name']
+            if not before_review:
+                odds[0]['bookmakers'][0]['markets'][0]['last_update'] = '2026-11-12T14:00:00Z'
+            mutate(odds, board)
+        return self.run_case(setup, now=None if before_review else self.now.replace(hour=14),
+                             captured_at='2026-11-12T12:00:20Z' if before_review else '2026-11-12T14:00:20Z')
+
+    def test_reviewed_team_ids_work_on_either_side_and_keep_raw_identity(self):
+        for rule in ALIAS_REVIEW['teams']:
+            for side in ('home', 'away'):
+                with self.subTest(rule=rule, side=side):
+                    r = self.alias_case(rule, side=side)
+                    self.assertEqual(r['verified_quote_count'], 1)
+                    row = r['snapshots'][0]['observations'][0]
+                    evidence = row['identity_alias_review']
+                    self.assertEqual(evidence['teams'][side], rule)
+                    self.assertEqual(evidence['provider_source_names'][side], rule['provider_name'])
+                    self.assertEqual(evidence['identity_source_names'][side], rule['espn_name'])
+                    self.assertEqual(evidence['review_sha256'], r['identity_alias_review']['sha256'])
+                    self.assertEqual(row['value']['quoted_at'], '2026-11-12T14:00:00Z')
+                    self.assertEqual(row['observed_at'], '2026-11-12T14:00:20Z')
+                    self.assertEqual(row['evidence']['sha256'], r['identity_mappings'][0]['odds_evidence_sha256'])
+
+    def test_alias_cannot_be_backdated_before_identity_review(self):
+        for rule in ALIAS_REVIEW['teams']:
+            self.assertFalse(self.alias_case(rule, before_review=True)['market_model_ready'])
+
+    def test_alias_rejects_wrong_id_name_opponent_side_time_competition_and_phase(self):
+        rule = ALIAS_REVIEW['teams'][0]
+        mutations = [
+            lambda o, b: b['events'][0]['competitions'][0]['competitors'][0]['team'].update(id='999'),
+            lambda o, b: b['events'][0]['competitions'][0]['competitors'][0]['team'].update(displayName='Türkiye U21'),
+            lambda o, b: o[0].update(home_team='turkey'),
+            lambda o, b: o[0].update(away_team='Different'),
+            lambda o, b: o[0].update(home_team='Away', away_team='Turkey'),
+            lambda o, b: o[0].update(commence_time='2026-11-12T18:00:00Z'),
+            lambda o, b: o[0].update(sport_key='soccer_other'),
+            lambda o, b: b['events'][0]['season'].update(slug='knockout'),
+        ]
+        for mutate in mutations:
+            self.assertFalse(self.alias_case(rule, mutate=mutate)['market_model_ready'])
+
+    def test_exact_and_alias_candidates_are_ambiguous_not_first_wins(self):
+        def mutate(odds, board):
+            duplicate = deepcopy(odds[0]); duplicate.update(id='o2', home_team='Türkiye')
+            odds.append(duplicate)
+        r = self.alias_case(ALIAS_REVIEW['teams'][0], mutate=mutate)
+        self.assertFalse(r['market_model_ready'])
+        self.assertEqual(r['excluded']['missing_or_ambiguous_identity'], 1)
+
+    def test_exact_matches_have_no_alias_metadata_added_to_observations(self):
+        row = self.run_case()['snapshots'][0]['observations'][0]
+        self.assertNotIn('identity_alias_review', row)
 
 
 if __name__ == '__main__':
