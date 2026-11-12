@@ -10,6 +10,8 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('fixture', nargs='?'); p.add_argument('--out', required=True)
     p.add_argument('--registry')
+    p.add_argument('--retain-current-on-test-failure', action='store_true',
+                   help='Freeze successful Current with explicit failed Test; never substitute predictions')
     p.add_argument('--report', help='New Markdown path for the eight-module evidence report')
     p.add_argument('--freeze-root', default='/workspace/WCPP/forecasts/issued-analyses')
     p.add_argument('--stage', choices=['prematch', 'live'], default='prematch')
@@ -30,7 +32,8 @@ def main():
         raise FileExistsError(a.report)
     if Path(a.out).exists():
         raise FileExistsError(a.out)
-    output = run(fixture, a.registry)
+    output = (run(fixture, a.registry, retain_current_on_test_failure=True)
+              if a.retain_current_on_test_failure else run(fixture, a.registry))
     from research.team_goal_analysis import attach_pair
     if any('team_goal_analysis' not in output[k] for k in ('current_model','test_model')):
         attach_pair(output)

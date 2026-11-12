@@ -14,5 +14,6 @@ def attach(output, fixture, artifact_path, test_artifact_path):
     from research.match_analysis import build as build_match_analysis
     output['match_analysis'] = build_match_analysis(fixture, output,
         current_artifact=json.loads(artifact_path.read_text()),
-        test_artifact=json.loads(test_artifact_path.read_text()) if test_artifact_path else {})
+        test_artifact=json.loads(test_artifact_path.read_text()) if (test_artifact_path
+            and output['test_model'].get('status') != 'ABSTAIN_TEST_EXECUTION_FAILED') else {})
     return output
