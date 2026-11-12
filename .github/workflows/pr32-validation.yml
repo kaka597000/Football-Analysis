@@ -1,3 +1,4 @@
+# Final strict pass includes the new native-scale xG tests.
 name: PR32 retained-asset verification
 on:
   push:
