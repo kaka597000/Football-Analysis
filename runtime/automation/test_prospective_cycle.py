@@ -148,6 +148,41 @@ class PortableCycleTests(unittest.TestCase):
         for path in ('/tmp/key','/etc/passwd','/workspace/WCPP/../elsewhere','relative'):
             with self.assertRaises(ValueError):p._allowed_original(path)
 
+    def test_failed_results_rotate_across_restarted_cycles(self):
+        now = datetime.now(timezone.utc)
+        fixtures = [self.fixture('espn:' + str(i), (now-timedelta(days=1)).isoformat()) for i in (1,2,3)]
+        with tempfile.TemporaryDirectory() as tmp:
+            root,m = self.bundle(tmp); receipt,plan = self.plan(root,m,fixtures)
+            m['packages'] = [{'match_id': f['match_id'], 'current_receipt':receipt,
+                              'candidate_receipt':receipt} for f in fixtures]; self.write(root,m)
+            pending = {'completed':0, 'pending_results':[f['match_id'] for f in fixtures], 'missing_first_pairs':[]}
+            seen = []
+            def failed(url):
+                seen.append(url.rsplit('=',1)[1]); raise OSError('synthetic outage')
+            with patch.object(p.fv, 'review', return_value=pending):
+                for _ in range(4):
+                    value = p.cycle(root, max_captures=0, max_result_requests=1, fetcher=failed, now=now)
+                    self.assertEqual(value['completed'],0)
+                    self.assertEqual(value['result_requests'],1)
+                    self.assertEqual(value['pending'],3)
+            self.assertEqual(seen, ['1','2','3','1'])
+
+    def test_nonfinal_ucl_responses_do_not_starve_later_matches(self):
+        from runtime.research_program import ucl_refresh_review as reviewer
+        now = datetime.now(timezone.utc)
+        fs = [self.fixture('espn:' + str(i), (now-timedelta(days=1)).isoformat()) for i in (1,2)]
+        with tempfile.TemporaryDirectory() as tmp:
+            root,m=self.bundle(tmp);receipt,plan=self.plan(root,m,fs)
+            m.update(schema=p.UCL_SCHEMA, plan=receipt,
+                     packages=[{'match_id': f['match_id'], 'baseline':receipt, 'refreshed':receipt} for f in fs])
+            self.write(root,m); seen=[]
+            def nonfinal(url):
+                seen.append(url.rsplit('=',1)[1])
+                return {'header': {'competitions':[{'competitors':[], 'status':{'type':{'name':'STATUS_POSTPONED'}}}]}}
+            with patch.object(p,'_hydrate_ucl'),patch.object(reviewer,'review',side_effect=lambda *a,**k: {'completed':0}):
+                for _ in range(3): p.ucl_cycle(root,max_result_requests=1,fetcher=nonfinal,now=now)
+            self.assertEqual(seen,['1','2','1'])
+
     def test_ucl_bundle_cannot_be_used_as_domestic_bundle(self):
         with tempfile.TemporaryDirectory()as tmp:
             root,m=self.bundle(tmp);m['schema']=p.UCL_SCHEMA;self.write(root,m)
