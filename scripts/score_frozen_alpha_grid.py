@@ -18,11 +18,36 @@ from research_program.replay import _finished_espn_label
 from research.analysis_freeze import verify, digest, aware
 
 
+def protocol_records(records, protocol):
+    """Resolve every planned first freeze, including failed reconstructions."""
+    by_hash = {r['record_sha256']: r for _, r in records.values()
+               if r.get('track') == 'current-test-pair'}
+    originals = {}
+    for planned in protocol['population']:
+        mid = planned['match_id']
+        if mid in originals:
+            raise ValueError('duplicate protocol identity')
+        original = by_hash.get(planned['record_sha256'])
+        if original is None:
+            raise ValueError('protocol first freeze missing or checksum mismatch')
+        fixture = original['fixture']
+        if (original['match_id'] != mid or fixture['match_id'] != mid
+                or original['stage'] != 'prematch' or original['evaluation_slot'] != 'FIRST_PREMATCH'
+                or planned.get('cohort', fixture['cohort']) != fixture['cohort']
+                or planned.get('kickoff_at', fixture['kickoff_at']) != fixture['kickoff_at']
+                or planned['future'] is not (aware(fixture['kickoff_at']) > aware(protocol['created_at']))
+                or not aware(fixture['cutoff_at']) <= aware(original['recorded_at']) < aware(fixture['kickoff_at'])):
+            raise ValueError('protocol fixture identity, segment or chronology mismatch')
+        originals[mid] = original
+    return originals
+
+
 def validate_predictions(predictions, records, protocol):
     """Bind every scored row to the original first freeze and candidate node."""
     population = {r['match_id']: r for r in protocol['population']}
     if len(population) != len(protocol['population']):
         raise ValueError('duplicate protocol identity')
+    protocol_records(records, protocol)
     seen = set()
     for p in predictions:
         mid = p['match_id']
@@ -67,13 +92,21 @@ def validate_predictions(predictions, records, protocol):
             receipt = p['candidate_freeze']; candidate = records[receipt['freeze_id']][1]
             expected = {k:v for k,v in p.items() if k != 'candidate_freeze'}
             cf = candidate['fixture']
+            retained = planned.get('retained_candidate_freeze')
+            if retained is not None:
+                if (retained != receipt
+                        or aware(candidate['recorded_at']) > aware(protocol['created_at'])):
+                    raise ValueError('retained future candidate declaration mismatch')
+                earliest_cutoff = aware(fixture['cutoff_at'])
+            else:
+                earliest_cutoff = aware(protocol['created_at'])
             if (candidate['track'] != 'alpha-grid-candidate' or candidate['stage'] != 'prematch'
                     or candidate['evaluation_slot'] != 'FIRST_PREMATCH'
                     or candidate['record_sha256'] != receipt['sha256']
                     or candidate['recorded_at'] != receipt['recorded_at']
                     or candidate['match_id'] != mid or candidate['payload'] != expected
                     or {k:v for k,v in cf.items() if k != 'cutoff_at'} != {k:v for k,v in fixture.items() if k != 'cutoff_at'}
-                    or not aware(protocol['created_at']) <= aware(cf['cutoff_at']) <= aware(candidate['recorded_at']) < aware(cf['kickoff_at'])):
+                    or not earliest_cutoff <= aware(cf['cutoff_at']) <= aware(candidate['recorded_at']) < aware(cf['kickoff_at'])):
                 raise ValueError('future candidate freeze mismatch')
         elif 'candidate_freeze' in p:
             raise ValueError('historical row cannot claim future candidate freeze')
@@ -98,8 +131,18 @@ def evaluate(predictions, roots, freeze_root):
                 raise ValueError('duplicate freeze identity')
             records[r['freeze_id']] = (path, verify(r))
     validate_predictions(predictions, records, protocol)
+    originals = protocol_records(records, protocol)
     results = []; excluded = Counter()
-    for p in predictions:
+    by_match = {p['match_id']: p for p in predictions}
+    for planned in protocol['population']:
+        p = by_match.get(planned['match_id'])
+        if p is None:
+            original = originals[planned['match_id']]; fixture = original['fixture']
+            item = {'match_id': planned['match_id'], 'cohort': fixture['cohort'],
+                    'kickoff_at': fixture['kickoff_at'], 'future': planned['future'],
+                    'first_freeze_id': original['freeze_id'],
+                    'status': 'MISSING_RECONSTRUCTED_PREDICTION', 'reconstructed': False}
+            excluded[item['status']] += 1; results.append(item); continue
         fixture = records[p['first_freeze_id']][1]['fixture']; labels = {}
         for path in files[p['match_id'].removeprefix('espn:')]:
             try:
@@ -117,6 +160,7 @@ def evaluate(predictions, roots, freeze_root):
             except (ValueError, KeyError, TypeError, IndexError):
                 continue
         item = {k: p[k] for k in ('match_id', 'cohort', 'kickoff_at', 'future', 'first_freeze_id')}
+        item['reconstructed'] = True
         if len(labels) != 1:
             item['status'] = 'CONFLICTING_RESULTS' if labels else 'PENDING_OR_MISSING_VERIFIED_FT'
             excluded[item['status']] += 1; results.append(item); continue
@@ -173,6 +217,8 @@ def summarize(results):
                     arms[arm][metric] = float(np.mean([r['arms'][arm][metric] for r in settled]))
         groups[cohort] = {'population': len(population), 'settled': len(settled),
                           'pending_or_missing': len(population)-len(settled),
+                          'reconstructed': sum(r.get('reconstructed', True) for r in population),
+                          'status_counts': dict(Counter(r['status'] for r in population)),
                           'coverage': len(settled)/len(population) if population else None, 'arms': arms}
     return groups
 

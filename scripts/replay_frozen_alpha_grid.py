@@ -15,7 +15,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'runtime'))
 from v6 import ml_model as ml
-from research.analysis_freeze import verify, save
+from research.analysis_freeze import verify, save, digest, aware
 
 ALPHAS = [0, .25, .5, .75, 1]
 
@@ -30,6 +30,47 @@ def metrics(matrix):
     return {'statistical_top1': score, 'top1_probability': float(matrix.max()),
             'wdl_probabilities': list(map(float, ml.legacy.probabilities(matrix))),
             'matrix_sha256': ml.legacy.digest(matrix.tolist())}
+
+
+def retained_candidate(fixture, first_freeze_id, freeze_root):
+    """Find a verified first candidate without creating a new prediction node."""
+    scope = {'match_id': fixture['match_id'], 'stage': 'prematch',
+             'track': 'alpha-grid-candidate'}
+    folder = Path(freeze_root) / digest(scope)
+    previous_hash = None
+    found = None
+    for path in sorted(folder.glob('[0-9]*.json')):
+        record = verify(json.loads(path.read_text()))
+        if record['previous_sha256'] != previous_hash:
+            raise ValueError('candidate freeze chain mismatch')
+        previous_hash = record['record_sha256']
+        if record.get('idempotency_key') != 'post32-alpha-' + first_freeze_id:
+            continue
+        cf = record['fixture']
+        if (found is not None or any(record[k] != v for k, v in scope.items())
+                or record['evaluation_slot'] != 'FIRST_PREMATCH'
+                or {k:v for k,v in cf.items() if k != 'cutoff_at'}
+                   != {k:v for k,v in fixture.items() if k != 'cutoff_at'}
+                or not aware(fixture['cutoff_at']) <= aware(cf['cutoff_at'])
+                   <= aware(record['recorded_at']) < aware(cf['kickoff_at'])):
+            raise ValueError('retained candidate identity or chronology mismatch')
+        found = (record, {'freeze_id': record['freeze_id'], 'path': str(path),
+                          'sha256': record['record_sha256'],
+                          'recorded_at': record['recorded_at'],
+                          'evaluation_slot': record['evaluation_slot']})
+    return found
+
+
+def freeze_candidate(row, fixture, freeze_root, retained=None):
+    if retained is not None:
+        record, receipt = retained
+        if record['payload'] != row:
+            raise ValueError('retained candidate payload differs from reconstruction')
+        return receipt
+    now = datetime.now(timezone.utc)
+    target = dict(fixture, cutoff_at=now.isoformat())
+    return save(row, target, stage='prematch', track='alpha-grid-candidate',
+                root=freeze_root, idempotency_key='post32-alpha-' + row['first_freeze_id'])
 
 
 def run(registry_path, freeze_root, out):
@@ -60,6 +101,9 @@ def run(registry_path, freeze_root, out):
                 or a['train_end'] >= kickoff.date().isoformat()):
             excluded['not_time_out_of_training'] += 1; continue
         candidates.append((path, record, a, artifact_path, artifact_sha))
+    retained = {r['match_id']: retained_candidate(r['fixture'], r['freeze_id'], freeze_root)
+                for _, r, _, _, _ in candidates
+                if ml.legacy.aware(r['fixture']['kickoff_at']) > now}
     protocol = {'schema': 'WCPP-FROZEN-ALPHA-GRID-1', 'created_at': now.isoformat(),
         'alphas': ALPHAS, 'alpha_zero': 'pure DC from test artifact, not necessarily Current',
         'selection': 'NONE; existing outcomes not used to select weights',
@@ -68,8 +112,12 @@ def run(registry_path, freeze_root, out):
         'prediction_inputs': 'exact original freeze input, never refreshed retrospectively',
         'candidate_node': 'actual candidate freeze time; original input cutoff retained',
         'promotion': False, 'registry_sha256': hashlib.sha256(Path(registry_path).read_bytes()).hexdigest(),
-        'population': [{'match_id': r['match_id'], 'freeze_file': str(p), 'record_sha256': r['record_sha256'],
-                        'kickoff_at': r['fixture']['kickoff_at'], 'future': ml.legacy.aware(r['fixture']['kickoff_at']) > now}
+        'population': [{'match_id': r['match_id'], 'cohort': r['fixture']['cohort'],
+                        'freeze_file': str(p), 'record_sha256': r['record_sha256'],
+                        'kickoff_at': r['fixture']['kickoff_at'],
+                        'future': ml.legacy.aware(r['fixture']['kickoff_at']) > now,
+                        **({'retained_candidate_freeze': retained[r['match_id']][1]}
+                           if retained.get(r['match_id']) else {})}
                        for p, r, a, ap, ash in candidates], 'excluded': dict(excluded)}
     write(out / 'protocol.json', protocol)
     rows = []; booster_cache = {}
@@ -101,17 +149,18 @@ def run(registry_path, freeze_root, out):
                'future': ml.legacy.aware(fixture['kickoff_at']) > now}
         if row['future']:
             current_time = datetime.now(timezone.utc)
-            if current_time >= ml.legacy.aware(fixture['kickoff_at']):
+            prior = retained.get(row['match_id'])
+            if prior is None and current_time >= ml.legacy.aware(fixture['kickoff_at']):
                 excluded['kickoff_passed_during_execution'] += 1; continue
-            target = dict(fixture, cutoff_at=current_time.isoformat())
-            row['candidate_freeze'] = save(row, target, stage='prematch', track='alpha-grid-candidate',
-                                          root=freeze_root, idempotency_key='post32-alpha-' + record['freeze_id'])
+            row['candidate_freeze'] = freeze_candidate(row, fixture, freeze_root, prior)
         rows.append(row)
     with (out / 'predictions.jsonl').open('x') as f:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False, allow_nan=False) + '\n')
     summary = {'eligible_population': len(candidates), 'reconstructed': len(rows),
                'future_candidates_frozen': sum(r['future'] for r in rows),
+               'future_candidates_reused': sum(r['future'] and retained.get(r['match_id']) is not None for r in rows),
+               'future_candidates_newly_frozen': sum(r['future'] and retained.get(r['match_id']) is None for r in rows),
                'historical_reconstructed': sum(not r['future'] for r in rows),
                'cohorts': dict(Counter(r['cohort'] for r in rows)), 'excluded': dict(excluded),
                'labels_read': 0, 'alpha_selected': None, 'active_modified': False,

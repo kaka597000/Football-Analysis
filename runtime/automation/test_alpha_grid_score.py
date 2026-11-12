@@ -12,6 +12,9 @@ import numpy as np
 spec = importlib.util.spec_from_file_location('alpha_score', Path(__file__).resolve().parents[2] / 'scripts/score_frozen_alpha_grid.py')
 score = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(score)
+spec = importlib.util.spec_from_file_location('alpha_replay', Path(__file__).resolve().parents[2] / 'scripts/replay_frozen_alpha_grid.py')
+replay = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(replay)
 
 
 class AlphaScoreTests(unittest.TestCase):
@@ -79,9 +82,92 @@ class AlphaScoreTests(unittest.TestCase):
             self.assertEqual(result['segments']['future_frozen']['ALL']['population'],1)
             self.assertEqual(result['segments']['future_frozen']['ALL']['settled'],0)
             self.assertEqual(result['segments']['historical_reconstruction']['ALL']['population'],0)
+            path.write_text('')
+            missing = score.evaluate(path, [], forecasts)
+            self.assertEqual(missing['segments']['future_frozen']['ALL']['population'], 1)
+            self.assertEqual(missing['segments']['future_frozen']['ALL']['coverage'], 0)
+            self.assertEqual(missing['rows'][0]['status'], 'MISSING_RECONSTRUCTED_PREDICTION')
             original=records['pair-1'][1]; original['fixture']['home']='forged'
             (forecasts/'pair-1/000001.json').write_text(json.dumps(original))
             with self.assertRaisesRegex(ValueError,'checksum'): score.evaluate(path, [], forecasts)
+
+    def test_retry_reuses_exact_first_candidate_and_rejects_changed_payload(self):
+        rows, records, protocol = self.inputs(True)
+        row = deepcopy(rows[0]); row.pop('candidate_freeze')
+        fixture = records['pair-1'][1]['fixture']
+        with tempfile.TemporaryDirectory() as tmp:
+            first = replay.freeze_candidate(row, fixture, tmp)
+            raw = Path(first['path']).read_bytes()
+            retained = replay.retained_candidate(fixture, row['first_freeze_id'], tmp)
+            second = replay.freeze_candidate(row, fixture, tmp, retained)
+            self.assertEqual(first, second)
+            self.assertEqual(Path(first['path']).read_bytes(), raw)
+            self.assertEqual(len(list(Path(tmp).glob('*/*.json'))), 1)
+            candidate = retained[0]
+            records[first['freeze_id']] = (Path(first['path']), candidate)
+            row['candidate_freeze'] = second
+            protocol['created_at'] = datetime.now(timezone.utc).isoformat()
+            protocol['population'][0]['retained_candidate_freeze'] = second
+            score.validate_predictions([row], records, protocol)
+            del protocol['population'][0]['retained_candidate_freeze']
+            with self.assertRaisesRegex(ValueError, 'candidate'):
+                score.validate_predictions([row], records, protocol)
+            row.pop('candidate_freeze'); row['original_alpha'] = .25
+            with self.assertRaisesRegex(ValueError, 'differs'):
+                replay.freeze_candidate(row, fixture, tmp, retained)
+
+    def test_missing_reconstruction_remains_in_every_denominator(self):
+        rows, records, protocol = self.inputs()
+        original = records['pair-1'][1]
+        missing = deepcopy(original)
+        missing.update(freeze_id='pair-2', match_id='espn:987654321')
+        missing['fixture']['match_id'] = missing['match_id']
+        missing.pop('record_sha256'); missing['record_sha256'] = score.digest(missing)
+        records['pair-2'] = (None, missing)
+        protocol['population'].append({'match_id': missing['match_id'],
+                                       'record_sha256': missing['record_sha256'], 'future': False})
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); forecasts = root/'forecasts'; forecasts.mkdir()
+            for key, (_, record) in records.items():
+                folder = forecasts/key; folder.mkdir()
+                (folder/'000001.json').write_text(json.dumps(record))
+            predictions = root/'predictions.jsonl'
+            predictions.write_text(json.dumps(rows[0])+'\n')
+            (root/'protocol.json').write_text(json.dumps(protocol))
+            raw = {'format': {'regulation': {'periods': 2}},
+                   'header': {'id': '123456789', 'competitions': [{
+                       'date': original['fixture']['kickoff_at'],
+                       'status': {'type': {'completed': True, 'name': 'STATUS_FULL_TIME'}},
+                       'competitors': [
+                           {'homeAway': 'home', 'team': {'id': '1'}, 'score': '0',
+                            'linescores': [{'displayValue': '0'}, {'displayValue': '0'}]},
+                           {'homeAway': 'away', 'team': {'id': '2'}, 'score': '0',
+                            'linescores': [{'displayValue': '0'}, {'displayValue': '0'}]}]}]}}
+            (root/'123456789.json').write_text(json.dumps(raw))
+            result = score.evaluate(predictions, [root], forecasts)
+            for group in [result['groups']['ALL'], result['groups']['eng.1'],
+                          result['segments']['historical_reconstruction']['ALL']]:
+                self.assertEqual(group['population'], 2)
+                self.assertEqual(group['settled'], 1)
+                self.assertEqual(group['coverage'], .5)
+                self.assertEqual(group['pending_or_missing'], 1)
+            self.assertEqual(result['rows'][1]['status'], 'MISSING_RECONSTRUCTED_PREDICTION')
+            # All reconstruction failures still preserve the planned population.
+            predictions.write_text('')
+            result = score.evaluate(predictions, [], forecasts)
+            self.assertEqual(result['groups']['ALL']['population'], 2)
+            self.assertEqual(result['groups']['ALL']['coverage'], 0)
+            self.assertEqual(result['groups']['ALL']['arms'], {})
+
+    def test_empty_protocol_has_no_coverage(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root/'predictions.jsonl').write_text('')
+            (root/'protocol.json').write_text(json.dumps({
+                'created_at': datetime.now(timezone.utc).isoformat(), 'population': []}))
+            result = score.evaluate(root/'predictions.jsonl', [], root/'forecasts')
+            self.assertIsNone(result['groups']['ALL']['coverage'])
+            self.assertEqual(result['groups']['ALL']['population'], 0)
 
 
 if __name__ == '__main__':
