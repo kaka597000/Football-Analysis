@@ -16,6 +16,21 @@ jobs:
       - run: python -m pip install -r requirements.txt -r requirements-test.txt
       - run: python scripts/check_repository.py
       - run: python scripts/run_tests.py
+      - name: Source-only verification bundle for PR32
+        if: github.event_name == 'pull_request' && github.event.pull_request.number == 32
+        run: |
+          mkdir -p /tmp/wcpp-source-verification
+          git archive --format=tar HEAD -o /tmp/wcpp-source-verification/source.tar
+          git rev-parse HEAD > /tmp/wcpp-source-verification/commit.txt
+          git rev-parse HEAD^{tree} > /tmp/wcpp-source-verification/tree.txt
+          git ls-tree -r HEAD > /tmp/wcpp-source-verification/blobs.txt
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'pull_request' && github.event.pull_request.number == 32
+        with:
+          name: pr32-source-only
+          path: /tmp/wcpp-source-verification
+          retention-days: 1
+          if-no-files-found: error
 
   portable:
     strategy:
