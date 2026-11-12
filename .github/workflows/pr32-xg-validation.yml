@@ -1,0 +1,71 @@
+name: PR32 fixed xG scale experiment
+on:
+  push:
+    branches: [research/elo-kelly-config-20261112]
+    paths: [.github/workflows/pr32-xg-validation.yml]
+permissions:
+  contents: read
+jobs:
+  xg:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt scikit-learn==1.8.0
+      - name: Restore only fixed original features and reference code
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json,tarfile,urllib.request,shutil
+          root=Path('/tmp/xg-input');root.mkdir()
+          base='https://raw.githubusercontent.com/kaka597000/kaka597000-Football-Analysis-Data/b106c810a1debe6e47646131a2beb10bf730091b/workspace-updates/20261104-all-scope-execution/'
+          def get(url):
+              with urllib.request.urlopen(url,timeout=90) as r:return r.read()
+          m=json.loads(get(base+'manifest.json'));h=hashlib.sha256();archive=root/'retained.tar.gz'
+          with archive.open('xb') as f:
+              for item in m['ordered_parts']:
+                  b=get(base+item['path'])
+                  if len(b)!=item['bytes'] or hashlib.sha256(b).hexdigest()!=item['sha256']:raise ValueError('part checksum mismatch')
+                  f.write(b);h.update(b)
+          if h.hexdigest()!='24ac632d7c9624d31581e3d204e58ad11dedd9ea26680d8990efc23475fa38d4':raise ValueError('archive mismatch')
+          found=0
+          with tarfile.open(archive) as t:
+              for member in t:
+                  if member.isfile() and member.name.endswith('/features/records.json'):
+                      with (root/'records.json').open('xb') as f:shutil.copyfileobj(t.extractfile(member),f)
+                      found+=1
+          if found!=1:raise ValueError('exact input member missing')
+          ref='https://raw.githubusercontent.com/kaka597000/Football-Analysis/9828f06c1c7100c2533a983a20b6953b8c5c234e/runtime/research_program/xg_comparison.py'
+          (root/'reference.py').write_bytes(get(ref))
+          archive.unlink()
+          PY
+      - name: Refit unchanged controls and native-scale candidates
+        run: python scripts/research_xg_native_scale.py --records /tmp/xg-input/records.json --reference /tmp/xg-input/reference.py --out /tmp/xg-results
+      - name: Retain complete numerical outputs without duplicate derived features
+        if: always()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import tarfile,hashlib,json
+          root=Path('/tmp/xg-results');out=Path('/tmp/xg-delivery');out.mkdir()
+          selected=[]
+          with tarfile.open(out/'numerical-evidence.tar.gz','w:gz') as t:
+              if root.exists():
+                  for p in sorted(root.rglob('*')):
+                      if not p.is_file() or p.name=='features.jsonl':continue
+                      t.add(p,arcname=str(p.relative_to(root)));selected.append({'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+          (out/'delivery.json').write_text(json.dumps({'files':selected,'derived_features_omitted':True,'active_modified':False,'future_validated':False},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr32-xg-scale-validation
+          path: /tmp/xg-delivery
+          retention-days: 1
+          if-no-files-found: error

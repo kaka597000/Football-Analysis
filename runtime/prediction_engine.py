@@ -1,5 +1,7 @@
 """Numerical routing and integrity checks; no publication or evidence execution."""
 import argparse
+import copy
+from datetime import datetime, timezone
 import hashlib
 import json
 import os
@@ -34,7 +36,7 @@ def source_identity():
         return {'commit': None, 'worktree_dirty': None, 'status': 'GIT_UNAVAILABLE'}
 
 
-def predict_models(fixture, registry_path=None):
+def predict_models(fixture, registry_path=None, *, retain_current_on_test_failure=False):
     from competition_scope import require
     require(fixture)
     from runtime_config import registry_path as resolve_registry
@@ -69,49 +71,70 @@ def predict_models(fixture, registry_path=None):
     test_engine_path = ROOT / 'v5' / 'weighted_model.py'
     test_artifact_path = None
     test_artifact_hash = None
-    if route.get('test_artifact_path'):
-        ml_path = Path(route['test_artifact_path'])
-        if hashlib.sha256(ml_path.read_bytes()).hexdigest() != route['test_artifact_sha256']:
-            raise ValueError('ML artifact checksum mismatch')
-        test_artifact_path = ml_path
-        test_artifact_hash = route['test_artifact_sha256']
-        explicit_test_engine = route.get('test_engine')
-        if explicit_test_engine:
-            from active_route_engines import (predict_aus_expert,
-                predict_generic_poisson, predict_systematic_candidate)
-            test_engine_path = ROOT / 'active_route_engines.py'
-            if explicit_test_engine == 'systematic_candidate':
-                test_engine = 'active_route_engines.predict_systematic_candidate'
-                experimental = predict_systematic_candidate(ml_path, fixture)
-            elif explicit_test_engine == 'aus_expert':
-                test_engine = 'active_route_engines.predict_aus_expert'
-                experimental = predict_aus_expert(ml_path, fixture)
-            elif explicit_test_engine == 'generic_poisson':
-                test_engine = 'active_route_engines.predict_generic_poisson'
-                experimental = predict_generic_poisson(ml_path, fixture)
+    failure_phase = 'TEST_ARTIFACT_INTEGRITY'
+    test_checksum_verified = False
+    test_failure = None
+    try:
+        if route.get('test_artifact_path'):
+            ml_path = Path(route['test_artifact_path'])
+            test_artifact_path = ml_path
+            test_artifact_hash = route['test_artifact_sha256']
+            if hashlib.sha256(ml_path.read_bytes()).hexdigest() != route['test_artifact_sha256']:
+                raise ValueError('ML artifact checksum mismatch')
+            test_checksum_verified = True
+            failure_phase = 'TEST_LOAD_OR_INFERENCE'
+            explicit_test_engine = route.get('test_engine')
+            if explicit_test_engine:
+                from active_route_engines import (predict_aus_expert,
+                    predict_generic_poisson, predict_systematic_candidate)
+                test_engine_path = ROOT / 'active_route_engines.py'
+                if explicit_test_engine == 'systematic_candidate':
+                    test_engine = 'active_route_engines.predict_systematic_candidate'
+                    experimental = predict_systematic_candidate(ml_path, fixture)
+                elif explicit_test_engine == 'aus_expert':
+                    test_engine = 'active_route_engines.predict_aus_expert'
+                    experimental = predict_aus_expert(ml_path, fixture)
+                elif explicit_test_engine == 'generic_poisson':
+                    test_engine = 'active_route_engines.predict_generic_poisson'
+                    experimental = predict_generic_poisson(ml_path, fixture)
+                else:
+                    raise ValueError('unknown test route engine: ' + explicit_test_engine)
+            elif route.get('test_version') == 'WCPP-ML-UCL-0.1':
+                sys.path.insert(0,str(ROOT/'continental'))
+                from ucl_ml import predict as ml_predict
+                test_engine = 'continental.ucl_ml.predict'
+                test_engine_path = ROOT / 'continental' / 'ucl_ml.py'
+                ml_artifact = json.loads(ml_path.read_text())
+                experimental = ml_predict(ml_artifact,current,fixture)
+                experimental['training_data_cutoff'] = ml_artifact.get('train_end')
             else:
-                raise ValueError('unknown test route engine: ' + explicit_test_engine)
-        elif route.get('test_version') == 'WCPP-ML-UCL-0.1':
-            sys.path.insert(0,str(ROOT/'continental'))
-            from ucl_ml import predict as ml_predict
-            test_engine = 'continental.ucl_ml.predict'
-            test_engine_path = ROOT / 'continental' / 'ucl_ml.py'
-            ml_artifact = json.loads(ml_path.read_text())
-            experimental = ml_predict(ml_artifact,current,fixture)
-            experimental['training_data_cutoff'] = ml_artifact.get('train_end')
+                sys.path.insert(0,str(ROOT/'v6'))
+                from ml_model import predict as ml_predict
+                test_engine = 'v6.ml_model.predict'
+                test_engine_path = ROOT / 'v6' / 'ml_model.py'
+                ml_artifact = json.loads(ml_path.read_text())
+                experimental = ml_predict(ml_artifact,current,fixture)
+                experimental['training_data_cutoff'] = ml_artifact.get('train_end')
         else:
-            sys.path.insert(0,str(ROOT/'v6'))
-            from ml_model import predict as ml_predict
-            test_engine = 'v6.ml_model.predict'
-            test_engine_path = ROOT / 'v6' / 'ml_model.py'
-            ml_artifact = json.loads(ml_path.read_text())
-            experimental = ml_predict(ml_artifact,current,fixture)
-            experimental['training_data_cutoff'] = ml_artifact.get('train_end')
-    else:
-        if current_engine_name != 'legacy_weighted_anchor':
-            raise ValueError('explicit current engine requires an independent test artifact')
-        experimental = predict(artifact, fixture, variant='test')
-        experimental['training_data_cutoff'] = artifact['anchor'].get('train_end')
+            if current_engine_name != 'legacy_weighted_anchor':
+                raise ValueError('explicit current engine requires an independent test artifact')
+            test_checksum_verified = True
+            failure_phase = 'TEST_LOAD_OR_INFERENCE'
+            experimental = predict(artifact, fixture, variant='test')
+            experimental['training_data_cutoff'] = artifact['anchor'].get('train_end')
+    except (ValueError, OSError, ImportError) as exc:
+        if (not retain_current_on_test_failure or current.get('matrix') is None
+                or str(current.get('status','')).startswith('ABSTAIN')):
+            raise
+        # No fallback model, copied probabilities, source bypass or provider text.
+        test_failure = {'stage': failure_phase, 'error_type': type(exc).__name__,
+                        'artifact_checksum_verified': test_checksum_verified}
+        experimental = {'status': 'ABSTAIN_TEST_EXECUTION_FAILED', 'matrix': None,
+                        'primary': None, 'wdl': None, 'total': None,
+                        'input': copy.deepcopy(fixture),
+                        'generated_at': datetime.now(timezone.utc).isoformat(),
+                        'version': route.get('test_version'), 'execution_failure': test_failure,
+                        'formal_kpi_eligible': False, 'comprehensive_primary_ready': False}
     experimental['model_label'] = 'test模型'
     from active_route_engines import align_matrix_support
     support_alignment = align_matrix_support(current, experimental)
@@ -129,4 +152,5 @@ def predict_models(fixture, registry_path=None):
         'test_artifact_hash': test_artifact_hash,
         'experimental': experimental,
         'support_alignment': support_alignment,
+        'test_failure': test_failure,
     }

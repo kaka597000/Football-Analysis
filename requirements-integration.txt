@@ -1,0 +1,4 @@
+# Optional CPU-only dependency for real-asset upset_v2 integration tests.
+# Install after requirements.txt and requirements-test.txt.
+--index-url https://download.pytorch.org/whl/cpu
+torch==2.10.0+cpu

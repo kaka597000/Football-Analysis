@@ -43,6 +43,10 @@ def execute(state_dir, mode, *, max_collection_seconds=300):
             status['result']=train(root,max_cohorts=len(scopes))
         else:raise ValueError('unknown job mode')
         status['status']='COMPLETED'
+        if mode=='collect':
+            status['status_scope']='REQUEST_EXECUTION_NOT_MODEL_READINESS'
+            status['data_status']=status['result'].get('data_status','NOT_ASSESSED')
+            status['market_model_ready']=status['result'].get('market_model_ready',False)
         if mode=='collect' and not status['result'].get('successful_requests'):
             status['status']='FAILED_NO_USABLE_RESPONSE'
         if mode=='train' and any(x.get('status')=='TRAINING_FAILED' for x in status['result'].get('cohorts',[])):
@@ -52,7 +56,8 @@ def execute(state_dir, mode, *, max_collection_seconds=300):
         # No provider bodies, URLs with credentials, or arbitrary exception strings.
     status['finished_at']=datetime.now(timezone.utc).isoformat()
     with (folder/(rid+'.json')).open('x') as f:json.dump(status,f,ensure_ascii=False,indent=2,allow_nan=False)
-    print(json.dumps({'run_id':rid,'mode':mode,'status':status['status'],'paid_api_calls':False}))
+    print(json.dumps({'run_id':rid,'mode':mode,'status':status['status'],'paid_api_calls':False,
+                      'data_status':status.get('data_status'),'market_model_ready':status.get('market_model_ready')}))
     return status
 
 

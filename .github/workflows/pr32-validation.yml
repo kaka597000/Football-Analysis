@@ -1,0 +1,61 @@
+# Final strict pass includes the new native-scale xG tests.
+name: PR32 retained-asset verification
+on:
+  push:
+    branches: [research/elo-kelly-config-20261112]
+    paths: [.github/workflows/pr32-validation.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  retained:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt -r requirements-test.txt
+      - run: python -m pip install -r requirements-integration.txt
+      - name: Retrieve existing checksum-locked backups
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: kaka597000/Football-Analysis
+        run: |
+          gh run download 43170849651 -n pr32-recovered-assets -D /tmp/pr32-bundles/core
+          gh run download 43172475529 -n pr32-j1-history -D /tmp/pr32-bundles/j1
+          gh run download 43175273609 -n pr32-integration-assets -D /tmp/pr32-bundles/integration
+          gh run download 43173772795 -n pr32-retained-research -D /tmp/pr32-bundles/research
+          sudo install -d -m 0755 -o "$(id -u)" -g "$(id -g)" /workspace
+      - name: Restore original assets without hash overrides
+        id: restore
+        run: python scripts/verify_pr32_retained.py restore --bundles /tmp/pr32-bundles --out /tmp/pr32-results
+      - name: Verify real J1 paired and partial inference
+        run: python scripts/verify_pr32_retained.py smoke --out /tmp/pr32-results
+      - name: Strict integration with real external assets
+        run: |
+          set -o pipefail
+          python scripts/run_tests.py --layer integration 2>&1 | tee /tmp/pr32-results/integration.log
+      - name: Reproduce fixed retrospective experiment
+        if: always() && steps.restore.outcome == 'success'
+        env:
+          PYTHONPATH: runtime
+        run: python -m research_program.elo_kelly_ablation --manifest /workspace/WCPP/research/remaining-nine-20261105/market-ablation-input-manifest.json --out /tmp/pr32-results/elo-kelly
+      - name: Bounded public-source probe without credentials
+        if: always() && steps.restore.outcome == 'success'
+        run: python scripts/verify_pr32_retained.py probe --out /tmp/pr32-results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr32-real-validation
+          path: |
+            /tmp/pr32-results/*.json
+            /tmp/pr32-results/*.log
+            /tmp/pr32-results/elo-kelly
+            /tmp/pr32-results/live-probe/requests.jsonl
+          retention-days: 1
+          if-no-files-found: error

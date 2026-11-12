@@ -3,8 +3,9 @@ import sys
 from pathlib import Path
 from prediction_engine import ROOT, file_sha256, object_sha256, source_identity, predict_models
 
-def run(fixture, registry_path=None):
-    state = predict_models(fixture, registry_path)
+def run(fixture, registry_path=None, *, retain_current_on_test_failure=False):
+    state = (predict_models(fixture, registry_path, retain_current_on_test_failure=True)
+             if retain_current_on_test_failure else predict_models(fixture, registry_path))
     path = state['path']
     registry = state['registry']
     route = state['route']
@@ -78,5 +79,12 @@ def run(fixture, registry_path=None):
         'matrix_support_alignment': support_alignment,
         'selection_policy': 'INDEPENDENT_PAIRED_RESEARCH_NO_BEST_OF_TWO',
     }
+    if state.get('test_failure') is not None:
+        output['prediction_status'] = 'PARTIAL_CURRENT_ONLY'
+        output['execution_audit']['test']['execution_failure'] = state['test_failure']
+        output['execution_audit']['test']['artifact_hash_role'] = 'DECLARED_EXPECTED_NOT_PROOF_OF_SUCCESS'
+        if state['test_failure']['stage'] == 'TEST_ARTIFACT_INTEGRITY':
+            output['execution_audit']['test'].update(engine=None, engine_sha256=None,
+                declared_engine=route.get('test_engine') or route.get('test_version'), engine_attempted=False)
     from prediction_diagnostics import attach
     return attach(output, fixture, artifact_path, test_artifact_path)

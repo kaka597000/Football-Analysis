@@ -12,6 +12,11 @@ import time
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 from urllib.parse import urlencode
 
+if __package__:
+    from .collection_status import classify_failure, summarize
+else:
+    from collection_status import classify_failure, summarize
+
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/'
 ASIAN = 'https://asianodds.org/d/events?sport=fb'
 MAX_REQUESTS = 100
@@ -164,6 +169,7 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
     (root/'raw').mkdir(exist_ok=True);stamp=now.isoformat();fetcher=fetcher or http_fetch
     live=fetcher is http_fetch
     calls=0;retry_used=False;successful=0;rows=[];quarantine=0;events_seen=0;cache={}
+    channels={name:{'requests':0,'successful_requests':0,'failures':{}} for name in ('history','market')}
     existing=set();previous={}
     target=root/'normalized-results.jsonl'
     if target.exists():
@@ -181,6 +187,7 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
                 time_limit_reached=True;break
             if attempt:retry_used=True
             calls+=1
+            channel=channels['market' if url==ASIAN else 'history'];channel['requests']+=1
             if live:time.sleep(.2)
             started=datetime.now(timezone.utc).isoformat()
             try:
@@ -193,10 +200,13 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
                 captured=datetime.now(timezone.utc).isoformat()
                 ref={'path':'raw/'+p.name,'sha256':digest,'captured_at':captured,'source_url':url}
                 append(root/'requests.jsonl',{'source_url':url,'started_at':started,'captured_at':captured,'status':'OK','raw':ref})
-                value=(body,ref);successful+=1;break
+                value=(body,ref);successful+=1;channel['successful_requests']+=1;break
             except Exception as exc:
-                append(root/'requests.jsonl',{'source_url':url,'started_at':started,'captured_at':stamp,'status':'FAILED','error_type':type(exc).__name__})
-                if getattr(exc,'code',None) in (401,403,429):break
+                failure=classify_failure(exc)
+                category=failure['category'];channel['failures'][category]=channel['failures'].get(category,0)+1
+                append(root/'requests.jsonl',{'source_url':url,'started_at':started,
+                    'captured_at':datetime.now(timezone.utc).isoformat(),'status':'FAILED','failure':failure})
+                if not failure['retryable']:break
         cache[url]=value;return value
     by_comp={};coverage={}
     for scope in scopes:by_comp.setdefault(scope['competition'],[]).append(scope)
@@ -256,5 +266,6 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
         'wallclock_limit_seconds':max_seconds,
         'budget_status':'TIME_LIMIT_REACHED' if time_limit_reached else 'REQUEST_LIMIT_REACHED' if calls>=MAX_REQUESTS else 'BOUNDED_SCAN_FINISHED',
         'coverage_complete':False,'coverage_by_competition':coverage,'new_rows':rows}
+    result.update(summarize(channels,market_saved=bool(market),new_rows=len(rows),quarantined=quarantine))
     append(root/'collection-runs.jsonl',{k:v for k,v in result.items() if k!='new_rows'})
     return result
