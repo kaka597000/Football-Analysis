@@ -1,0 +1,58 @@
+name: PR32 bounded asset recovery
+on:
+  push:
+    branches: [research/elo-kelly-config-20261112]
+    paths: [.github/workflows/pr32-recovery.yml]
+permissions:
+  contents: read
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify fixed backup and recover bounded text assets
+        run: |
+          python - <<'PY'
+          import hashlib, io, json, pathlib, tarfile, urllib.request, zipfile
+          out=pathlib.Path('/tmp/pr32-assets');out.mkdir()
+          base='https://raw.githubusercontent.com/kaka597000/kaka597000-Football-Analysis-Data/'
+          old='466fd626a47481e70b176a9a69c58224d7d1bf63/workspace-backup-20261102/incoming-core/'
+          current='9a7bb55ce149a5b7bc9a4a9684ac160f964c83d7/'
+          def get(path):
+              with urllib.request.urlopen(base+path,timeout=90) as r:return r.read()
+          parts=get(old+'parts.json');(out/'parts.json').write_bytes(parts);m=json.loads(parts)
+          archive=pathlib.Path('/tmp/core.tar.gz');whole=hashlib.sha256()
+          with archive.open('xb') as f:
+              for p in m['ordered_parts']:
+                  b=get(old+p['name'])
+                  if len(b)!=p['bytes'] or hashlib.sha256(b).hexdigest()!=p['sha256']:raise ValueError('part checksum')
+                  f.write(b);whole.update(b)
+          if whole.hexdigest()!=m['whole_sha256']:raise ValueError('whole checksum')
+          (out/'control.zip').write_bytes(get(old+'control.zip'))
+          inventory=[];selected=[]
+          with tarfile.open(archive,'r:gz') as src,tarfile.open(out/'assets.tar.gz','w:gz') as dest:
+              for t in src:
+                  inventory.append({'name':t.name,'bytes':t.size,'file':t.isfile()})
+                  if not t.isfile() or t.size>40000000 or t.name.endswith(('.db','.sqlite','.sqlite3')):continue
+                  if pathlib.PurePosixPath(t.name).is_absolute() or '..' in pathlib.PurePosixPath(t.name).parts:raise ValueError('unsafe member')
+                  if pathlib.PurePosixPath(t.name).name=='.env':continue
+                  b=src.extractfile(t).read();dest.addfile(t,io.BytesIO(b));selected.append({'name':t.name,'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b)})
+          (out/'inventory.json').write_text(json.dumps(inventory,ensure_ascii=False,indent=2))
+          (out/'selected.json').write_text(json.dumps(selected,ensure_ascii=False,indent=2))
+          for path in ['seed/training.json.gz','seed/manifest.json','normalized-results.jsonl','config/scopes.json','latest-source.json','workspace-updates/20261112-model-inventory/inventory.json','workspace-updates/20261112-model-inventory/exact-parameters.json']:
+              b=get(current+path);p=out/'current'/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b)
+          (out/'receipt.json').write_text(json.dumps({'backup_commit':old.split('/')[0],'data_commit':current[:-1],'core_sha256':whole.hexdigest(),'selected_files':len(selected),'inventory_files':len(inventory),'selection':'non-database regular members <=40MB','active_files_modified':False},indent=2))
+          print('Verified backup and selected',len(selected),'members; no active files modified')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr32-recovered-assets
+          path: /tmp/pr32-assets
+          retention-days: 1
+          if-no-files-found: error
