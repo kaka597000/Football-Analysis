@@ -82,9 +82,10 @@ class PortableCycleTests(unittest.TestCase):
         now=datetime.now(timezone.utc);f={'match_id':'espn:1','cohort':'eng.1','kickoff_at':(now+timedelta(days=1)).isoformat()}
         with tempfile.TemporaryDirectory() as tmp:
             root,m=self.bundle(tmp,[f]);m['protected_first_slots']=[{'match_id':'espn:1'}];self.write(root,m)
-            with patch.object(p.fv,'register')as register:
-                v=p.cycle(root,max_result_requests=0,now=now)
+            with patch.object(p.fv,'register')as register,patch('runtime.automation.market_bridge.attach_total_quote')as market:
+                v=p.cycle(root,max_result_requests=0,now=now,market_dir=tmp)
             register.assert_not_called();self.assertEqual(v['new_captures'],[])
+            market.assert_not_called()
 
     def test_orphaned_registration_is_recovered_by_frozen_identity(self):
         with tempfile.TemporaryDirectory()as tmp:
@@ -111,10 +112,11 @@ class PortableCycleTests(unittest.TestCase):
             package={'match_id':fixture['match_id'],'plan_sha256':plan['record_sha256'],
                      'current_receipt':receipt,'candidate_receipt':receipt}
             pending={'completed':0,'pending_results':[fixture['match_id']],'missing_first_pairs':[]}
-            with patch.object(p,'_recover_package',return_value=package),patch.object(p.fv,'capture')as capture,patch.object(p.fv,'review',return_value=pending),patch.object(p,'hydrate')as hydrate:
+            with patch.object(p,'_recover_package',return_value=package),patch.object(p.fv,'capture')as capture,patch.object(p.fv,'review',return_value=pending),patch.object(p,'hydrate')as hydrate,patch('runtime.automation.market_bridge.attach_total_quote')as market:
                 fetch=lambda url:self.fail('recovery must not fetch new data')
-                result=p.cycle(root,fetcher=fetch,now=now)
+                result=p.cycle(root,fetcher=fetch,now=now,market_dir=tmp)
             capture.assert_not_called();hydrate.assert_not_called()
+            market.assert_not_called()
             self.assertEqual(result['captured_population'],1)
             self.assertEqual(len(p.read(state/'state.json')['packages']),1)
 
@@ -143,6 +145,56 @@ class PortableCycleTests(unittest.TestCase):
             self.assertEqual([v['match_id']for v in persisted['packages']],['espn:1'])
             self.assertEqual(result['failures'][0]['status'],'CAPTURE_BLOCKED')
             self.assertEqual(result['failures'][0]['error_type'],'OSError')
+
+    def test_new_capture_uses_market_attachment_but_partial_journal_does_not(self):
+        for resume in (False, True):
+            with self.subTest(resume=resume), tempfile.TemporaryDirectory() as tmp:
+                now=datetime.now(timezone.utc);fixture=self.fixture('espn:1',(now+timedelta(days=1)).isoformat())
+                root,m=self.bundle(tmp,[fixture]);receipt,plan=self.plan(root,m,[fixture])
+                before=(root/'manifest.json').read_bytes()
+                package={'match_id':'espn:1','current_receipt':receipt,'candidate_receipt':receipt}
+                if resume:
+                    state=root.parent/'state';state.mkdir()
+                    (state/'capture-espn_1.json.capture.json').write_text('{"synthetic_resume":true}')
+                body={'header':{'id':'1','competitions':[{'date':fixture['kickoff_at'],
+                    'status':{'type':{'state':'pre'}},'neutralSite':False,
+                    'competitors':[{'homeAway':s,'team':{'id':v}}for s,v in [('home','1'),('away','2')]]}]}}
+                quote={'verified':True,'match_id':'espn:1','bookmaker':'synthetic-book',
+                       'market':'standard_total','line':2.75,'over_odds':1.9,'under_odds':2.0,
+                       'quoted_at':(now-timedelta(seconds=10)).isoformat(),'query_time':now.isoformat(),
+                       'source_url':'https://example.org/odds'}
+                def attach(f,*args,**kwargs):
+                    self.assertIn('cutoff_at',f)
+                    return dict(f,total_quote=quote),{'status':'ATTACHED'}
+                pending={'completed':0,'pending_results':['espn:1'],'missing_first_pairs':[]}
+                with patch.object(p,'hydrate'),patch.object(p.fv,'capture',return_value=package)as capture,patch.object(p.fv,'review',return_value=pending),patch('runtime.automation.market_bridge.attach_total_quote',side_effect=attach)as market:
+                    value=p.cycle(root,fetcher=lambda url:body,now=now,market_dir=tmp,
+                                  market_providers=['a','b'],market_bookmakers=['book'])
+                self.assertEqual(value['captured_population'],1)
+                self.assertEqual(capture.call_args.kwargs['resume'],resume)
+                if resume:
+                    market.assert_not_called()
+                else:
+                    self.assertEqual(capture.call_args.args[2]['total_quote'],quote)
+                    self.assertEqual(market.call_args.kwargs['provider_order'],['a','b'])
+                self.assertEqual((root/'manifest.json').read_bytes(),before)
+
+    def test_missing_market_keeps_new_score_capture_and_explicit_quote_gap(self):
+        now=datetime.now(timezone.utc);fixture=self.fixture('espn:1',(now+timedelta(days=1)).isoformat())
+        with tempfile.TemporaryDirectory()as tmp:
+            root,m=self.bundle(tmp,[fixture]);receipt,plan=self.plan(root,m,[fixture])
+            package={'match_id':'espn:1','current_receipt':receipt,'candidate_receipt':receipt}
+            body={'header':{'id':'1','competitions':[{'date':fixture['kickoff_at'],
+                'status':{'type':{'state':'pre'}},'neutralSite':False,
+                'competitors':[{'homeAway':s,'team':{'id':v}}for s,v in [('home','1'),('away','2')]]}]}}
+            pending={'completed':0,'pending_results':['espn:1'],'missing_first_pairs':[]}
+            with patch.object(p,'hydrate'),patch.object(p.fv,'capture',return_value=package)as capture,patch.object(p.fv,'review',return_value=pending):
+                value=p.cycle(root,fetcher=lambda url:body,now=now,market_dir=Path(tmp)/'missing')
+            self.assertEqual(value['captured_population'],1)
+            self.assertEqual(value['failures'],[])
+            passed=capture.call_args.args[2]
+            self.assertNotIn('total_quote',passed)
+            self.assertEqual(passed['market_attachment']['status'],'NO_ELIGIBLE_RETAINED_TOTAL_QUOTE')
 
     def test_original_destination_allowlist(self):
         for path in ('/tmp/key','/etc/passwd','/workspace/WCPP/../elsewhere','relative'):

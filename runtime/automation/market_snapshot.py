@@ -1,4 +1,4 @@
-"""Bounded Nations League market collection with retained identity/time evidence.
+"""Bounded competition market collection with retained identity/time evidence.
 
 This is a data channel, not an active-model or staking change. Exact names or
 reviewed provider/team-ID aliases require the same sides, competition and kickoff.
@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 from urllib.parse import urlencode
 from urllib.request import urlopen
@@ -23,6 +24,16 @@ except ModuleNotFoundError:
 ODDS = 'https://api.the-odds-api.com/v4/sports/soccer_uefa_nations_league/odds/'
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard'
 MAX_AGE_SECONDS = 60
+SCOPES = {
+    'uefa.nations': ('soccer_uefa_nations_league', 'league-phase', 'league-phase'),
+    'eng.1': ('soccer_epl', 'regular-season', 'regular'),
+    'esp.1': ('soccer_spain_la_liga', 'regular-season', 'regular'),
+    'ger.1': ('soccer_germany_bundesliga', 'regular-season', 'regular'),
+    'ita.1': ('soccer_italy_serie_a', 'regular-season', 'regular'),
+    'fra.1': ('soccer_france_ligue_one', 'regular-season', 'regular'),
+    'nor.1': ('soccer_norway_eliteserien', 'regular-season', 'regular'),
+    'swe.1': ('soccer_sweden_allsvenskan', 'regular-season', 'regular'),
+}
 
 # Reviewed from retained raw responses, not transliteration/fuzzy matching. IDs
 # are national-team ESPN identities; no fixture ID is baked into future matching.
@@ -82,11 +93,15 @@ def check_evidence(root, metadata):
     return json.loads(path.read_text())
 
 
-def build(root, odds_meta, identity_meta, *, cutoff, now=None):
+def build(root, odds_meta, identity_meta, *, cutoff, now=None,
+          competition='uefa.nations', market_max_age_seconds=MAX_AGE_SECONDS):
     now = now or datetime.now(timezone.utc)
+    sport_key, source_phase, stage = SCOPES[competition]
+    if type(market_max_age_seconds) is not int or not 0 < market_max_age_seconds <= 3600:
+        raise ValueError('market age must be within the locked one-hour limit')
     odds, board = (check_evidence(root, m) for m in (odds_meta, identity_meta))
-    if not any(x.get('slug') == 'uefa.nations' for x in board.get('leagues', [])):
-        raise ValueError('Nations League source identity required')
+    if not any(x.get('slug') == competition for x in board.get('leagues', [])):
+        raise ValueError('requested competition source identity required')
     if max(aware(m['captured_at']) for m in (odds_meta, identity_meta)) > aware(cutoff):
         raise ValueError('identity and quote capture must precede cutoff')
     eligible = []
@@ -94,7 +109,7 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
         status = event.get('status', {}).get('type', {})
         if status.get('state') != 'pre' or status.get('completed') is not False:
             continue
-        if event.get('season', {}).get('slug') != 'league-phase' or aware(event['date']) <= now:
+        if event.get('season', {}).get('slug') != source_phase or aware(event['date']) <= now:
             continue
         sides = {x['homeAway']: x['team'] for x in event['competitions'][0]['competitors']}
         if set(sides) != {'home', 'away'} or sides['home']['id'] == sides['away']['id']:
@@ -104,7 +119,7 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
     for event, sides in eligible:
         matched = []
         for source in odds:
-            if (source.get('sport_key') != ALIAS_REVIEW['sport_key']
+            if (source.get('sport_key') != sport_key
                     or aware(source['commence_time']) != aware(event['date'])):
                 continue
             identities = {side: team_identity(sides[side], source.get(side + '_team'), cutoff)
@@ -121,7 +136,16 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
                            'provider_source_names': {side: source[side + '_team'] for side in ('home', 'away')},
                            'identity_source_names': {side: sides[side]['displayName'] for side in ('home', 'away')}}
                           if aliases else None)
-        target = {'cohort': 'uefa.nations', 'match_id': 'espn:' + event['id'],
+        cohort = competition
+        if competition == 'uefa.nations':
+            group = event['competitions'][0].get('group', {}).get('name', '')
+            grade = re.fullmatch(r'Group ([ABCD])[1-4]', group, re.IGNORECASE)
+            if not grade:
+                excluded['missing_verified_nations_grade'] += 1
+                continue
+            cohort += ':' + grade[1].upper() + ':league-phase'
+        target = {'cohort': cohort, 'competition': competition, 'stage': stage,
+                  'match_id': 'espn:' + event['id'],
                   'home_id': 'espn:' + sides['home']['id'], 'away_id': 'espn:' + sides['away']['id'],
                   'kickoff_at': event['date'], 'cutoff_at': cutoff}
         rows = []
@@ -181,7 +205,7 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
             else:
                 rows.extend(group.values())
         snap = snapshot(rows, target, root, provider='the-odds-api',
-                        market_max_age_seconds=MAX_AGE_SECONDS, now=now)
+                        market_max_age_seconds=market_max_age_seconds, now=now)
         snapshots.append(snap)
         mapping = {'match_id': target['match_id'], 'provider_match_id': source['id'],
                    'home_id': target['home_id'], 'away_id': target['away_id'],
@@ -196,8 +220,8 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None):
             'market_model_ready': count > 0, 'verified_quote_count': count,
             'eligible_fixture_count': len(eligible), 'covered_fixture_count': covered,
             'coverage': covered / len(eligible) if eligible else None,
-            'coverage_scope': 'ESPN Nations League league-phase future fixtures on requested UTC day',
-            'source_odds_events': len(odds), 'market_max_age_seconds': MAX_AGE_SECONDS,
+            'coverage_scope': f'ESPN {competition} {stage} future fixtures on requested UTC day',
+            'source_odds_events': len(odds), 'market_max_age_seconds': market_max_age_seconds,
             'excluded': dict(excluded), 'identity_mappings': mappings, 'snapshots': snapshots,
             'identity_alias_review': dict(ALIAS_REVIEW, sha256=ALIAS_REVIEW_SHA256),
             'tls_verification_disabled': False, 'active_model_changed': False,
@@ -215,24 +239,29 @@ def fetch(url, public_url, path):
             'url': public_url, 'requested_at': requested, 'captured_at': captured}
 
 
-def collect(out):
+def collect(out, *, competition='uefa.nations', date=None, market_max_age_seconds=MAX_AGE_SECONDS):
+    sport_key = SCOPES[competition][0]
+    day = date or datetime.now(timezone.utc).strftime('%Y%m%d')
+    datetime.strptime(day, '%Y%m%d')
     out = Path(out); out.mkdir(parents=True, exist_ok=False)
-    key = os.environ.get('THE_ODDS') or os.environ.get('WCPP_ODDS_API_KEY')
+    key = (os.environ.get('THE_ODDS') or os.environ.get('WCPP_ODDS_API_KEY')
+           or os.environ.get('WCPP_THE_ODDS_API_KEY'))
     if not key:
         result = {'market_model_ready': False, 'verified_quote_count': 0,
                   'status': 'MISSING_CREDENTIAL', 'required_secret': 'WCPP_ODDS_API_KEY',
                   'requests': 0}
     else:
         try:
-            day = datetime.now(timezone.utc).strftime('%Y%m%d')
-            identity = fetch(ESPN + '?dates=' + day + '&limit=1000',
-                             ESPN + '?dates=' + day + '&limit=1000', out / 'identity.json')
+            board_url = ESPN.replace('/uefa.nations/', '/' + competition + '/')
+            identity = fetch(board_url + '?dates=' + day + '&limit=1000',
+                             board_url + '?dates=' + day + '&limit=1000', out / 'identity.json')
             params = {'regions': 'eu', 'markets': 'h2h,totals', 'oddsFormat': 'decimal'}
-            public = ODDS + '?' + urlencode(params)
+            public = ODDS.replace('soccer_uefa_nations_league', sport_key) + '?' + urlencode(params)
             odds = fetch(public + '&' + urlencode({'apiKey': key}), public, out / 'odds.json')
             write(out / 'source-metadata.json', {'odds': odds, 'identity': identity})
             now = datetime.now(timezone.utc)
-            result = build(out, odds, identity, cutoff=now.isoformat(), now=now)
+            result = build(out, odds, identity, cutoff=now.isoformat(), now=now,
+                           competition=competition, market_max_age_seconds=market_max_age_seconds)
             result['status'] = 'VALIDATED' if result['market_model_ready'] else 'NO_VALID_QUOTES'
         except Exception as exc:
             result = {'status': 'COLLECTION_FAILED', 'market_model_ready': False,
@@ -244,6 +273,10 @@ def collect(out):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', required=True)
+    parser.add_argument('--competition', choices=SCOPES, default='uefa.nations')
+    parser.add_argument('--date', help='UTC scoreboard day in YYYYMMDD format')
+    parser.add_argument('--market-max-age-seconds', type=int, default=MAX_AGE_SECONDS)
     args = parser.parse_args()
-    result = collect(args.out)
+    result = collect(args.out, competition=args.competition, date=args.date,
+                     market_max_age_seconds=args.market_max_age_seconds)
     print(json.dumps({k: v for k, v in result.items() if k not in {'snapshots', 'identity_mappings'}}))
