@@ -37,9 +37,9 @@ def _team(model,team,day,season):
     state=copy.deepcopy(model['teams'].get(team,{'attack':0.,'defence':0.,'date':day,'season':season}))
     gap=(date.fromisoformat(day)-date.fromisoformat(state['date'])).days
     if gap<0:raise ValueError('target before strength state')
-    retain=math.exp(-gap/CONFIG['shrink_days'])
+    retain=math.exp(-gap/model['config']['shrink_days'])
     if season is not None and state['season'] is not None and season!=state['season']:
-        retain*=CONFIG['season_retention']
+        retain*=model['config']['season_retention']
     for k in ('attack','defence'):state[k]*=retain
     state.update(date=day,season=season)
     return state
@@ -53,11 +53,24 @@ def rates(model,fixture):
                            model['intercept']+a['attack']+h['defence']]),.05,8.)
 
 
-def fit(rows):
+def _config(value=None):
+    config=copy.deepcopy(CONFIG if value is None else value)
+    for key in ('learning_rate','shrink_days','max_log_strength'):
+        if type(config[key]) not in (int,float) or not math.isfinite(config[key]) or config[key]<=0:
+            raise ValueError('positive finite dynamic configuration required')
+    if type(config['season_retention']) not in (int,float) or not 0<=config['season_retention']<=1:
+        raise ValueError('season retention must be between zero and one')
+    if any(type(config[k]) is not int or config[k]<1 for k in ('minimum_rows','max_goals')):
+        raise ValueError('positive integer sample/support configuration required')
+    return config
+
+
+def fit(rows,config=None):
+    config=_config(config)
     rows=prepare(rows)
     if not rows:raise ValueError('history required')
     model={'schema':'WCPP-DYNAMIC-STRENGTH-1','cohort':rows[0]['cohort'],'stage':rows[0]['stage'],
-           'intercept':math.log(1.2),'home_advantage':math.log(1.2),'teams':{},'config':CONFIG}
+           'intercept':math.log(1.2),'home_advantage':math.log(1.2),'teams':{},'config':config}
     # Predict all same-day games before any label updates on that day.
     for day,group in groupby(rows,key=lambda r:r['date']):
         block=list(group);updates={};global_res=[];home_res=[]
@@ -66,8 +79,8 @@ def fit(rows):
             for team,own,opponent in ((row['home'],res[0],res[1]),(row['away'],res[1],res[0])):
                 state=_team(model,team,day,row.get('season'))
                 if team in updates:raise ValueError('same team has ambiguous same-day duplicate games')
-                state['attack']=float(np.clip(state['attack']+CONFIG['learning_rate']*own,-1.5,1.5))
-                state['defence']=float(np.clip(state['defence']+CONFIG['learning_rate']*opponent,-1.5,1.5))
+                state['attack']=float(np.clip(state['attack']+config['learning_rate']*own,-config['max_log_strength'],config['max_log_strength']))
+                state['defence']=float(np.clip(state['defence']+config['learning_rate']*opponent,-config['max_log_strength'],config['max_log_strength']))
                 updates[team]=state
             global_res.extend(res)
             if not row['neutral']:home_res.append(float(res[0]))
@@ -78,10 +91,11 @@ def fit(rows):
     return model
 
 
-def distribution(mu,family='poisson',parameter=None):
+def distribution(mu,family='poisson',parameter=None,*,max_goals=80):
     mu=np.asarray(mu,float)
     if mu.shape!=(2,) or not np.isfinite(mu).all() or (mu<=0).any() or (mu>8).any():raise ValueError('valid fitted means required')
-    x=np.arange(CONFIG['max_goals']+1)
+    if type(max_goals) is not int or max_goals<1:raise ValueError('positive integer support required')
+    x=np.arange(max_goals+1)
     if family=='poisson':m=np.outer(poisson.pmf(x,mu[0]),poisson.pmf(x,mu[1]))
     elif family=='negative_binomial':
         if parameter is None or parameter<=0:raise ValueError('positive dispersion required')
@@ -102,19 +116,20 @@ def distribution(mu,family='poisson',parameter=None):
 
 
 def _evaluate(model,rows,family,parameter):
-    return evaluate([{'matrix':distribution(rates(model,r),family,parameter)[0],
+    return evaluate([{'matrix':distribution(rates(model,r),family,parameter,max_goals=model['config']['max_goals'])[0],
                       'home_goals':r['home_goals'],'away_goals':r['away_goals']} for r in rows])
 
 
-def experiment(rows):
+def experiment(rows,config=None):
+    config=_config(config)
     rows=prepare(rows)
-    if len(rows)<CONFIG['minimum_rows']:raise ValueError('insufficient independent temporal groups')
+    if len(rows)<config['minimum_rows']:raise ValueError('insufficient independent temporal groups')
     days=sorted({r['date'] for r in rows})
     if len(days)<12:raise ValueError('insufficient distinct dates')
     c1,c2=days[len(days)//2],days[3*len(days)//4]
     train=[r for r in rows if r['date']<c1];cal=[r for r in rows if c1<=r['date']<c2];test=[r for r in rows if r['date']>=c2]
     if min(map(len,(train,cal,test)))<20:raise ValueError('complete fit/cal/test denominators required')
-    initial=fit(train);candidates=[]
+    initial=fit(train,config);candidates=[]
     for family,param in FAMILIES:
         metrics=_evaluate(initial,cal,family,param)
         candidates.append({'family':family,'parameter':param,'calibration':metrics})
@@ -124,7 +139,7 @@ def experiment(rows):
         return (m['exact_top1']>=baseline['exact_top1'] and m['score_log_loss']<=baseline['score_log_loss']
                 and m['score_brier']<=baseline['score_brier'] and m['wdl_brier']<=baseline['wdl_brier'])
     selected=min([c for c in candidates if admissible(c)],key=lambda c:(-c['calibration']['metrics']['exact_top1'],c['calibration']['metrics']['score_log_loss']))
-    diagnostic_model=fit(train+cal)
+    diagnostic_model=fit(train+cal,config)
     result={'schema':'WCPP-DYNAMIC-DISTRIBUTION-EXPERIMENT-1','status':'DEVELOPMENT_ONLY_NOT_PROMOTED',
             'cohort':rows[0]['cohort'],'stage':rows[0]['stage'],'generated_at':datetime.now(timezone.utc).isoformat(),
             'split':{'calibration_start':c1,'diagnostic_start':c2,'fit_n':len(train),'cal_n':len(cal),'diagnostic_n':len(test)},
