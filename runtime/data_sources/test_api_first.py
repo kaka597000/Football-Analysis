@@ -77,6 +77,23 @@ class ApiFirstTests(unittest.TestCase):
             self.assertEqual(list(Path(folder).iterdir()), [])
         self.assertEqual(len([c for c in self.calls if c['provider'] == 'espn']), 1)
 
+    def test_http200_authentication_or_rate_rejection_stops_batch_without_caching(self):
+        for failure_kind in ('PROVIDER_AUTHENTICATION_REJECTION', 'RATE_LIMITED'):
+            self.calls.clear()
+            plan = copy.deepcopy(self.plan)
+            plan['requests']['duplicate']['params']['event'] = 3
+            def denied(**arguments):
+                self.calls.append(arguments)
+                return {'call': {'api_success': False, 'http_status': 200,
+                                'error_code': 'PROVIDER_ERROR',
+                                'failure_kind': failure_kind}, 'response': {'errors': {}}}
+            with self.subTest(failure_kind=failure_kind), tempfile.TemporaryDirectory() as folder:
+                result = self.collect(plan, folder, denied)
+                self.assertEqual(list(Path(folder).iterdir()), [])
+            self.assertEqual(len([c for c in self.calls if c['provider'] == 'espn']), 1)
+            self.assertEqual(result['requests']['one']['call']['error_code'], 'BATCH_PROVIDER_BLOCKED')
+            self.assertEqual(result['api_evidence'], [])
+
     def test_no_web_fallback_without_api_candidates_or_identity(self):
         plan = copy.deepcopy(self.plan)
         for bad in ([], [{'request_id': 'one', 'pointer': '/data'}]):

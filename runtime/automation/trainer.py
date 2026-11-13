@@ -122,6 +122,11 @@ def _verify_raw_result(row, state_dir, cache):
         kickoff = aware(match['date'])
         if kickoff.date().isoformat() != row['date'] or ('kickoff_at' in row and aware(row['kickoff_at']) != kickoff):
             raise ValueError('RAW_SOURCE_KICKOFF_MISMATCH')
+        if aware(row.get('known_at') or row.get('first_known_at')) < kickoff:
+            raise ValueError('RAW_SOURCE_KNOWN_BEFORE_KICKOFF')
+        if (type(match.get('neutralSite')) is bool and type(row.get('neutral')) is bool
+                and match['neutralSite'] != row['neutral']):
+            raise ValueError('RAW_SOURCE_NEUTRAL_CONFLICT')
         teams = match['competitors']
         if len(teams) != 2 or {t.get('homeAway') for t in teams} != {'home', 'away'}:
             raise ValueError('RAW_SOURCE_TEAMS_AMBIGUOUS')

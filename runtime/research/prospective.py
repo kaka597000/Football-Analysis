@@ -4,8 +4,11 @@ from pathlib import Path
 from datetime import datetime,timezone
 from urllib.parse import urlparse
 ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
 sys.path.insert(0,str(ROOT/'upset'))
 import classifier as old
+from publication import deliver
+from storage_lock import exclusive_lock
 
 def digest(x):return hashlib.sha256(json.dumps(x,sort_keys=True,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode()).hexdigest()
 def save(bundle,root):
@@ -22,9 +25,17 @@ def save(bundle,root):
   if len(parts)!=2 or not all(p.isdigit() for p in parts):raise ValueError('exact-score recommendation required')
  candidate=bundle.get('upset_candidate',{})
  if candidate.get('status')=='CANDIDATE_SHADOW_ONLY' and not cutoff<=old.aware(candidate['generated_at'])<kickoff:raise ValueError('candidate must precede kickoff')
- row={'scope':'INDEPENDENT_PROSPECTIVE_RESEARCH_NOT_FORMAL_PRIMARY_FREEZE','recorded_at':now.isoformat(),'match_id':mid,'bundle':bundle,'bundle_sha256':digest(bundle),'input_sha256':digest(fixture),'formal_kpi_eligible':False}
  out=Path(root);out.mkdir(parents=True,exist_ok=True);name=hashlib.sha256(mid.encode()).hexdigest()+'.json'
- with (out/name).open('x') as f:json.dump(row,f,ensure_ascii=False,indent=2,allow_nan=False)
+ target=out/name
+ def before_commit():
+  if not cutoff<=datetime.now(timezone.utc)<kickoff:raise ValueError('must record before kickoff')
+ with exclusive_lock(str(target)+'.lock'):
+  if target.exists():raise FileExistsError(target)
+  now=datetime.now(timezone.utc)
+  if not cutoff<=now<kickoff:raise ValueError('must record before kickoff')
+  row={'scope':'INDEPENDENT_PROSPECTIVE_RESEARCH_NOT_FORMAL_PRIMARY_FREEZE','recorded_at':now.isoformat(),'match_id':mid,'bundle':bundle,'bundle_sha256':digest(bundle),'input_sha256':digest(fixture),'formal_kpi_eligible':False}
+  content=json.dumps(row,ensure_ascii=False,indent=2,allow_nan=False).encode('utf-8')
+  deliver(target,content,before_commit=before_commit)
  return str(out/name)
 
 def review(root,results):
@@ -38,6 +49,11 @@ def review(root,results):
   if r['bundle_sha256']!=digest(b):raise ValueError('ledger changed')
   if mid not in observed:pending.append(mid);continue
   a=observed[mid]
+  statuses=[a[k] for k in ('status','event_status') if a.get(k) is not None]
+  if any(s in ('completed','FT') for s in statuses) and any(s not in ('completed','FT') for s in statuses):raise ValueError('conflicting result status')
+  if a.get('status') not in ('completed','FT') and a.get('event_status')!='FT':
+   if not statuses:raise ValueError('explicit result status required')
+   pending.append(mid);continue
   if a.get('score_basis')!='regulation_90' or any(type(a.get(k)) is not int or not 0<=a[k]<=30 for k in ('home_goals','away_goals')):raise ValueError('90-minute result required')
   if urlparse(a.get('source_url','')).scheme!='https' or old.aware(a['observed_at'])>datetime.now(timezone.utc):raise ValueError('verified result source/time required')
   from datetime import timedelta

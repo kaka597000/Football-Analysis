@@ -7,7 +7,7 @@ from v2_test.data_contract import digest,public_url
 
 
 def compare(entries,results):
-    actual={};seen=set();rows=[];groups={};pending=[];pending_rows=[];selected=0;missing_pairs=0
+    actual={};seen=set();fixture_keys=set();rows=[];groups={};pending=[];pending_rows=[];selected=0;missing_pairs=0
     for result in results:
         if result['match_id'] in actual:raise ValueError('duplicate result')
         statuses=[result[k] for k in ('status','event_status') if result.get(k) is not None]
@@ -26,6 +26,10 @@ def compare(entries,results):
         if comp['stage']!='prematch' or comp['track']!='comprehensive' or comp['evaluation_slot']!='FIRST_PREMATCH':
             raise ValueError('default first comprehensive prematch record required')
         kickoff=aware(fixture['kickoff_at'])
+        if fixture.get('home') and fixture.get('away'):
+            fixture_key=(fixture['cohort'],fixture.get('stage'),kickoff,fixture['home'],fixture['away'])
+            if fixture_key in fixture_keys:raise ValueError('duplicate fixture under different IDs')
+            fixture_keys.add(fixture_key)
         if not aware(fixture['cutoff_at'])<=aware(comp['recorded_at'])<kickoff:raise ValueError('late comprehensive freeze')
         primary=comp['payload'].get('primary')
         if primary is not None and (not isinstance(primary,str) or not re.fullmatch(r'\d{1,2}-\d{1,2}',primary)):
@@ -33,6 +37,11 @@ def compare(entries,results):
         selected+=primary is not None
         result=actual.get(mid);score=None
         if result is not None:
+            if result.get('kickoff_at') is not None and aware(result['kickoff_at'])!=kickoff:
+                raise ValueError('result kickoff identity')
+            if any(result.get(k) is not None and fixture.get(k) is not None and result[k]!=fixture[k]
+                   for k in ('cohort','competition','stage','home','away')):
+                raise ValueError('result fixture identity')
             observed=aware(result['observed_at'])
             if not kickoff+timedelta(minutes=90)<=observed<=datetime.now(timezone.utc):raise ValueError('result capture time')
             score=f"{result['home_goals']}-{result['away_goals']}"
@@ -46,6 +55,8 @@ def compare(entries,results):
                 raise ValueError('actual frozen comprehensive pair reference required')
             if (pair['stage']!='prematch' or pair['track']!='current-test-pair'
                     or pair['fixture']['match_id']!=mid or pair['fixture']['cohort']!=fixture['cohort']
+                    or any(pair['fixture'].get(k) is not None and fixture.get(k) is not None
+                           and pair['fixture'][k]!=fixture[k] for k in ('competition','stage','home','away'))
                     or aware(pair['fixture']['kickoff_at'])!=kickoff
                     or not aware(pair['fixture']['cutoff_at'])<=aware(pair['recorded_at'])<=aware(comp['recorded_at'])<kickoff):
                 raise ValueError('pair chronology/identity')

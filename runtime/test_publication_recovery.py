@@ -1,5 +1,6 @@
 """Offline regressions: fail closed on identity conflicts and recover one freeze."""
 from datetime import datetime, timedelta, timezone
+import copy
 import json
 from pathlib import Path
 import tempfile
@@ -65,6 +66,34 @@ class PublicationRecoveryTests(unittest.TestCase):
             result = publication.publish({'current_model': {'input': source}}, fixture,
                                          out=Path(d) / 'out.json', freeze_root=Path(d) / 'freezes')
             self.assertEqual(result['current_model']['input'], source)
+
+    def test_same_match_id_cannot_hide_conflicting_fixture_context(self):
+        fixture = dict(self.fixture(), home='A', away='B', competition='eng.1',
+                       cohort='eng.1', stage='regular', leg=1, neutral=False,
+                       total_quote={'line': 2.5, 'bookmaker': 'synthetic'})
+        changes = {'home': 'OTHER', 'away': 'OTHER', 'competition': 'esp.1',
+                   'cohort': 'esp.1', 'stage': 'playoff', 'leg': 2, 'neutral': True,
+                   'total_quote': {'line': 3.5, 'bookmaker': 'synthetic'}}
+        for field, value in changes.items():
+            source = copy.deepcopy(fixture)
+            source[field] = value
+            payload = {'current_model': {'input': copy.deepcopy(fixture)},
+                       'test_model': {'input': source}}
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as d:
+                out, root = Path(d) / 'out.json', Path(d) / 'freezes'
+                with self.assertRaisesRegex(ValueError, 'input context mismatch'):
+                    publication.publish(payload, fixture, out=out, freeze_root=root)
+                self.assertEqual(list(root.glob('*/*.json')), [])
+                self.assertFalse(out.with_name(out.name + '.publication.json').exists())
+
+    def test_provided_input_cannot_omit_context_or_add_result_data(self):
+        fixture = dict(self.fixture(), home='A', away='B')
+        for source in ({k: v for k, v in fixture.items() if k != 'home'},
+                       dict(fixture, home_goals=1)):
+            with self.subTest(source=source), tempfile.TemporaryDirectory() as d:
+                with self.assertRaisesRegex(ValueError, 'input context mismatch'):
+                    publication.publish({'current_model': {'input': source}}, fixture,
+                                        out=Path(d) / 'out.json', freeze_root=Path(d) / 'freezes')
 
     def test_changed_journal_request_cannot_create_second_freeze(self):
         for field, value in [('id', 'changed-id'), ('output', {'value': 2}),

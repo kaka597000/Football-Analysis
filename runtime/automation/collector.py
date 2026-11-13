@@ -7,7 +7,9 @@ from datetime import datetime, timedelta, timezone
 import gzip
 import hashlib
 import json
+import os
 from pathlib import Path
+import tempfile
 import time
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 from urllib.parse import urlencode
@@ -40,6 +42,38 @@ def encoded(value):
 
 def append(path, value):
     with path.open('a') as f: f.write(encoded(value).decode()+'\n')
+
+
+class _ScoreboardQueue:
+    """Rotate bounded runs; persist an attempt before transport can fail."""
+    def __init__(self, root, urls):
+        self.path = root/'scoreboard-attempts.json'
+        value = json.loads(self.path.read_text()) if self.path.exists() else {'sequence':0,'attempts':{}}
+        self.sequence = value['sequence']
+        if type(self.sequence) is not int or self.sequence < 0:
+            raise ValueError('invalid collection attempt sequence')
+        self.attempts = {url:value['attempts'][url] for url in urls if url in value['attempts']}
+        if any(type(v) is not int or not 0 < v <= self.sequence for v in self.attempts.values()):
+            raise ValueError('invalid collection attempt priority')
+
+    def order(self, urls):
+        return sorted(urls, key=lambda url:(self.attempts.get(url,0),url))
+
+    def mark(self, url):
+        self.sequence += 1
+        self.attempts[url] = self.sequence
+        fd, temporary = tempfile.mkstemp(dir=self.path.parent, prefix='.scoreboard-attempts-')
+        try:
+            with os.fdopen(fd,'wb') as handle:
+                handle.write(encoded({'sequence':self.sequence,'attempts':self.attempts}))
+                handle.flush();os.fsync(handle.fileno())
+            os.replace(temporary,self.path)
+            if os.name != 'nt':
+                directory_fd=os.open(self.path.parent,os.O_RDONLY)
+                try:os.fsync(directory_fd)
+                finally:os.close(directory_fd)
+        finally:
+            if os.path.exists(temporary):os.unlink(temporary)
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -175,6 +209,15 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
     if target.exists():
         for line in target.read_text().splitlines():
             x=json.loads(line);existing.add((x['cohort'],x['match_id'],x['home_goals'],x['away_goals']));previous[(x['cohort'],x['match_id'])]=x
+    by_comp={};coverage={};scan_tasks={}
+    for scope in scopes:by_comp.setdefault(scope['competition'],[]).append(scope)
+    for comp in sorted(by_comp):
+        coverage[comp]={'scoreboards_ok':0,'events_seen':0,'new_rows':0,'quarantined':0}
+        if any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789._' for c in comp):raise ValueError('invalid competition code')
+        for lag in range(lookback_days,-1,-1):
+            day=(now-timedelta(days=lag)).strftime('%Y%m%d')
+            scan_tasks[ESPN+comp+'/scoreboard?'+urlencode({'dates':day,'limit':1000})]=comp
+    polling=_ScoreboardQueue(root,scan_tasks)
     def get(url,headers=None):
         nonlocal calls,retry_used,successful,time_limit_reached
         if url in cache:return cache[url]
@@ -186,6 +229,7 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
             if time.monotonic()-started_monotonic+25.2>=max_seconds:
                 time_limit_reached=True;break
             if attempt:retry_used=True
+            elif url in scan_tasks:polling.mark(url)
             calls+=1
             channel=channels['market' if url==ASIAN else 'history'];channel['requests']+=1
             if live:time.sleep(.2)
@@ -208,55 +252,49 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
                     'captured_at':datetime.now(timezone.utc).isoformat(),'status':'FAILED','failure':failure})
                 if not failure['retryable']:break
         cache[url]=value;return value
-    by_comp={};coverage={}
-    for scope in scopes:by_comp.setdefault(scope['competition'],[]).append(scope)
-    for comp,group in sorted(by_comp.items()):
-        coverage[comp]={'scoreboards_ok':0,'events_seen':0,'new_rows':0,'quarantined':0}
-        if any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789._' for c in comp):raise ValueError('invalid competition code')
-        for lag in range(lookback_days,-1,-1):
-            day=(now-timedelta(days=lag)).strftime('%Y%m%d')
-            url=ESPN+comp+'/scoreboard?'+urlencode({'dates':day,'limit':1000})
-            data=get(url)
-            if data is None:continue
-            coverage[comp]['scoreboards_ok']+=1
-            for event in data[0].get('events',[]):
-                events_seen+=1
-                coverage[comp]['events_seen']+=1
-                c=event.get('competitions',[{}])[0]
-                if c.get('status',event.get('status',{})).get('type',{}).get('completed') is not True:continue
-                eid=str(event.get('id',''))
-                if not eid.isdigit():continue
-                listed={x.get('homeAway'):x for x in c.get('competitors',[])}
-                signature=[str(listed.get(s,{}).get('score')) for s in ('home','away')]
-                # An unchanged provider final score needs no repeated summary.
-                # Revised scoreboards trigger fresh period verification and append
-                # a distinct observation; no old result is overwritten.
-                if all(v.isdigit() for v in signature) and all(
-                    previous.get((s['cohort'],'espn:'+eid),{}).get('provider_final_score')==signature
-                    for s in group):continue
-                detail=get(ESPN+comp+'/summary?event='+eid)
-                if detail is None:continue
-                event_fields=[key for key in ('keyEvents','scoringPlays','commentary')
-                              if isinstance(detail[0].get(key),list) and detail[0][key]]
-                if event_fields:
-                    append(root/'event-snapshots.jsonl',{'match_id':'espn:'+eid,
-                        'competition':comp,'known_at':detail[1]['captured_at'],
-                        'raw_reference':detail[1],'available_fields':event_fields,
-                        'normalization_status':'RAW_SOURCE_FIELDS_ONLY',
-                        'minute_coverage':'UNKNOWN_NOT_CERTIFIED',
-                        'used_for_state_training':False})
-                matched=False
-                for scope in group:
-                    try:
-                        row=regulation_row(scope,event,detail[0],detail[1]['captured_at'],detail[1]);matched=True
-                    except (ValueError,KeyError,TypeError,IndexError,OverflowError):continue
-                    key=(row['cohort'],row['match_id'],row['home_goals'],row['away_goals'])
-                    if key not in existing:
-                        append(target,row);rows.append(row);existing.add(key)
-                        coverage[comp]['new_rows']+=1
-                if not matched:
-                    quarantine+=1;coverage[comp]['quarantined']+=1
-                    append(root/'quarantine.jsonl',{'competition':comp,'event_id':eid,'captured_at':stamp,'reason':'PHASE_IDENTITY_OR_90MIN_NOT_VERIFIED','raw_reference':detail[1]})
+    for url in polling.order(scan_tasks):
+        comp=scan_tasks[url];group=by_comp[comp]
+        data=get(url)
+        if data is None:continue
+        coverage[comp]['scoreboards_ok']+=1
+        for event in data[0].get('events',[]):
+            events_seen+=1
+            coverage[comp]['events_seen']+=1
+            c=event.get('competitions',[{}])[0]
+            if c.get('status',event.get('status',{})).get('type',{}).get('completed') is not True:continue
+            eid=str(event.get('id',''))
+            if not eid.isdigit():continue
+            listed={x.get('homeAway'):x for x in c.get('competitors',[])}
+            signature=[str(listed.get(s,{}).get('score')) for s in ('home','away')]
+            # An unchanged provider final score needs no repeated summary.
+            # Revised scoreboards trigger fresh period verification and append
+            # a distinct observation; no old result is overwritten.
+            if all(v.isdigit() for v in signature) and all(
+                previous.get((s['cohort'],'espn:'+eid),{}).get('provider_final_score')==signature
+                for s in group):continue
+            detail=get(ESPN+comp+'/summary?event='+eid)
+            if detail is None:continue
+            event_fields=[key for key in ('keyEvents','scoringPlays','commentary')
+                          if isinstance(detail[0].get(key),list) and detail[0][key]]
+            if event_fields:
+                append(root/'event-snapshots.jsonl',{'match_id':'espn:'+eid,
+                    'competition':comp,'known_at':detail[1]['captured_at'],
+                    'raw_reference':detail[1],'available_fields':event_fields,
+                    'normalization_status':'RAW_SOURCE_FIELDS_ONLY',
+                    'minute_coverage':'UNKNOWN_NOT_CERTIFIED',
+                    'used_for_state_training':False})
+            matched=False
+            for scope in group:
+                try:
+                    row=regulation_row(scope,event,detail[0],detail[1]['captured_at'],detail[1]);matched=True
+                except (ValueError,KeyError,TypeError,IndexError,OverflowError):continue
+                key=(row['cohort'],row['match_id'],row['home_goals'],row['away_goals'])
+                if key not in existing:
+                    append(target,row);rows.append(row);existing.add(key)
+                    coverage[comp]['new_rows']+=1
+            if not matched:
+                quarantine+=1;coverage[comp]['quarantined']+=1
+                append(root/'quarantine.jsonl',{'competition':comp,'event_id':eid,'captured_at':stamp,'reason':'PHASE_IDENTITY_OR_90MIN_NOT_VERIFIED','raw_reference':detail[1]})
     market=get(ASIAN,{'X-AO':'1','Referer':'https://asianodds.org/'})
     if market:append(root/'market-snapshots.jsonl',{'source_url':ASIAN,'bookmaker':'BetInAsia via AsianOdds','captured_at':market[1]['captured_at'],'quote_time':None,'quote_time_status':'UNKNOWN_NOT_CAPTURE_TIME','raw_reference':market[1],'used_for_training':False})
     result={'schema':'WCPP-AUTOMATION-COLLECTION-1','captured_at':stamp,'request_count':calls,

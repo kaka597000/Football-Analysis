@@ -4,7 +4,7 @@ import os
 import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError
-from clients import fetch, NoRedirect
+from clients import fetch, match_context, NoRedirect
 
 
 class Response(io.BytesIO):
@@ -14,6 +14,40 @@ class Response(io.BytesIO):
 
 
 class Tests(unittest.TestCase):
+    def test_match_context_stops_after_access_denial_with_explicit_missing_fields(self):
+        for failure in ({'http_status': 401, 'error_code': 'HTTP_ERROR'},
+                        {'http_status': 403, 'error_code': 'HTTP_ERROR'},
+                        {'http_status': 429, 'error_code': 'HTTP_ERROR'},
+                        {'error_code': 'ENV_BINDING_MISSING'},
+                        {'http_status': 200, 'error_code': 'PROVIDER_ERROR',
+                         'failure_kind': 'PROVIDER_AUTHENTICATION_REJECTION'},
+                        {'http_status': 200, 'error_code': 'PROVIDER_ERROR', 'failure_kind': 'RATE_LIMITED'}):
+            with self.subTest(failure=failure), patch(fetch.__module__ + '.fetch',
+                    return_value={'call': dict(failure, api_success=False), 'response': None}) as request:
+                result = match_context('api-football', 1)
+            self.assertEqual(request.call_count, 1)
+            self.assertEqual(set(result), {'match', 'lineups', 'statistics', 'events', 'injuries', 'odds'})
+            for name in ('lineups', 'statistics', 'events', 'injuries', 'odds'):
+                self.assertEqual(result[name]['call']['error_code'], 'BATCH_PROVIDER_BLOCKED')
+                self.assertIsNone(result[name]['response'])
+
+    def test_match_context_stops_mid_batch_and_keeps_previous_evidence(self):
+        success = {'call': {'http_status': 200, 'api_success': True}, 'response': {'fixture': 1}}
+        failure = {'call': {'http_status': 429, 'api_success': False, 'error_code': 'HTTP_ERROR'}, 'response': None}
+        with patch(fetch.__module__ + '.fetch', side_effect=[success, failure]) as request:
+            result = match_context('api-football', 1)
+        self.assertEqual(request.call_count, 2)
+        self.assertEqual(result['match'], success)
+        self.assertEqual(result['lineups'], failure)
+        self.assertEqual(result['statistics']['call']['error_code'], 'BATCH_PROVIDER_BLOCKED')
+
+    def test_match_context_keeps_full_successful_response_shape(self):
+        success = {'call': {'http_status': 200, 'api_success': True}, 'response': {}}
+        with patch(fetch.__module__ + '.fetch', return_value=success) as request:
+            result = match_context('api-football', 1)
+        self.assertEqual(request.call_count, 6)
+        self.assertTrue(all(item['call']['api_success'] for item in result.values()))
+
     def test_bsd_and_openfoot_header_schemes_and_missing_bindings(self):
         for provider,binding,prefix in [('bsd','WCPP_BSD_API_KEY','Token '),('openfoot','WCPP_OPENFOOT_API_KEY','Bearer ')]:
             with patch.dict(os.environ,{},clear=True):
@@ -134,6 +168,41 @@ class Tests(unittest.TestCase):
             def denied(*a,**k):raise HTTPError('https://example.test',403,'denied',{},None)
             r=fetch('api-football',opener=denied)
             self.assertEqual(r['call']['http_status'],403);self.assertIsNone(r['response'])
+
+    def test_http200_sensitive_error_keys_are_classified_before_redaction(self):
+        for field in ('token', 'key', 'api_key', 'apikey', 'authentication'):
+            key = 'SYNTHETIC_AUTH_ERROR_KEY'
+            with self.subTest(field=field), patch.dict(os.environ, {'WCPP_API_FOOTBALL_KEY': key}, clear=True):
+                result = fetch('api-football', opener=lambda *a, **k: Response(
+                    {'errors': {field: 'Invalid API key ' + key}, 'response': []}))
+            self.assertFalse(result['call']['api_success'])
+            self.assertFalse(result['call']['authenticated'])
+            self.assertEqual(result['call']['error_code'], 'PROVIDER_ERROR')
+            self.assertEqual(result['call']['failure_kind'], 'PROVIDER_AUTHENTICATION_REJECTION')
+            self.assertNotIn(key, json.dumps(result))
+
+    def test_http200_explicit_rate_or_daily_quota_rejection_stops_context(self):
+        cases = [{'rateLimit': 'Too many requests. Please slow down.'},
+                 {'requests': 'You have reached the request limit for the day.'}]
+        for errors in cases:
+            def request(*args, **kwargs):
+                return fetch(*args, **kwargs, opener=lambda *a, **k: Response({'errors': errors, 'response': []}))
+            with self.subTest(errors=errors), patch.dict(os.environ, {'WCPP_API_FOOTBALL_KEY': 'SYNTHETIC_ONLY'}, clear=True), \
+                    patch(fetch.__module__ + '.fetch', side_effect=request) as mocked:
+                result = match_context('api-football', 1)
+            self.assertEqual(mocked.call_count, 1)
+            self.assertFalse(result['match']['call']['api_success'])
+            self.assertEqual(result['match']['call']['failure_kind'], 'RATE_LIMITED')
+            self.assertEqual(result['lineups']['call']['error_code'], 'BATCH_PROVIDER_BLOCKED')
+
+    def test_http200_resource_plan_rejection_does_not_block_other_resources(self):
+        with patch.dict(os.environ, {'WCPP_API_FOOTBALL_KEY': 'SYNTHETIC_ONLY'}, clear=True):
+            rejected = fetch('api-football', opener=lambda *a, **k: Response(
+                {'errors': {'plan': 'Your plan does not cover this season.'}, 'response': []}))
+        self.assertEqual(rejected['call']['failure_kind'], 'PROVIDER_PLAN_OR_PERMISSION_REJECTION')
+        with patch(fetch.__module__ + '.fetch', return_value=rejected) as request:
+            match_context('api-football', 1)
+        self.assertEqual(request.call_count, 6)
 
     def test_credentials_cannot_be_sent_to_other_hosts_or_in_query(self):
         for path in ('https://evil.test','/../other','//evil.test','/fixtures?key=x'):

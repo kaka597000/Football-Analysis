@@ -38,6 +38,16 @@ def validate_identity(output, fixture):
                 for field in ('kickoff_at', 'cutoff_at'):
                     if field in source and aware(source[field]) != aware(fixture[field]):
                         raise ValueError('publication model input time mismatch: ' + field)
+                # Actual predictors preserve the complete fixture. Compare all
+                # context (including venue and real quotes), allowing equivalent
+                # timezone representations without inventing missing fields.
+                times = {'kickoff_at', 'cutoff_at'}
+                if (set(source) != set(fixture)
+                        or {k: v for k, v in source.items() if k not in times}
+                        != {k: v for k, v in fixture.items() if k not in times}):
+                    raise ValueError('publication model input context mismatch')
+            elif source is not None:
+                raise ValueError('publication model input context mismatch')
 
 
 def verify_receipt(state):
@@ -75,7 +85,7 @@ def atomic_json(path, value):
         if os.path.exists(temp): os.unlink(temp)
 
 
-def deliver(path, content):
+def deliver(path, content, *, before_commit=None):
     if path.exists():
         if path.read_bytes() != content:
             raise FileExistsError(path)
@@ -85,6 +95,8 @@ def deliver(path, content):
     try:
         with os.fdopen(fd, 'wb') as handle:
             handle.write(content); handle.flush(); os.fsync(handle.fileno())
+        if before_commit is not None:
+            before_commit()
         os.link(temp, path)  # complete file, no overwrite
         sync_directory(path.parent)
     finally:

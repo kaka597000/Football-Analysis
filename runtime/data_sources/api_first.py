@@ -13,9 +13,9 @@ from pathlib import Path
 import time
 
 try:
-    from .clients import fetch, PROVIDERS, PRIVATE
+    from .clients import fetch, PROVIDERS, PRIVATE, service_blocked
 except ImportError:
-    from clients import fetch, PROVIDERS, PRIVATE
+    from clients import fetch, PROVIDERS, PRIVATE, service_blocked
 
 
 def digest(value):
@@ -150,8 +150,8 @@ def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep, quota_le
         last_call[provider] = time.monotonic()
         item['cache_hit'] = False
         call = item['call']
-        if call.get('http_status') in (401, 403, 429) or call.get('error_code') == 'ENV_BINDING_MISSING':
-            blocked[provider] = call.get('error_code', 'ACCESS_DENIED')
+        if service_blocked(call):
+            blocked[provider] = call.get('failure_kind') or call.get('error_code') or 'ACCESS_DENIED'
         by_key[key] = item
         if call.get('api_success'):
             record = {'sha256': digest(item), 'result': item}
