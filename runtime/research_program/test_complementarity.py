@@ -18,6 +18,14 @@ class ComplementarityTests(unittest.TestCase):
   self.assertEqual(g['different_primary'],3);self.assertEqual(g['only_test_right'],2)
   self.assertEqual(g['paired_net_test_hits'],2);self.assertEqual(g['coverage'],[1.,1.])
   self.assertEqual(g['probability_metrics'][1]['primary']['hits'],2)
+ def test_conflicting_result_status_cannot_settle(self):
+  for status in ('LIVE','POSTPONED','CANCELLED'):
+   with self.subTest(event_status=status):
+    pairs,results=self.data();results[0]['event_status']=status
+    with self.assertRaisesRegex(ValueError,'conflicting result status'):compare(pairs,results)
+  pairs,results=self.data()
+  for result in results:result['event_status']='FT'
+  self.assertEqual(compare(pairs,results)['groups'][0]['settled'],3)
  def test_missing_primary_never_filled_from_matrix(self):
   pairs,results=self.data();pairs[0]['payload']['test_model']['primary']=None;seal(pairs[0])
   g=compare(pairs,results)['groups'][0]

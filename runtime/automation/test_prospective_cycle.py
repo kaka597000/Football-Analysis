@@ -36,6 +36,21 @@ class PortableCycleTests(unittest.TestCase):
         return {'match_id':mid,'cohort':'eng.1','stage':'regular','home':'espn:1','away':'espn:2',
                 'kickoff_at':kickoff,'gender':'men','age':'senior','identity_verified':True}
 
+    def package(self,root,m,plan,fixture,*,frozen_fixture=None):
+        package={'match_id':fixture['match_id'],'plan_sha256':plan['record_sha256']}
+        for role in ('current','candidate'):
+            body={'match_id':fixture['match_id'],'fixture':frozen_fixture or fixture,
+                  'payload':{},'track':role}
+            record=dict(body,record_sha256=p.digest(body))
+            data=json.dumps(record).encode();checksum=hashlib.sha256(data).hexdigest()
+            (root/'objects'/checksum).write_bytes(data)
+            alias='/workspace/WCPP/test-'+fixture['match_id'].replace(':','_')+'-'+role+'.json'
+            m['objects'][checksum]={'path':'objects/'+checksum,'bytes':len(data),'sha256':checksum}
+            m['aliases'][alias]=checksum
+            package[role+'_receipt']={'path':alias,'sha256':record['record_sha256']}
+        self.write(root,m)
+        return package
+
     def test_manifest_tampering_rejected_before_use(self):
         with tempfile.TemporaryDirectory() as tmp:
             root,m=self.bundle(tmp);m['queue']=[{'match_id':'forged'}]
@@ -109,8 +124,7 @@ class PortableCycleTests(unittest.TestCase):
         with tempfile.TemporaryDirectory()as tmp:
             root,m=self.bundle(tmp,[fixture]);receipt,plan=self.plan(root,m,[fixture])
             state=root.parent/'state';state.mkdir();(state/'capture-espn_1.json').write_text('{}')
-            package={'match_id':fixture['match_id'],'plan_sha256':plan['record_sha256'],
-                     'current_receipt':receipt,'candidate_receipt':receipt}
+            package=self.package(root,m,plan,fixture)
             pending={'completed':0,'pending_results':[fixture['match_id']],'missing_first_pairs':[]}
             with patch.object(p,'_recover_package',return_value=package),patch.object(p.fv,'capture')as capture,patch.object(p.fv,'review',return_value=pending),patch.object(p,'hydrate')as hydrate,patch('runtime.automation.market_bridge.attach_total_quote')as market:
                 fetch=lambda url:self.fail('recovery must not fetch new data')
@@ -127,13 +141,38 @@ class PortableCycleTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'plan binding'):
                 p._recover_package(root,m,out,{'record_sha256':'expected'},'espn:1',root)
 
+    def test_recovery_rejects_consistent_pair_for_wrong_registered_fixture(self):
+        now=datetime.now(timezone.utc)
+        fixture=self.fixture('espn:1',(now-timedelta(hours=1)).isoformat())
+        with tempfile.TemporaryDirectory() as tmp:
+            root,m=self.bundle(tmp);_,plan=self.plan(root,m,[fixture])
+            package=self.package(root,m,plan,fixture,frozen_fixture=dict(fixture,away='espn:999'))
+            out=root/'capture.json';out.write_text(json.dumps(package))
+            with patch.object(p.fv,'review') as review:
+                with self.assertRaises(ValueError):
+                    p._recover_package(root,m,out,plan,fixture['match_id'],root.parent/'state')
+            review.assert_not_called()
+
+    def test_terminal_review_rejects_pair_with_changed_registered_kickoff(self):
+        now=datetime.now(timezone.utc)
+        fixture=self.fixture('espn:1',(now-timedelta(days=1)).isoformat())
+        with tempfile.TemporaryDirectory() as tmp:
+            root,m=self.bundle(tmp);_,plan=self.plan(root,m,[fixture])
+            altered=dict(fixture,kickoff_at=(now-timedelta(days=2)).isoformat())
+            m['packages']=[self.package(root,m,plan,fixture,frozen_fixture=altered)];self.write(root,m)
+            pending={'completed':0,'pending_results':['espn:1'],'missing_first_pairs':[]}
+            with patch.object(p.fv,'review',return_value=pending) as review:
+                with self.assertRaises(ValueError):
+                    p.cycle(root,max_captures=0,max_result_requests=0,now=now,
+                            fetcher=lambda url:self.fail('no result request allowed'))
+            review.assert_not_called()
+
     def test_network_failure_preserves_prior_successful_capture_checkpoint(self):
         now=datetime.now(timezone.utc);kickoff=(now+timedelta(days=1)).isoformat()
         fixtures=[self.fixture('espn:'+str(i),kickoff)for i in (1,2)]
         with tempfile.TemporaryDirectory()as tmp:
             root,m=self.bundle(tmp,fixtures);receipt,plan=self.plan(root,m,fixtures)
-            package={'match_id':'espn:1','plan_sha256':plan['record_sha256'],
-                     'current_receipt':receipt,'candidate_receipt':receipt}
+            package=self.package(root,m,plan,fixtures[0])
             def fetch(url):
                 if url.endswith('=2'):raise OSError('bounded source outage')
                 return {'header':{'id':'1','competitions':[{'date':kickoff,'status':{'type':{'state':'pre'}},
@@ -151,8 +190,8 @@ class PortableCycleTests(unittest.TestCase):
             with self.subTest(resume=resume), tempfile.TemporaryDirectory() as tmp:
                 now=datetime.now(timezone.utc);fixture=self.fixture('espn:1',(now+timedelta(days=1)).isoformat())
                 root,m=self.bundle(tmp,[fixture]);receipt,plan=self.plan(root,m,[fixture])
+                package=self.package(root,m,plan,fixture)
                 before=(root/'manifest.json').read_bytes()
-                package={'match_id':'espn:1','current_receipt':receipt,'candidate_receipt':receipt}
                 if resume:
                     state=root.parent/'state';state.mkdir()
                     (state/'capture-espn_1.json.capture.json').write_text('{"synthetic_resume":true}')
@@ -183,7 +222,7 @@ class PortableCycleTests(unittest.TestCase):
         now=datetime.now(timezone.utc);fixture=self.fixture('espn:1',(now+timedelta(days=1)).isoformat())
         with tempfile.TemporaryDirectory()as tmp:
             root,m=self.bundle(tmp,[fixture]);receipt,plan=self.plan(root,m,[fixture])
-            package={'match_id':'espn:1','current_receipt':receipt,'candidate_receipt':receipt}
+            package=self.package(root,m,plan,fixture)
             body={'header':{'id':'1','competitions':[{'date':fixture['kickoff_at'],
                 'status':{'type':{'state':'pre'}},'neutralSite':False,
                 'competitors':[{'homeAway':s,'team':{'id':v}}for s,v in [('home','1'),('away','2')]]}]}}
@@ -205,8 +244,7 @@ class PortableCycleTests(unittest.TestCase):
         fixtures = [self.fixture('espn:' + str(i), (now-timedelta(days=1)).isoformat()) for i in (1,2,3)]
         with tempfile.TemporaryDirectory() as tmp:
             root,m = self.bundle(tmp); receipt,plan = self.plan(root,m,fixtures)
-            m['packages'] = [{'match_id': f['match_id'], 'current_receipt':receipt,
-                              'candidate_receipt':receipt} for f in fixtures]; self.write(root,m)
+            m['packages'] = [self.package(root,m,plan,f) for f in fixtures]; self.write(root,m)
             pending = {'completed':0, 'pending_results':[f['match_id'] for f in fixtures], 'missing_first_pairs':[]}
             seen = []
             def failed(url):

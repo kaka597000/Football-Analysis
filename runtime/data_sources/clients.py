@@ -129,10 +129,21 @@ def error_diagnostics(status, raw, content_type):
                 phrase in detail for phrase in ('invalid api key', 'invalid api-key', 'missing application key',
                                                 'missing api key', 'expired api key')):
             kind = 'PROVIDER_AUTHENTICATION_REJECTION'
+        elif error_keys & {'ratelimit', 'rate_limit'} or any(
+                phrase in detail for phrase in ('too many requests', 'request limit', 'requests limit',
+                                                'rate limit', 'quota exceeded')):
+            kind = 'RATE_LIMITED'
         elif error_keys & {'plan', 'subscription', 'permissions'} or any(
                 phrase in detail for phrase in ('plan_upgrade_required', 'subscription', 'entitlement')):
             kind = 'PROVIDER_PLAN_OR_PERMISSION_REJECTION'
     return {'response_format': fmt, 'failure_kind': kind}
+
+
+def service_blocked(call):
+    """Access rejection stops a batch even when the provider uses HTTP 200."""
+    return (call.get('http_status') in (401, 403, 429)
+            or call.get('error_code') == 'ENV_BINDING_MISSING'
+            or call.get('failure_kind') in {'PROVIDER_AUTHENTICATION_REJECTION', 'RATE_LIMITED'})
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -188,13 +199,18 @@ def fetch(provider, path=None, params=None, opener=None, credential_binding=None
             log.update(response_metadata(response, all_keys))
             raw = response.read(20_000_001)
             if len(raw) > 20_000_000: raise ValueError('response too large')
-            data = scrub(json.loads(raw), all_keys)
-            if not isinstance(data, (dict, list)):
+            parsed = json.loads(raw)
+            if not isinstance(parsed, (dict, list)):
                 raise ValueError('structured provider response required')
+            # Error keys can also be sensitive names (notably errors.token).
+            # Classify the untouched structure before redaction removes them.
+            errors = (parsed.get('errors') or parsed.get('error') or parsed.get('errorCode')) if isinstance(parsed, dict) else None
+            if provider == '5dollar' and (not isinstance(parsed, dict) or parsed.get('success') != 1):
+                errors = True
+            if errors:
+                log.update(error_diagnostics(log['http_status'], raw, log.get('content_type')))
+            data = scrub(parsed, all_keys)
 
-        errors = (data.get('errors') or data.get('error') or data.get('errorCode')) if isinstance(data, dict) else None
-        if provider == '5dollar' and (not isinstance(data, dict) or data.get('success') != 1):
-            errors = True
         auth = authentication_status(provider, path, not bool(errors))
         log.update(api_success=not bool(errors), authenticated=auth == 'CREDENTIAL_ACCEPTED',
                    authentication_status=auth)
@@ -226,7 +242,19 @@ def match_context(provider, match_id):
     """Actual calls only; each field remains unmapped until identity/time verification."""
     if type(match_id) is not int or match_id <= 0: raise ValueError('provider numeric match ID required')
     if provider == 'football-data': return {'match': fetch(provider, f'/matches/{match_id}')}
-    return {name: fetch(provider, path, {'fixture': match_id}) for name, path in (
+    result, blocked_by = {}, None
+    for name, path in (
         ('match', '/fixtures'), ('lineups', '/fixtures/lineups'),
         ('statistics', '/fixtures/statistics'), ('events', '/fixtures/events'),
-        ('injuries', '/injuries'), ('odds', '/odds'))}
+        ('injuries', '/injuries'), ('odds', '/odds')):
+        if blocked_by is not None:
+            result[name] = {'call': {'provider': provider, 'api_success': False,
+                            'error_code': 'BATCH_PROVIDER_BLOCKED', 'blocked_by': blocked_by},
+                            'response': None}
+            continue
+        item = fetch(provider, path, {'fixture': match_id})
+        result[name] = item
+        call = item['call']
+        if service_blocked(call):
+            blocked_by = call.get('failure_kind') or call.get('error_code') or 'ACCESS_DENIED'
+    return result

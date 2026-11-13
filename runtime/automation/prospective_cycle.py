@@ -17,6 +17,7 @@ from urllib.request import Request, build_opener
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from ..research.analysis_freeze import digest, verify, aware
 from ..research_program import future_validation as fv
+from ..research_program.future_identity import validate_plan_packages
 from ..publication import atomic_json
 from ..storage_lock import exclusive_lock
 from .result_queue import ResultQueue
@@ -193,6 +194,7 @@ def _recover_package(root, manifest, path, plan, match_id, state):
     for role in ('current','candidate'):
         package[role+'_receipt'] = _receipt(root,manifest,package[role+'_receipt'])
     # Reuse all existing first-slot, matrix, artifact and chronology checks.
+    validate_plan_packages(plan,[package])
     fv.review(plan,[package],[],state)
     return package
 
@@ -360,6 +362,7 @@ def _cycle(bundle, *, max_captures=3, max_result_requests=6, fetcher=None, now=N
                 p=dict(package)
                 for role in ('current','candidate'):p[role+'_receipt']=_receipt(root,m,p[role+'_receipt'])
                 ps.append(p)
+        validate_plan_packages(plan,ps)
         reviews.append(fv.review(plan,ps,[r for r in results if r['match_id']in ids],state))
     value={'schema':'WCPP-AUTOMATED-FUTURE-CYCLE-1','reviewed_at':datetime.now(timezone.utc).isoformat(),
            'bundle_sha256':m['manifest_sha256'],'population':len(registered),'captured_population':len(captured),

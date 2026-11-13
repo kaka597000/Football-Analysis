@@ -11,15 +11,17 @@ import json
 import os
 import re
 from pathlib import Path
-from urllib.parse import urlencode
-from urllib.request import urlopen
+from urllib.parse import parse_qsl, urlencode, urlsplit
+from urllib.request import Request, build_opener
 
 try:
     from runtime.automation.collection_status import classify_failure
-    from runtime.v2_test.data_contract import aware, snapshot, validate
+    from runtime.data_sources.clients import NoRedirect
+    from runtime.v2_test.data_contract import aware, public_url as validate_public_url, snapshot, validate
 except ModuleNotFoundError:
     from automation.collection_status import classify_failure
-    from v2_test.data_contract import aware, snapshot, validate
+    from data_sources.clients import NoRedirect
+    from v2_test.data_contract import aware, public_url as validate_public_url, snapshot, validate
 
 ODDS = 'https://api.the-odds-api.com/v4/sports/soccer_uefa_nations_league/odds/'
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard'
@@ -100,30 +102,58 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
     if type(market_max_age_seconds) is not int or not 0 < market_max_age_seconds <= 3600:
         raise ValueError('market age must be within the locked one-hour limit')
     odds, board = (check_evidence(root, m) for m in (odds_meta, identity_meta))
+    if not isinstance(odds, list) or not isinstance(board, dict):
+        raise ValueError('provider event list and independent scoreboard required')
+    if aware(cutoff) > now:
+        raise ValueError('future cutoff')
     if not any(x.get('slug') == competition for x in board.get('leagues', [])):
         raise ValueError('requested competition source identity required')
     if max(aware(m['captured_at']) for m in (odds_meta, identity_meta)) > aware(cutoff):
         raise ValueError('identity and quote capture must precede cutoff')
-    eligible = []
+    eligible, excluded = [], Counter()
+    event_ids = Counter(str(e.get('id')) for e in board.get('events', []) if isinstance(e, dict))
     for event in board.get('events', []):
-        status = event.get('status', {}).get('type', {})
-        if status.get('state') != 'pre' or status.get('completed') is not False:
-            continue
-        if event.get('season', {}).get('slug') != source_phase or aware(event['date']) <= now:
-            continue
-        sides = {x['homeAway']: x['team'] for x in event['competitions'][0]['competitors']}
-        if set(sides) != {'home', 'away'} or sides['home']['id'] == sides['away']['id']:
-            continue
-        eligible.append((event, sides))
-    snapshots, excluded, mappings = [], Counter(), []
+        try:
+            status = event.get('status', {}).get('type', {})
+            if status.get('state') != 'pre' or status.get('completed') is not False:
+                continue
+            if event.get('season', {}).get('slug') != source_phase or aware(event['date']) <= now:
+                continue
+            if (not isinstance(event['id'], str) or not event['id'].strip()
+                    or event_ids[event['id']] != 1 or len(event['competitions']) != 1):
+                raise ValueError('unique event and competition required')
+            comp = event['competitions'][0]
+            if ('id' in comp and str(comp['id']) != event['id']
+                    or 'date' in comp and aware(comp['date']) != aware(event['date'])):
+                raise ValueError('conflicting competition identity')
+            comp_status = comp.get('status', {}).get('type')
+            if comp_status is not None and (comp_status.get('state') != 'pre'
+                                            or comp_status.get('completed') is not False):
+                raise ValueError('conflicting competition status')
+            competitors = comp['competitors']
+            sides = {x['homeAway']: x['team'] for x in competitors}
+            if (len(competitors) != 2 or set(sides) != {'home', 'away'}
+                    or any(not isinstance(t.get(k), str) or not t[k].strip()
+                           for t in sides.values() for k in ('id', 'displayName'))
+                    or sides['home']['id'] == sides['away']['id']):
+                raise ValueError('two unambiguous team identities required')
+            eligible.append((event, sides))
+        except (AttributeError, KeyError, TypeError, ValueError):
+            excluded['unverified_target_identity_or_status'] += 1
+    snapshots, mappings = [], []
+    provider_ids = Counter(str(e.get('id')) for e in odds if isinstance(e, dict))
     for event, sides in eligible:
         matched = []
         for source in odds:
-            if (source.get('sport_key') != sport_key
-                    or aware(source['commence_time']) != aware(event['date'])):
+            try:
+                if (not isinstance(source.get('id'), str) or not source['id'].strip()
+                        or provider_ids[source['id']] != 1 or source.get('sport_key') != sport_key
+                        or aware(source['commence_time']) != aware(event['date'])):
+                    continue
+                identities = {side: team_identity(sides[side], source.get(side + '_team'), cutoff)
+                              for side in ('home', 'away')}
+            except (AttributeError, KeyError, TypeError, ValueError):
                 continue
-            identities = {side: team_identity(sides[side], source.get(side + '_team'), cutoff)
-                          for side in ('home', 'away')}
             if all(value is not None for value in identities.values()):
                 matched.append((source, {side: value for side, value in identities.items() if value}))
         if len(matched) != 1:
@@ -228,14 +258,59 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
             'quote_time_inferred_from_capture': False}
 
 
+def validate_response_credentials(value, secrets):
+    """Inspect decoded raw JSON without treating provider business keys as auth.
+
+    TheOdds uses ``key`` for bookmaker and market identities. Normalized-row
+    credential guards must not remove or reject these raw provider fields.
+    """
+    credential_fields = {'api_key', 'apikey', 'api-key', 'token', 'access_token',
+                         'password', 'authorization', 'secret', 'x-auth-token',
+                         'x-apisports-key', 'x-rapidapi-key', 'x-therundown-key'}
+    if isinstance(value, dict):
+        for name, item in value.items():
+            if name.lower() in credential_fields:
+                raise ValueError('credential fields prohibited')
+            validate_response_credentials(name, secrets)
+            validate_response_credentials(item, secrets)
+    elif isinstance(value, list):
+        for item in value:
+            validate_response_credentials(item, secrets)
+    elif isinstance(value, str) and any(secret in value for secret in secrets):
+        raise ValueError('credential echoed by provider')
+
+
 def fetch(url, public_url, path):
+    """Bounded approved endpoints; never retain echoed query credentials."""
+    validate_public_url(public_url)
+    public, requested_url = urlsplit(public_url), urlsplit(url)
+    endpoint = public.scheme + '://' + public.netloc + public.path
+    odds_endpoints = {ODDS.replace('soccer_uefa_nations_league', scope[0]) for scope in SCOPES.values()}
+    board_endpoints = {ESPN.replace('/uefa.nations/', '/' + scope + '/') for scope in SCOPES}
+    if (endpoint not in odds_endpoints | board_endpoints
+            or requested_url._replace(query='') != public._replace(query='')):
+        raise ValueError('unapproved collection endpoint')
+    query = parse_qsl(requested_url.query, keep_blank_values=True)
+    secrets = [value for name, value in query if name == 'apiKey']
+    if ([item for item in query if item[0] != 'apiKey'] != parse_qsl(public.query, keep_blank_values=True)
+            or (endpoint in odds_endpoints and (len(secrets) != 1 or not secrets[0]))
+            or (endpoint in board_endpoints and secrets)):
+        raise ValueError('unexpected collection query or credential')
     requested = datetime.now(timezone.utc).isoformat()
-    with urlopen(url, timeout=15) as response:
-        body = response.read()
+    with build_opener(NoRedirect()).open(Request(url, headers={'Accept': 'application/json'}), timeout=15) as response:
+        body = response.read(20_000_001)
+    if len(body) > 20_000_000:
+        raise ValueError('response too large')
+    data = json.loads(body)
+    validate_response_credentials(data, secrets)
+    if any(secret.encode() in body for secret in secrets):
+        raise ValueError('credential echoed by provider')
+    if not isinstance(data, list if endpoint in odds_endpoints else dict):
+        raise ValueError('unexpected provider response shape')
     captured = datetime.now(timezone.utc).isoformat()
-    json.loads(body)
-    path.write_bytes(body)
-    return {'file': path.name, 'sha256': hashlib.sha256(body).hexdigest(),
+    with Path(path).open('xb') as handle:
+        handle.write(body)
+    return {'file': Path(path).name, 'sha256': hashlib.sha256(body).hexdigest(),
             'url': public_url, 'requested_at': requested, 'captured_at': captured}
 
 

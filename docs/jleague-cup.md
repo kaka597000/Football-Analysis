@@ -23,13 +23,15 @@ BetExplorer列表中明确普通完赛的数字比分才能直接认作90分钟�
 在源码仓库根目录执行：
 
 ```bash
-python -m runtime.jleague_cup.cli build --manifest /absolute/build-manifest.json --db /absolute/NEW.sqlite
-python -m runtime.jleague_cup.cli stats --db /absolute/NEW.sqlite
-python -m runtime.jleague_cup.cli train --db /absolute/NEW.sqlite --out /absolute/NEW-models
-python -m runtime.jleague_cup.cli predict --artifact /absolute/current-artifact.json --fixture /absolute/fixture.json --out /absolute/NEW-output.json
+python -m runtime.jleague_cup.safe_cli build --manifest /absolute/build-manifest.json --db /absolute/NEW.sqlite
+python -m runtime.jleague_cup.safe_cli stats --db /absolute/NEW.sqlite
+python -m runtime.jleague_cup.safe_cli train --db /absolute/NEW.sqlite --out /absolute/NEW-models
+python -m runtime.jleague_cup.safe_cli predict --artifact /absolute/current-artifact.json --fixture /absolute/fixture.json --out /absolute/NEW-output.json
 ```
 
 数据库、模型目录和输出拒绝覆盖。manifest中`sources`须为真实缓存原文的raw_path/raw_sha256/source_url/query_time；仅支持核准的BetExplorer日联杯地址。研究fixture必须匹配工件的competition、cohort、era、stage、tie_format和leg，显式成年男子，不能含目标比分；日期必须在训练截止之后。程序不会将这种离线研究诊断称为已核验的赛前发布。
+
+2026-11-13起新增操作默认使用`safe_cli`。它在建库发布和训练前重新核对每条合格历史的列表比分、AfE/AET/AfP状态与详细页比分及状态；冲突或未知完赛标志拒绝进入新输出。预测拒绝目标比分别名，补充未见球队标记，并记录执行校验层、旧依赖及共享数值源码的SHA；训练目录另存`execution-guard.json`。旧数值/证据模块及工件哈希保持原样，没有修改配方或重新训练既有工件。
 
 正式赛事分析继续按用户核心需求核查近期过程、伤停、真实盘口、赛制及双回合总比分，按当前/test/综合轨规则独立保存。缺少通过验收的数值工件时如实保留缺口，不能使用其他赛事模型补位。本次不新建定时任务、不发布环境、不宣称准确率提升。
 

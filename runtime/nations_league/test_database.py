@@ -44,6 +44,24 @@ class DatabaseTests(unittest.TestCase):
         row,raw=self.capture();path=Path(row['raw_path']);body=path.read_bytes();path.unlink()
         self.insert([row]);self.assertEqual(self.event()['training_eligible'],0);self.assertIsNone(self.event()['home_90'])
         path.write_bytes(body);self.assertFalse(self.insert([row])['idempotent']);self.assertEqual(self.event()['training_eligible'],1)
+    def test_unverified_completed_date_cannot_block_verified_summary_upgrade(self):
+        row,_=self.capture()
+        inventory={**row,'source_kind':'inventory','raw_path':None,'raw_sha256':None,
+                   'status':'STATUS_FULL_TIME','kickoff_at':'2025-01-02T12:00:00Z',
+                   'query_time':'2026-01-04T00:00:00Z'}
+        self.insert([inventory]);result=self.insert([row]);event=self.event()
+        self.assertEqual(result['counts'].get('quarantined',0),0)
+        self.assertEqual(event['date'],'2025-01-01');self.assertEqual(event['training_eligible'],1)
+        self.assertEqual(db.stats(self.path)['counts']['observations'],2)
+    def test_missing_raw_summary_cannot_outrank_verified_scheduled_scoreboard(self):
+        board,_=self.capture(kind='scoreboard',status='STATUS_SCHEDULED')
+        inventory={**board,'source_kind':'summary','raw_path':None,'raw_sha256':None,
+                   'status':'STATUS_FULL_TIME','query_time':'2026-01-04T00:00:00Z'}
+        self.insert([inventory]);self.insert([board]);event=self.event()
+        self.assertEqual(event['raw_verified'],1);self.assertEqual(event['status'],'STATUS_SCHEDULED')
+        self.assertIsNone(event['home_90']);self.assertEqual(event['training_eligible'],0)
+        self.insert([{**inventory,'query_time':'2026-01-05T00:00:00Z'}])
+        self.assertEqual(self.event(),event)
     def test_raw_hash_mismatch_and_wrong_event_quarantined(self):
         row,_=self.capture();row['raw_sha256']='f'*64;self.insert([row]);self.assertEqual(db.stats(self.path)['counts']['quarantine'],1);self.assertEqual(db.stats(self.path)['counts']['events'],0)
         row,_=self.capture();row['event_id']='11';self.insert([row]);self.assertEqual(db.stats(self.path)['counts']['quarantine'],2)

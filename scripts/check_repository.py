@@ -6,12 +6,16 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-BINDINGS = ('WCPP_BSD_API_KEY', 'WCPP_OPENFOOT_API_KEY', 'WCPP_5DOLLAR_API_KEY', 'WCPP_FOOTBALL_DATA_API_KEY',
-            'football_data', 'Football_data_api', 'WCPP_API_FOOTBALL_KEY',
-            '_apifootball', 'dashboard_api_football', 'Apifootballcom_APIKEY',
-            'apifootball', 'apifootball2', 'WCPP_APIFOOTBALLCOM_API_KEY',
-            'manyzhishu_theodds_sports', 'WCPP_THE_ODDS_API_KEY', 'yapan_infersports',
-            'WCPP_THERUNDOWN_API_KEY', 'therundown')
+sys.path.insert(0, str(ROOT / 'runtime'))
+from data_sources.clients import PROVIDERS, QUARANTINED_CREDENTIAL_NAMES
+
+# Reuse the actual client registry so new aliases cannot silently escape the
+# exact-value scan. Standalone collectors and notification bindings live here.
+BINDINGS = tuple(sorted(set(QUARANTINED_CREDENTIAL_NAMES) | {
+    name for provider in PROVIDERS.values()
+    for name in (provider.get('env'), *provider.get('aliases', [])) if name
+} | {'WCPP_ODDS_API_KEY', 'WCPP_INFERSPORTS_KEY', 'infer_yapan_zhishu',
+     'yapan_infersports', 'WCPP_SMTP_PASSWORD'}))
 PATTERNS = {
     'private_key': re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'),
     'openai_token': re.compile(r'\bsk-(?:proj-)?[A-Za-z0-9_-]{24,}'),

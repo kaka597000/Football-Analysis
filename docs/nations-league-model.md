@@ -1,6 +1,6 @@
 # 欧国联独立双模型与验收
 
-2026-11-10按用户要求实际训练；入口 `python -m runtime.nations_league.model`。
+2026-11-10按用户要求实际训练。2026-11-13起未来训练、研究预测与冻结统一使用安全入口 `python -m runtime.nations_league.safe_cli`；旧 `runtime.nations_league.model` 保留为原工件的历史核心，源码哈希与既有工件保持不变。
 4个等级各自训练两个独立统计候选，阶段仅限 `league-phase`。
 当前候选学习Poisson截距与主场参数；test候选学习正则化球队进攻及对手防守参数。
 配方、730天半衰期和ridge=8在运行前锁定，未根据本轮留出成绩重选。
@@ -24,17 +24,21 @@
 ## 调用与冻结
 
 ```bash
-python -m runtime.nations_league.model train \
+python -m runtime.nations_league.safe_cli train \
   --db /workspace/WCPP/data/nations-league/uefa-nations-20261110.sqlite \
   --out /absolute/NEW-model-directory
 
-python -m runtime.nations_league.model freeze-pairs \
+python -m runtime.nations_league.safe_cli freeze-pairs \
   --index /absolute/NEW-model-directory/candidates.json \
   --fixtures /absolute/verified-future-fixtures.json \
   --out /absolute/NEW-freeze-output
 ```
 
 目录和输出拒绝覆盖。`fixtures`为JSON数组，每场必须有真实summary原文的路径、SHA、URL、查询时间；等级缺失时允许已经严格核对的同场scoreboard补证。球队、开球时间、阶段等级、中立场和未来状态均重新验证。未来fixture禁止目标比分标签；工件创建时间须在实际预测截止之前，训练标签须在目标日期之前。数据、协议与执行源码哈希须和训练登记一致。
+
+安全入口额外要求 `match_id` 与原文 `source_event_id` 完全对应，拒绝 `home_90`、`home_total`、`home_score`、`score`、`actual` 等目标赛果别名，并核对索引内current/test角色和实际执行的核心源码。全批两边候选均校验、计算成功后才开始冻结，业务错误不会发布半批；多文件写入遇磁盘故障的事务回滚不属于这一保证。新计划与预测保存校验层版本、校验层/旧核心/共享数值源SHA，训练另保存 `execution-guard.json`。原矩阵算法直接复用，历史工件不改哈希、不重训、不晋级。
+
+单场只计算研究输出时使用 `python -m runtime.nations_league.safe_cli predict --artifact /absolute/current-artifact.json --fixture /absolute/fixture.json --out /absolute/NEW-output.json`；该命令本身不构成冻结。
 
 首次执行前冻结完整未来名单及两边工件SHA，再冻结各场完整矩阵和统计参考Primary。本轮由Luna取得52场未来summary，实际HTTP200、原文明示场地；52场均保存为 `nations-paired-candidates` 轨。它独立于活动current/test和综合人工分析，统计矩阵最大格子不代表综合第一推荐。具体冻结ID、时间、工件和原文均在数据交付快照中。
 

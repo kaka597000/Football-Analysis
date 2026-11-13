@@ -5,7 +5,8 @@ from research_program.selection_review import compare
 class SelectionTests(unittest.TestCase):
  def data(self):
   now=datetime.now(timezone.utc);kickoff=now-timedelta(days=1);t=(kickoff-timedelta(hours=1)).isoformat()
-  fixture={'match_id':'SYNTHETIC','cohort':'eng.1','cutoff_at':t,'kickoff_at':kickoff.isoformat()}
+  fixture={'match_id':'SYNTHETIC','cohort':'eng.1','competition':'eng.1','stage':'regular',
+           'home':'Synthetic Home','away':'Synthetic Away','cutoff_at':t,'kickoff_at':kickoff.isoformat()}
   def record(payload,track):
    r={'fixture':fixture,'match_id':fixture['match_id'],'stage':'prematch','track':track,'freeze_id':track+'-synthetic','recorded_at':t,'evaluation_slot':'FIRST_PREMATCH','payload':payload}
    r['record_sha256']=digest(r);return r
@@ -52,6 +53,47 @@ class SelectionTests(unittest.TestCase):
  def test_duplicate_matches_do_not_double_count(self):
   entry,result=self.data()
   with self.assertRaises(ValueError):compare([entry,entry],[result])
+ def test_pair_team_competition_or_phase_conflicts_rejected(self):
+  for field in ('home','away','competition','stage'):
+   with self.subTest(field=field):
+    entry,result=self.data()
+    entry['pair']['fixture']=dict(entry['pair']['fixture'],**{field:'CONFLICT'})
+    self.reseal(entry)
+    with self.assertRaisesRegex(ValueError,'pair chronology/identity'):compare([entry],[result])
+ def test_explicit_result_identity_conflicts_cannot_settle(self):
+  for field in ('cohort','competition','stage','home','away','kickoff_at'):
+   with self.subTest(field=field):
+    entry,result=self.data()
+    result[field]='2000-01-01T00:00:00Z' if field=='kickoff_at' else 'CONFLICT'
+    with self.assertRaisesRegex(ValueError,'result.*identity'):compare([entry],[result])
+ def test_alias_fixture_cannot_inflate_population(self):
+  entry,result=self.data();alias=copy.deepcopy(entry)
+  for record in alias.values():
+   record['match_id']='ALIAS';record['fixture']['match_id']='ALIAS'
+  self.reseal(alias)
+  with self.assertRaisesRegex(ValueError,'different IDs'):
+   compare([entry,alias],[result,dict(result,match_id='ALIAS')])
+ def test_pair_cutoff_and_timezone_may_differ_for_same_fixture(self):
+  entry,result=self.data();fixture=entry['pair']['fixture']
+  entry['pair']['fixture']=dict(fixture,
+   cutoff_at=(datetime.fromisoformat(fixture['cutoff_at'])-timedelta(minutes=10)).isoformat(),
+   kickoff_at=datetime.fromisoformat(fixture['kickoff_at']).astimezone(timezone(timedelta(hours=8))).isoformat())
+  self.reseal(entry)
+  self.assertEqual(compare([entry],[result])['comprehensive_hits'],1)
+ def test_same_teams_on_distinct_kickoffs_remain_independent(self):
+  entry,result=self.data();later=copy.deepcopy(entry)
+  kickoff=(datetime.fromisoformat(entry['comprehensive']['fixture']['kickoff_at'])+timedelta(hours=1)).isoformat()
+  for record in later.values():
+   record['match_id']='LATER';record['fixture'].update(match_id='LATER',kickoff_at=kickoff)
+  self.reseal(later)
+  report=compare([entry,later],[result,dict(result,match_id='LATER',kickoff_at=kickoff)])
+  self.assertEqual(report['population'],2);self.assertEqual(report['comprehensive_hits'],2)
+ def test_missing_legacy_identity_fields_are_not_invented(self):
+  entry,result=self.data()
+  for field in ('home','away','competition','stage'):
+   entry['comprehensive']['fixture'].pop(field)
+  self.reseal(entry)
+  self.assertEqual(compare([entry],[result])['comprehensive_hits'],1)
  def test_contradictory_result_status_cannot_settle_comprehensive(self):
   entry,result=self.data();result['event_status']='LIVE'
   with self.assertRaisesRegex(ValueError,'conflicting result status'):compare([entry],[result])

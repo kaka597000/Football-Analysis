@@ -13,6 +13,9 @@ def compare(pairs,results):
     for result in results:
         mid=result['match_id']
         if mid in actual:raise ValueError('duplicate result')
+        statuses=[result[k] for k in ('status','event_status') if result.get(k) is not None]
+        if any(s in ('completed','FT') for s in statuses) and any(s not in ('completed','FT') for s in statuses):
+            raise ValueError('conflicting result status')
         if result.get('status') not in ('completed','FT') or result.get('score_basis')!='regulation_90':
             raise ValueError('explicit completed regulation result required')
         public_url(result['source_url'])

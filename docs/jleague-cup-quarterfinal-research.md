@@ -31,15 +31,17 @@
 示例（路径必须替换为实际审查过的输入，新目录拒绝覆盖）：
 
 ```bash
-python -m runtime.jleague_cup.quarterfinals train \
+python -m runtime.jleague_cup.safe_cli train-quarterfinals \
   --db /absolute/expanded.sqlite --rules /absolute/rules-certificate.json \
   --protocol /absolute/preregistered-protocol.json --out /absolute/NEW-models
-python -m runtime.jleague_cup.quarterfinals freeze-pairs \
+python -m runtime.jleague_cup.safe_cli freeze-pairs \
   --index /absolute/NEW-models/candidates.json \
   --fixtures /absolute/verified-future-fixtures.json --out /absolute/NEW-freezes
 ```
 
 单份 `predict --artifact ... --fixture ... --out ...` 只计算研究输出，不构成已冻结；真实发布使用freeze-pairs。默认独立研究冻结根目录沿用现有WCPP。合成软件测试只能使用临时目录，不能伪装成真实预测。
+
+2026-11-13起新增操作使用上述`safe_cli`兼容入口，单份预测使用`python -m runtime.jleague_cup.safe_cli predict`。旧模型、证据、数据库和八强模块均保留原字节，以继续验证既有工件源码哈希。新入口在首个冻结前检查全批身份、索引及完整依赖哈希、角色与回合、首回合赛果证据，并预先计算所有可发场次的双边结果；缺少首回合赛果的次回合只登记延期。预检结束再次核对来源、时间及输入哈希，任何预检失败均不创建输出目录或冻结记录。每批和每份预测保存执行校验层与旧依赖SHA；这项检查不构成跨文件磁盘事务，也不代表候选通过活动模型验收。
 
 ## 验收与下一步
 

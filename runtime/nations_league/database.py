@@ -256,7 +256,7 @@ def _projection_conflict(old,new):
         if old[key]!=new[key]: return 'EVENT_TEAM_IDENTITY_CONFLICT'
     for key in ('stage','league_level','neutral'):
         if old[key] is not None and new[key] is not None and old[key]!=new[key]: return 'VERIFIED_'+key.upper()+'_CONFLICT'
-    if old['status'] in TERMINAL and new['status'] in TERMINAL:
+    if old['raw_verified'] and new['raw_verified'] and old['status'] in TERMINAL and new['status'] in TERMINAL:
         for key in ('date',*SCORE_FIELDS):
             if old[key] is not None and new[key] is not None and old[key]!=new[key]: return 'COMPLETED_RESULT_CONFLICT:'+key
     return None
@@ -315,9 +315,12 @@ def import_captures(path,rows,raw_root):
                     projected=True
                     if old:
                         rank={'inventory':0,'scoreboard':1,'summary':2}
-                        projected=rank[source['kind']]>=rank[old['kind']]
-                        if old['observed_at'] and (not facts['observed_at'] or aware(facts['observed_at'])<aware(old['observed_at'])): projected=False
-                        if old['status'] in TERMINAL and facts['status'] not in TERMINAL: projected=False
+                        projected=(facts['raw_verified'],rank[source['kind']])>=(old['raw_verified'],rank[old['kind']])
+                        # Missing-raw inventory cannot establish a result or capture
+                        # chronology that prevents later verified evidence upgrading it.
+                        if old['raw_verified'] or not facts['raw_verified']:
+                            if old['observed_at'] and (not facts['observed_at'] or aware(facts['observed_at'])<aware(old['observed_at'])): projected=False
+                            if old['status'] in TERMINAL and facts['status'] not in TERMINAL: projected=False
                         if old['summary_verified'] and not facts['summary_verified']: projected=False
                     if not old:
                         columns=('event_key','competition','provider_event_id','home_id','away_id',*FACT_FIELDS,'source_id','last_observation_id')

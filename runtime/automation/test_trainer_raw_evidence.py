@@ -80,6 +80,46 @@ class RawEvidenceTests(unittest.TestCase):
             _,rows,q,_=self.check(alter);self.assertEqual(rows,[])
             self.assertIn('IDENTITY_MISMATCH',q[0]['reason'])
 
+    def test_explicit_raw_venue_conflict_is_quarantined(self):
+        def alter(raw,row):raw['header']['competitions'][0]['neutralSite']=True
+        _,rows,q,_=self.check(alter);self.assertEqual(rows,[])
+        self.assertEqual(q[0]['reason'],'RAW_SOURCE_NEUTRAL_CONFLICT')
+
+    def test_unknown_raw_or_normalized_venue_retains_existing_behavior(self):
+        for raw_neutral,row_neutral in ((None,False),(True,None),(False,False)):
+            def alter(raw,row):
+                raw['header']['competitions'][0]['neutralSite']=raw_neutral
+                row['neutral']=row_neutral
+            with self.subTest(raw_neutral=raw_neutral,row_neutral=row_neutral):
+                _,rows,q,_=self.check(alter)
+                self.assertEqual(len(rows),1);self.assertEqual(q,[])
+
+    def test_incremental_raw_result_cannot_be_known_before_kickoff(self):
+        for field in ('known_at','first_known_at'):
+            def alter(raw,row):
+                row.pop('known_at',None);row[field]='2023-12-01T00:00:00Z'
+            with self.subTest(field=field):
+                _,rows,q,_=self.check(alter);self.assertEqual(rows,[])
+                self.assertEqual(q[0]['reason'],'RAW_SOURCE_KNOWN_BEFORE_KICKOFF')
+        # Unreferenced legacy rows retain their explicit unverified status.
+        _,rows,q,_=self.check(alter,reference=False)
+        self.assertEqual(len(rows),1);self.assertEqual(q,[])
+        self.assertEqual(rows[0]['source_evidence_status'],'LEGACY_NO_RAW_REFERENCE')
+
+    def test_retrospective_seed_is_not_reinterpreted_as_incremental_evidence(self):
+        def alter(raw,row):
+            raw['header']['competitions'][0]['neutralSite']=True
+            row['known_at']='2023-12-01T00:00:00Z'
+            row['dataset_kind']='SEED_RETROSPECTIVE'
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);row=self.setup_state(root,alter)
+            (root/'normalized-results.jsonl').unlink()
+            (root/'seed').mkdir()
+            with gzip.open(root/'seed/training.json.gz','wt') as handle:json.dump([row],handle)
+            _,rows,q,_=_load(root,datetime(2025,1,1,tzinfo=timezone.utc))
+        self.assertEqual(len(rows),1);self.assertEqual(q,[])
+        self.assertEqual(rows[0]['source_evidence_status'],'RETROSPECTIVE_SEED')
+
     def test_legacy_without_raw_reference_is_explicitly_unverified(self):
         _,rows,q,_=self.check(reference=False);self.assertEqual(len(rows),1)
         self.assertEqual(rows[0]['source_evidence_status'],'LEGACY_NO_RAW_REFERENCE')

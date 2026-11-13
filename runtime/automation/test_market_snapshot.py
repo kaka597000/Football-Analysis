@@ -6,12 +6,12 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 if __package__:
-    from .market_snapshot import ALIAS_REVIEW, build, collect
+    from .market_snapshot import ALIAS_REVIEW, ESPN, ODDS, NoRedirect, build, collect, fetch
 else:
-    from market_snapshot import ALIAS_REVIEW, build, collect
+    from market_snapshot import ALIAS_REVIEW, ESPN, ODDS, NoRedirect, build, collect, fetch
 
 
 class MarketSnapshotTests(unittest.TestCase):
@@ -101,10 +101,106 @@ class MarketSnapshotTests(unittest.TestCase):
                        lambda o, b: o.append(deepcopy(o[0]))]:
             self.assertFalse(self.run_case(mutate)['market_model_ready'])
 
+    def test_conflicting_scoreboard_identity_or_status_cannot_supply_quotes(self):
+        def duplicate_side(odds, board):
+            board['events'][0]['competitions'][0]['competitors'].insert(0,
+                {'homeAway': 'home', 'team': {'id': '999', 'displayName': 'Other'}})
+        mutations = [duplicate_side,
+                     lambda o, b: b['events'].append(deepcopy(b['events'][0])),
+                     lambda o, b: b['events'][0]['competitions'].append(deepcopy(b['events'][0]['competitions'][0])),
+                     lambda o, b: b['events'][0]['competitions'][0].update(id='OTHER'),
+                     lambda o, b: b['events'][0]['competitions'][0].update(date='2026-11-12T18:00Z'),
+                     lambda o, b: b['events'][0]['competitions'][0].update(status={'type': {'state': 'in', 'completed': False}}),
+                     lambda o, b: b['events'][0]['competitions'][0].update(status={'type': {'state': 'post', 'completed': True}})]
+        for mutate in mutations:
+            with self.subTest(mutate=mutate):
+                result = self.run_case(mutate)
+                self.assertFalse(result['market_model_ready'])
+                self.assertGreater(result['excluded']['unverified_target_identity_or_status'], 0)
+
+    def test_bad_scoreboard_event_does_not_discard_independent_valid_fixture(self):
+        def mutate(odds, board):
+            broken = deepcopy(board['events'][0]); broken['id'] = 'broken'
+            broken['competitions'] = []
+            board['events'].insert(0, broken)
+        result = self.run_case(mutate)
+        self.assertEqual(result['verified_quote_count'], 1)
+        self.assertEqual(result['excluded']['unverified_target_identity_or_status'], 1)
+
+    def test_provider_id_cannot_refer_to_two_different_fixtures(self):
+        def mutate(odds, board):
+            duplicate = deepcopy(odds[0]); duplicate['home_team'] = 'Different fixture'
+            odds.append(duplicate)
+        self.assertFalse(self.run_case(mutate)['market_model_ready'])
+
     def test_missing_secret_reports_no_request(self):
-        with tempfile.TemporaryDirectory() as d, patch.dict('os.environ', {}, clear=True), patch(collect.__module__ + '.urlopen') as fetch:
+        with tempfile.TemporaryDirectory() as d, patch.dict('os.environ', {}, clear=True), patch(collect.__module__ + '.build_opener') as fetch:
             r = collect(Path(d) / 'run')
             self.assertEqual(r['status'], 'MISSING_CREDENTIAL'); fetch.assert_not_called()
+
+    def test_fetch_blocks_redirects_and_retains_safe_evidence_once(self):
+        with tempfile.TemporaryDirectory() as folder:
+            target = Path(folder) / 'odds.json'
+            opener = MagicMock()
+            opener.open.return_value.__enter__.return_value.read.return_value = b'[]'
+            with patch(fetch.__module__ + '.build_opener', return_value=opener) as create:
+                meta = fetch(ODDS + '?apiKey=SYNTHETIC_ONLY', ODDS, target)
+                with self.assertRaises(FileExistsError):
+                    fetch(ODDS + '?apiKey=SYNTHETIC_ONLY', ODDS, target)
+            self.assertIsInstance(create.call_args.args[0], NoRedirect)
+            self.assertEqual(meta['sha256'], hashlib.sha256(b'[]').hexdigest())
+            self.assertNotIn('SYNTHETIC_ONLY', json.dumps(meta))
+            self.assertEqual(target.read_bytes(), b'[]')
+
+    def test_nonempty_provider_response_preserves_business_keys_through_fetch_and_build(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            odds, board = self.inputs(root)
+            odds[0]['bookmakers'][0]['markets'].append({
+                'key': 'h2h', 'last_update': '2026-11-12T12:00:00Z',
+                'outcomes': [{'name': 'Home', 'price': 2.5},
+                             {'name': 'Draw', 'price': 3.2},
+                             {'name': 'Away', 'price': 2.8}]})
+            odds_body, board_body = (json.dumps(value).encode() for value in (odds, board))
+            opener = MagicMock()
+            opener.open.return_value.__enter__.return_value.read.side_effect = [odds_body, board_body]
+            with patch(fetch.__module__ + '.build_opener', return_value=opener), \
+                    patch(fetch.__module__ + '.datetime') as clock:
+                clock.now.return_value = self.now
+                odds_meta = fetch(ODDS + '?apiKey=SYNTHETIC_ONLY', ODDS, root / 'odds.json')
+                identity_meta = fetch(ESPN, ESPN, root / 'identity.json')
+            self.assertEqual((root / 'odds.json').read_bytes(), odds_body)
+            result = build(root, odds_meta, identity_meta, cutoff=self.now.isoformat(), now=self.now)
+            self.assertEqual(result['verified_quote_count'], 2)
+            self.assertEqual({row['value']['market'] for row in result['snapshots'][0]['observations']},
+                             {'totals', 'h2h'})
+            self.assertTrue(result['market_model_ready'])
+
+    def test_fetch_refuses_unapproved_endpoint_or_mismatched_public_url_before_request(self):
+        cases = [('https://evil.example/odds?apiKey=SYNTHETIC_ONLY', ODDS),
+                 (ODDS + '?apiKey=SYNTHETIC_ONLY', ESPN),
+                 (ESPN + '?apiKey=SYNTHETIC_ONLY', ESPN),
+                 (ODDS + '?apiKey=SYNTHETIC_ONLY&markets=totals', ODDS),
+                 (ODDS + '?apiKey=SYNTHETIC_ONLY', ODDS + '?apiKey=SYNTHETIC_ONLY')]
+        with tempfile.TemporaryDirectory() as folder, patch(fetch.__module__ + '.build_opener') as create:
+            for url, public in cases:
+                with self.subTest(url=url), self.assertRaises(ValueError):
+                    fetch(url, public, Path(folder) / 'odds.json')
+            create.assert_not_called()
+
+    def test_unsafe_or_oversized_response_is_not_saved(self):
+        bodies = [b'[{"message":"SYNTHETIC_ONLY"}]',
+                  b'[{"message":"\\u0053YNTHETIC_ONLY"}]',
+                  b'[{"apiKey":"other-key"}]', b'{"error":"provider rejection"}',
+                  b' ' * 20_000_001]
+        for body in bodies:
+            with self.subTest(size=len(body)), tempfile.TemporaryDirectory() as folder:
+                target = Path(folder) / 'odds.json'
+                opener = MagicMock()
+                opener.open.return_value.__enter__.return_value.read.return_value = body
+                with patch(fetch.__module__ + '.build_opener', return_value=opener), self.assertRaises(ValueError):
+                    fetch(ODDS + '?apiKey=SYNTHETIC_ONLY', ODDS, target)
+                self.assertFalse(target.exists())
 
     def test_missing_price_or_bookmaker_preserves_other_books(self):
         for missing in ('price', 'bookmaker'):

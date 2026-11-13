@@ -4,7 +4,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from datetime import datetime,timezone
+from datetime import datetime,timezone,timedelta
 from collector import collect,regulation_row,phase_for,ASIAN
 
 
@@ -73,6 +73,55 @@ class CollectorTests(unittest.TestCase):
             self.assertTrue(result['retry_used'])
             self.assertNotIn('not persisted',(Path(folder)/'requests.jsonl').read_text())
 
+    def test_bounded_runs_rotate_scoreboards_across_competitions_and_days(self):
+        scopes=[{'competition':comp,'cohort':comp,'stages':['regular']}
+                for comp in ('eng.1','ita.1','swe.1')]
+        calls=[]
+        def fetch(url,headers=None):
+            calls.append(url)
+            return {'events':[]}
+        with tempfile.TemporaryDirectory() as folder, patch('collector.MAX_REQUESTS',1):
+            for _ in range(6):
+                result=collect(folder,scopes,self.now,fetch,lookback_days=1)
+                self.assertEqual(result['request_count'],1)
+            self.assertEqual(len(set(calls)),6)
+            self.assertTrue(all('/scoreboard?' in url for url in calls))
+            collect(folder,scopes,self.now,fetch,lookback_days=1)
+            self.assertEqual(calls[6],calls[0])
+
+    def test_failed_scoreboard_does_not_starve_unqueried_competitions(self):
+        scopes=[{'competition':comp,'cohort':comp,'stages':['regular']}
+                for comp in ('eng.1','swe.1')]
+        calls=[]
+        def failure(url,headers=None):
+            calls.append(url)
+            raise TimeoutError('synthetic outage')
+        with tempfile.TemporaryDirectory() as folder, patch('collector.MAX_REQUESTS',1):
+            for _ in range(2):collect(folder,scopes,self.now,failure,lookback_days=0)
+        self.assertNotEqual(calls[0],calls[1])
+
+    def test_budget_and_date_window_changes_keep_bounded_rotation_state(self):
+        scopes=[{'competition':comp,'cohort':comp,'stages':['regular']}
+                for comp in ('eng.1','swe.1')]
+        calls=[]
+        def fetch(url,headers=None):
+            calls.append(url)
+            return {'events':[]}
+        with tempfile.TemporaryDirectory() as folder:
+            with patch('collector.MAX_REQUESTS',1):
+                collect(folder,scopes,self.now,fetch,lookback_days=1)
+            with patch('collector.MAX_REQUESTS',2):
+                collect(folder,scopes,self.now,fetch,lookback_days=1)
+            self.assertEqual(len(set(calls)),3)
+            calls.clear()
+            with patch('collector.MAX_REQUESTS',2):
+                collect(folder,scopes,self.now+timedelta(days=1),fetch,lookback_days=0)
+            self.assertEqual(len(set(calls)),2)
+            self.assertTrue(all('dates=20261031' in url for url in calls))
+            state=json.loads((Path(folder)/'scoreboard-attempts.json').read_text())
+            self.assertEqual(set(state['attempts']),set(calls))
+            self.assertEqual(state['sequence'],5)
+
     def test_exhausted_wallclock_starts_no_requests(self):
         ticks=[0]
         def clock():
@@ -83,6 +132,7 @@ class CollectorTests(unittest.TestCase):
             self.assertEqual(result['request_count'],0)
             self.assertEqual(result['budget_status'],'TIME_LIMIT_REACHED')
             self.assertFalse(result['coverage_complete'])
+            self.assertFalse((Path(folder)/'scoreboard-attempts.json').exists())
 
     def test_wallclock_cutoff_preserves_already_verified_rows(self):
         calls=[]
