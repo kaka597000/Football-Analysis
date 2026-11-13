@@ -15,9 +15,11 @@ API-Football默认至少间隔10秒。2026-10-30起可在计划中显式配置qu
 401/403/429或缺绑定在本批停止同服务后续请求；不重复探测已明确受阻的入口。
 暂时不自动重试，网络失败保存原因后进入适用备用接口。状态与权限按当次证据判断，不把旧Free套餐结论永久化。
 
-已提供安全读取适配：5Dollar、football-data.org、API-Football/API-SPORTS、APIfootball.com、The Odds API、ESPN、FotMob。
+已提供安全读取适配：BSD、OpenFoot、5Dollar、football-data.org、API-Football/API-SPORTS、APIfootball.com、The Odds API、TheRundown、ESPN、FotMob。
 5Dollar先查/status，竞彩参数固定types=jingcailottery；参数本身不证明权限。
 APIfootball.com与API-Football是两个不同服务，不交叉发送密钥。
+TheRundown使用官方`https://therundown.io`和`X-TheRundown-Key`，绑定`WCPP_THERUNDOWN_API_KEY`或`therundown`；受保护探针是`/api/v2/markets`。公开`/api/v2/sports`和`/api/v2/affiliates`成功不证明密钥有效。适配不等于开通账户权限、取得足球数据或自动纳入采集任务。
+HTTP错误现保存固定`failure_kind`，区分Cloudflare品牌HTML阻断、普通HTML拒绝、JSON鉴权/套餐拒绝和限流；原`error_code`兼容保留，不保存错误正文。CF-Ray单独出现不足以判定Cloudflare阻断，分类也不代表已查出具体防火墙规则。最新两家403排查见[诊断记录](api-access-diagnosis-20261113.md)。
 The Odds API的spreads保留原市场名，未独立验证前不称亚洲盘。
 未适配接口仍可作为候选来源，但不能宣传已经自动接入；新增服务须先核实官方地址和鉴权方式。
 

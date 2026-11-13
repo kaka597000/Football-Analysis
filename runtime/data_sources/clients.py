@@ -38,12 +38,16 @@ PROVIDERS = {
                      'aliases': ['APIFOOTBALL', '_apifootball', 'dashboard_api_football',
                                  'apifootball'],
                      'probe': '/status'},
+    'therundown': {'base': 'https://therundown.io',
+                   'env': 'WCPP_THERUNDOWN_API_KEY', 'aliases': ['therundown'],
+                   'header': 'X-TheRundown-Key', 'probe': '/api/v2/markets'},
 }
 # Historical name is ambiguous between two distinct providers. Do not route it
 # automatically, but still redact its value if echoed by another provider.
 QUARANTINED_CREDENTIAL_NAMES = ('Apifootballcom_APIKEY',)
 PRIVATE = {'key', 'api_key', 'apikey', 'token', 'authorization', 'access_token',
-           'secret', 'x-auth-token', 'x-apisports-key', 'x-rapidapi-key'}
+           'secret', 'x-auth-token', 'x-apisports-key', 'x-rapidapi-key',
+           'x-therundown-key'}
 ALLOWED = {
     'bsd': ('/events', '/leagues', '/teams', '/players'),
     'openfoot': ('/matches', '/competitions', '/standings', '/search'),
@@ -57,6 +61,7 @@ ALLOWED = {
     'football-data': ('/competitions', '/matches', '/teams', '/persons'),
     'api-football': ('/status', '/leagues', '/fixtures', '/standings', '/injuries',
                      '/players', '/teams', '/odds', '/timezone'),
+    'therundown': ('/api/v2/markets', '/api/v2/sports', '/api/v2/affiliates'),
 }
 
 
@@ -89,7 +94,45 @@ def authentication_status(provider, path, success):
         return 'PUBLIC_ENDPOINT'
     if provider == 'football-data' and path.rstrip('/') == '/competitions':
         return 'UNVERIFIED_PUBLIC_CATALOG'
+    if provider == 'therundown' and path.rstrip('/') in ('/api/v2/sports', '/api/v2/affiliates'):
+        return 'UNVERIFIED_PUBLIC_CATALOG'
     return 'CREDENTIAL_ACCEPTED' if success else 'UNVERIFIED'
+
+
+def error_diagnostics(status, raw, content_type):
+    """Classify observed errors, not their unknown upstream security rule.
+
+    Return fixed labels only: error bodies can echo keys, IPs or account data.
+    A CF-Ray header alone also occurs on normal API JSON responses.
+    """
+    try:
+        data = json.loads(raw)
+        fmt = 'JSON'
+    except (ValueError, TypeError):
+        data = None
+        fmt = 'HTML' if b'<html' in raw.lower() or 'text/html' in (content_type or '').lower() else 'OTHER'
+    kind = 'HTTP_ERROR'
+    if status == 429:
+        kind = 'RATE_LIMITED'
+    elif fmt == 'HTML' and status == 403:
+        body = raw.lower()
+        branded_block = b'cloudflare' in body and (
+            b'attention required' in body or b'cf-error-details' in body)
+        kind = 'CLOUDFLARE_HTML_ACCESS_BLOCK' if branded_block else 'HTML_ACCESS_DENIED'
+    elif fmt == 'JSON':
+        kind = 'PROVIDER_JSON_REJECTION'
+        fields = data if isinstance(data, dict) else {}
+        errors = fields.get('errors') or fields.get('error') or fields.get('message') or ''
+        error_keys = {k.lower() for k in errors} if isinstance(errors, dict) else set()
+        detail = json.dumps(errors).lower()
+        if status == 401 or error_keys & {'token', 'key', 'api_key', 'apikey', 'authentication'} or any(
+                phrase in detail for phrase in ('invalid api key', 'invalid api-key', 'missing application key',
+                                                'missing api key', 'expired api key')):
+            kind = 'PROVIDER_AUTHENTICATION_REJECTION'
+        elif error_keys & {'plan', 'subscription', 'permissions'} or any(
+                phrase in detail for phrase in ('plan_upgrade_required', 'subscription', 'entitlement')):
+            kind = 'PROVIDER_PLAN_OR_PERMISSION_REJECTION'
+    return {'response_format': fmt, 'failure_kind': kind}
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -161,17 +204,10 @@ def fetch(provider, path=None, params=None, opener=None, credential_binding=None
     except HTTPError as exc:
         log.update(http_status=exc.code, error_code='HTTP_ERROR')
         log.update(response_metadata(exc, all_keys))
-        # Error pages may echo credentials or personal data. Persist only a
-        # coarse format classifier; no body, URL, or exception string.
+        # Preserve only fixed diagnostic labels, not error text or account data.
         try:
             raw = exc.read(65536)
-            try:
-                json.loads(raw)
-                log['response_format'] = 'JSON'
-            except (ValueError, TypeError):
-                log['response_format'] = ('HTML' if b'<html' in raw.lower()
-                                           or 'text/html' in (log['content_type'] or '').lower()
-                                           else 'OTHER')
+            log.update(error_diagnostics(exc.code, raw, log['content_type']))
         except (OSError, ValueError, AttributeError):
             log['response_format'] = 'UNKNOWN'
         finally:

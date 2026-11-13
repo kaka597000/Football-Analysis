@@ -1,5 +1,5 @@
 {
-  "status": "AUTHENTICATED_WITH_VERIFIED_SCOPE_LIMITS",
+  "status": "PER_PROVIDER_DATED_OBSERVATIONS",
   "default_storage": "raw_staging_before_identity_and_time_audit",
   "providers": {
     "5dollar": {
@@ -37,51 +37,85 @@
       "verification_report": "/workspace/WCPP/reports/new-api-retest-20261012-152152/summary.json"
     },
     "api-football": {
+      "account_permissions_verified": false,
+      "account_authentication_verified": false,
+      "last_http_status": 403,
+      "current_connection_verified": false,
+      "current_authentication_verification": "UNVERIFIED_EDGE_BLOCK",
+      "current_readiness": "BLOCKED_CLOUDFLARE_HTML",
+      "last_failure_kind": "CLOUDFLARE_HTML_ACCESS_BLOCK",
+      "configured_secret_domain_correct": true,
+      "runtime_spec_revision": "4",
+      "runtime_credential_readiness": "ready",
+      "exact_security_rule_known": false,
+      "automatic_activation": false,
+      "actual_odds_coverage_verified": false,
+      "verification_report": "https://github.com/kaka597000/kaka597000-Football-Analysis-Data/tree/main/workspace-updates/20261113-api-403-diagnosis",
       "base_url": "https://v3.football.api-sports.io",
       "credential_env": "WCPP_API_FOOTBALL_KEY",
-      "role": "lineups_injuries_events_statistics_and_odds_crosscheck",
-      "historical_seasons_and_xg_require_actual_field_check": true,
-      "account_permissions_verified": true,
-      "reference": "https://www.api-football.com/documentation-v3",
       "credential_env_aliases": [
+        "APIFOOTBALL",
         "_apifootball",
         "dashboard_api_football",
         "apifootball"
       ],
-      "last_http_status": 200,
-      "binding_domain_check": "runtime_binding_success_secret_dashboard_domain_not_api_verified",
-      "preferred_working_binding": "_apifootball",
-      "account_authentication_verified": true,
-      "observed_plan": "Free",
-      "daily_request_limit": 100,
-      "verified_fixture_seasons": [
-        2024
-      ],
-      "provider_declared_allowed_seasons": [
-        2022,
-        2023,
-        2024
-      ],
-      "current_2026_fixture_access": false,
-      "actual_odds_coverage_verified": false,
-      "verification_report": "/workspace/WCPP/reports/api-football-retest-20261012-200625/summary.json",
-      "previous_verification_report": "/workspace/WCPP/reports/new-api-retest-20261012-152152/summary.json",
-      "last_failure_kind": null,
-      "current_connection_verified": true,
-      "current_authentication_verification": "VERIFIED",
-      "current_readiness": "AVAILABLE_WITH_SCOPE_LIMITS",
-      "configured_secret_domain_correct": false,
-      "last_tested_at_utc8": "2026-10-12T20:06:25.372683+08:00",
-      "prior_retest_report": "/workspace/WCPP/reports/api-football-retest-20261012-195508/summary.json",
-      "runtime_spec_revision": "45",
-      "runtime_credential_readiness": "ready",
-      "diagnostic_report": "/workspace/WCPP/reports/api-football-diagnosis-20261012-161049/summary.json",
-      "unauthenticated_provider_json_verified": true,
-      "synthetic_invalid_key_provider_json_verified": true,
-      "exact_security_rule_known": false,
-      "diagnosis_completed_at_utc8": "2026-10-12T16:11:37+08:00",
-      "previous_failure_kind": "CLOUDFLARE_HTML_ACCESS_BLOCK",
-      "per_minute_request_limit": 10
+      "role": "lineups_injuries_events_statistics_and_odds_crosscheck",
+      "historical_seasons_and_xg_require_actual_field_check": true,
+      "reference": "https://api-sports.io/public/documentations/football-v3.yaml",
+      "tested_binding": "apifootball",
+      "last_tested_at_utc8": "2026-11-13T10:08:05+08:00",
+      "cf_ray": "a59a3a02986e2cc8-DFW",
+      "current_2026_fixture_access": null,
+      "current_plan_verified": false,
+      "historical_observations": [
+        {
+          "base_url": "https://v3.football.api-sports.io",
+          "credential_env": "WCPP_API_FOOTBALL_KEY",
+          "role": "lineups_injuries_events_statistics_and_odds_crosscheck",
+          "historical_seasons_and_xg_require_actual_field_check": true,
+          "account_permissions_verified": true,
+          "reference": "https://www.api-football.com/documentation-v3",
+          "credential_env_aliases": [
+            "_apifootball",
+            "dashboard_api_football",
+            "apifootball"
+          ],
+          "last_http_status": 200,
+          "binding_domain_check": "runtime_binding_success_secret_dashboard_domain_not_api_verified",
+          "preferred_working_binding": "_apifootball",
+          "account_authentication_verified": true,
+          "observed_plan": "Free",
+          "daily_request_limit": 100,
+          "verified_fixture_seasons": [
+            2024
+          ],
+          "provider_declared_allowed_seasons": [
+            2022,
+            2023,
+            2024
+          ],
+          "current_2026_fixture_access": false,
+          "actual_odds_coverage_verified": false,
+          "verification_report": "/workspace/WCPP/reports/api-football-retest-20261012-200625/summary.json",
+          "previous_verification_report": "/workspace/WCPP/reports/new-api-retest-20261012-152152/summary.json",
+          "last_failure_kind": null,
+          "current_connection_verified": true,
+          "current_authentication_verification": "VERIFIED",
+          "current_readiness": "AVAILABLE_WITH_SCOPE_LIMITS",
+          "configured_secret_domain_correct": false,
+          "last_tested_at_utc8": "2026-10-12T20:06:25.372683+08:00",
+          "prior_retest_report": "/workspace/WCPP/reports/api-football-retest-20261012-195508/summary.json",
+          "runtime_spec_revision": "45",
+          "runtime_credential_readiness": "ready",
+          "diagnostic_report": "/workspace/WCPP/reports/api-football-diagnosis-20261012-161049/summary.json",
+          "unauthenticated_provider_json_verified": true,
+          "synthetic_invalid_key_provider_json_verified": true,
+          "exact_security_rule_known": false,
+          "diagnosis_completed_at_utc8": "2026-10-12T16:11:37+08:00",
+          "previous_failure_kind": "CLOUDFLARE_HTML_ACCESS_BLOCK",
+          "per_minute_request_limit": 10
+        }
+      ]
     },
     "open-football-simulator": {
       "website": "https://open-football.org/zh",
@@ -131,6 +165,44 @@
         "odds"
       ],
       "source_dependency_notice": "Docs cite FotMob and other providers; overlapping data is not independent corroboration"
+    },
+    "therundown": {
+      "account_permissions_verified": false,
+      "account_authentication_verified": false,
+      "last_http_status": 403,
+      "current_connection_verified": false,
+      "current_authentication_verification": "UNVERIFIED_EDGE_BLOCK",
+      "current_readiness": "BLOCKED_CLOUDFLARE_HTML",
+      "last_failure_kind": "CLOUDFLARE_HTML_ACCESS_BLOCK",
+      "configured_secret_domain_correct": true,
+      "runtime_spec_revision": "4",
+      "runtime_credential_readiness": "ready",
+      "exact_security_rule_known": false,
+      "automatic_activation": false,
+      "actual_odds_coverage_verified": false,
+      "verification_report": "https://github.com/kaka597000/kaka597000-Football-Analysis-Data/tree/main/workspace-updates/20261113-api-403-diagnosis",
+      "base_url": "https://therundown.io",
+      "credential_env": "WCPP_THERUNDOWN_API_KEY",
+      "credential_env_aliases": [
+        "therundown"
+      ],
+      "role": "candidate_market_odds_crosscheck",
+      "reference": "https://docs.therundown.io/authentication.md",
+      "tested_binding": "therundown",
+      "last_tested_at_utc8": "2026-11-13T10:02:43.091590+08:00",
+      "cf_ray": "a59a32243e0e1c16-DFW",
+      "probe": "/api/v2/markets",
+      "public_catalogs_do_not_verify_auth": [
+        "/api/v2/sports",
+        "/api/v2/affiliates"
+      ],
+      "controls_observed": [
+        "current_key",
+        "no_key",
+        "fixed_invalid_key"
+      ],
+      "all_controls_cloudflare_html_403": true
     }
-  }
+  },
+  "latest_access_diagnosis": "docs/api-access-diagnosis-20261113.md"
 }

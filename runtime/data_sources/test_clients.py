@@ -183,5 +183,58 @@ class Tests(unittest.TestCase):
         self.assertEqual(result['call']['error_code'], 'INVALID_RESPONSE')
         self.assertFalse(result['call']['api_success'])
 
+    def test_403_body_distinguishes_edge_auth_and_plan_without_leaking_data(self):
+        key = 'SYNTHETIC_DENIAL_CREDENTIAL'
+        cases = [
+            ('text/html', '<html><title>Attention Required! | Cloudflare</title>' + key + '</html>',
+             'CLOUDFLARE_HTML_ACCESS_BLOCK'),
+            ('text/html', '<html>Forbidden ' + key + '</html>', 'HTML_ACCESS_DENIED'),
+            ('application/json', json.dumps({'errors': {'token': 'Invalid API key ' + key}}),
+             'PROVIDER_AUTHENTICATION_REJECTION'),
+            ('application/json', json.dumps({'errors': {'plan': 'Access denied ' + key}}),
+             'PROVIDER_PLAN_OR_PERMISSION_REJECTION'),
+            ('application/json', json.dumps({'error': 'plan_upgrade_required'}),
+             'PROVIDER_PLAN_OR_PERMISSION_REJECTION'),
+            ('application/json', json.dumps({'message': 'Forbidden ' + key}), 'PROVIDER_JSON_REJECTION'),
+        ]
+        for content_type, body, kind in cases:
+            def denied(*a, **k):
+                raise HTTPError('https://example.test/?key=' + key, 403, key,
+                                {'Content-Type': content_type, 'CF-Ray': 'synthetic-ray', 'Set-Cookie': key},
+                                io.BytesIO(body.encode()))
+            with self.subTest(kind=kind), patch.dict(os.environ, {'apifootball': key}, clear=True):
+                result = fetch('api-football', opener=denied)
+                self.assertEqual(result['call']['failure_kind'], kind)
+                self.assertFalse(result['call']['authenticated'])
+                self.assertIsNone(result['response'])
+                self.assertNotIn(key, json.dumps(result))
+                self.assertNotIn('Set-Cookie', json.dumps(result))
+
+    def test_therundown_official_header_protected_probe_and_public_catalogs(self):
+        key = 'SYNTHETIC_RUNDOWN_CREDENTIAL'
+        def opener(req, **kwargs):
+            self.assertTrue(req.full_url.startswith('https://therundown.io/api/v2/'))
+            self.assertEqual(req.get_header('X-therundown-key'), key)
+            self.assertNotIn(key, req.full_url)
+            return Response({'data': [], 'X-TheRundown-Key': key, 'message': 'echo ' + key})
+        with patch.dict(os.environ, {'therundown': key}, clear=True):
+            protected = fetch('therundown', opener=opener)
+            self.assertEqual(protected['call']['url'], 'https://therundown.io/api/v2/markets')
+            self.assertTrue(protected['call']['authenticated'])
+            self.assertNotIn(key, json.dumps(protected))
+            self.assertNotIn('X-TheRundown-Key', json.dumps(protected))
+            for path in ('/api/v2/sports', '/api/v2/affiliates/'):
+                catalog = fetch('therundown', path, opener=opener)
+                self.assertTrue(catalog['call']['api_success'])
+                self.assertEqual(catalog['call']['authentication_status'], 'UNVERIFIED_PUBLIC_CATALOG')
+                self.assertFalse(catalog['call']['authenticated'])
+            with self.assertRaises(ValueError):
+                fetch('therundown', params={'X-TheRundown-Key': 'any-value'})
+            with self.assertRaises(ValueError):
+                fetch('therundown', credential_binding='apifootball')
+        with patch.dict(os.environ, {}, clear=True):
+            missing = fetch('therundown', opener=lambda *a, **k: self.fail('missing key sent'))
+            self.assertEqual(missing['call']['error_code'], 'ENV_BINDING_MISSING')
+
 
 if __name__=='__main__':unittest.main()
