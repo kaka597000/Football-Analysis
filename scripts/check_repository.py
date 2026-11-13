@@ -10,7 +10,8 @@ BINDINGS = ('WCPP_BSD_API_KEY', 'WCPP_OPENFOOT_API_KEY', 'WCPP_5DOLLAR_API_KEY',
             'football_data', 'Football_data_api', 'WCPP_API_FOOTBALL_KEY',
             '_apifootball', 'dashboard_api_football', 'Apifootballcom_APIKEY',
             'apifootball', 'apifootball2', 'WCPP_APIFOOTBALLCOM_API_KEY',
-            'manyzhishu_theodds_sports', 'WCPP_THE_ODDS_API_KEY', 'yapan_infersports')
+            'manyzhishu_theodds_sports', 'WCPP_THE_ODDS_API_KEY', 'yapan_infersports',
+            'WCPP_THERUNDOWN_API_KEY', 'therundown')
 PATTERNS = {
     'private_key': re.compile(r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'),
     'openai_token': re.compile(r'\bsk-(?:proj-)?[A-Za-z0-9_-]{24,}'),
