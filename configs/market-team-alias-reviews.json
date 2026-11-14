@@ -1,0 +1,58 @@
+[
+  {
+    "version": "nations-team-alias-20261115-1",
+    "reviewed_at": "2026-11-14T18:51:10.869582+00:00",
+    "provider": "the-odds-api",
+    "sport_key": "soccer_uefa_nations_league",
+    "cohort": "uefa.nations",
+    "phase": "league-phase",
+    "teams": [
+      {
+        "espn_id": "452",
+        "espn_name": "Bosnia-Herzegovina",
+        "provider_name": "Bosnia & Herzegovina"
+      }
+    ],
+    "evidence": {
+      "raw_odds_sha256": "95bc1d0fae6c2ff596ff0a0695ab8b265e15a8af2a276243b14ff6de7f7f4e9e",
+      "identity_sha256": "338ce0f5559fda7e69b5f3859319897ebc147f1a53f3a897c9379f8ae3dacb76",
+      "odds_source_url": "https://api.the-odds-api.com/v4/sports/soccer_uefa_nations_league/odds/?regions=eu&markets=h2h%2Ctotals&oddsFormat=decimal",
+      "identity_source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard?dates=20261114",
+      "source_event_id": "401861166",
+      "provider_event_id": "2b646127cc6cb400abc663c5a458f1db",
+      "opponent_espn_id": "466",
+      "opponent_name": "Sweden",
+      "kickoff_at": "2026-11-14T19:45Z",
+      "retention_path": "workspace-updates/20261115-remaining-nations-brazil/remaining-evidence.tar.gz",
+      "review_method": "Exact country/club identity, same opponent, competition, side and kickoff; no fuzzy matching; review time gates future use only."
+    }
+  },
+  {
+    "version": "brazil-team-alias-20261115-1",
+    "reviewed_at": "2026-11-14T18:51:10.870922+00:00",
+    "provider": "the-odds-api",
+    "sport_key": "soccer_brazil_campeonato",
+    "cohort": "bra.1",
+    "phase": "regular",
+    "teams": [
+      {
+        "espn_id": "7632",
+        "espn_name": "Atlético-MG",
+        "provider_name": "Atletico Mineiro"
+      }
+    ],
+    "evidence": {
+      "raw_odds_sha256": "b147bef28240afac9f35e918d2b3b76cc2e2289cd89e2b2ac5fee706e5765a0d",
+      "identity_sha256": "b877bf23f38f1ba82c87421ded77a52a0340e00a2065cfd5dee08bb34681ef90",
+      "odds_source_url": "https://api.the-odds-api.com/v4/sports/soccer_brazil_campeonato/odds/?regions=eu&markets=h2h%2Ctotals&oddsFormat=decimal",
+      "identity_source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/scoreboard?dates=20261114",
+      "source_event_id": "401841311",
+      "provider_event_id": "60e79364c168ad0ad22c0cffc02be8a9",
+      "opponent_espn_id": "9169",
+      "opponent_name": "Mirassol",
+      "kickoff_at": "2026-11-14T21:30Z",
+      "retention_path": "workspace-updates/20261115-remaining-nations-brazil/remaining-evidence.tar.gz",
+      "review_method": "Exact country/club identity, same opponent, competition, side and kickoff; no fuzzy matching; review time gates future use only."
+    }
+  }
+]

@@ -9,9 +9,9 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 if __package__:
-    from .market_snapshot import ALIAS_REVIEW, ESPN, ODDS, NoRedirect, build, collect, fetch
+    from .market_snapshot import ALIAS_REVIEW, ADDITIONAL_ALIAS_REVIEWS, ESPN, ODDS, NoRedirect, build, collect, fetch, team_identity
 else:
-    from market_snapshot import ALIAS_REVIEW, ESPN, ODDS, NoRedirect, build, collect, fetch
+    from market_snapshot import ALIAS_REVIEW, ADDITIONAL_ALIAS_REVIEWS, ESPN, ODDS, NoRedirect, build, collect, fetch, team_identity
 
 
 class MarketSnapshotTests(unittest.TestCase):
@@ -287,6 +287,51 @@ class MarketSnapshotTests(unittest.TestCase):
     def test_exact_matches_have_no_alias_metadata_added_to_observations(self):
         row = self.run_case()['snapshots'][0]['observations'][0]
         self.assertNotIn('identity_alias_review', row)
+
+    def test_brazil_calendar_season_is_regular_but_cup_and_wrong_year_are_not(self):
+        def setup(o, b):
+            b['leagues'][0]['slug'] = 'bra.1'
+            b['events'][0]['season'] = {'year': 2026, 'slug': '2026-brasileiro-serie-a'}
+            o[0]['sport_key'] = 'soccer_brazil_campeonato'
+        result = self.run_case(setup, competition='bra.1')
+        self.assertEqual(result['covered_fixture_count'], 1)
+        self.assertEqual(result['snapshots'][0]['target']['cohort'], 'bra.1')
+        self.assertEqual(result['snapshots'][0]['target']['stage'], 'regular')
+        for season in ({'year':2026,'slug':'2026-copa-do-brasil'},
+                       {'year':2025,'slug':'2025-brasileiro-serie-a'},
+                       {'slug':'2026-brasileiro-serie-a'}):
+            def bad(o,b):
+                setup(o,b); b['events'][0]['season'] = season
+            self.assertFalse(self.run_case(bad, competition='bra.1')['market_model_ready'])
+
+    def test_new_aliases_keep_scope_id_and_review_time_boundaries(self):
+        for review in ADDITIONAL_ALIAS_REVIEWS:
+            rule = review['teams'][0]
+            team = {'id':rule['espn_id'], 'displayName':rule['espn_name']}
+            args = (team, rule['provider_name'], '2026-11-15T00:00:00Z', review['cohort'])
+            self.assertEqual(team_identity(*args), rule)
+            self.assertIsNone(team_identity(team,rule['provider_name'],'2026-11-14T12:00:00Z',review['cohort']))
+            self.assertIsNone(team_identity(dict(team,id='999'),*args[1:]))
+            other = 'bra.1' if review['cohort']=='uefa.nations' else 'uefa.nations'
+            self.assertIsNone(team_identity(team,rule['provider_name'],args[2],other))
+
+    def test_new_alias_snapshot_records_its_own_review_not_the_old_catalog(self):
+        for review in ADDITIONAL_ALIAS_REVIEWS:
+            rule = review['teams'][0]
+            def setup(o,b):
+                b['leagues'][0]['slug'] = review['cohort']
+                event=b['events'][0]; event['date']='2026-11-14T23:30:00Z'
+                event['season'] = ({'year':2026,'slug':'2026-brasileiro-serie-a'}
+                                   if review['cohort']=='bra.1' else {'slug':'league-phase'})
+                event['competitions'][0]['competitors'][1]['team'].update(id=rule['espn_id'],displayName=rule['espn_name'])
+                o[0].update(sport_key=review['sport_key'],commence_time=event['date'],away_team=rule['provider_name'])
+                o[0]['bookmakers'][0]['markets'][0]['last_update']='2026-11-14T19:00:00Z'
+            result=self.run_case(setup,now=datetime(2026,11,14,19,0,30,tzinfo=timezone.utc),captured_at='2026-11-14T19:00:20Z',competition=review['cohort'])
+            self.assertEqual(result['covered_fixture_count'],1)
+            evidence=result['snapshots'][0]['observations'][0]['identity_alias_review']
+            self.assertEqual(evidence['review_version'],review['version'])
+            self.assertEqual(evidence['reviewed_at'],review['reviewed_at'])
+            self.assertEqual(evidence['teams']['away'],rule)
 
 
 if __name__ == '__main__':
