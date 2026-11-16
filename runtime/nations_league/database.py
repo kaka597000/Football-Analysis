@@ -196,7 +196,7 @@ def normalize_capture(row, raw_root, raw_cache=None):
         if neutral is not None and type(neutral) is not bool: raise ValueError('invalid raw neutral flag')
         phase = _phase(raw if kind=='summary' else event)
         supplemental=row.get('supplemental_phase_evidence')
-        if kind=='summary' and supplemental and not phase.get('complete'):
+        if kind=='summary' and supplemental:
             extra_path=Path(supplemental['source_path'])
             if not extra_path.is_absolute() or not extra_path.resolve().is_relative_to(Path(raw_root).resolve()):
                 raise ValueError('supplemental raw path outside allowed root')
@@ -296,7 +296,14 @@ def import_captures(path,rows,raw_root):
                     if str(raw_path) not in raw_state:
                         raw_state[str(raw_path)]=hashlib.sha256(raw_path.read_bytes()).hexdigest() if raw_path.is_file() and raw_path.resolve().is_relative_to(Path(raw_root).resolve()) else None
         # Evidence dependencies are part of idempotency, including actual bytes.
-        run_id=digest(['nations-import-v1',input_hash,digest(prepared),raw_state])
+        # A corrected evidence parser must be able to revalidate the same raw
+        # captures. Otherwise an old incomplete import masks repaired parsing.
+        try:
+            from runtime.research_program import nations_phase as phase_verifier
+        except ModuleNotFoundError:
+            from research_program import nations_phase as phase_verifier
+        parser_sha=hashlib.sha256(Path(phase_verifier.__file__).read_bytes()).hexdigest()
+        run_id=digest(['nations-import-v2',input_hash,digest(prepared),raw_state,parser_sha])
         existing=c.execute('SELECT counts_json FROM import_runs WHERE run_id=?',(run_id,)).fetchone()
         if existing: return {'run_id':run_id,'idempotent':True,'original_counts':json.loads(existing[0])}
         with c:

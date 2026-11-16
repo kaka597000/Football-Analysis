@@ -4,6 +4,7 @@ Provider group-stage and league-A/B/C/D are one league-phase with a separate
 league_level. Unknown grades, playoff pairings and phases remain unclassified.
 """
 from datetime import datetime, timezone, timedelta
+import copy
 import gzip
 import hashlib
 import json
@@ -95,6 +96,16 @@ def _labels(payload):
         item=comp.get(name) or {}
         if isinstance(item,dict):
             for key in ('name','text','title','abbreviation'):add('competitions[0].'+name+'.'+key,item.get(key))
+    # ESPN's retained 2024 summaries use plural `groups`, commonly an object,
+    # for the explicit grade (GROUP C3 / LEAGUE A - GROUP 4). Read the actual
+    # label, never infer a grade from opaque group IDs or present-day teams.
+    groups=comp.get('groups') or []
+    if isinstance(groups,dict):groups=[groups]
+    if not isinstance(groups,list):raise TypeError('malformed source groups')
+    for i,item in enumerate(groups):
+        if not isinstance(item,dict):raise TypeError('malformed source group')
+        for key in ('name','text','title','abbreviation'):
+            add(f'competitions[0].groups[{i}].{key}',item.get(key))
     for i,note in enumerate(comp.get('notes') or []):
         if isinstance(note,dict):add(f'competitions[0].notes[{i}].headline',note.get('headline'))
     return fields
@@ -206,6 +217,40 @@ def resolve_phase_evidence(summary,supplemental=None,context=None):
     years=[event.get('season',{}).get('year') for event in (primary,other)]
     if None not in years and years[0]!=years[1]:raise ValueError('supplemental season mismatch')
     extra=classify_source_phase(other)
+    reconciled=[]
+    if (base.get('phase_conflict') or base.get('league_level_conflict')
+            or any(base.get(k) is not None and extra.get(k) is not None and base[k]!=extra[k]
+                   for k in ('stage','league_level'))):
+        # Historical ESPN summaries sometimes attach a reused groups.id label
+        # or the terminal display text "UEFA Nations League, FINAL". Resolve
+        # these only when the summary's edition-specific season AND the exact
+        # same-event scoreboard independently agree. Never trust team membership
+        # or discard a conflict between two season-specific sources.
+        scoped=copy.deepcopy(primary)
+        scoped_comp=scoped['competitions'][0]
+        for key in ('groups','group','altGameNote','notes','type','series'):
+            scoped_comp.pop(key,None)
+        season=classify_source_phase(scoped)
+        cleaned=copy.deepcopy(primary)
+        cleaned['competitions'][0].pop('groups',None)
+        display=cleaned['competitions'][0].get('altGameNote','')
+        if re.fullmatch(r'UEFA Nations League,\s*(?:UEFA NATIONS LEAGUE\s*-\s*)?(?:FINAL|RELEGATION PLAYOFFS)',display,re.I):
+            cleaned['competitions'][0].pop('altGameNote',None)
+        cleaned_phase=classify_source_phase(cleaned)
+        known=[key for key in ('stage','league_level') if season.get(key) is not None]
+        grade_conflict=(base.get('league_level_conflict') or
+            (base.get('league_level') is not None and extra.get('league_level') is not None
+             and base['league_level']!=extra['league_level']))
+        agrees=(bool(known) and not season.get('phase_conflict')
+                and not season.get('league_level_conflict') and extra.get('complete')
+                and (not grade_conflict or cleaned_phase.get('league_level')==extra['league_level'])
+                and all(season[key]==extra[key] for key in known)
+                and not cleaned_phase.get('phase_conflict') and not cleaned_phase.get('league_level_conflict')
+                and all(cleaned_phase.get(key) in (None,extra[key]) for key in ('stage','league_level')))
+        if agrees:
+            reconciled=[f for f in base['source_fields'] if f not in cleaned_phase['source_fields']]
+            base={**extra,'source_fields':cleaned_phase['source_fields'],
+                  'phase_conflict':False,'league_level_conflict':False}
     for parsed in (base,extra):
         if parsed.get('phase_conflict') or parsed.get('league_level_conflict'):
             raise ValueError('conflicting raw phase/league evidence')
@@ -223,6 +268,8 @@ def resolve_phase_evidence(summary,supplemental=None,context=None):
     return {**joined,'complete':not reasons,'reasons':reasons,'source_fields':base['source_fields'],
             'supplemental_phase_evidence':proof,'supplemental_source_fields':extra['source_fields'],
             'phase_join':'EXACT_EVENT_TEAMS_KICKOFF; summary remains the score source',
+            'reconciled_unscoped_summary_metadata':reconciled,
+            'reconciliation_basis':'SUMMARY_EDITION_SEASON_AND_EXACT_SCOREBOARD_AGREE' if reconciled else None,
             'phase_conflict':False,'league_level_conflict':False}
 
 

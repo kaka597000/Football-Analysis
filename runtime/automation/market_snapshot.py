@@ -58,24 +58,36 @@ ALIAS_REVIEW = {
         {'espn_id': '450', 'espn_name': 'Czechia', 'provider_name': 'Czech Republic'},
     ],
 }
+ADDITIONAL_ALIAS_REVIEW = {
+    'version': 'nations-bosnia-20261116-1', 'reviewed_at': '2026-11-16T09:30:46+00:00',
+    'provider': 'the-odds-api', 'sport_key': 'soccer_uefa_nations_league',
+    'cohort': 'uefa.nations', 'phase': 'league-phase',
+    'raw_odds_sha256': 'ea1b3bbaa14d2444b1eeb987e9f6b0d1bdd38da136f901a75ad8c1611b24f38e',
+    'identity_sha256': '23cc80dddf22b193ae9643cc2e6e556a4f6701e9d35bac74227788c79f88331a',
+    'review_event': {'espn_id':'401861196','provider_id':'3eb1d15a190bb1be8c32a020365dc7c2',
+                     'home_id':'452','away_id':'473','kickoff_at':'2026-11-17T19:45:00Z'},
+    'teams': [{'espn_id':'452','espn_name':'Bosnia-Herzegovina','provider_name':'Bosnia & Herzegovina'}],
+}
+ALIAS_REVIEWS = (ALIAS_REVIEW, ADDITIONAL_ALIAS_REVIEW)
+ALIAS_REGISTRY = {'version':'nations-alias-registry-20261116-1','reviews':list(ALIAS_REVIEWS)}
 ALIAS_REVIEW_SHA256 = hashlib.sha256(json.dumps(
-    ALIAS_REVIEW, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+    ALIAS_REGISTRY, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
 def team_identity(team, provider_name, cutoff):
     """Return match evidence, or None. A reviewed name never admits another ID."""
-    relevant = [rule for rule in ALIAS_REVIEW['teams']
+    relevant = [(rule,review) for review in ALIAS_REVIEWS for rule in review['teams']
                 if provider_name in (rule['provider_name'], rule['espn_name'])
                 or team['displayName'] in (rule['provider_name'], rule['espn_name'])]
     if relevant:
-        if len(relevant) != 1 or team['id'] != relevant[0]['espn_id']:
+        if len(relevant) != 1 or team['id'] != relevant[0][0]['espn_id']:
             return None
-        rule = relevant[0]
+        rule,review = relevant[0]
         if team['displayName'] != rule['espn_name']:
             return None
         if provider_name == rule['espn_name']:
             return {}
-        if provider_name == rule['provider_name'] and aware(ALIAS_REVIEW['reviewed_at']) <= aware(cutoff):
+        if provider_name == rule['provider_name'] and aware(review['reviewed_at']) <= aware(cutoff):
             return dict(rule)
         return None
     return {} if provider_name == team['displayName'] else None
@@ -160,9 +172,11 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
             excluded['missing_or_ambiguous_identity'] += 1
             continue
         source, aliases = matched[0]
-        alias_evidence = ({'review_version': ALIAS_REVIEW['version'],
+        used_reviews=[r for r in ALIAS_REVIEWS if any(rule in r['teams'] for rule in aliases.values())]
+        alias_evidence = ({'review_version': ALIAS_REGISTRY['version'],
                            'review_sha256': ALIAS_REVIEW_SHA256,
-                           'reviewed_at': ALIAS_REVIEW['reviewed_at'], 'teams': aliases,
+                           'reviewed_at': max((r['reviewed_at'] for r in used_reviews),key=aware),
+                           'used_reviews':used_reviews, 'teams': aliases,
                            'provider_source_names': {side: source[side + '_team'] for side in ('home', 'away')},
                            'identity_source_names': {side: sides[side]['displayName'] for side in ('home', 'away')}}
                           if aliases else None)
@@ -253,7 +267,7 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
             'coverage_scope': f'ESPN {competition} {stage} future fixtures on requested UTC day',
             'source_odds_events': len(odds), 'market_max_age_seconds': market_max_age_seconds,
             'excluded': dict(excluded), 'identity_mappings': mappings, 'snapshots': snapshots,
-            'identity_alias_review': dict(ALIAS_REVIEW, sha256=ALIAS_REVIEW_SHA256),
+            'identity_alias_review': dict(ALIAS_REGISTRY, sha256=ALIAS_REVIEW_SHA256),
             'tls_verification_disabled': False, 'active_model_changed': False,
             'quote_time_inferred_from_capture': False}
 

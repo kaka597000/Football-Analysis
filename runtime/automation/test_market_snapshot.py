@@ -261,6 +261,16 @@ class MarketSnapshotTests(unittest.TestCase):
         for rule in ALIAS_REVIEW['teams']:
             self.assertFalse(self.alias_case(rule, before_review=True)['market_model_ready'])
 
+    def test_bosnia_alias_has_its_own_review_time_and_exact_team_id(self):
+        if __package__:
+            from .market_snapshot import team_identity
+        else:
+            from market_snapshot import team_identity
+        team={'id':'452','displayName':'Bosnia-Herzegovina'}
+        self.assertIsNone(team_identity(team,'Bosnia & Herzegovina','2026-11-15T12:00:00Z'))
+        self.assertEqual(team_identity(team,'Bosnia & Herzegovina','2026-11-16T10:00:00Z')['espn_id'],'452')
+        self.assertIsNone(team_identity({**team,'id':'999'},'Bosnia & Herzegovina','2026-11-16T10:00:00Z'))
+
     def test_alias_rejects_wrong_id_name_opponent_side_time_competition_and_phase(self):
         rule = ALIAS_REVIEW['teams'][0]
         mutations = [
