@@ -54,6 +54,51 @@ class NationsPhaseTests(unittest.TestCase):
         for slug in ('regular','friendly','qualification','unknown'):
             r=classify_source_phase(event(slug,'UEFA Nations League'));self.assertFalse(r['complete']);self.assertIsNone(r['stage'])
 
+    def test_plural_groups_grade_proof_and_conflicts(self):
+        for groups,grade in [({'name':'GROUP C3'},'C'),
+                             ([{'name':'LEAGUE A - GROUP 4'}],'A')]:
+            raw=event('group-stage','UEFA Nations League')
+            raw['competitions'][0]['groups']=groups
+            result=classify_source_phase(raw)
+            self.assertTrue(result['complete']);self.assertEqual(result['league_level'],grade)
+            self.assertTrue(any('groups[' in f['path'] for f in result['source_fields']))
+        raw['competitions'][0]['groups']=[{'name':'League A'},{'name':'League B'}]
+        self.assertTrue(classify_source_phase(raw)['league_level_conflict'])
+        raw['competitions'][0]['groups']={'groupId':'A1','name':'GROUP A'}
+        self.assertFalse(classify_source_phase(raw)['complete'])
+        raw['competitions'][0]['groups']={'name':'League A'}
+        raw['season']['slug']='quarterfinals'
+        self.assertEqual(classify_source_phase(raw)['stage'],'quarterfinals')
+
+    def test_historical_unscoped_group_requires_matching_edition_and_scoreboard(self):
+        from research_program.nations_phase import resolve_phase_evidence
+        with tempfile.TemporaryDirectory() as root:
+            raw=event('league-d','UEFA Nations League, FINAL')
+            raw['league']={'slug':'uefa.nations'}
+            raw['competitions'][0]['groups']={'id':'1','name':'LEAGUE A - GROUP 1'}
+            self.assertFalse(classify_source_phase(raw)['complete'])
+            evidence=self.supplemental(root,event('league-d','LEAGUE D - GROUP 1'))
+            fixed=resolve_phase_evidence(raw,evidence)
+            self.assertTrue(fixed['complete']);self.assertEqual(fixed['league_level'],'D')
+            self.assertEqual(fixed['stage'],'league-phase')
+            self.assertTrue(fixed['reconciled_unscoped_summary_metadata'])
+            raw['competitions'][0]['altGameNote']='UEFA Nations League, Relegation Playoffs'
+            self.assertTrue(resolve_phase_evidence(raw,evidence)['complete'])
+            conflict=copy.deepcopy(raw)
+            conflict['competitions'][0]['altGameNote']='UEFA Nations League, League B'
+            with self.assertRaises(ValueError):resolve_phase_evidence(conflict,evidence)
+            bad=self.supplemental(root,event('league-a','LEAGUE A - GROUP 1'))
+            with self.assertRaises(ValueError):resolve_phase_evidence(raw,bad)
+            evidence=self.supplemental(root,event('league-d','LEAGUE D - GROUP 1'))
+            raw['season']['slug']='final'
+            with self.assertRaises(ValueError):resolve_phase_evidence(raw,evidence)
+            # Generic edition phase alone cannot adjudicate two grade labels.
+            raw['season']['slug']='group-stage'
+            raw['competitions'][0]['altGameNote']='UEFA Nations League'
+            with self.assertRaises(ValueError):resolve_phase_evidence(raw,evidence)
+            raw['competitions'][0]['altGameNote']='UEFA Nations League, Group D1'
+            self.assertTrue(resolve_phase_evidence(raw,evidence)['complete'])
+
     def test_conflicting_source_phase_or_grade_refused(self):
         raw=event('group-stage','League A Quarterfinals')
         self.assertFalse(classify_source_phase(raw)['complete'])

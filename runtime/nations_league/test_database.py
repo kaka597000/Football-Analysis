@@ -40,6 +40,16 @@ class DatabaseTests(unittest.TestCase):
         board,_=self.capture(kind='scoreboard');summary,_=self.capture(query='2026-01-03T00:00:00Z')
         self.insert([board]);self.assertEqual(self.event()['training_eligible'],0)
         self.insert([summary]);self.assertEqual(self.event()['training_eligible'],1);self.assertEqual(db.stats(self.path)['counts']['observations'],2)
+
+    def test_plural_group_evidence_restores_real_grade_without_invented_labels(self):
+        row,raw=self.capture(phase='2024-25 UEFA Nations League, Group Stage')
+        raw['header']['competitions'][0]['groups']={'name':'LEAGUE B - GROUP 2'}
+        p=Path(row['raw_path']);p.write_text(json.dumps(raw))
+        row['raw_sha256']=hashlib.sha256(p.read_bytes()).hexdigest()
+        self.insert([row]);self.assertEqual(self.event()['league_level'],'B')
+        self.assertEqual(self.event()['training_eligible'],1)
+        out=self.root/'restored.json';db.export(self.path,out,'league-phase','B')
+        self.assertEqual(len(json.loads(out.read_text())['rows']),1)
     def test_missing_raw_is_inventory_and_later_raw_can_be_imported(self):
         row,raw=self.capture();path=Path(row['raw_path']);body=path.read_bytes();path.unlink()
         self.insert([row]);self.assertEqual(self.event()['training_eligible'],0);self.assertIsNone(self.event()['home_90'])
