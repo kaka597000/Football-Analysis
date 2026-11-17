@@ -261,6 +261,16 @@ class MarketSnapshotTests(unittest.TestCase):
         for rule in ALIAS_REVIEW['teams']:
             self.assertFalse(self.alias_case(rule, before_review=True)['market_model_ready'])
 
+    def test_bosnia_alias_has_its_own_review_time_and_exact_team_id(self):
+        if __package__:
+            from .market_snapshot import team_identity
+        else:
+            from market_snapshot import team_identity
+        team={'id':'452','displayName':'Bosnia-Herzegovina'}
+        self.assertIsNone(team_identity(team,'Bosnia & Herzegovina','2026-11-15T12:00:00Z'))
+        self.assertEqual(team_identity(team,'Bosnia & Herzegovina','2026-11-16T10:00:00Z')['espn_id'],'452')
+        self.assertIsNone(team_identity({**team,'id':'999'},'Bosnia & Herzegovina','2026-11-16T10:00:00Z'))
+
     def test_alias_rejects_wrong_id_name_opponent_side_time_competition_and_phase(self):
         rule = ALIAS_REVIEW['teams'][0]
         mutations = [
@@ -287,6 +297,20 @@ class MarketSnapshotTests(unittest.TestCase):
     def test_exact_matches_have_no_alias_metadata_added_to_observations(self):
         row = self.run_case()['snapshots'][0]['observations'][0]
         self.assertNotIn('identity_alias_review', row)
+
+    def test_nations_registry_remains_pr39_and_cannot_cross_competition(self):
+        from automation.market_snapshot import (ALIAS_REGISTRY, ALIAS_REVIEW_SHA256,
+                                                alias_registry, review_sha)
+        self.assertEqual(alias_registry('uefa.nations'), ALIAS_REGISTRY)
+        self.assertEqual(review_sha(ALIAS_REGISTRY), ALIAS_REVIEW_SHA256)
+        self.assertEqual(ALIAS_REVIEW_SHA256,
+                         '9dcd2ea9e399208f12bdeea51dd7d1b5c22f7b99c412d7503a2ea384e2fb1b3f')
+        self.assertEqual([r['version'] for r in ALIAS_REGISTRY['reviews']],
+                         ['nations-national-teams-20261112-1', 'nations-bosnia-20261116-1'])
+        self.assertEqual(ALIAS_REGISTRY['reviews'][1]['reviewed_at'], '2026-11-16T09:30:46+00:00')
+        team = {'id': '452', 'displayName': 'Bosnia-Herzegovina'}
+        self.assertIsNone(team_identity(team, 'Bosnia & Herzegovina', '2026-11-17T00:00:00Z', 'bra.1'))
+        self.assertEqual([r['cohort'] for r in ADDITIONAL_ALIAS_REVIEWS], ['bra.1'])
 
     def test_brazil_calendar_season_is_regular_but_cup_and_wrong_year_are_not(self):
         def setup(o, b):
@@ -329,9 +353,10 @@ class MarketSnapshotTests(unittest.TestCase):
             result=self.run_case(setup,now=datetime(2026,11,14,19,0,30,tzinfo=timezone.utc),captured_at='2026-11-14T19:00:20Z',competition=review['cohort'])
             self.assertEqual(result['covered_fixture_count'],1)
             evidence=result['snapshots'][0]['observations'][0]['identity_alias_review']
-            self.assertEqual(evidence['review_version'],review['version'])
+            self.assertEqual(evidence['used_reviews'],[review])
             self.assertEqual(evidence['reviewed_at'],review['reviewed_at'])
             self.assertEqual(evidence['teams']['away'],rule)
+            self.assertEqual(evidence['review_sha256'],result['identity_alias_review']['sha256'])
 
 
 if __name__ == '__main__':

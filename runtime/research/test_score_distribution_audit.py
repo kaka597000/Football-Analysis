@@ -103,6 +103,31 @@ class DistributionAuditTests(unittest.TestCase):
         payload['selection_evidence']=[]
         with self.assertRaises(ValueError): comprehensive_audit(payload,pair)
 
+    def test_new_policy_requires_counterevidence_for_third_direction_and_totals(self):
+        pair={k:poisson_pair() for k in ('current_model','test_model')}
+        payload={'primary':'1-1','wdl':'平局','total_direction':'小',
+                 'decision_policy_version':'WCPP-COMPREHENSIVE-REPAIR-1',
+                 'override_validation_status':'UNVALIDATED_MANUAL_RESEARCH',
+                 'selection_evidence':self.evidence()}
+        before=copy.deepcopy(pair)
+        audit=comprehensive_audit(payload,pair)
+        self.assertTrue(audit['direction_disagrees_with_all_referenced_models'])
+        self.assertIn('WDL_EVIDENCE_SUPPORT_AND_COUNTEREVIDENCE',audit['missing_comparisons'])
+        self.assertIn('TOTAL_EVIDENCE_SUPPORT_AND_COUNTEREVIDENCE',audit['missing_comparisons'])
+        for key in ('wdl_evidence','total_evidence'):
+            payload['selection_evidence'][key]={'reason':'synthetic separate evidence',
+                                              'counterevidence':'synthetic opposing evidence'}
+        self.assertTrue(comprehensive_audit(payload,pair)['top3_ready'])
+        self.assertEqual(pair,before);self.assertEqual(payload['primary'],'1-1')
+
+    def test_score_draw_does_not_force_draw_direction(self):
+        prediction={'primary':'1-1','matrix':[[.01,.01,.01],[.2,.25,.03],[.2,.24,.05]]}
+        pair={k:copy.deepcopy(prediction) for k in ('current_model','test_model')}
+        payload={'primary':'1-1','wdl':'主胜','selection_evidence':self.evidence()}
+        out=comprehensive_audit(payload,pair)
+        self.assertTrue(out['point_score_does_not_determine_wdl'])
+        self.assertFalse(out['direction_disagrees_with_all_referenced_models'])
+
     def fixture(self):
         now=datetime.now(timezone.utc)
         return {'match_id':'synthetic-audit-test',

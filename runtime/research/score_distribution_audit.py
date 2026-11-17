@@ -14,7 +14,8 @@ try:
 except ImportError:
     from team_goal_analysis import summarize_prediction
 
-VERSION = 'WCPP-SCORE-DISTRIBUTION-AUDIT-0.2'
+VERSION = 'WCPP-SCORE-DISTRIBUTION-AUDIT-0.3'
+DECISION_POLICY = 'WCPP-COMPREHENSIVE-REPAIR-1'
 PAIR_DIAGNOSTIC_VERSION = 'WCPP-CURRENT-TEST-DISAGREEMENT-0.1'
 RESEARCH_SCOPE = 'candidate_research'
 
@@ -200,8 +201,40 @@ def comprehensive_audit(payload, pair):
         missing.append('ACTUAL_LINE_DIRECTION_REASON_INDEPENDENT_OF_POINT_SCORE')
     if any(a['comprehensive_selection']['status']!='IN_MATRIX' for a in available):
         missing.append('PRIMARY_OUTSIDE_REFERENCED_MATRIX_SUPPORT')
+    directions={}
+    for name in audits:
+        if audits[name]['status']!='AVAILABLE':continue
+        m=np.asarray(pair[name]['matrix'],float);h,a=np.indices(m.shape)
+        probabilities=dict(zip(('主胜','平局','客胜'),
+            map(float,(m[h>a].sum(),m[h==a].sum(),m[h<a].sum()))))
+        chosen=payload.get('wdl')
+        directions[name]={'model_direction':max(probabilities,key=probabilities.get),
+                          'model_probabilities':probabilities,
+                          'comprehensive_direction':chosen,
+                          'selected_direction_model_probability':probabilities.get(chosen)}
+    unsupported_direction=(payload.get('wdl') in ('主胜','平局','客胜') and directions
+        and payload['wdl'] not in {v['model_direction'] for v in directions.values()})
+    policy=payload.get('decision_policy_version')
+    policy_checks=[]
+    if policy not in (None,DECISION_POLICY):raise ValueError('unknown comprehensive decision policy')
+    if policy==DECISION_POLICY:
+        for name,required in [('wdl_evidence',bool(unsupported_direction)),
+                              ('total_evidence',payload.get('total_direction') in ('大','小'))]:
+            entry=details.get(name,{})
+            if required and (not isinstance(entry,dict) or any(
+                    not isinstance(entry.get(k),str) or not entry[k].strip()
+                    for k in ('reason','counterevidence'))):
+                policy_checks.append(name.upper()+'_SUPPORT_AND_COUNTEREVIDENCE')
+        # This records manual discretion, without inventing learned weights or
+        # automatically substituting a model direction for the user's judgement.
+        if payload.get('override_validation_status')!='UNVALIDATED_MANUAL_RESEARCH':
+            policy_checks.append('EXPLICIT_UNVALIDATED_MANUAL_OVERRIDE_STATUS')
+        missing.extend(policy_checks)
     return {'version': VERSION, 'status':'NEEDS_COMPARISON' if missing else 'COMPARISONS_DOCUMENTED',
             'top3_ready':not missing,'models':audits,'missing_comparisons':missing,
+            'decision_policy_version':policy,'independent_wdl_comparison':directions,
+            'direction_disagrees_with_all_referenced_models':bool(unsupported_direction),
+            'point_score_does_not_determine_wdl':True,
             'completeness_is_not_accuracy_evidence':True,
             'numeric_output_modified':False,'primary_reordered':False}
 

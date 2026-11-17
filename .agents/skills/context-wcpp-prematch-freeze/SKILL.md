@@ -11,4 +11,5 @@ description: 在WCPP项目进行足球赛前分析、独立双模型调用、综
 4. 使用同场同输入运行 `python runtime/predict_active.py FIXTURE.json --out NEW_PAIR.json`。此CLI会写冻结；仅限已经核验的真实未来比赛，软件合成测试不得使用此发布入口。调用失败时保存错误和双模型不可用状态，按冻结规则保留覆盖分母。
 5. 分别审查双方进球路径、近期状态/过程、人员、赛制、全赛事负荷及反证，最后核实市场。遵守[市场与阵容规则](../../../docs/market-and-lineup-policy.md)：没有正式首发不自动阻断；重大未解决人员风险保留待定。没有矩阵不编概率，单场射门不改称xG，不能仅把矩阵最大格子改名为综合第一比分。
 6. 综合输入封装为 `fixture` 和 `payload`，引用真实双模型冻结回执，保存原文、候选比较、反证、来源、版本、截止和缺项。运行 `python runtime/research/analysis_freeze.py NEW_ANALYSIS.json --stage prematch --track comprehensive`。TOP3使用同模块 `--track top3-selection`，只纳入实际合格记录，不足不凑；名单可以为空。
+   欧国联后续综合分析使用 [2026-11-16 修复协议](../../../docs/nations-repair-20261116.md) 的 `WCPP-COMPREHENSIVE-REPAIR-1`，分别保存人工胜平负及实盘大小球理由/反证，不能从点比分推导方向；新刷新和新算法候选尚未晋级。
 7. 发布前读回回执并验证哈希，显示冻结ID和北京时间。后续修订追加，不覆盖首次记录。按[版本管理](../../../docs/version-management.md)推送和核验远端；按[存储分工](../../../docs/football-storage-and-skills.md)准备报告副本。冻结不意味着模型晋级。
