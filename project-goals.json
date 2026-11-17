@@ -86,7 +86,7 @@
     "primary_metric_unchanged": "future_frozen_primary_exact_score_top1",
     "policy": "docs/asia-leagues-ood-research-tracks.md"
   },
-  "reconfirmed_at": "2026-11-12",
+  "reconfirmed_at": "2026-11-17",
   "continuous_optimization": {
     "status": "LONG_TERM_OBJECTIVE_CONFIRMED",
     "mission": "持续优化分析模型，提高胜平负、实际盘口大小球及唯一第一推荐比分的未来真实命中率",
@@ -141,6 +141,33 @@
       "source_backed_features_and_market_experts",
       "nested_temporal_fusion_calibration_selector",
       "prospective_review_and_validated_evolution"
+    ]
+  },
+  "research_execution": {
+    "confirmed_at": "2026-11-17",
+    "mode": "EXPERIMENT_FIRST",
+    "policy": "docs/research-execution-20261117.md",
+    "priority": [
+      "primary_exact_score",
+      "wdl",
+      "actual_line_totals"
+    ],
+    "optional_missing_features": "declared baseline fallback; retain population and coverage",
+    "provider_field_conflicts": "parallel variants and sensitivity comparison, not an automatic batch veto",
+    "estimated_features": "allowed in provenance-labelled research",
+    "start_experiments_before_promotion_requirements": true,
+    "required_integrity": [
+      "fixture_identity",
+      "regulation_score_basis",
+      "chronological_training",
+      "immutable_prior_forecasts",
+      "artifact_integrity"
+    ],
+    "deliverables": [
+      "real_data",
+      "executed_comparison",
+      "next_prospective_capture",
+      "repository_sync"
     ]
   }
 }
