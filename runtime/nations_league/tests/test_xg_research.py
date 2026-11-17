@@ -1,6 +1,9 @@
 import copy
 from datetime import date, timedelta
+from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 
@@ -92,6 +95,37 @@ class XgResearchTests(unittest.TestCase):
         self.assertIsNone(missing['total_settlement'])
         self.assertEqual(quoted['primary'], missing['primary'])
         self.assertEqual(xg.summarize([quoted, missing])['actual_line_n'], 1)
+
+    def test_quote_cannot_replace_verified_neutral_match_context(self):
+        rows = history()
+        core = xg.fit(rows[:60], {}, xg.ARMS[0])
+        core['home_advantage'] = .7
+        target = {**rows[60], 'neutral': True}
+        quote = {k: v for k, v in target.items() if k != 'neutral'}
+        quote['cutoff_at'] = target['date']+'T17:00:00+00:00'
+        before = xg.historical_record(core, target, None)
+        after = xg.historical_record(core, target, quote)
+        self.assertEqual(before['matrix_hash'], after['matrix_hash'])
+        quote['kickoff_at'] = target['date']+'T19:00:00+00:00'
+        with self.assertRaises(ValueError):
+            xg.historical_record(core, target, quote)
+
+    def test_changed_numerical_dependency_cannot_reuse_artifact_identity(self):
+        dependencies = xg.dependency_identity()
+        self.assertIn('nations_league/repair.py', dependencies)
+        self.assertIn('v2/model.py', dependencies)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'artifact.json'
+            artifact = {'engine_sha256': xg.repair.sha(xg.__file__),
+                        'dependencies': dependencies, 'protocol_sha256': 'protocol'}
+            xg.repair.write(path, artifact)
+            index = {'protocol_sha256': 'protocol', 'selected': {'A': 'goals'},
+                     'routes': {'A': {'goals': {'path': str(path), 'sha256': xg.repair.sha(path)}}}}
+            fixture = {'match_id': 'future', 'league_level': 'A', 'kickoff_at': '2126-01-01T00:00:00+00:00'}
+            changed = {**dependencies, 'v2/model.py': 'changed'}
+            with patch.object(xg, 'dependency_identity', return_value=changed):
+                with self.assertRaisesRegex(ValueError, 'artifact/engine/protocol'):
+                    xg.freeze_forward(index, [fixture], Path(tmp)/'forward', Path(tmp)/'freezes')
 
 
 if __name__ == '__main__':

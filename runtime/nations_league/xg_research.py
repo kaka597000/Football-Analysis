@@ -28,6 +28,17 @@ def now():
     return datetime.now(timezone.utc).isoformat()
 
 
+def dependency_identity():
+    from . import repair_forward
+    from research import analysis_freeze
+    from research_program import future_validation
+    from v2 import model as strength
+    root = Path(__file__).resolve().parents[1]
+    modules = (__file__, repair.__file__, repair_forward.__file__, strength.__file__,
+               analysis_freeze.__file__, future_validation.__file__)
+    return {str(Path(path).resolve().relative_to(root)): repair.sha(path) for path in modules}
+
+
 def index_xg(records, history):
     """Join on actual fixture identity, never names or array position."""
     canonical = {r['match_id']: r for r in history}
@@ -142,7 +153,12 @@ def prediction(core, fixture, version, artifact_sha256=None):
 def historical_record(core, row, quote_fixture):
     # These predictions are generated now. Original quote timestamps describe
     # the archived market, not a fictitious historical prediction timestamp.
-    fixture = quote_fixture or row
+    fixture = dict(row)
+    if quote_fixture:
+        if (any(quote_fixture[k] != row[k] for k in ('match_id', 'home', 'away', 'cohort'))
+                or aware(quote_fixture['kickoff_at']) != aware(row['kickoff_at'])):
+            raise ValueError('archived quote fixture mismatch')
+        fixture.update(total_quote=quote_fixture.get('total_quote'), cutoff_at=quote_fixture['cutoff_at'])
     p = prediction(core, fixture, core['blend']['id'])
     matrix = np.asarray(p['matrix'])
     record = repair.record_prediction(matrix, row, 'joint_map', base_rates=p['expected_goals'])
@@ -175,6 +191,8 @@ def run(protocol, history, xg_records, quotes, out):
               'selection_window': protocol['selection_window'], 'diagnostic_window': protocol['diagnostic_window'],
               'levels': {}, 'arms': protocol['arms']}
     routes = {}
+    dependencies = dependency_identity()
+    version_identity = digest({'protocol': digest(protocol), 'dependencies': dependencies})[:12]
     for level in sorted({r['league_level'] for r in history}):
         cohort = [r for r in history if r['league_level'] == level]
         targets = [r for r in cohort if protocol['selection_window'][0] <= r['date'] < protocol['diagnostic_window'][1]]
@@ -195,9 +213,10 @@ def run(protocol, history, xg_records, quotes, out):
             repair.write(out/level/(arm['id']+'-predictions.json'), records)
             final = fit(cohort, indexed, arm, **protocol['fit'])
             artifact = {'schema': 'WCPP-NATIONS-XG-ARTIFACT-1', 'created_at': now(),
-                'version': f'NATIONS-XG-{level}-{arm["id"]}-{digest(protocol)[:10]}',
+                'version': f'NATIONS-XG-{level}-{arm["id"]}-{version_identity}',
                 'core': final, 'protocol_sha256': digest(protocol),
                 'inputs': protocol['inputs'], 'engine_sha256': repair.sha(__file__),
+                'dependencies': dependencies,
                 'historical_asof_certified': False, 'active': False}
             path = out/level/(arm['id']+'-artifact.json')
             repair.write(path, artifact)
@@ -234,6 +253,7 @@ def freeze_forward(index, fixtures, out, freeze_root='/workspace/WCPP/forecasts/
             artifact = repair.read(ref['path'])
             if (repair.sha(ref['path']) != ref['sha256']
                     or artifact['engine_sha256'] != repair.sha(__file__)
+                    or artifact.get('dependencies') != dependency_identity()
                     or artifact['protocol_sha256'] != index['protocol_sha256']):
                 raise ValueError('artifact/engine/protocol mismatch')
             predictions[arm] = prediction(artifact['core'], fixture, artifact['version'], ref['sha256'])
