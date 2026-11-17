@@ -110,6 +110,23 @@ class XgResearchTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             xg.historical_record(core, target, quote)
 
+    def test_inplay_quote_is_excluded_without_losing_score_prediction(self):
+        rows = history()
+        core = xg.fit(rows[:60], {}, xg.ARMS[0])
+        target = rows[60]
+        fixture = {**target, 'cutoff_at': target['date']+'T18:30:00+00:00',
+                   'total_quote': {'verified': True, 'match_id': target['match_id'],
+                     'bookmaker': 'test-book', 'market': 'asian_total', 'line': 2.25,
+                     'over_odds': 1.9, 'under_odds': 1.9,
+                     'quoted_at': target['date']+'T18:29:00+00:00',
+                     'query_time': target['date']+'T18:30:00+00:00',
+                     'source_url': 'https://example.org/odds'}}
+        result = xg.historical_record(core, target, fixture)
+        self.assertIsNone(result['total_settlement'])
+        self.assertIn('QUOTE_CAPTURE_NOT_PREMATCH', result['total_quote_audit']['reasons'])
+        self.assertEqual(xg.summarize([result])['actual_line_n'], 0)
+        self.assertEqual(result['matrix_hash'], xg.historical_record(core, target, None)['matrix_hash'])
+
     def test_changed_numerical_dependency_cannot_reuse_artifact_identity(self):
         dependencies = xg.dependency_identity()
         self.assertIn('nations_league/repair.py', dependencies)

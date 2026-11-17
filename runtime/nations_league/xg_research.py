@@ -160,6 +160,10 @@ def historical_record(core, row, quote_fixture):
             raise ValueError('archived quote fixture mismatch')
         fixture.update(total_quote=quote_fixture.get('total_quote'), cutoff_at=quote_fixture['cutoff_at'])
     p = prediction(core, fixture, core['blend']['id'])
+    if p['total'] and aware(fixture['cutoff_at']) >= aware(fixture['kickoff_at']):
+        p['total'] = None
+        p['total_quote_audit']['eligible'] = False
+        p['total_quote_audit']['reasons'].append('QUOTE_CAPTURE_NOT_PREMATCH')
     matrix = np.asarray(p['matrix'])
     record = repair.record_prediction(matrix, row, 'joint_map', base_rates=p['expected_goals'])
     record.update(training_cutoff=core['train_end'], training_coverage=core['coverage'],
