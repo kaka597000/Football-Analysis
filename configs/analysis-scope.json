@@ -1,6 +1,6 @@
 {
   "schema": "WCPP-ANALYSIS-SCOPE-1",
-  "effective_date": "2026-11-15",
+  "effective_date": "2026-11-17",
   "gender": "men",
   "age": "senior",
   "score_basis": "regulation_90",
@@ -59,12 +59,6 @@
       "name": "美职联MLS",
       "requires_phase_identity": true,
       "active_route_gap": false
-    },
-    {
-      "code": "fin.1",
-      "name": "芬超",
-      "requires_phase_identity": true,
-      "active_route_gap": true
     },
     {
       "code": "nor.1",
@@ -133,6 +127,6 @@
       "active_route_gap": false
     }
   ],
-  "expected_competition_count": 21,
-  "scope_change_authorization": "2026-11-15 user requested Brazil Serie A if analyzable; both retained artifacts loaded successfully before inclusion; no model promotion."
+  "expected_competition_count": 20,
+  "scope_change_authorization": "2026-11-17 user explicitly removed Finland Veikkausliiga (fin.1) from new analyses; Brazil remains included; historical data, artifacts and freezes retained; no model promotion."
 }
