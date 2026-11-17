@@ -38,10 +38,11 @@ class PublicationTests(unittest.TestCase):
             f=self.fixture()
             script="import json,sys;from research.analysis_freeze import save;save({'synthetic':True},json.loads(sys.argv[1]),stage='prematch',track='concurrent',root=sys.argv[2])"
             env=dict(os.environ,PYTHONPATH=str(Path(__file__).parent))
-            workers=[subprocess.Popen([sys.executable,'-c',script,json.dumps(f),d],env=env) for _ in range(3)]
-            for worker in workers:self.assertEqual(worker.wait(timeout=60),0)
+            workers=[subprocess.Popen([sys.executable,'-c',script,json.dumps(f),d],env=env) for _ in range(8)]
+            statuses=[worker.wait(timeout=60) for worker in workers]
+            self.assertEqual(statuses,[0]*len(workers))
             records=sorted(Path(d).glob('*/*.json'))
-            self.assertEqual(len(records),3)
+            self.assertEqual(len(records),len(workers))
             previous=None
             for path in records:
                 record=verify(json.loads(path.read_text()))

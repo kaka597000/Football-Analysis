@@ -7,9 +7,8 @@ def exclusive_lock(path):
     with open(path, 'a+b') as handle:
         if os.name == 'nt':
             import msvcrt
-            handle.seek(0, 2)
-            if handle.tell() == 0:
-                handle.write(b'\0'); handle.flush()
+            # Windows permits byte-range locks past EOF. Writing a seed byte
+            # before acquiring the lock races with another process's lock.
             handle.seek(0)
             msvcrt.locking(handle.fileno(), msvcrt.LK_LOCK, 1)
             try:
