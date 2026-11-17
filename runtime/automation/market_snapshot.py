@@ -35,6 +35,7 @@ SCOPES = {
     'fra.1': ('soccer_france_ligue_one', 'regular-season', 'regular'),
     'nor.1': ('soccer_norway_eliteserien', 'regular-season', 'regular'),
     'swe.1': ('soccer_sweden_allsvenskan', 'regular-season', 'regular'),
+    'bra.1': ('soccer_brazil_campeonato', 'brasileiro-serie-a', 'regular'),
 }
 
 # Reviewed from retained raw responses, not transliteration/fuzzy matching. IDs
@@ -74,9 +75,26 @@ ALIAS_REVIEW_SHA256 = hashlib.sha256(json.dumps(
     ALIAS_REGISTRY, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
-def team_identity(team, provider_name, cutoff):
+ADDITIONAL_ALIAS_REVIEWS = json.loads((Path(__file__).resolve().parents[2]
+    / 'configs' / 'market-team-alias-reviews.json').read_text(encoding='utf-8'))
+
+
+def alias_registry(competition):
+    # Keep PR39's Nations registry and evidence hashes unchanged.
+    if competition == 'uefa.nations':
+        return ALIAS_REGISTRY
+    return {'version': 'competition-alias-registry-20261117-1',
+            'reviews': [r for r in ADDITIONAL_ALIAS_REVIEWS if r['cohort'] == competition]}
+
+
+def review_sha(review):
+    return hashlib.sha256(json.dumps(review, ensure_ascii=False, sort_keys=True,
+                                    separators=(',', ':')).encode()).hexdigest()
+
+
+def team_identity(team, provider_name, cutoff, competition='uefa.nations'):
     """Return match evidence, or None. A reviewed name never admits another ID."""
-    relevant = [(rule,review) for review in ALIAS_REVIEWS for rule in review['teams']
+    relevant = [(rule,review) for review in alias_registry(competition)['reviews'] for rule in review['teams']
                 if provider_name in (rule['provider_name'], rule['espn_name'])
                 or team['displayName'] in (rule['provider_name'], rule['espn_name'])]
     if relevant:
@@ -129,7 +147,12 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
             status = event.get('status', {}).get('type', {})
             if status.get('state') != 'pre' or status.get('completed') is not False:
                 continue
-            if event.get('season', {}).get('slug') != source_phase or aware(event['date']) <= now:
+            season = event.get('season', {})
+            expected_phase = (f"{season.get('year')}-{source_phase}"
+                              if competition == 'bra.1' else source_phase)
+            if (season.get('slug') != expected_phase
+                    or competition == 'bra.1' and season.get('year') != aware(event['date']).year
+                    or aware(event['date']) <= now):
                 continue
             if (not isinstance(event['id'], str) or not event['id'].strip()
                     or event_ids[event['id']] != 1 or len(event['competitions']) != 1):
@@ -162,7 +185,7 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
                         or provider_ids[source['id']] != 1 or source.get('sport_key') != sport_key
                         or aware(source['commence_time']) != aware(event['date'])):
                     continue
-                identities = {side: team_identity(sides[side], source.get(side + '_team'), cutoff)
+                identities = {side: team_identity(sides[side], source.get(side + '_team'), cutoff, competition)
                               for side in ('home', 'away')}
             except (AttributeError, KeyError, TypeError, ValueError):
                 continue
@@ -172,9 +195,10 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
             excluded['missing_or_ambiguous_identity'] += 1
             continue
         source, aliases = matched[0]
-        used_reviews=[r for r in ALIAS_REVIEWS if any(rule in r['teams'] for rule in aliases.values())]
-        alias_evidence = ({'review_version': ALIAS_REGISTRY['version'],
-                           'review_sha256': ALIAS_REVIEW_SHA256,
+        registry = alias_registry(competition)
+        used_reviews=[r for r in registry['reviews'] if any(rule in r['teams'] for rule in aliases.values())]
+        alias_evidence = ({'review_version': registry['version'],
+                           'review_sha256': review_sha(registry),
                            'reviewed_at': max((r['reviewed_at'] for r in used_reviews),key=aware),
                            'used_reviews':used_reviews, 'teams': aliases,
                            'provider_source_names': {side: source[side + '_team'] for side in ('home', 'away')},
@@ -267,7 +291,7 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
             'coverage_scope': f'ESPN {competition} {stage} future fixtures on requested UTC day',
             'source_odds_events': len(odds), 'market_max_age_seconds': market_max_age_seconds,
             'excluded': dict(excluded), 'identity_mappings': mappings, 'snapshots': snapshots,
-            'identity_alias_review': dict(ALIAS_REGISTRY, sha256=ALIAS_REVIEW_SHA256),
+            'identity_alias_review': dict(alias_registry(competition), sha256=review_sha(alias_registry(competition))),
             'tls_verification_disabled': False, 'active_model_changed': False,
             'quote_time_inferred_from_capture': False}
 

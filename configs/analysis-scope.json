@@ -1,6 +1,6 @@
 {
   "schema": "WCPP-ANALYSIS-SCOPE-1",
-  "effective_date": "2026-11-11",
+  "effective_date": "2026-11-15",
   "gender": "men",
   "age": "senior",
   "score_basis": "regulation_90",
@@ -125,7 +125,14 @@
       "name": "日本联赛杯（日联杯）",
       "requires_phase_identity": true,
       "active_route_gap": true
+    },
+    {
+      "code": "bra.1",
+      "name": "巴西甲",
+      "requires_phase_identity": false,
+      "active_route_gap": false
     }
   ],
-  "expected_competition_count": 20
+  "expected_competition_count": 21,
+  "scope_change_authorization": "2026-11-15 user requested Brazil Serie A if analyzable; both retained artifacts loaded successfully before inclusion; no model promotion."
 }
