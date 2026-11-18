@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import MagicMock, patch
 from urllib.error import HTTPError
+from urllib.parse import parse_qs, urlsplit
 
 if __package__:
     from . import infer_market_snapshot as adapter
@@ -133,6 +134,80 @@ class InferSnapshotTests(unittest.TestCase):
             b['events'][0]['competitions'][0]['group']['name'] = 'Group C2'
         result = self.run_case(change)
         self.assertEqual(result['snapshots'][0]['target']['cohort'], 'uefa.nations:C:league-phase')
+
+    def test_grade_b_and_requested_population_coverage(self):
+        def change(e, o, b):
+            e['data'][0]['league'] = {'id': 'lg_4GXKQVPJ', 'name': 'UEFANLB'}
+            b['events'][0]['competitions'][0]['group']['name'] = 'Group B4'
+        fixtures = self.fixtures()
+        fixtures[0]['cohort'] = 'uefa.nations:B:league-phase'
+        fixtures.append(dict(fixtures[0], match_id='espn:MISSING'))
+        result = self.run_case(change, fixtures=fixtures)
+        self.assertEqual(result['covered_fixture_count'], 1)
+        self.assertEqual(result['eligible_fixture_count'], 1)
+        self.assertEqual(result['requested_fixture_count'], 2)
+        self.assertEqual(result['coverage'], .5)
+
+    def test_new_aliases_are_id_bound_and_not_backdated(self):
+        for rule in adapter.ALIAS_REVIEWS[1:]:
+            with self.subTest(name=rule['provider_name']):
+                team = {'id': rule['espn_id'], 'displayName': rule['espn_name']}
+                self.assertFalse(adapter.team_identity(team, rule['provider_name'], self.now.isoformat()))
+                self.assertTrue(adapter.team_identity(team, rule['provider_name'], rule['reviewed_at']))
+                self.assertFalse(adapter.team_identity(dict(team, id='999'), rule['provider_name'], rule['reviewed_at']))
+
+    def test_unverified_d_provider_mapping_stays_in_coverage_denominator(self):
+        def change(e, o, b):
+            e['data'][0]['league'] = {'id': 'lg_UNKNOWN_D', 'name': 'UEFANLD'}
+            b['events'][0]['competitions'][0]['group']['name'] = 'Group D2'
+        result = self.run_case(change)
+        self.assertEqual(result['eligible_fixture_count'], 1)
+        self.assertEqual(result['coverage'], 0)
+        self.assertEqual(result['excluded']['missing_or_ambiguous_provider_identity'], 1)
+
+    def test_pagination_finds_target_after_first_page_and_retains_page_evidence(self):
+        for max_pages, expected_quotes in ((1, 0), (3, 1)):
+            with self.subTest(max_pages=max_pages), tempfile.TemporaryDirectory() as d, patch.dict(
+                    'os.environ', {'WCPP_INFERSPORTS_KEY': 'synthetic-private-key'}, clear=True), patch.object(adapter, 'datetime', FixedClock):
+                events, odds, board = self.inputs()
+                calls = []
+                def fake_fetch(url, path, **kwargs):
+                    calls.append(url)
+                    if url.startswith(adapter.ESPN):
+                        body = board
+                    elif '/odds?' in url:
+                        body = odds
+                    else:
+                        params = parse_qs(urlsplit(url).query)
+                        self.assertEqual(params['date'], ['2026-11-12'])
+                        self.assertEqual(params['timezone'], ['UTC'])
+                        body = events if params.get('cursor') == ['MTAw'] else {'data': [], 'page': {'next_cursor': 'MTAw'}}
+                    return self.metadata(path.parent, path.name, body, url)
+                out = Path(d) / 'run'
+                with patch.object(adapter, 'fetch', side_effect=fake_fetch):
+                    result = adapter.collect(out, self.fixtures(), max_pages=max_pages)
+                self.assertEqual(result['verified_quote_count'], expected_quotes)
+                self.assertEqual(len(calls), 4 if expected_quotes else 2)
+                if expected_quotes:
+                    row = result['snapshots'][0]['observations'][0]
+                    self.assertEqual(row['provider_event_evidence']['file'], 'events-2.json')
+                    self.assertEqual(result['status'], 'VALIDATED')
+                else:
+                    self.assertTrue(result['provider_events_page_truncated'])
+
+    def test_live_day_without_future_fixture_uses_no_provider_quota(self):
+        with tempfile.TemporaryDirectory() as d, patch.dict('os.environ', {
+                'WCPP_INFERSPORTS_KEY': 'synthetic-private-key'}, clear=True), patch.object(adapter, 'datetime', FixedClock):
+            _, _, board = self.inputs()
+            board['events'][0]['status']['type'] = {'state': 'post', 'completed': True}
+            def fake_fetch(url, path, **kwargs):
+                self.assertTrue(url.startswith(adapter.ESPN))
+                return self.metadata(path.parent, path.name, board, url)
+            with patch.object(adapter, 'fetch', side_effect=fake_fetch) as fetch:
+                result = adapter.collect(Path(d) / 'run', date='20261112')
+            self.assertEqual(fetch.call_count, 1)
+            self.assertEqual(result['status'], 'NO_FUTURE_FIXTURES')
+            self.assertEqual(result['coverage'], None)
 
     def test_reviewed_alias_requires_exact_national_team_id(self):
         def change(e, o, b):

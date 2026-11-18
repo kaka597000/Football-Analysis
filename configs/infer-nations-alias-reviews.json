@@ -1,0 +1,56 @@
+[
+  {
+    "version": "infer-nations-bosnia-20261118-1",
+    "reviewed_at": "2026-11-18T00:45:15.784230+00:00",
+    "espn_id": "452",
+    "espn_name": "Bosnia-Herzegovina",
+    "provider_name": "Bosnia",
+    "evidence": {
+      "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+      "audit_file": "workspace-updates/20261118-repository-audit/infer-evidence/alias-review-candidates.json",
+      "audit_sha256": "2631356b0e723787f7e58c858601d85867732b4d0d87c72cec474b38179a1f23",
+      "provider_event_sha256": "aa477ed114a72fb1bcd93b924796d7c3bf27c5b6d91304ff883fc4784ebc7814",
+      "provider_event_pointer": "/data/36/home_team",
+      "espn_identity_sha256": "76fadb5b37b90bd18a9f214392a69c30a87074e660c4bf1b6dcb722234e537c8",
+      "espn_event_pointer": "/events/0/competitions/0/competitors",
+      "provider_event_id": "evt_YT1ZX5BW",
+      "espn_event_id": "401861196"
+    }
+  },
+  {
+    "version": "infer-nations-northern-ireland-20261118-1",
+    "reviewed_at": "2026-11-18T00:45:15.784230+00:00",
+    "espn_id": "586",
+    "espn_name": "Northern Ireland",
+    "provider_name": "Nor.Ireland",
+    "evidence": {
+      "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+      "audit_file": "workspace-updates/20261118-repository-audit/infer-evidence/alias-review-candidates.json",
+      "audit_sha256": "2631356b0e723787f7e58c858601d85867732b4d0d87c72cec474b38179a1f23",
+      "provider_event_sha256": "aa477ed114a72fb1bcd93b924796d7c3bf27c5b6d91304ff883fc4784ebc7814",
+      "provider_event_pointer": "/data/37/away_team",
+      "espn_identity_sha256": "76fadb5b37b90bd18a9f214392a69c30a87074e660c4bf1b6dcb722234e537c8",
+      "espn_event_pointer": "/events/2/competitions/0/competitors",
+      "provider_event_id": "evt_VE437XS2",
+      "espn_event_id": "401861191"
+    }
+  },
+  {
+    "version": "infer-nations-ireland-20261118-1",
+    "reviewed_at": "2026-11-18T00:45:15.784230+00:00",
+    "espn_id": "476",
+    "espn_name": "Republic of Ireland",
+    "provider_name": "Ireland",
+    "evidence": {
+      "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+      "audit_file": "workspace-updates/20261118-repository-audit/infer-evidence/alias-review-candidates.json",
+      "audit_sha256": "2631356b0e723787f7e58c858601d85867732b4d0d87c72cec474b38179a1f23",
+      "provider_event_sha256": "aa477ed114a72fb1bcd93b924796d7c3bf27c5b6d91304ff883fc4784ebc7814",
+      "provider_event_pointer": "/data/39/home_team",
+      "espn_identity_sha256": "76fadb5b37b90bd18a9f214392a69c30a87074e660c4bf1b6dcb722234e537c8",
+      "espn_event_pointer": "/events/5/competitions/0/competitors",
+      "provider_event_id": "evt_G537DAY6",
+      "espn_event_id": "401861192"
+    }
+  }
+]
