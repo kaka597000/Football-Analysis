@@ -115,21 +115,9 @@ def check_evidence(root, metadata):
     return json.loads(path.read_text())
 
 
-def build(root, odds_meta, identity_meta, *, cutoff, now=None,
-          competition='uefa.nations', market_max_age_seconds=MAX_AGE_SECONDS):
-    now = now or datetime.now(timezone.utc)
-    sport_key, source_phase, stage = SCOPES[competition]
-    if type(market_max_age_seconds) is not int or not 0 < market_max_age_seconds <= 3600:
-        raise ValueError('market age must be within the locked one-hour limit')
-    odds, board = (check_evidence(root, m) for m in (odds_meta, identity_meta))
-    if not isinstance(odds, list) or not isinstance(board, dict):
-        raise ValueError('provider event list and independent scoreboard required')
-    if aware(cutoff) > now:
-        raise ValueError('future cutoff')
-    if not any(x.get('slug') == competition for x in board.get('leagues', [])):
-        raise ValueError('requested competition source identity required')
-    if max(aware(m['captured_at']) for m in (odds_meta, identity_meta)) > aware(cutoff):
-        raise ValueError('identity and quote capture must precede cutoff')
+def scheduled_targets(board, competition, now):
+    """All identified future events in scope, including those with no provider quote."""
+    _, source_phase, _ = SCOPES[competition]
     eligible, excluded = [], Counter()
     event_ids = Counter(str(e.get('id')) for e in board.get('events', []) if isinstance(e, dict))
     for event in board.get('events', []):
@@ -150,6 +138,25 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
             eligible.append((event, sides))
         except (AttributeError, KeyError, TypeError, ValueError):
             excluded['unverified_target_identity_or_status'] += 1
+    return eligible, excluded
+
+
+def build(root, odds_meta, identity_meta, *, cutoff, now=None,
+          competition='uefa.nations', market_max_age_seconds=MAX_AGE_SECONDS):
+    now = now or datetime.now(timezone.utc)
+    sport_key, _, stage = SCOPES[competition]
+    if type(market_max_age_seconds) is not int or not 0 < market_max_age_seconds <= 3600:
+        raise ValueError('market age must be within the locked one-hour limit')
+    odds, board = (check_evidence(root, m) for m in (odds_meta, identity_meta))
+    if not isinstance(odds, list) or not isinstance(board, dict):
+        raise ValueError('provider event list and independent scoreboard required')
+    if aware(cutoff) > now:
+        raise ValueError('future cutoff')
+    if not any(x.get('slug') == competition for x in board.get('leagues', [])):
+        raise ValueError('requested competition source identity required')
+    if max(aware(m['captured_at']) for m in (odds_meta, identity_meta)) > aware(cutoff):
+        raise ValueError('identity and quote capture must precede cutoff')
+    eligible, excluded = scheduled_targets(board, competition, now)
     snapshots, mappings = [], []
     provider_ids = Counter(str(e.get('id')) for e in odds if isinstance(e, dict))
     for event, sides in eligible:
