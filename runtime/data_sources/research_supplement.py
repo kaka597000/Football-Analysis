@@ -10,14 +10,14 @@ import re
 import sys
 import time
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+from urllib.request import Request, build_opener, urlopen
 from zoneinfo import ZoneInfo
 
 RUNTIME = Path(__file__).resolve().parents[1]
 if str(RUNTIME) not in sys.path:
     sys.path.insert(0, str(RUNTIME))
 from automation import market_snapshot
-from data_sources.clients import fetch
+from data_sources.clients import NoRedirect, fetch
 from publication import atomic_json
 from research.analysis_freeze import aware, verify
 from research_program.three_arm_forward import market_pair
@@ -68,17 +68,21 @@ class Source:
         self.calls = []
         self.block = None
         self.last_request = 0.
+        self.deadline = time.monotonic()+32
 
-    def get(self, url, load, parse, *, ttl=None):
+    def get(self, url, load, parse, *, ttl=None, not_before=None):
         path = self.cache / (sha(url.encode()) + '.json')
         old = read(path) if path.is_file() else None
-        if old and (ttl is None or timedelta(0) <= now() - aware(old['observed_at']) <= ttl):
+        if (old and (not_before is None or aware(old['observed_at']) >= not_before)
+                and (ttl is None or timedelta(0) <= now() - aware(old['observed_at']) <= ttl)):
             self.calls.append({'url':url,'status':'cached','observed_at':old['observed_at'],'response_sha256':old['source_sha256']})
             return old
         base = {'url': url, 'status': 'missing'}
         if self.block:
             return dict(base, reason=self.block, attempted=False)
         for attempt in range(2):
+            if time.monotonic() >= self.deadline:
+                return dict(base, reason='provider round time budget exhausted',attempted=False)
             time.sleep(max(0., .4 - (time.monotonic() - self.last_request)))
             self.last_request = time.monotonic()
             started = now().isoformat()
@@ -156,7 +160,7 @@ def espn_summary(raw, fixture, historical):
             ids = [str(p['athlete']['id']) for p in rosters[s].get('roster',[]) if p.get('starter') is True and p.get('athlete',{}).get('id')]
             if len(ids) == len(set(ids)) == 11:
                 starters[s] = ids
-    return {'starters':starters, 'both_elevens':len(starters) == 2}
+    return {'starters':starters, 'both_elevens':len(starters) == 2 and not set(starters['home']).intersection(starters['away'])}
 
 
 def original_inputs(data):
@@ -200,7 +204,8 @@ def espn_job(src, fixtures, history, stamp):
         prior = aware(f['kickoff_at']) - stamp
         ttl = None if previous else timedelta(minutes=5 if prior <= timedelta(minutes=90) else 60)
         url = ESPN + f['match_id'][5:]
-        result = src.get(url, lambda: public_fetch(url), lambda raw: espn_summary(raw,f,previous),ttl=ttl)
+        window_start = aware(f['kickoff_at'])-timedelta(minutes=90) if not previous and prior<=timedelta(minutes=90) else None
+        result = src.get(url, lambda: public_fetch(url), lambda raw: espn_summary(raw,f,previous),ttl=ttl,not_before=window_start)
         if not previous and result['status'] == 'ok' and aware(result['observed_at']) >= aware(f['kickoff_at']):
             result = {'status':'missing','reason':'observed_after_kickoff','url':url}
         (stats if previous else observations)[f['match_id']] = result
@@ -248,7 +253,8 @@ def public_job(src, fixtures):
 
 
 def bsd_load(path, params=None):
-    item = fetch('bsd',path,params or {})
+    transport = build_opener(NoRedirect())
+    item = fetch('bsd',path,params or {},opener=lambda request,timeout:transport.open(request,timeout=min(5,timeout)))
     call = item['call']
     if not call.get('api_success'):
         if call.get('error_code')=='NETWORK_ERROR':
@@ -395,6 +401,7 @@ def terminal_report(out, prior, stamp):
         return read(out/'latest.json')
     rows = prior['fixtures']
     for row in rows:
+        row.setdefault('market_cutoff_at',prior['started_at'])
         window = lineup_window(aware(row['kickoff_at']),stamp,{},row.get('lineup_window_evidence'))
         row['lineup_window_evidence'] = window
         row['quality']['lineup_window'] = window['state']
@@ -431,6 +438,7 @@ def collect(data, out, *, clock=now):
             old = previous_rows.get(mid,{})
             if ko <= stamp and old:
                 row = dict(old)
+                row.setdefault('market_cutoff_at',previous['started_at'])
                 window = lineup_window(ko,done,{},old.get('lineup_window_evidence'))
                 row['lineup_window_evidence'] = window
                 row['quality']['lineup_window'] = window['state']
@@ -542,6 +550,18 @@ def verify_only(data, out):
             matched=[market_pair(s) for s in feed['snapshots'] if s['target']['match_id']==mid]
             if len(matched)!=1 or matched[0]!={k:v for k,v in quote.items() if k!='archive'}:
                 raise ValueError('quote differs from original market evidence')
+        sides_history=r['history_ids']
+        xg=[report['previous_games_bsd'].get(sides_history.get(s),{}) for s in SIDES]
+        proc=[report['previous_games_espn'].get(sides_history.get(s),{}) for s in SIDES]
+        reported=all(entry.get('status')=='ok' and all(any(entry['facts']['teams'][s][key] is not None for key in ('expected_goals','xg_actual')) for s in SIDES) for entry in xg)
+        shots=all(all(entry.get('facts',{}).get('statistics',{}).get(s,{}).get('totalShots') is not None for s in SIDES) for entry in proc)
+        if report['status']!='batch_closed' and aware(r['kickoff_at'])>aware(report['started_at']):
+            expected = {'confirmed_lineups':r['current_lineup'].get('facts',{}).get('both_elevens',False),
+                        'fresh_h2h_and_total':quote is not None,'both_prior_games_reported_xg':reported,
+                        'both_prior_games_xg':all(has_real_xg(v) for v in xg),'both_prior_games_shots':shots,
+                        'open_file_date_and_teams':bool(openref and openref['date_and_sides_verified'])}
+            if r['quality']['latest_observation']!=expected:
+                raise ValueError('field availability differs from retained values')
     counts = quality_counts(list(rows.values()))
     if counts!=report['coverage_counts'] or counts!=index['coverage_counts']:
         raise ValueError('coverage denominators differ')

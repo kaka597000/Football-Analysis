@@ -86,7 +86,7 @@ class CoverageTests(unittest.TestCase):
         teams=[{'team':{'id':f[s][5:]},'homeAway':s} for s in monitor.SIDES]
         entry={'date':KICK.isoformat(),'status':{'type':{'state':'pre','completed':False}},'competitors':teams}
         doc={'header':{'id':'123','league':{'slug':'bra.1'},'competitions':[entry]},
-             'rosters':[dict(t,roster=[{'starter':True,'athlete':{'id':str(i)}} for i in range(11)]) for t in teams]}
+             'rosters':[dict(t,roster=[{'starter':True,'athlete':{'id':t['team']['id']+str(i)}} for i in range(11)]) for t in teams]}
         self.assertTrue(monitor.espn_summary(json.dumps(doc).encode(),f,False)['both_elevens'])
         doc['rosters'][0]['roster'][1] = doc['rosters'][0]['roster'][0]
         self.assertFalse(monitor.espn_summary(json.dumps(doc).encode(),f,False)['both_elevens'])
