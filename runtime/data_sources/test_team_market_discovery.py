@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -10,6 +11,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from data_sources import team_market_discovery as d
+from data_sources import team_market_quotes as quotes
 
 
 def provider(eid='a' * 32, kickoff='2026-11-21T12:30:00Z'):
@@ -92,6 +94,52 @@ class DiscoveryTests(unittest.TestCase):
                 (root / 'discovery-events.json').write_text('[]')
                 with self.assertRaisesRegex(ValueError, 'checksum'):
                     d.replay_discovery(root, receipt)
+
+    def test_collect_verify_and_retry_without_confirmed_fixtures(self):
+        wrong_league = scoreboard()
+        wrong_league['leagues'][0]['slug'] = 'eng.2'
+        scenarios = [
+            ('NO_UPCOMING_EVENTS', 'test-key', [(200, [])]),
+            ('MISSING_CREDENTIAL', '', []),
+            ('NO_VERIFIED_EVENTS', 'test-key', [(200, [dict(provider(), away_team='Unknown')]), (200, scoreboard())]),
+            ('EVENT_CATALOG_UNAVAILABLE', 'test-key', [(429, None)]),
+            ('SCOREBOARD_UNAVAILABLE', 'test-key', [(200, [provider()]), (503, None)]),
+            ('SCOREBOARD_LEAGUE_MISMATCH', 'test-key', [(200, [provider()]), (200, wrong_league)]),
+        ]
+        stamp = '2026-11-18T00:00:00+00:00'
+        for status, key, responses in scenarios:
+            with self.subTest(status=status), tempfile.TemporaryDirectory() as temp:
+                root = Path(temp)
+                out = root / 'run'
+                remaining = iter(responses)
+
+                def capture(url, filename, directory, key=None):
+                    code, value = next(remaining)
+                    meta = dict(source_url=url, http_status=code, requested_at=stamp, captured_at=stamp, quota={})
+                    if code != 200:
+                        return None, dict(meta, status='HTTP_ERROR')
+                    raw = json.dumps(value).encode()
+                    (directory / filename).write_bytes(raw)
+                    return value, dict(meta, source_file=filename, source_sha256=hashlib.sha256(raw).hexdigest(), status='OK')
+
+                def no_quote(*args):
+                    self.fail('unexpected paid event request')
+
+                env = {'THE_ODDS': key, 'WCPP_ODDS_API_KEY': '', 'WCPP_THE_ODDS_API_KEY': ''}
+                with (patch.dict(os.environ, env), patch.object(quotes, 'now', return_value=stamp),
+                      patch.object(d, '_fetch', side_effect=capture) as fetch):
+                    first = quotes.collect(root, out, discover='eng.1', fetcher=no_quote)
+                    self.assertEqual(fetch.call_count, len(responses))
+                self.assertEqual((first['registered'], first['requests'], first['accepted_pairs']), (0, 0, 0))
+                receipt = quotes.read(out / 'discovery-receipt.json')
+                self.assertEqual(receipt['status'], status)
+                self.assertEqual(quotes.read(out / 'targets.json'), [])
+                self.assertEqual(quotes.read(out / 'quotes.json'), [])
+                original = {p.name: p.read_bytes() for p in out.iterdir() if p.is_file()}
+                with patch.object(d, '_fetch', side_effect=AssertionError('offline operation made a request')):
+                    self.assertEqual(quotes.verify_run(root, out), first)
+                    self.assertEqual(quotes.collect(root, out, discover='eng.1', fetcher=no_quote), first)
+                self.assertEqual(original, {p.name: p.read_bytes() for p in out.iterdir() if p.is_file()})
 
     def test_no_paid_calls_or_dates_when_schedule_missing(self):
         targets, report, requests = self.discover([], scoreboard())

@@ -156,32 +156,43 @@ def _discover(competition, days, now_iso, enabled, read_source):
 
 
 def replay_discovery(directory, archived_receipt):
-    """Reconstruct a successful discovery from its retained inputs and verify all issued targets."""
+    """Reproduce the original discovery branch, including a valid empty or unavailable result."""
     root = Path(directory)
     receipt = archived_receipt
     start = aware(receipt['starts_at'])
     span = aware(receipt['ends_at']) - start
-    if (receipt.get('status') != 'VERIFIED_EVENTS' or span != timedelta(days=span.days)
-            or len(receipt.get('requests', [])) != 2):
-        raise ValueError('expected a complete discovery run')
+    if span.days < 1 or span != timedelta(days=span.days):
+        raise ValueError('invalid archived discovery horizon')
     requests = iter(receipt['requests'])
     prior_capture = start
 
     def read_source(url, filename, authenticated):
         nonlocal prior_capture
-        meta = next(requests)
+        meta = next(requests, None)
         # The online matching path supplies the filename and route; never open a path from metadata.
-        if (meta.get('source_file') != filename or meta.get('source_url') != url
-                or meta.get('http_status') != 200 or meta.get('status') != 'OK'
+        if (meta is None or meta.get('source_url') != url
                 or not prior_capture <= aware(meta['requested_at']) <= aware(meta['captured_at'])):
             raise ValueError('discovery source identity or capture time differs')
         prior_capture = aware(meta['captured_at'])
+        status = meta.get('status')
+        http = meta.get('http_status')
+        if status != 'OK':
+            # Failed reads returned no retained response body in the collection contract.
+            valid = (status == 'NETWORK_ERROR' and http is None
+                     or status == 'HTTP_ERROR' and isinstance(http, int) and http != 200
+                     or status in {'INVALID_JSON', 'RESPONSE_TOO_LARGE'} and http == 200)
+            if not valid or 'source_sha256' in meta or 'source_file' in meta:
+                raise ValueError('invalid failed discovery response receipt')
+            return None, meta
+        if http != 200 or meta.get('source_file') != filename:
+            raise ValueError('discovery source identity differs')
         raw = (root / filename).read_bytes()
         if hashlib.sha256(raw).hexdigest() != meta['source_sha256']:
             raise ValueError('discovery source checksum mismatch')
         return json.loads(raw), meta
 
-    targets, reconstructed = _discover(receipt['competition'], span.days, receipt['starts_at'], True, read_source)
+    enabled = receipt.get('status') != 'MISSING_CREDENTIAL'
+    targets, reconstructed = _discover(receipt['competition'], span.days, receipt['starts_at'], enabled, read_source)
     if reconstructed != receipt or targets != json.loads((root / 'targets.json').read_bytes()):
         raise ValueError('archived discovery targets or summary differ from replay')
     return targets, reconstructed
