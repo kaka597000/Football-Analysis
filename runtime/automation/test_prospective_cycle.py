@@ -6,6 +6,7 @@ import unittest
 from unittest.mock import patch
 from datetime import datetime,timezone,timedelta
 
+from runtime.automation import prospective_bundle as bundle
 from runtime.automation import prospective_cycle as p
 
 
@@ -74,7 +75,7 @@ class PortableCycleTests(unittest.TestCase):
             (root/'objects'/h).write_bytes(body);alias='/workspace/WCPP/synthetic'
             m['objects'][h]={'path':'objects/'+h,'bytes':len(body),'sha256':h};m['aliases'][alias]=h;m['capture_assets']=[alias];self.write(root,m)
             dest=Path(tmp)/'existing';dest.write_bytes(b'other')
-            with patch.object(p,'_allowed_original',return_value=dest):
+            with patch.object(bundle,'_allowed_original',return_value=dest):
                 with self.assertRaisesRegex(ValueError,'conflict'):p.hydrate(root)
             self.assertEqual(dest.read_bytes(),b'other')
 
@@ -88,7 +89,7 @@ class PortableCycleTests(unittest.TestCase):
         queue=[{'match_id':f'espn:{i}','cohort':'eng.1','kickoff_at':future}for i in (1,2)]
         with tempfile.TemporaryDirectory() as tmp:
             root,m=self.bundle(tmp,queue)
-            with patch.object(p,'hydrate'),patch.object(p,'_recover_registration',return_value=[]),patch.object(p.fv,'register',return_value=[])as reg:
+            with patch.object(p,'restore_domestic'),patch.object(p,'_recover_registration',return_value=[]),patch.object(p.fv,'register',return_value=[])as reg:
                 value=p.cycle(root,max_captures=0,max_result_requests=0,now=now)
             self.assertEqual(len(reg.call_args.args[1]),2)
             self.assertEqual(value['new_captures'],[])
@@ -126,7 +127,7 @@ class PortableCycleTests(unittest.TestCase):
             state=root.parent/'state';state.mkdir();(state/'capture-espn_1.json').write_text('{}')
             package=self.package(root,m,plan,fixture)
             pending={'completed':0,'pending_results':[fixture['match_id']],'missing_first_pairs':[]}
-            with patch.object(p,'_recover_package',return_value=package),patch.object(p.fv,'capture')as capture,patch.object(p.fv,'review',return_value=pending),patch.object(p,'hydrate')as hydrate,patch('runtime.automation.market_bridge.attach_total_quote')as market:
+            with patch.object(p,'_recover_package',return_value=package),patch.object(p.fv,'capture')as capture,patch.object(p.fv,'review',return_value=pending),patch.object(p,'restore_domestic')as hydrate,patch('runtime.automation.market_bridge.attach_total_quote')as market:
                 fetch=lambda url:self.fail('recovery must not fetch new data')
                 result=p.cycle(root,fetcher=fetch,now=now,market_dir=tmp)
             capture.assert_not_called();hydrate.assert_not_called()
@@ -178,7 +179,7 @@ class PortableCycleTests(unittest.TestCase):
                 return {'header':{'id':'1','competitions':[{'date':kickoff,'status':{'type':{'state':'pre'}},
                     'neutralSite':False,'competitors':[{'homeAway':s,'team':{'id':v}}for s,v in [('home','1'),('away','2')]]}]}}
             pending={'completed':0,'pending_results':['espn:1'],'missing_first_pairs':['espn:2']}
-            with patch.object(p,'hydrate'),patch.object(p.fv,'capture',return_value=package),patch.object(p.fv,'review',return_value=pending):
+            with patch.object(p,'restore_domestic'),patch.object(p.fv,'capture',return_value=package),patch.object(p.fv,'review',return_value=pending):
                 result=p.cycle(root,fetcher=fetch,now=now)
             persisted=p.read(root.parent/'state'/'state.json')
             self.assertEqual([v['match_id']for v in persisted['packages']],['espn:1'])
@@ -206,7 +207,7 @@ class PortableCycleTests(unittest.TestCase):
                     self.assertIn('cutoff_at',f)
                     return dict(f,total_quote=quote),{'status':'ATTACHED'}
                 pending={'completed':0,'pending_results':['espn:1'],'missing_first_pairs':[]}
-                with patch.object(p,'hydrate'),patch.object(p.fv,'capture',return_value=package)as capture,patch.object(p.fv,'review',return_value=pending),patch('runtime.automation.market_bridge.attach_total_quote',side_effect=attach)as market:
+                with patch.object(p,'restore_domestic'),patch.object(p.fv,'capture',return_value=package)as capture,patch.object(p.fv,'review',return_value=pending),patch('runtime.automation.market_bridge.attach_total_quote',side_effect=attach)as market:
                     value=p.cycle(root,fetcher=lambda url:body,now=now,market_dir=tmp,
                                   market_providers=['a','b'],market_bookmakers=['book'])
                 self.assertEqual(value['captured_population'],1)
@@ -227,7 +228,7 @@ class PortableCycleTests(unittest.TestCase):
                 'status':{'type':{'state':'pre'}},'neutralSite':False,
                 'competitors':[{'homeAway':s,'team':{'id':v}}for s,v in [('home','1'),('away','2')]]}]}}
             pending={'completed':0,'pending_results':['espn:1'],'missing_first_pairs':[]}
-            with patch.object(p,'hydrate'),patch.object(p.fv,'capture',return_value=package)as capture,patch.object(p.fv,'review',return_value=pending):
+            with patch.object(p,'restore_domestic'),patch.object(p.fv,'capture',return_value=package)as capture,patch.object(p.fv,'review',return_value=pending):
                 value=p.cycle(root,fetcher=lambda url:body,now=now,market_dir=Path(tmp)/'missing')
             self.assertEqual(value['captured_population'],1)
             self.assertEqual(value['failures'],[])
@@ -237,7 +238,7 @@ class PortableCycleTests(unittest.TestCase):
 
     def test_original_destination_allowlist(self):
         for path in ('/tmp/key','/etc/passwd','/workspace/WCPP/../elsewhere','relative'):
-            with self.assertRaises(ValueError):p._allowed_original(path)
+            with self.assertRaises(ValueError):bundle._allowed_original(path)
 
     def test_failed_results_rotate_across_restarted_cycles(self):
         now = datetime.now(timezone.utc)
@@ -269,7 +270,7 @@ class PortableCycleTests(unittest.TestCase):
             def nonfinal(url):
                 seen.append(url.rsplit('=',1)[1])
                 return {'header': {'competitions':[{'competitors':[], 'status':{'type':{'name':'STATUS_POSTPONED'}}}]}}
-            with patch.object(p,'_hydrate_ucl'),patch.object(reviewer,'review',side_effect=lambda *a,**k: {'completed':0}):
+            with patch.object(p,'restore_ucl'),patch.object(reviewer,'review',side_effect=lambda *a,**k: {'completed':0}):
                 for _ in range(3): p.ucl_cycle(root,max_result_requests=1,fetcher=nonfinal,now=now)
             self.assertEqual(seen,['1','2','1'])
 
@@ -287,7 +288,7 @@ class PortableCycleTests(unittest.TestCase):
             m.update(schema=p.UCL_SCHEMA,state_directory='ucl-state',plan=receipt,
                      packages=[{'match_id':'espn:1','baseline':receipt,'refreshed':receipt}]);self.write(root,m)
             pending={'population':1,'first_paired':1,'completed':0,'pending_results':['espn:1'],'missing_first_pairs':[]}
-            with patch.object(p,'_hydrate_ucl'),patch.object(reviewer,'review',side_effect=lambda *a,**k:dict(pending)):
+            with patch.object(p,'restore_ucl'),patch.object(reviewer,'review',side_effect=lambda *a,**k:dict(pending)):
                 value=p.ucl_cycle(root,fetcher=lambda u:self.fail('future match cannot fetch results'),now=now)
             self.assertEqual(value['pending_results'],['espn:1']);self.assertEqual(value['result_requests'],0)
             self.assertEqual(value['mode'],'REVIEW_ONLY_NO_NEW_INFERENCE')
@@ -302,7 +303,7 @@ class PortableCycleTests(unittest.TestCase):
             body={'header':{'id':'2','competitions':[{'date':f['kickoff_at'],'status':{'type':{'name':'STATUS_FULL_TIME'}},
                 'competitors':[{'homeAway':s,'team':{'id':v},'score':'0'}for s,v in [('home','1'),('away','2')]]}]}}
             pending={'population':1,'first_paired':1,'completed':0,'pending_results':['espn:1'],'missing_first_pairs':[]}
-            with patch.object(p,'_hydrate_ucl'),patch.object(reviewer,'review',side_effect=lambda *a,**k:dict(pending)):
+            with patch.object(p,'restore_ucl'),patch.object(reviewer,'review',side_effect=lambda *a,**k:dict(pending)):
                 value=p.ucl_cycle(root,fetcher=lambda u:body,now=now)
             self.assertEqual(value['completed'],0);self.assertEqual(value['failures'][0]['status'],'RESULT_NOT_CERTIFIED')
             self.assertFalse((root.parent/'ucl-state'/'results.json').exists())
