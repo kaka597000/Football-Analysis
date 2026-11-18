@@ -34,4 +34,4 @@ python scripts/run_tests.py --layer integration
 python runtime/module_governance.py --data /path/to/data
 ```
 
-输出目录必须是新路径。开发报告及逐场记录可字节重放；未来复盘随真实结果更新，不能要求永远等于首次“待结算”快照。未来优势仍未证明，正式权重、冻结、工件、部署与自动晋级均未改变。
+输出目录必须是新路径。开发报告及逐场记录的身份、权重、比分与计数须精确重放，跨数学库的score_log_loss/wdl_brier只允许1e-12绝对误差；未来复盘随真实结果更新，不能要求永远等于首次“待结算”快照。未来优势仍未证明，正式权重、冻结、工件、部署与自动晋级均未改变。
