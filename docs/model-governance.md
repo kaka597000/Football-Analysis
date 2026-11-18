@@ -24,7 +24,7 @@
 
 公开接口 `automation.research_api` v1 提供 `ScoreboardQueue`、`read_predictions`、`read_results`、`certify_result` 及原采集辅助函数。它们是原实现的直接别名，签名、异常、队列持久化和数学保持不变。
 
-数据仓 `runtime/source_review_api.py` 是唯一旧私有调用适配层；有 v1 时使用公开接口，当前 `3fd411a…` 冻结版本没有该模块时走显式 legacy 路径。不吞掉实现的导入错误，不猜测新版本协议。`poll_three_arm_results.py` 只消费公开命名。移除 legacy 层需要单独迁移运行 pin 并重放冻结；本次不更新 pin、不安装部署。
+数据仓 `runtime/source_review_api.py` 是唯一旧私有调用适配层；有 v1 时使用公开接口，当前 `3fd411a…` 冻结版本没有该模块时走显式 legacy 路径。不吞掉实现的导入错误，不猜测新版本协议。`poll_three_arm_results.py` 只消费公开命名。移除 legacy 层需要单独迁移运行 pin 并重放冻结；第二批仅在草稿中迁移三臂复盘 pin，其他原运行 pin 保持；尚未部署。
 
 `install_forward_overlay.py` 暂保留：它在覆盖前后都核查协议锁定的源码。消除 overlay 需要分别解除国内联赛、欧冠协议的依赖，不能把 main 源码整体覆盖到旧推理版本上。
 
@@ -38,7 +38,7 @@ python scripts/check_repository.py
 python scripts/run_tests.py --layer integration
 ```
 
-治理检查在源码 CI 运行，检查未分类模块、新增阶段组合超额、重复阶段和冻结例外被提前退休。跨仓检查另校验数据仓 `config/source-contract.json` 中的原工作流、冻结、登记与工件哈希。合同是本次整理基线，不是永久禁止工作流更新；以后迁移须同时更新合同和实际重放证据。
+治理检查在源码 CI 运行，检查未分类模块、新增阶段组合超额、重复阶段和冻结例外被提前退休。跨仓检查另校验数据仓 `config/source-contract.json` 中的登记工作流、冻结、登记与工件哈希。合同是本次整理基线，不是永久禁止工作流更新；以后迁移须同时更新合同和实际重放证据。
 
 源码、数据清单、活动工件身份和部署版本各自记录。回滚只需 revert 对应整理提交；没有迁移数据或修改模型权重。新增 API 与旧调用并存，因此数据仓和源码仓可以分别回滚。
 
