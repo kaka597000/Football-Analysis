@@ -42,9 +42,7 @@ def arms(base, early, latest):
 
 def forecast(matrix, line):
     picks = score.score_picks(matrix, line=line)
-    inds = np.argsort(-matrix.ravel(), kind='stable')[:3]
-    top3 = ['%d-%d' % np.unravel_index(i, matrix.shape) for i in inds]
-    return dict(picks, top3=top3, matrix=matrix.tolist())
+    return dict(picks, top3=score.top_three_scores(matrix), matrix=matrix.tolist())
 
 
 def outcome(picks, result):

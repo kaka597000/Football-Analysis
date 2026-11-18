@@ -220,6 +220,11 @@ def _apply(artifact, current_matrix, quote, cohort):
     return {'current': current.copy(), 'market': blended, 'market_cohort': corrected}
 
 
+def top_three_scores(matrix):
+    indices = np.argsort(-matrix.ravel(), kind='stable')[:3]
+    return ['%d-%d' % np.unravel_index(index, matrix.shape) for index in indices]
+
+
 def score_picks(matrix, *, line=None):
     m = _matrix(matrix)
     h, a = np.unravel_index(np.argmax(m), m.shape)

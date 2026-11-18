@@ -14,7 +14,7 @@ from nations_league import elo_reference as elo
 from publication import atomic_json, deliver
 from research.analysis_freeze import aware, digest, save, verify
 from research_program.nations_phase import classify_source_phase, resolve_phase_evidence, verify_period_scores
-from research_program.market_path_study import forecast as ranked_forecast
+from research_program.three_arm_model import score_picks, top_three_scores
 
 
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/'
@@ -198,13 +198,13 @@ def candidate(event, month_raw, month_meta, study, store, window, cache):
     fit=json.loads(report_raw)['campaigns']['2026']['fits'][fixture['league_level']]['elo']
     rates=[ratings[names[s]] for s in ('home','away')]
     pmf=elo.forecast(fit,rates,fixture['neutral'])
-    picks=ranked_forecast(pmf,line=2.5)
-    matrix=picks.pop('matrix')
+    picks=score_picks(pmf,line=2.5)
+    picks['top3']=top_three_scores(pmf)
     fixture['cutoff_at']=now().isoformat()
     body={'fixture_registration':registration,'summary':known,'schedule':scoreboard,'rating_sources':vintage,
           'history_sources':sources,'recent_coverage':checked,'pre_match_elo':rates,
           'artifact_report_sha256':hashlib.sha256(report_raw).hexdigest(),'calibration':fit,
-          'method':'independent international Elo; fixed 2.5 research line','matrix':matrix,'picks':picks,
+          'method':'independent international Elo; fixed 2.5 research line','matrix':pmf.tolist(),'picks':picks,
           'actual_market_line':None, 'automatic_promotion':False}
     checksum=first(store,'nations-elo-independent',fixture,body)
     return dict(result,status='ISSUED',freeze_sha256=checksum)
