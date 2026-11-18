@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta, timezone
+import copy
 import hashlib
 import json
 from pathlib import Path
@@ -58,7 +59,25 @@ class EloMonitoringTests(unittest.TestCase):
             rec=monitor.existing(store,'espn:901','nations-elo-independent')
             self.assertEqual(rec['evaluation_slot'],'FIRST_PREMATCH')
             self.assertEqual(rec['payload']['picks']['total']['line'],2.5)
+            self.assertEqual(len(set(rec['payload']['picks']['top3'])),3)
+            self.assertEqual(rec['payload']['picks']['top3'][0],rec['payload']['picks']['primary'])
             self.assertEqual(rec['payload']['fixture_registration'],first['registration_sha256'])
+
+            completed = copy.deepcopy(head)
+            competition = completed['competitions'][0]
+            competition['status'] = {'type':{'name':'STATUS_FULL_TIME','shortDetail':'FT','state':'post','completed':True},'period':2}
+            for competitor, goals in zip(competition['competitors'], (1,0)):
+                competitor['linescores'] = [{'value':0},{'value':goals}]
+            data = {'header':completed}
+            later=start+timedelta(days=2)
+            with patch.object(monitor,'fetch',return_value=captured('https://example.com/result',data)):
+                reviewed=monitor.review(store,later)
+                self.assertEqual(reviewed['settled'],1,reviewed)
+                self.assertEqual(reviewed['top3_eligible'],1)
+                self.assertEqual(reviewed['standardized_hits']['top3_hit'],int('1-0' in rec['payload']['picks']['top3']))
+            with patch.object(monitor,'fetch',side_effect=AssertionError('settlement must be immutable')):
+                self.assertEqual(monitor.review(store,later),reviewed)
+            self.assertIsNone(monitor.regulation_result(dict(data,commentary=[{'text':'Match abandoned'}]),rec))
 
 
 if __name__=='__main__':

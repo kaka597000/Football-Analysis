@@ -13,8 +13,8 @@ from urllib.request import Request, urlopen
 from nations_league import elo_reference as elo
 from publication import atomic_json, deliver
 from research.analysis_freeze import aware, digest, save, verify
-from research_program.nations_phase import classify_source_phase, resolve_phase_evidence
-from research_program.three_arm_model import score_picks
+from research_program.nations_phase import classify_source_phase, resolve_phase_evidence, verify_period_scores
+from research_program.market_path_study import forecast as ranked_forecast
 
 
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/'
@@ -198,15 +198,83 @@ def candidate(event, month_raw, month_meta, study, store, window, cache):
     fit=json.loads(report_raw)['campaigns']['2026']['fits'][fixture['league_level']]['elo']
     rates=[ratings[names[s]] for s in ('home','away')]
     pmf=elo.forecast(fit,rates,fixture['neutral'])
-    picks=score_picks(pmf,line=2.5)
+    picks=ranked_forecast(pmf,line=2.5)
+    matrix=picks.pop('matrix')
     fixture['cutoff_at']=now().isoformat()
     body={'fixture_registration':registration,'summary':known,'schedule':scoreboard,'rating_sources':vintage,
           'history_sources':sources,'recent_coverage':checked,'pre_match_elo':rates,
           'artifact_report_sha256':hashlib.sha256(report_raw).hexdigest(),'calibration':fit,
-          'method':'independent international Elo; fixed 2.5 research line','matrix':pmf.tolist(),'picks':picks,
+          'method':'independent international Elo; fixed 2.5 research line','matrix':matrix,'picks':picks,
           'actual_market_line':None, 'automatic_promotion':False}
     checksum=first(store,'nations-elo-independent',fixture,body)
     return dict(result,status='ISSUED',freeze_sha256=checksum)
+
+
+def regulation_result(data, record):
+    f = record['fixture']
+    header = data['header']
+    comp, = header['competitions']
+    if (header['league']['slug'] != 'uefa.nations' or 'espn:' + str(header['id']) != f['match_id']
+            or str(comp['id']) != str(header['id']) or aware(comp['date']) != aware(f['kickoff_at'])
+            or team_names(header) != {s:f[s] for s in ('home','away')}):
+        raise ValueError('settlement identity differs from first issue')
+    status = comp['status']
+    if status['type'].get('name') != 'STATUS_FULL_TIME':
+        return None
+    match_text = json.dumps([data.get('commentary',[]), comp.get('notes',[])]).lower()
+    if 'match abandoned' in match_text or 'match was abandoned' in match_text or 'forfeited' in match_text:
+        return None
+    verified = [verify_period_scores(sides(header)[s],status) for s in ('home','away')]
+    if any(v is None for v in verified):
+        return None
+    return [v['regulation'] for v in verified]
+
+
+def review(store, at):
+    settlements = []
+    for path in sorted((store/'freezes').glob('*/000001.json')):
+        record = verify(json.loads(path.read_bytes()))
+        if record['track'] != 'nations-elo-independent':
+            continue
+        fixture = record['fixture']
+        mid = fixture['match_id']
+        item = {'match_id':mid,'first_issue_sha256':record['record_sha256']}
+        output = store/'settlements'/(mid.replace(':','-')+'.json')
+        try:
+            if output.exists():
+                result = verify(json.loads(output.read_bytes()))
+                if result['first_issue_sha256']!=record['record_sha256']:
+                    raise ValueError('settlement references a different first issue')
+                item.update(status='SETTLED',outcome=result['outcome'])
+            elif aware(fixture['kickoff_at']) >= at:
+                item['status']='PENDING'
+            else:
+                raw,meta=fetch(ESPN + 'uefa.nations/summary?' + urlencode({'event':mid.split(':',1)[1]}))
+                score=regulation_result(json.loads(raw),record)
+                if score is None:
+                    item['status']='PENDING_VERIFIED_90'
+                else:
+                    outcome=elo.selections(record['payload']['matrix'],score)
+                    if any(outcome[key]!=record['payload']['picks'][key] for key in ('primary','wdl')) or (
+                            outcome['total_2_5']!=record['payload']['picks']['total']['direction']):
+                        raise ValueError('frozen selections disagree with frozen matrix')
+                    top3=record['payload']['picks'].get('top3')
+                    if top3 is not None:
+                        outcome['top3_hit']=f'{score[0]}-{score[1]}' in top3
+                    source=retain(store,raw,meta)
+                    settled=dict(item,score=score,score_basis='regulation_90',source=source,outcome=outcome)
+                    settled['record_sha256']=digest(settled)
+                    output.parent.mkdir(parents=True,exist_ok=True)
+                    deliver(output,(json.dumps(settled,sort_keys=True,indent=2)+'\n').encode())
+                    item.update(status='SETTLED',outcome=outcome)
+        except SOURCE_FAILURE as exc:
+            item.update(status='PENDING_SOURCE_OR_IDENTITY',detail=str(exc))
+        settlements.append(item)
+    finished = [r['outcome'] for r in settlements if r['status']=='SETTLED']
+    return {'first_issues':len(settlements),'settled':len(finished),'pending':len(settlements)-len(finished),
+            'standardized_hits':{k:sum(bool(x.get(k)) for x in finished) for k in ('primary_hit','top3_hit','wdl_hit','total_hit')},
+            'top3_eligible':sum('top3_hit' in x for x in finished),
+            'rows':settlements}
 
 
 def monitor(study,horizon=90,window=48):
@@ -241,6 +309,7 @@ def monitor(study,horizon=90,window=48):
             'forecast_hours':window,'schedule_sources':scans,'discovery_errors':errors,'scheduled':len(future),
             'registered':sum('registration_sha256' in row for row in rows),
             'issued_or_original':sum(row['status'] in ('ISSUED','ALREADY_ISSUED') for row in rows),'fixtures':rows}
+    report['review']=review(store,now())
     atomic_json(store/'latest.json',report)
     return report
 

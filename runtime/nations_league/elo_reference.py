@@ -107,10 +107,11 @@ def selections(pmf, score):
     home, away = score
     direction = 'home' if home > away else ('away' if away > home else 'draw')
     over = sum(score) >= 3
+    observed = float(pmf[home, away]) if 0 <= home < pmf.shape[0] and 0 <= away < pmf.shape[1] else 0.
     return {
         'primary': picks['primary'], 'wdl': picks['wdl'], 'total_2_5': picks['total']['direction'],
         'primary_hit': picks['primary'] == f'{home}-{away}', 'wdl_hit': picks['wdl'] == direction,
         'total_hit': (picks['total']['direction'] == 'over') == over,
-        'p_observed_score': float(pmf[home, away]), 'score_log_loss': -float(np.log(pmf[home, away])),
+        'p_observed_score': observed, 'score_log_loss': -float(np.log(observed)) if observed > 0 else None,
         'wdl_probabilities': picks['wdl_probabilities'], 'p_over_2_5': float(picks['total']['settlements']['over']['win']),
     }

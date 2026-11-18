@@ -18,6 +18,16 @@ class EloReferenceTests(unittest.TestCase):
         self.assertEqual(history['2024-02-01'], history['2024-01-02'])
         self.assertGreater(history['2024-02-02']['A'], 1510.)
 
+    def test_score_outside_matrix_still_settles_wdl_and_total(self):
+        pmf=np.zeros((4,4))
+        pmf[3,1]=1.
+        actual=elo.selections(pmf,(4,1))
+        self.assertFalse(actual['primary_hit'])
+        self.assertTrue(actual['wdl_hit'])
+        self.assertTrue(actual['total_hit'])
+        self.assertEqual(actual['p_observed_score'],0)
+        self.assertIsNone(actual['score_log_loss'])
+
     def test_independent_neutral_rating_symmetry_and_standardized_line(self):
         artifact = {'include_elo':True, 'coefficients':[.2, .1, .5]}
         a = elo.forecast(artifact, [1700,1400], True)
