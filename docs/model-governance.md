@@ -41,3 +41,11 @@ python scripts/run_tests.py --layer integration
 治理检查在源码 CI 运行，检查未分类模块、新增阶段组合超额、重复阶段和冻结例外被提前退休。跨仓检查另校验数据仓 `config/source-contract.json` 中的原工作流、冻结、登记与工件哈希。合同是本次整理基线，不是永久禁止工作流更新；以后迁移须同时更新合同和实际重放证据。
 
 源码、数据清单、活动工件身份和部署版本各自记录。回滚只需 revert 对应整理提交；没有迁移数据或修改模型权重。新增 API 与旧调用并存，因此数据仓和源码仓可以分别回滚。
+
+## 第二批：版本执行入口收敛
+
+数据仓五个运行/回放工作流改为通过 `runtime/source_versions.py` 读取同一份 `config/source-contract.json`，不再各自硬编码源码版本。训练、采集、sequence 和 Transformer 仍锁原提交；三臂 reviewer 的草稿迁移指向公开 API v1 的 `8534d90…`。该版本相对原 `3fd411a…` 只有新增 runtime 文件，原 runtime 文件 Git blob 全部一致；旧适配层只为回滚保留。这里描述 PR 中待合并的配置，不表示部署已改变。
+
+源仓旧部署密钥安装器不再生成密钥、修改 Secrets 或触发任务；原内容与重复执行工作流逐字节归档。原运行注册表中范围外路由改标为清单中的 archived，并由 `competition_scope.permitted` 校验；外部注册表、参数和原模型保持。
+
+后续可执行迁移：国内联赛/欧冠 overlay 须分别从 `future/bundle-v2/manifest.json` 与 `future/ucl-bundle-v2/manifest.json` 提取锁定源码集合，在独立目录生成无覆盖版本并逐场重放，原集合与新收据一并保存后才改 pin。LSTM/Transformer 须等待已登记六场原赛果，按原协议比较同截点净增命中、概率质量和覆盖，再记录保留或淘汰；目前没有可删除这些实验入口的证据。历史回放专用工作流仍保留原历史提交，不强行统一到最新源码。

@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 
 STATES = {'active', 'validation', 'retired', 'archived'}
@@ -37,6 +38,17 @@ def validate(root, manifest):
     for row in policy['frozen_exceptions']:
         if row['status'] != 'validation' or row['action'] != 'complete_original_protocol_before_retirement':
             errors.append('frozen validation changed: ' + row['id'])
+    from competition_scope import permitted
+    for row in manifest['registry_snapshot']['routes']:
+        eligible = permitted({'cohort': row['route_key']})
+        if row.get('analysis_eligible') != eligible or row['status'] != ('active' if eligible else 'archived'):
+            errors.append('route scope classification differs: ' + row['route_key'])
+    for entry in manifest.get('retired_entrypoints', []):
+        archive = root / entry['archive']
+        if not archive.is_file() or hashlib.sha256(archive.read_bytes()).hexdigest() != entry['archive_sha256']:
+            errors.append('retirement archive changed: ' + entry['archive'])
+        if entry['status'] == 'archived' and (root / entry['path']).exists():
+            errors.append('archived entrypoint reactivated: ' + entry['path'])
     return errors
 
 
@@ -49,6 +61,14 @@ def check_data(data):
         file = data / path
         if not file.is_file() or hashlib.sha256(file.read_bytes()).hexdigest() != expected:
             errors.append('protected file changed: ' + path)
+    for name, role in contract.get('managed_workflows', {}).items():
+        workflow = (data / '.github/workflows' / name).read_text()
+        checkouts = re.findall(r'repository: kaka597000/Football-Analysis\s+ref: ([^\n]+)\s+path: ([^\n]+)', workflow)
+        expected = {role: 'source'} if role else {key: key for key in contract['workflow_pins']}
+        actual = {path.strip(): ref.strip() for ref, path in checkouts}
+        wanted = {path: '${{ steps.versions.outputs.' + key.replace('-', '_') + ' }}' for key, path in expected.items()}
+        if actual != wanted or 'runtime/source_versions.py --github-output' not in workflow:
+            errors.append('workflow bypasses version contract: ' + name)
     return errors
 
 

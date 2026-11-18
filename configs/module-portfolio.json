@@ -280,7 +280,7 @@
     "routes": [
       {
         "route_key": "mex.1:apertura:regular",
-        "status": "active",
+        "status": "archived",
         "registry_status": "ACTIVE_RESEARCH",
         "current": {
           "artifact_sha256": "9614858205e8d3dcc56951d957f012e1c4ca603198a8acf79036037ed65e017e",
@@ -292,7 +292,9 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": false,
+        "retention": "outside current analysis scope; immutable registry and artifacts retained for replay"
       },
       {
         "route_key": "eng.1",
@@ -308,7 +310,8 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "esp.1",
@@ -324,7 +327,8 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "ger.1",
@@ -340,7 +344,8 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "ita.1",
@@ -356,7 +361,8 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "fra.1",
@@ -372,7 +378,8 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "ned.1",
@@ -388,11 +395,12 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "por.1",
-        "status": "active",
+        "status": "archived",
         "registry_status": "ACTIVE_RESEARCH",
         "current": {
           "artifact_sha256": "860c6244fed26c1685d5487797b243bc9873ac66fa7f747afe7c6d9b45290746",
@@ -404,7 +412,9 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": false,
+        "retention": "outside current analysis scope; immutable registry and artifacts retained for replay"
       },
       {
         "route_key": "bra.1",
@@ -420,7 +430,8 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "swe.1",
@@ -436,11 +447,12 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "ksa.1",
-        "status": "active",
+        "status": "archived",
         "registry_status": "ACTIVE_RESEARCH",
         "current": {
           "artifact_sha256": "4a59e33f7acce4da67b35b9dcee9d94abfd798bbb80fc9c25ef472fa8fba8dec",
@@ -452,11 +464,13 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": false,
+        "retention": "outside current analysis scope; immutable registry and artifacts retained for replay"
       },
       {
         "route_key": "eng.2",
-        "status": "active",
+        "status": "archived",
         "registry_status": "ACTIVE_RESEARCH",
         "current": {
           "artifact_sha256": "72beee6485c2c700219ab800fc1ce20794b6b41f096dea3b13214f9b8d283fcc",
@@ -468,7 +482,9 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": false,
+        "retention": "outside current analysis scope; immutable registry and artifacts retained for replay"
       },
       {
         "route_key": "nor.1",
@@ -484,7 +500,8 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "usa.1",
@@ -500,7 +517,8 @@
           "version": "WCPP-ML-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "uefa.champions:NEW_FORMAT:league_phase",
@@ -516,7 +534,8 @@
           "version": "WCPP-ML-UCL-0.1",
           "engine": null
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "jpn.1",
@@ -532,7 +551,8 @@
           "version": "WCPP-SYSTEMATIC-RESEARCH-0.1",
           "engine": "systematic_candidate"
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "kor.1",
@@ -548,7 +568,8 @@
           "version": "WCPP-SYSTEMATIC-RESEARCH-0.1",
           "engine": "systematic_candidate"
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "aus.1",
@@ -564,7 +585,8 @@
           "version": "WCPP-AUS-EXPERT-0.1.1-DATAFIX",
           "engine": "aus_expert"
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       },
       {
         "route_key": "afc.champions:ELITE:league_phase",
@@ -580,7 +602,8 @@
           "version": "WCPP-AFC-ELITE-TEST-POISSON-0.1",
           "engine": "generic_poisson"
         },
-        "integration_candidates": []
+        "integration_candidates": [],
+        "analysis_eligible": true
       }
     ]
   },
@@ -641,5 +664,21 @@
         "data_path": "workspace-updates/20261118-transformer"
       }
     ]
-  }
+  },
+  "retired_entrypoints": [
+    {
+      "path": "scripts/setup_unattended.py",
+      "status": "retired",
+      "reason": "superseded deploy-key activation; current data workflow uses its own GITHUB_TOKEN",
+      "archive": "docs/archive/setup_unattended.py.txt",
+      "archive_sha256": "ad04718861c87bc1b18545decaa843227dc4ed7748eb7293ba0473ef7c9b173f"
+    },
+    {
+      "path": ".github/workflows/unattended.yml",
+      "status": "archived",
+      "reason": "obsolete public execution workflow; data repository is the sole scheduler",
+      "archive": "docs/archive/unattended-public.yml",
+      "archive_sha256": "ef8065412958925551ab1675ff30a666f80732cbaba194f64f6af9d8fee4d073"
+    }
+  ]
 }
