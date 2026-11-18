@@ -1,4 +1,4 @@
-# 当前状态（2026-11-11）
+# 当前状态（2026-11-18）
 
 本页统一维护当前入口；项目目标和执行规范分别以 [project-goals.json](project-goals.json)、[AGENTS.md](AGENTS.md) 为准。
 
@@ -12,3 +12,5 @@
 [模型与代码用途](models/README.md) · [架构](ARCHITECTURE.md) · [运行与验证](OPERATIONS.md)
 
 历史评估、旧模型快照和冻结预测保留用于复现。文档整理不代表重新训练、模型晋级或准确率改善。
+
+- 整理基线：机器清单 `configs/module-portfolio.json` 记录 19 条原路由，未晋级。巴甲三臂、LSTM/LightGBM、Transformer 首冻继续按各自截点结算；治理与公开复盘 API 见 [模型收敛](docs/model-governance.md)。运行源码仍由数据仓固定提交决定。
