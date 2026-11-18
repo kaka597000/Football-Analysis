@@ -1,6 +1,6 @@
 """Bounded InferSports totals collection; evidence preparation, not model promotion.
 
-Only independently matched Nations League A/C league-phase fixtures are supported.
+Only independently matched Nations League league-phase fixtures are supported.
 Raw row ``as_of`` is the quote time. Response/capture timestamps never replace it.
 The one-hour window matches the existing forward quote audit and is retained in
 every snapshot; callers can still require a stricter window downstream.
@@ -13,6 +13,7 @@ import json
 import os
 from pathlib import Path
 import re
+import time
 from urllib.parse import urlencode, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -27,18 +28,25 @@ BASE = 'https://api.infersports.dev'
 ESPN = 'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.nations/scoreboard'
 MAX_AGE_SECONDS = 3600
 # These IDs/names were observed together, not inferred from a league-name search.
-LEAGUES = {'lg_BEJAVP29': ('UEFANLA', 'A'), 'lg_FDN4KCTA': ('UEFANLC', 'C')}
+LEAGUES = {'lg_BEJAVP29': ('UEFANLA', 'A'), 'lg_4GXKQVPJ': ('UEFANLB', 'B'),
+           'lg_FDN4KCTA': ('UEFANLC', 'C')}
 BOOKMAKERS = frozenset({'crown', 'hkjc', 'm8bet', 'macau', 'nova88', 'sbobet'})
 ALIAS_REVIEW = {'version': 'infer-nations-turkey-20261112-1',
                 'reviewed_at': '2026-11-12T13:43:21.438909+00:00',
                 'espn_id': '465', 'espn_name': 'Türkiye', 'provider_name': 'Turkey'}
+ALIAS_REVIEWS = (ALIAS_REVIEW, *json.loads((Path(__file__).resolve().parents[2]
+    / 'configs' / 'infer-nations-alias-reviews.json').read_text(encoding='utf-8')))
 
 
 def team_identity(team, name, cutoff):
-    """Exact names, plus the explicitly reviewed national-team alias and ID."""
-    rule = ALIAS_REVIEW
-    if name in (rule['provider_name'], rule['espn_name']) or team.get('displayName') in (
-            rule['provider_name'], rule['espn_name']):
+    """Exact names, plus reviewed aliases bound to the national-team ESPN ID."""
+    relevant = [rule for rule in ALIAS_REVIEWS
+                if name in (rule['provider_name'], rule['espn_name'])
+                or team.get('displayName') in (rule['provider_name'], rule['espn_name'])]
+    if relevant:
+        if len(relevant) != 1:
+            return False
+        rule = relevant[0]
         return (team.get('id') == rule['espn_id'] and team.get('displayName') == rule['espn_name']
                 and (name == rule['espn_name'] or name == rule['provider_name']
                      and aware(rule['reviewed_at']) <= aware(cutoff)))
@@ -96,10 +104,10 @@ def eligible_targets(board, *, cutoff, now, fixtures=None):
             comp_status = competition.get('status', {}).get('type')
             if comp_status is not None and (comp_status.get('state') != 'pre' or comp_status.get('completed') is not False):
                 raise ValueError('conflicting competition status')
-            group = re.fullmatch(r'Group ([AC])[1-4]', competition.get('group', {}).get('name', ''))
+            group = re.fullmatch(r'Group ([ABC][1-4]|D[12])', competition.get('group', {}).get('name', ''))
             if not group:
                 raise ValueError('unverified grade')
-            grade = group[1]
+            grade = group[1][0]
             competitors = competition['competitors']
             sides = {x['homeAway']: x['team'] for x in competitors}
             if (len(competitors) != 2 or set(sides) != {'home', 'away'}
@@ -146,16 +154,34 @@ def matched_events(events, target, sides, grade, cutoff):
     return found
 
 
-def build(root, events_meta, odds_meta, identity_meta, *, cutoff, now=None, fixtures=None):
-    """Build from direct provider responses; odds_meta is one metadata object or a list."""
+def read_event_pages(root, metadata, cutoff):
+    """Keep each event attached to its original page, rather than inventing a raw merge."""
+    pages = [metadata] if isinstance(metadata, dict) else metadata
+    events, evidence, last = [], {}, {}
+    for meta in pages:
+        last = read_evidence(root, meta, cutoff=cutoff, expected=BASE + '/v1/events')
+        if not isinstance(last.get('data'), list):
+            raise ValueError('events list required')
+        events.extend(last['data'])
+        evidence.update({event['id']: meta for event in last['data']})
+    return events, evidence, bool(last.get('page', {}).get('next_cursor'))
+
+
+def build(root, events_meta, odds_meta, identity_meta, *, cutoff, now=None, fixtures=None,
+          identity_review_at=None):
+    """Build from retained pages. Later identity reviews explicitly mark an offline replay.
+
+    Live collection always uses the prediction cutoff for alias availability.
+    ``identity_review_at`` only enables labelled retrospective transport diagnostics;
+    it does not change raw capture/quote times or create a prematch prediction.
+    """
     now = now or datetime.now(timezone.utc)
     if aware(cutoff) > now:
         raise ValueError('future cutoff')
-    events_response = read_evidence(root, events_meta, cutoff=cutoff, expected=BASE + '/v1/events')
+    alias_cutoff = identity_review_at or cutoff
+    replay = aware(alias_cutoff) > aware(cutoff)
+    events, event_evidence, truncated = read_event_pages(root, events_meta, cutoff)
     board = read_evidence(root, identity_meta, cutoff=cutoff, expected=ESPN)
-    events = events_response['data']
-    if not isinstance(events, list):
-        raise ValueError('events list required')
     eligible, excluded = eligible_targets(board, cutoff=cutoff, now=now, fixtures=fixtures)
     odds_by_event = defaultdict(list)
     for meta in [odds_meta] if isinstance(odds_meta, dict) else odds_meta:
@@ -168,11 +194,15 @@ def build(root, events_meta, odds_meta, identity_meta, *, cutoff, now=None, fixt
         odds_by_event[route[1]].append((response, meta))
     snapshots, mappings = [], []
     for target, sides, grade in eligible:
-        matches = matched_events(events, target, sides, grade, cutoff)
+        matches = matched_events(events, target, sides, grade, alias_cutoff)
         if len(matches) != 1:
             excluded['missing_or_ambiguous_provider_identity'] += 1
             continue
         source = matches[0]
+        source_meta = event_evidence[source['id']]
+        aliases = [dict(rule, sha256=digest(rule)) for rule in ALIAS_REVIEWS
+                   if any(source[s + '_team']['name'] == rule['provider_name']
+                          and sides[s]['id'] == rule['espn_id'] for s in ('home', 'away'))]
         responses = odds_by_event.get(source['id'], [])
         if len(responses) != 1:
             excluded['missing_or_ambiguous_odds_response'] += 1
@@ -197,11 +227,11 @@ def build(root, events_meta, odds_meta, identity_meta, *, cutoff, now=None, fixt
                    'field': 'market_quote', 'period': 'regulation_90',
                    'event_kickoff_at': target['kickoff_at'], 'observed_at': meta['captured_at'],
                    'provider_match_id': source['id'], 'value': value,
-                   'identity_evidence': identity_meta, 'provider_event_evidence': events_meta,
+                   'identity_evidence': identity_meta, 'provider_event_evidence': source_meta,
                    'evidence': {'file': meta['file'], 'sha256': meta['sha256'], 'url': meta['url'],
                                 'query_time': meta['captured_at'], 'identity_verified': True}}
-            if source['home_team']['name'] == 'Turkey' or source['away_team']['name'] == 'Turkey':
-                row['identity_alias_review'] = dict(ALIAS_REVIEW, sha256=digest(ALIAS_REVIEW))
+            if aliases:
+                row['identity_alias_reviews'] = aliases
             try:
                 validate(row, root, now=now)
                 line = value['line']
@@ -234,15 +264,20 @@ def build(root, events_meta, odds_meta, identity_meta, *, cutoff, now=None, fixt
         mappings.append({'match_id': target['match_id'], 'provider_match_id': source['id'],
                          'provider_league': source['league'], 'cohort': target['cohort'],
                          'identity_evidence_sha256': identity_meta['sha256'],
-                         'provider_event_evidence_sha256': events_meta['sha256']})
+                         'provider_event_evidence_sha256': source_meta['sha256'],
+                         'identity_alias_reviews': aliases})
     count = sum(len(s['observations']) for s in snapshots)
     covered = sum(bool(s['observations']) for s in snapshots)
     return {'schema': 'WCPP-MARKET-CHANNEL-1', 'created_at': now.isoformat(),
             'provider': 'infersports', 'market_model_ready': count > 0,
             'verified_quote_count': count, 'eligible_fixture_count': len(eligible),
-            'covered_fixture_count': covered, 'coverage': covered / len(eligible) if eligible else None,
-            'coverage_scope': 'explicit requested fixtures' if fixtures is not None else 'ESPN Nations League A/C league-phase future fixtures',
-            'provider_events_page_truncated': bool(events_response.get('page', {}).get('next_cursor')),
+            'covered_fixture_count': covered,
+            'requested_fixture_count': len(fixtures) if fixtures is not None else len(eligible),
+            'coverage': covered / len(fixtures if fixtures is not None else eligible) if (fixtures or eligible) else None,
+            'coverage_scope': 'explicit requested fixtures' if fixtures is not None else 'ESPN Nations League A/B/C/D league-phase future fixtures',
+            'provider_events_page_truncated': truncated,
+            'provider_events_pages': 1 if isinstance(events_meta, dict) else len(events_meta),
+            'retrospective_identity_replay': replay, 'identity_review_at': alias_cutoff,
             'source_odds_events': len(odds_by_event), 'market_max_age_seconds': MAX_AGE_SECONDS,
             'excluded': dict(excluded), 'identity_mappings': mappings, 'snapshots': snapshots,
             'quote_time_inferred_from_capture': False, 'tls_verification_disabled': False,
@@ -283,19 +318,27 @@ def write(path, value):
         json.dump(value, handle, ensure_ascii=False, indent=2, allow_nan=False)
 
 
-def collect(out, fixtures, *, limit=50, max_events=8):
-    """One bounded schedule page and at most max_events exact target requests.
+def collect(out, fixtures=None, *, date=None, limit=100, max_pages=3, max_events=8,
+            max_seconds=45):
+    """A bounded, UTC-day schedule search and exact-target odds requests.
 
     No retries, subscriptions, secret installation or registry changes. Fixtures
-    restrict the scope; the live ESPN response must independently confirm them.
+    Explicit fixtures restrict the scope; otherwise the live ESPN league phase
+    determines the population. Stop paging once all eligible targets are matched.
     """
     if type(limit) is not int or not 1 <= limit <= 100 or type(max_events) is not int or not 1 <= max_events <= 10:
         raise ValueError('bounded limits required')
-    if not isinstance(fixtures, list) or not fixtures:
+    if type(max_pages) is not int or not 1 <= max_pages <= 3 or not 15 <= max_seconds <= 50:
+        raise ValueError('bounded page/time budget required')
+    if fixtures is not None and (not isinstance(fixtures, list) or not fixtures):
         raise ValueError('explicit fixture list required')
-    days = {aware(f['kickoff_at']).astimezone(timezone.utc).strftime('%Y%m%d') for f in fixtures}
+    days = ({aware(f['kickoff_at']).astimezone(timezone.utc).strftime('%Y%m%d') for f in fixtures}
+            if fixtures is not None else {date or datetime.now(timezone.utc).strftime('%Y%m%d')})
     if len(days) != 1:
         raise ValueError('single UTC date per collection required')
+    day = next(iter(days))
+    provider_day = datetime.strptime(day, '%Y%m%d').strftime('%Y-%m-%d')
+    started = time.monotonic()
     out = Path(out)
     out.mkdir(parents=True, exist_ok=False)
     credential = os.environ.get('WCPP_INFERSPORTS_KEY') or os.environ.get('infer_yapan_zhishu')
@@ -305,22 +348,45 @@ def collect(out, fixtures, *, limit=50, max_events=8):
     if credential:
         try:
             requests += 1
-            identity = fetch(ESPN + '?' + urlencode({'dates': next(iter(days)), 'limit': 1000}), out / 'identity.json')
+            identity = fetch(ESPN + '?' + urlencode({'dates': day, 'limit': 1000}), out / 'identity.json')
             metadata['identity'] = identity
-            requests += 1
-            events_meta = fetch(BASE + '/v1/events?' + urlencode({'sport': 'football', 'status': 'scheduled', 'limit': limit}),
-                                out / 'events.json', credential=credential)
-            metadata.update(events=events_meta, odds=[])
             now = datetime.now(timezone.utc)
             board = read_evidence(out, identity, cutoff=now.isoformat(), expected=ESPN)
-            events = read_evidence(out, events_meta, cutoff=now.isoformat(), expected=BASE + '/v1/events')['data']
             targets, _ = eligible_targets(board, cutoff=now.isoformat(), now=now, fixtures=fixtures)
+            metadata.update(events=[], odds=[])
             requested_ids = []
-            for target, sides, grade in targets:
-                matches = matched_events(events, target, sides, grade, now.isoformat())
-                if len(matches) == 1 and matches[0]['id'] not in requested_ids:
-                    requested_ids.append(matches[0]['id'])
+            cursor, seen_cursors, timed_out = None, set(), False
+            for page in range(max_pages) if targets else ():
+                if time.monotonic() - started > max_seconds - 15:
+                    timed_out = True
+                    break
+                params = {'sport': 'football', 'status': 'scheduled', 'date': provider_day,
+                          'timezone': 'UTC', 'limit': limit}
+                if cursor:
+                    params['cursor'] = cursor
+                requests += 1
+                meta = fetch(BASE + '/v1/events?' + urlencode(params),
+                             out / ('events.json' if page == 0 else f'events-{page+1}.json'),
+                             credential=credential)
+                metadata['events'].append(meta)
+                now = datetime.now(timezone.utc)
+                events, _, _ = read_event_pages(out, metadata['events'], now.isoformat())
+                requested_ids = []
+                for target, sides, grade in targets:
+                    matches = matched_events(events, target, sides, grade, now.isoformat())
+                    if len(matches) == 1 and matches[0]['id'] not in requested_ids:
+                        requested_ids.append(matches[0]['id'])
+                response = read_evidence(out, meta, cutoff=now.isoformat(), expected=BASE + '/v1/events')
+                cursor = response.get('page', {}).get('next_cursor')
+                if len(requested_ids) == len(targets) or not cursor:
+                    break
+                if cursor in seen_cursors:
+                    raise ValueError('provider repeated pagination cursor')
+                seen_cursors.add(cursor)
             for event_id in requested_ids[:max_events]:
+                if time.monotonic() - started > max_seconds - 15:
+                    timed_out = True
+                    break
                 try:
                     requests += 1
                     meta = fetch(BASE + '/v1/events/' + event_id + '/odds?' + urlencode({'markets': 'totals', 'format': 'decimal'}),
@@ -332,10 +398,12 @@ def collect(out, fixtures, *, limit=50, max_events=8):
                     if failure.get('http_status') in {401, 403, 429}:
                         break
             now = datetime.now(timezone.utc)
-            result = build(out, events_meta, metadata['odds'], identity, cutoff=now.isoformat(), now=now, fixtures=fixtures)
+            result = build(out, metadata['events'], metadata['odds'], identity, cutoff=now.isoformat(), now=now, fixtures=fixtures)
             result['request_budget_truncated'] = len(requested_ids) > max_events
-            result['status'] = ('PARTIAL_VALIDATED' if failures else 'VALIDATED') if result['market_model_ready'] else (
-                'COLLECTION_FAILED' if failures else 'NO_VALID_QUOTES')
+            result['time_budget_exhausted'] = timed_out
+            complete = result['covered_fixture_count'] == result['requested_fixture_count']
+            result['status'] = ('VALIDATED' if complete and not failures else 'PARTIAL_VALIDATED') if result['market_model_ready'] else (
+                'COLLECTION_FAILED' if failures else 'NO_FUTURE_FIXTURES' if not targets else 'NO_VALID_QUOTES')
         except Exception as exc:
             failures.append(classify_failure(exc))
             result['status'] = 'COLLECTION_FAILED'
@@ -348,9 +416,13 @@ def collect(out, fixtures, *, limit=50, max_events=8):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', required=True)
-    parser.add_argument('--fixtures', required=True, help='Explicit fixture JSON list; identities are independently rechecked')
-    parser.add_argument('--limit', type=int, default=50)
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument('--fixtures', help='Explicit fixture JSON list; identities are independently rechecked')
+    scope.add_argument('--date', help='UTC scoreboard day YYYYMMDD; default current UTC day')
+    parser.add_argument('--limit', type=int, default=100)
+    parser.add_argument('--max-pages', type=int, default=3)
     parser.add_argument('--max-events', type=int, default=8)
     args = parser.parse_args()
-    result = collect(args.out, json.loads(Path(args.fixtures).read_text()), limit=args.limit, max_events=args.max_events)
+    result = collect(args.out, json.loads(Path(args.fixtures).read_text()) if args.fixtures else None,
+                     date=args.date, limit=args.limit, max_pages=args.max_pages, max_events=args.max_events)
     print(json.dumps({k: v for k, v in result.items() if k not in {'snapshots', 'identity_mappings'}}))
