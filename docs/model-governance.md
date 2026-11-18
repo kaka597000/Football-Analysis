@@ -49,3 +49,5 @@ python scripts/run_tests.py --layer integration
 源仓旧部署密钥安装器不再生成密钥、修改 Secrets 或触发任务；原内容与重复执行工作流逐字节归档。原运行注册表中范围外路由改标为清单中的 archived，并由 `competition_scope.permitted` 校验；外部注册表、参数和原模型保持。
 
 后续可执行迁移：国内联赛/欧冠 overlay 须分别从 `future/bundle-v2/manifest.json` 与 `future/ucl-bundle-v2/manifest.json` 提取锁定源码集合，在独立目录生成无覆盖版本并逐场重放，原集合与新收据一并保存后才改 pin。LSTM/Transformer 须等待已登记六场原赛果，按原协议比较同截点净增命中、概率质量和覆盖，再记录保留或淘汰；目前没有可删除这些实验入口的证据。历史回放专用工作流仍保留原历史提交，不强行统一到最新源码。
+
+第三批的有界开发搜索、已冻结候选生命周期与原源码回放边界见 [候选闭环](candidate-lifecycle.md)。最新主分支新增的市场信号研究保持原运行版本，统一清单现在包含六个运行角色。

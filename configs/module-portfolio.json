@@ -662,6 +662,12 @@
         "status": "validation",
         "action": "complete_original_protocol_before_retirement",
         "data_path": "workspace-updates/20261118-transformer"
+      },
+      {
+        "id": "market-signals",
+        "status": "validation",
+        "action": "complete_original_protocol_before_retirement",
+        "data_path": "workspace-updates/20261118-market-signals"
       }
     ]
   },
@@ -679,6 +685,42 @@
       "reason": "obsolete public execution workflow; data repository is the sole scheduler",
       "archive": "docs/archive/unattended-public.yml",
       "archive_sha256": "ef8065412958925551ab1675ff30a666f80732cbaba194f64f6af9d8fee4d073"
+    }
+  ],
+  "research_lifecycle": [
+    {
+      "id": "active-paired",
+      "status": "active",
+      "role": "existing current/test and independently issued comprehensive Primary; registry unchanged"
+    },
+    {
+      "id": "bounded-lightgbm-mixture-grid-20261118",
+      "status": "retired",
+      "role": "closed development search, not production model retirement",
+      "evidence": "data:workspace-updates/20261118-governance/third/report.json",
+      "reason": "all five cohorts fail to establish downstream diagnostic Top1 advantage; do not enroll a new permanent arm"
+    },
+    {
+      "id": "equal-weight-fusion-reference",
+      "status": "archived",
+      "role": "untrained 50/50 reference only; implementation retained",
+      "path": "runtime/fuse_models.py"
+    },
+    {
+      "id": "score-mixture-selector",
+      "status": "active",
+      "role": "reused development selection/gating library, not an accepted predictor",
+      "path": "runtime/research_program/score_mixture_shadow.py"
+    },
+    {
+      "id": "original-three-arm-sequence-transformer",
+      "status": "validation",
+      "role": "original fixed batches finish unchanged; lifecycle policy governs next-round recommendations"
+    },
+    {
+      "id": "market-signals-and-nations-elo",
+      "status": "validation",
+      "role": "retain newly merged original protocols and monitoring; no evidence of promotion"
     }
   ]
 }
