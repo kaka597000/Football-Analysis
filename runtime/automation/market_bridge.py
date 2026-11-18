@@ -60,6 +60,11 @@ def attach_total_quote(fixture, market_dir, *, provider_order=(), bookmaker_orde
     for path in files:
         try:
             channel = json.loads(path.read_text())
+            if not isinstance(channel, dict):
+                raise ValueError('market channel object required')
+            if channel.get('retrospective_identity_replay'):
+                excluded['RETROSPECTIVE_IDENTITY_REPLAY'] += 1
+                continue
             retained = channel.get('snapshots', [])
             if (not isinstance(retained, list)
                     or retained and channel.get('schema') != 'WCPP-MARKET-CHANNEL-1'):
@@ -76,19 +81,33 @@ def attach_total_quote(fixture, market_dir, *, provider_order=(), bookmaker_orde
                 if not _matches(saved['target'], fixture):
                     excluded['FIXTURE_IDENTITY_OR_STAGE_MISMATCH'] += 1
                     continue
+                if saved.get('claims', {}).get('retrospective_identity_replay'):
+                    excluded['RETROSPECTIVE_IDENTITY_REPLAY'] += 1
+                    continue
                 if not aware(saved['target']['cutoff_at']) <= aware(saved['created_at']) <= cutoff:
                     raise ValueError('snapshot unavailable at prediction cutoff')
                 age_limit = saved['policy']['market_max_age_seconds']
                 if type(age_limit) not in (int, float) or not 0 <= age_limit <= 3600:
                     raise ValueError('source freshness policy exceeds locked one-hour limit')
-                rows = saved['observations']
-                for row in rows:
+                rows = []
+                for row in saved['observations']:
                     if row['field'] == 'market_quote':
+                        reviews = list(row.get('identity_alias_reviews', ()))
+                        if row.get('identity_alias_review'):
+                            reviews.append(row['identity_alias_review'])
+                        if any(aware(review['reviewed_at']) > cutoff for review in reviews):
+                            excluded['ALIAS_REVIEW_AFTER_CUTOFF'] += 1
+                            continue
+                        if any(row.get(key, {}).get('capture_time_basis') == 'legacy_query_time_proxy_REPLAY_ONLY'
+                               for key in ('identity_evidence', 'provider_event_evidence', 'evidence')):
+                            excluded['REPLAY_ONLY_CAPTURE_TIME'] += 1
+                            continue
                         _source(path.parent, row['identity_evidence'], cutoff)
                         # Infer odds bind only an event ID. Its retained events
                         # response supplies the provider teams/grade/kickoff link.
                         if row['provider'] == 'infersports' or 'provider_event_evidence' in row:
                             _source(path.parent, row['provider_event_evidence'], cutoff)
+                    rows.append(row)
                 checked = snapshot(rows, target, path.parent, provider=saved['provider'],
                                    market_max_age_seconds=age_limit, now=now)
                 excluded.update(checked['excluded'])

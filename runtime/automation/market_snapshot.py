@@ -16,10 +16,12 @@ from urllib.request import Request, build_opener
 
 try:
     from runtime.automation.collection_status import classify_failure
+    from runtime.automation.market_identity import scheduled_competition, team_match
     from runtime.data_sources.clients import NoRedirect
     from runtime.v2_test.data_contract import aware, public_url as validate_public_url, snapshot, validate
 except ModuleNotFoundError:
     from automation.collection_status import classify_failure
+    from automation.market_identity import scheduled_competition, team_match
     from data_sources.clients import NoRedirect
     from v2_test.data_contract import aware, public_url as validate_public_url, snapshot, validate
 
@@ -83,7 +85,7 @@ def alias_registry(competition):
     # Keep PR39's Nations registry and evidence hashes unchanged.
     if competition == 'uefa.nations':
         return ALIAS_REGISTRY
-    return {'version': 'competition-alias-registry-20261117-1',
+    return {'version': 'brazil-alias-registry-20261118-1' if competition == 'bra.1' else 'competition-alias-registry-20261117-1',
             'reviews': [r for r in ADDITIONAL_ALIAS_REVIEWS if r['cohort'] == competition]}
 
 
@@ -94,21 +96,9 @@ def review_sha(review):
 
 def team_identity(team, provider_name, cutoff, competition='uefa.nations'):
     """Return match evidence, or None. A reviewed name never admits another ID."""
-    relevant = [(rule,review) for review in alias_registry(competition)['reviews'] for rule in review['teams']
-                if provider_name in (rule['provider_name'], rule['espn_name'])
-                or team['displayName'] in (rule['provider_name'], rule['espn_name'])]
-    if relevant:
-        if len(relevant) != 1 or team['id'] != relevant[0][0]['espn_id']:
-            return None
-        rule,review = relevant[0]
-        if team['displayName'] != rule['espn_name']:
-            return None
-        if provider_name == rule['espn_name']:
-            return {}
-        if provider_name == rule['provider_name'] and aware(review['reviewed_at']) <= aware(cutoff):
-            return dict(rule)
-        return None
-    return {} if provider_name == team['displayName'] else None
+    entries = ((rule, review['reviewed_at']) for review in alias_registry(competition)['reviews']
+               for rule in review['teams'])
+    return team_match(team, provider_name, cutoff, entries)
 
 
 def write(path, value):
@@ -154,24 +144,9 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
                     or competition == 'bra.1' and season.get('year') != aware(event['date']).year
                     or aware(event['date']) <= now):
                 continue
-            if (not isinstance(event['id'], str) or not event['id'].strip()
-                    or event_ids[event['id']] != 1 or len(event['competitions']) != 1):
-                raise ValueError('unique event and competition required')
-            comp = event['competitions'][0]
-            if ('id' in comp and str(comp['id']) != event['id']
-                    or 'date' in comp and aware(comp['date']) != aware(event['date'])):
-                raise ValueError('conflicting competition identity')
-            comp_status = comp.get('status', {}).get('type')
-            if comp_status is not None and (comp_status.get('state') != 'pre'
-                                            or comp_status.get('completed') is not False):
-                raise ValueError('conflicting competition status')
-            competitors = comp['competitors']
-            sides = {x['homeAway']: x['team'] for x in competitors}
-            if (len(competitors) != 2 or set(sides) != {'home', 'away'}
-                    or any(not isinstance(t.get(k), str) or not t[k].strip()
-                           for t in sides.values() for k in ('id', 'displayName'))
-                    or sides['home']['id'] == sides['away']['id']):
-                raise ValueError('two unambiguous team identities required')
+            if event_ids[event['id']] != 1:
+                raise ValueError('unique event required')
+            _, sides = scheduled_competition(event)
             eligible.append((event, sides))
         except (AttributeError, KeyError, TypeError, ValueError):
             excluded['unverified_target_identity_or_status'] += 1
@@ -196,7 +171,8 @@ def build(root, odds_meta, identity_meta, *, cutoff, now=None,
             continue
         source, aliases = matched[0]
         registry = alias_registry(competition)
-        used_reviews=[r for r in registry['reviews'] if any(rule in r['teams'] for rule in aliases.values())]
+        used_reviews = [r for r in registry['reviews'] if aware(r['reviewed_at']) <= aware(cutoff)
+                        and any(rule in r['teams'] for rule in aliases.values())]
         alias_evidence = ({'review_version': registry['version'],
                            'review_sha256': review_sha(registry),
                            'reviewed_at': max((r['reviewed_at'] for r in used_reviews),key=aware),

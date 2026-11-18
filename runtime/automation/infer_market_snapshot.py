@@ -19,9 +19,11 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 try:
     from runtime.automation.collection_status import classify_failure
+    from runtime.automation.market_identity import scheduled_competition, team_match
     from runtime.v2_test.data_contract import aware, digest, public_url, safe_content, snapshot, validate
 except ModuleNotFoundError:
     from automation.collection_status import classify_failure
+    from automation.market_identity import scheduled_competition, team_match
     from v2_test.data_contract import aware, digest, public_url, safe_content, snapshot, validate
 
 BASE = 'https://api.infersports.dev'
@@ -40,17 +42,7 @@ ALIAS_REVIEWS = (ALIAS_REVIEW, *json.loads((Path(__file__).resolve().parents[2]
 
 def team_identity(team, name, cutoff):
     """Exact names, plus reviewed aliases bound to the national-team ESPN ID."""
-    relevant = [rule for rule in ALIAS_REVIEWS
-                if name in (rule['provider_name'], rule['espn_name'])
-                or team.get('displayName') in (rule['provider_name'], rule['espn_name'])]
-    if relevant:
-        if len(relevant) != 1:
-            return False
-        rule = relevant[0]
-        return (team.get('id') == rule['espn_id'] and team.get('displayName') == rule['espn_name']
-                and (name == rule['espn_name'] or name == rule['provider_name']
-                     and aware(rule['reviewed_at']) <= aware(cutoff)))
-    return bool(name) and name == team.get('displayName')
+    return team_match(team, name, cutoff, ((r, r['reviewed_at']) for r in ALIAS_REVIEWS)) is not None
 
 
 def read_evidence(root, meta, *, cutoff, expected):
@@ -95,24 +87,11 @@ def eligible_targets(board, *, cutoff, now, fixtures=None):
                 raise ValueError('not unique future scheduled fixture')
             if event.get('season', {}).get('slug') != 'league-phase':
                 raise ValueError('unverified phase')
-            if len(event['competitions']) != 1:
-                raise ValueError('ambiguous competition')
-            competition = event['competitions'][0]
-            if ('id' in competition and str(competition['id']) != str(event['id'])
-                    or 'date' in competition and aware(competition['date']) != aware(event['date'])):
-                raise ValueError('conflicting competition identity')
-            comp_status = competition.get('status', {}).get('type')
-            if comp_status is not None and (comp_status.get('state') != 'pre' or comp_status.get('completed') is not False):
-                raise ValueError('conflicting competition status')
+            competition, sides = scheduled_competition(event)
             group = re.fullmatch(r'Group ([ABC][1-4]|D[12])', competition.get('group', {}).get('name', ''))
             if not group:
                 raise ValueError('unverified grade')
             grade = group[1][0]
-            competitors = competition['competitors']
-            sides = {x['homeAway']: x['team'] for x in competitors}
-            if (len(competitors) != 2 or set(sides) != {'home', 'away'}
-                    or sides['home']['id'] == sides['away']['id']):
-                raise ValueError('ambiguous teams')
             target = {'match_id': mid, 'competition': 'uefa.nations',
                       'cohort': f'uefa.nations:{grade}:league-phase', 'stage': 'league-phase',
                       'home_id': 'espn:' + sides['home']['id'],
@@ -129,7 +108,7 @@ def eligible_targets(board, *, cutoff, now, fixtures=None):
                 if aware(f['kickoff_at']) != aware(target['kickoff_at']):
                     raise ValueError('requested kickoff mismatch')
             eligible.append((target, sides, grade))
-        except (KeyError, TypeError, ValueError):
+        except (AttributeError, KeyError, TypeError, ValueError):
             excluded['unverified_target_identity_or_phase'] += 1
     if selected is not None:
         excluded['requested_fixture_absent_from_identity'] += len(set(selected) - {
@@ -201,7 +180,8 @@ def build(root, events_meta, odds_meta, identity_meta, *, cutoff, now=None, fixt
         source = matches[0]
         source_meta = event_evidence[source['id']]
         aliases = [dict(rule, sha256=digest(rule)) for rule in ALIAS_REVIEWS
-                   if any(source[s + '_team']['name'] == rule['provider_name']
+                   if aware(rule['reviewed_at']) <= aware(alias_cutoff)
+                   and any(source[s + '_team']['name'] == rule['provider_name']
                           and sides[s]['id'] == rule['espn_id'] for s in ('home', 'away'))]
         responses = odds_by_event.get(source['id'], [])
         if len(responses) != 1:
@@ -259,8 +239,13 @@ def build(root, events_meta, odds_meta, identity_meta, *, cutoff, now=None, fixt
                 excluded['conflicting_market_group'] += 1
             else:
                 rows.extend(group.values())
-        snapshots.append(snapshot(rows, target, root, provider='infersports',
-                                  market_max_age_seconds=MAX_AGE_SECONDS, now=now))
+        snap = snapshot(rows, target, root, provider='infersports',
+                        market_max_age_seconds=MAX_AGE_SECONDS, now=now)
+        if replay:
+            # The diagnostic label must travel with a snapshot copied out of its channel.
+            snap['claims']['retrospective_identity_replay'] = True
+            snap['snapshot_sha256'] = digest({k: v for k, v in snap.items() if k != 'snapshot_sha256'})
+        snapshots.append(snap)
         mappings.append({'match_id': target['match_id'], 'provider_match_id': source['id'],
                          'provider_league': source['league'], 'cohort': target['cohort'],
                          'identity_evidence_sha256': identity_meta['sha256'],

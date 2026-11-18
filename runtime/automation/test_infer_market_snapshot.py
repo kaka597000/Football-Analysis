@@ -56,7 +56,8 @@ class InferSnapshotTests(unittest.TestCase):
                  'cohort': 'uefa.nations:A:league-phase', 'stage': 'league-phase',
                  'home': 'espn:10', 'away': 'espn:20', 'kickoff_at': '2026-11-12T17:00Z'}]
 
-    def run_case(self, mutate=lambda e, o, b: None, *, modify_meta=None, fixtures=None, now=None):
+    def run_case(self, mutate=lambda e, o, b: None, *, modify_meta=None, fixtures=None, now=None,
+                 identity_review_at=None):
         with tempfile.TemporaryDirectory() as d:
             root = Path(d)
             events, odds, board = self.inputs()
@@ -67,7 +68,27 @@ class InferSnapshotTests(unittest.TestCase):
             if modify_meta:
                 modify_meta(root, metas)
             now = now or self.now
-            return adapter.build(root, *metas, cutoff=now.isoformat(), now=now, fixtures=fixtures)
+            return adapter.build(root, *metas, cutoff=now.isoformat(), now=now, fixtures=fixtures,
+                                 identity_review_at=identity_review_at)
+
+    def test_offline_identity_review_label_survives_snapshot_copy(self):
+        live = self.run_case()['snapshots'][0]
+        historical = self.run_case(identity_review_at='2026-11-18T00:00:00Z')['snapshots'][0]
+        self.assertNotIn('retrospective_identity_replay', live['claims'])
+        self.assertTrue(historical['claims']['retrospective_identity_replay'])
+        self.assertEqual(historical['snapshot_sha256'],
+                         adapter.digest({k: v for k, v in historical.items() if k != 'snapshot_sha256'}))
+        self.assertNotEqual(live['snapshot_sha256'], historical['snapshot_sha256'])
+
+    def test_multiple_alias_reviews_for_one_team_are_time_and_id_bound(self):
+        team = {'id': '10', 'displayName': 'Home'}
+        rules = [{'espn_name': 'Home', 'espn_id': '10', 'provider_name': alias, 'reviewed_at': stamp}
+                 for alias, stamp in [('First', '2026-11-11T12:00Z'), ('Second', '2026-11-13T12:00Z')]]
+        with patch.object(adapter, 'ALIAS_REVIEWS', rules):
+            for name, expected in [('Home', True), ('First', True), ('Second', False), ('Other', False)]:
+                self.assertEqual(adapter.team_identity(team, name, self.now.isoformat()), expected)
+            self.assertTrue(adapter.team_identity(team, 'Second', rules[1]['reviewed_at']))
+            self.assertFalse(adapter.team_identity(dict(team, id='99'), 'First', self.now.isoformat()))
 
     def test_complete_quote_preserves_row_time_and_full_identity(self):
         result = self.run_case(fixtures=self.fixtures())

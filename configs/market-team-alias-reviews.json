@@ -26,5 +26,36 @@
       "retention_path": "workspace-updates/20261115-remaining-nations-brazil/remaining-evidence.tar.gz",
       "review_method": "Exact country/club identity, same opponent, competition, side and kickoff; no fuzzy matching; review time gates future use only."
     }
+  },
+  {
+    "version": "brazil-athletico-paranaense-20261118-1",
+    "reviewed_at": "2026-11-18T01:16:56.494882+00:00",
+    "provider": "the-odds-api",
+    "sport_key": "soccer_brazil_campeonato",
+    "cohort": "bra.1",
+    "phase": "regular",
+    "teams": [
+      {
+        "espn_id": "3458",
+        "espn_name": "Athletico-PR",
+        "provider_name": "Atletico Paranaense"
+      }
+    ],
+    "evidence": {
+      "raw_odds_sha256": "5c06ceae28182190fa2e2e1940cecd320186c09119f027b168734f2aeeeb2ca7",
+      "identity_sha256": "f58d60d628051f38ae04df29cf4e26bfdc91b1dd68ee128334b8e9b49b7a34c0",
+      "odds_source_url": "https://api.the-odds-api.com/v4/sports/soccer_brazil_campeonato/odds/?regions=eu&markets=h2h%2Ctotals&oddsFormat=decimal",
+      "identity_source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/scoreboard?dates=20261118&limit=1000",
+      "source_event_id": "401841313",
+      "provider_event_id": "4ffeab0ae6c6a76e96262104d3a1d6e7",
+      "opponent_espn_id": "819",
+      "opponent_name": "Flamengo",
+      "team_side": "away",
+      "espn_full_name": "Athletico Paranaense",
+      "kickoff_at": "2026-11-18T23:30Z",
+      "retention_path": "market/runs/44212218194-1-bra1",
+      "data_commit": "3dab247275faab7e7a1d0d771468f618802318c5",
+      "review_method": "Unique Brazilian Serie A away team at Flamengo at the same instant. ESPN supplies both the full name and its short display name for 3458."
+    }
   }
 ]

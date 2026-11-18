@@ -85,6 +85,42 @@ class CycleTests(unittest.TestCase):
         path.write_text(json.dumps(raw))
         with self.assertRaises(ValueError):cycle.result_from_raw(f,path,cycle.ENDPOINT+'1',self.now.isoformat())
 
+    def test_completed_review_is_reused_only_for_the_same_verified_evidence(self):
+        self.bundle_records()
+        by_id = {f['match_id'].split(':')[1]: f for f in self.fixtures}
+        def fetch(url):
+            return self.raw(by_id[url.rsplit('=', 1)[1]])
+        first = cycle.cycle(self.bundle, self.state, fetcher=fetch)
+        self.assertEqual((first['settled'], first['result_requests'], first['review_publication']),
+                         (2, 2, 'RECORDED'))
+        def stored_files():
+            return {p.relative_to(self.state): p.read_bytes()
+                    for folder in ('runs', 'freezes')
+                    for p in (self.state / folder).rglob('*.json')}
+        before = stored_files()
+        self.assertEqual(len(before), 2)
+        again = cycle.cycle(self.bundle, self.state, max_requests=0)
+        self.assertEqual(again['review_publication'], 'REUSED_COMPLETED_REVIEW')
+        self.assertEqual(again['review_freeze_id'], first['review_freeze_id'])
+        self.assertEqual(again['result_requests'], 0)
+        self.assertEqual(stored_files(), before)
+
+        result_path = self.state / 'results.json'
+        results = json.loads(result_path.read_text())
+        raw = self.state / results[0]['source_path']
+        raw.write_bytes(raw.read_bytes() + b'\n')
+        with self.assertRaises(ValueError):
+            cycle.cycle(self.bundle, self.state, max_requests=0)
+        self.assertEqual(stored_files(), before)
+        results[0]['source_sha256'] = cycle.repair.sha(raw)
+        result_path.write_text(json.dumps(results))
+        revised = cycle.cycle(self.bundle, self.state, max_requests=0)
+        self.assertNotEqual(revised['review_freeze_id'], first['review_freeze_id'])
+        self.assertEqual(revised['review_publication'], 'RECORDED')
+        after = stored_files()
+        self.assertEqual(len(after), 4)
+        self.assertTrue(all(after[p] == value for p, value in before.items()))
+
     def test_rate_limit_stops_batch_and_keeps_population(self):
         self.bundle_records()
         def limited(url):raise HTTPError(url,429,'synthetic',{},None)

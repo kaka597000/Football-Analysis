@@ -110,6 +110,34 @@ class MarketBridgeTests(unittest.TestCase):
             self.assertNotIn('total_quote', result)
             self.assertEqual(audit['excluded']['INVALID_SNAPSHOT_OR_SOURCE_EVIDENCE'], 1)
 
+    def test_replay_labels_and_late_alias_reviews_yield_to_available_live_quote(self):
+        for kind, reason in (
+            ('channel', 'RETROSPECTIVE_IDENTITY_REPLAY'), ('snapshot', 'RETROSPECTIVE_IDENTITY_REPLAY'),
+            ('alias', 'ALIAS_REVIEW_AFTER_CUTOFF'), ('aliases', 'ALIAS_REVIEW_AFTER_CUTOFF'),
+            ('legacy-capture', 'REPLAY_ONLY_CAPTURE_TIME')
+        ):
+            with self.subTest(kind=kind), tempfile.TemporaryDirectory() as tmp:
+                path, data = self.channel(Path(tmp)/'prior', provider='preferred')
+                snap = data['snapshots'][0]
+                row = snap['observations'][0]
+                late = {'reviewed_at': (self.now + timedelta(minutes=1)).isoformat()}
+                if kind == 'channel':
+                    data['retrospective_identity_replay'] = True
+                elif kind == 'snapshot':
+                    snap['claims']['retrospective_identity_replay'] = True
+                elif kind == 'alias':
+                    row['identity_alias_review'] = late
+                elif kind == 'aliases':
+                    row['identity_alias_reviews'] = [late]
+                else:
+                    row['identity_evidence']['capture_time_basis'] = 'legacy_query_time_proxy_REPLAY_ONLY'
+                snap['snapshot_sha256'] = digest({k:v for k,v in snap.items() if k != 'snapshot_sha256'})
+                path.write_text(json.dumps(data))
+                self.channel(Path(tmp)/'live', provider='other', line=3.)
+                fixture, audit = attach_total_quote(self.fixture, tmp, provider_order=['preferred'], now=self.now)
+                self.assertEqual(fixture['total_quote']['provider'], 'other')
+                self.assertEqual(audit['excluded'][reason], 1)
+
     def test_provider_events_source_hash_time_and_path_are_rechecked(self):
         for provider in ('infersports', 'provider-a'):
             for problem in ('valid', 'tampered', 'late', 'outside'):
