@@ -22,3 +22,5 @@ The Odds API 和 InferSports 通过 `runtime/automation/market_identity.py` 核�
 ## 前向验证工件
 
 `runtime/automation/prospective_bundle.py` 负责国内联赛和欧冠工件的导出、校验、路径恢复和冻结回执读取。`prospective_cycle.py` 保留原 CLI 和 Python 入口，负责注册、捕获、结果轮询和进程中断后的任务恢复。每次运行在对应状态目录的锁内完整校验一次工件。云端把这两个文件一同加载到协议锁定的推理版本上，运行回执记录两份文件的哈希。
+
+治理入口：[模块状态、有限候选与跨仓接口](docs/model-governance.md)。

@@ -1,0 +1,726 @@
+{
+  "schema": "WCPP-MODULE-PORTFOLIO-1",
+  "as_of": "2026-11-18",
+  "source_base": "b56f309",
+  "states": [
+    "active",
+    "validation",
+    "retired",
+    "archived"
+  ],
+  "state_semantics": {
+    "active": "used by current execution, not proof of formal acceptance",
+    "validation": "development or frozen validation; no promotion",
+    "retired": "rejected by recorded evidence, retained for replay",
+    "archived": "historical, retained; not a deletion instruction"
+  },
+  "modules": [
+    {
+      "path": "runtime/aus_expert",
+      "status": "active",
+      "role": "active_inference",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/automation",
+      "status": "active",
+      "role": "collection_training_review",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/continental",
+      "status": "active",
+      "role": "active_inference",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/data_sources",
+      "status": "active",
+      "role": "collection",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/database",
+      "status": "active",
+      "role": "storage",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/emperor_cup",
+      "status": "validation",
+      "role": "phase_research",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/jleague_cup",
+      "status": "validation",
+      "role": "phase_research",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/nations_league",
+      "status": "validation",
+      "role": "phase_research",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/optimization",
+      "status": "active",
+      "role": "shared_analysis_dependency",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/optimization_tools",
+      "status": "validation",
+      "role": "development_tools",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/research",
+      "status": "active",
+      "role": "analysis_review",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/research_program",
+      "status": "validation",
+      "role": "validation",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/score_adjustment",
+      "status": "active",
+      "role": "active_diagnostics",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/upset",
+      "status": "active",
+      "role": "active_diagnostics",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/upset_v2",
+      "status": "active",
+      "role": "active_diagnostics",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/v2",
+      "status": "active",
+      "role": "shared_math",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/v2_test",
+      "status": "active",
+      "role": "validation_and_shared_math",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/v3",
+      "status": "active",
+      "role": "compatibility",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/v4",
+      "status": "active",
+      "role": "active_inference",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/v5",
+      "status": "active",
+      "role": "active_review",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/v6",
+      "status": "active",
+      "role": "active_diagnostics",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "runtime/v7",
+      "status": "validation",
+      "role": "validation",
+      "retention": "imports, frozen source identity, replay or external calls; deletion requires explicit evidence"
+    },
+    {
+      "path": "models",
+      "status": "archived",
+      "role": "historical_parameters",
+      "retention": "reproduction and rollback; not active registry"
+    },
+    {
+      "path": "docs/archive",
+      "status": "archived",
+      "role": "historical_documents",
+      "retention": "historical evidence"
+    },
+    {
+      "path": "runtime/active_route_engines.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/asof_contract.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/build_active_routes_20261027.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/competition_scope.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/fuse_models.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/league_tracks.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/ml_core.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/model_source_identity.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/predict_active.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/prediction_diagnostics.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/prediction_engine.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/prediction_service.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/publication.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/review_active.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/runtime_config.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/shadow.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/storage_lock.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/wcpp.py",
+      "status": "active",
+      "role": "entrypoint_or_shared_infrastructure",
+      "retention": "compatibility, imports and external callers"
+    },
+    {
+      "path": "runtime/module_governance.py",
+      "status": "active",
+      "role": "governance",
+      "retention": "repository checks"
+    }
+  ],
+  "registry_snapshot": {
+    "version": "WCPP-DUAL-4",
+    "authoritative_path": "/workspace/WCPP/runtime/active-model.json",
+    "routes": [
+      {
+        "route_key": "mex.1:apertura:regular",
+        "status": "archived",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "9614858205e8d3dcc56951d957f012e1c4ca603198a8acf79036037ed65e017e",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "70d7e66f72c30717327223c47a49c5c3e6998e56a9dbc16fa111f0667cfcad9a",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": false,
+        "retention": "outside current analysis scope; immutable registry and artifacts retained for replay"
+      },
+      {
+        "route_key": "eng.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "ac5ef67c624da8913a2e3492b2fbae6b73776bf0f9e5157423c72e718dd72983",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "9f78989414419514a23f669aa9648e341a4899890101f363cc47bff5057b03e0",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "esp.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "3d4da662d2b671c368860f7786ce7d2b22ddab4f60efc1b61470230ce57234ec",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "dc1c4071478cabd7de2861e31edfe9decad328ebdf174c3c8cf639dbc4fd5682",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "ger.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "d8e4e8edeb3b1be5bb3567496c5ff3f90de31de8bdf2e5ec00e68c38990c7691",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "9d81229e3699c648596e4545e6670cf705ecfb92385c35f7f19444b641edc740",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "ita.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "ca69b767362958577e22a4157c23613cb9b6e12604ffb20fcaa2b624413e6dbd",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "f005920710f0124a37ab75e448a96c141bb9b3024d40b444a6445bc6dea34cb5",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "fra.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "403b79855abfe75a6fc05dfe0e4ddaf52f2204e933daadae6335df2ba9b816b8",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "1b6567b71fbbdb0f0e03669bf37c732b9f73ceda0bc66f30bf905d6a5298b9e9",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "ned.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "1440e0242882cecc14d4486f88220270ae05d8bdbf00361384432f026e2d3738",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "2442f03bbe7da265d546af20b9097ca52efbb2435f49a9479d1a88da699f30aa",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "por.1",
+        "status": "archived",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "860c6244fed26c1685d5487797b243bc9873ac66fa7f747afe7c6d9b45290746",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "86e67de8d9244522e988439ab64041455ba08777d21fdd05558b6c2678999f56",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": false,
+        "retention": "outside current analysis scope; immutable registry and artifacts retained for replay"
+      },
+      {
+        "route_key": "bra.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "6fa5b60cec4cc1a51b6ff019072da029cd7d558a33a203ab8c2846b97efdf318",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "bfb1ec1472a7503c7f70bd69bbd349d88df652d7ecaac436b4e36fdeef415191",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "swe.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "ecaf574c2e639139a404ec1f30432c8b27576b310a285843455f2e264832dc27",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "f540e29e1f11457061b332118412145d8e3d9966c06d23eb9564acbcf34ec5d2",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "ksa.1",
+        "status": "archived",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "4a59e33f7acce4da67b35b9dcee9d94abfd798bbb80fc9c25ef472fa8fba8dec",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "f3e45a331a3a0e7ad3cb0221ff3cb0cf45ea2a4bd6c6df55a5a4a58df96f1759",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": false,
+        "retention": "outside current analysis scope; immutable registry and artifacts retained for replay"
+      },
+      {
+        "route_key": "eng.2",
+        "status": "archived",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "72beee6485c2c700219ab800fc1ce20794b6b41f096dea3b13214f9b8d283fcc",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "8b5450da4931868d9e352c06937a762546f0a08b30cf055be3f809f2ea7cea54",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": false,
+        "retention": "outside current analysis scope; immutable registry and artifacts retained for replay"
+      },
+      {
+        "route_key": "nor.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "7c980a4cf9f4a2c8f47f44eb761f5aa9b75e1933872406416c41e3840ce8ffd3",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "086fd30bf2ba48fd246af72cd30476007f2e5684f2555f017463d210dbaf31af",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "usa.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "ff328c4edd392a31eb414ec0ba188290e56524506dd80cdd011e61da3b9188e7",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "15d3c0f5d570792545b6659590a4be49666944af9be9248f26fcffde98620478",
+          "version": "WCPP-ML-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "uefa.champions:NEW_FORMAT:league_phase",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "30e1baf7f24f9db3ccf683179162d994a87f20f5048b5eb6ecb3d6e011589759",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "82180940b19757779ea06c192a2600bd45a8c832ddf9fd08e6ea5a620cc4dd6e",
+          "version": "WCPP-ML-UCL-0.1",
+          "engine": null
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "jpn.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "995f8686ff6348e5f0c6b40a8838a714c4118036968285d01e188e6db29f4ab2",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "f5532bb519983e04eb44c6778df405aaa7420790f78c84b8b6047ea13011b12a",
+          "version": "WCPP-SYSTEMATIC-RESEARCH-0.1",
+          "engine": "systematic_candidate"
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "kor.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "f2c9a03bf4ddaa7bcb4eabaf2cb94434f9694e18d26dd6721af602e65aa9dd62",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "6b6d9bd66bb2f7dcb1f214407ed027f720d6cd4f823c120061ed1b172631014c",
+          "version": "WCPP-SYSTEMATIC-RESEARCH-0.1",
+          "engine": "systematic_candidate"
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "aus.1",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "f3e9e25f84a468ed937c0d82c041c4ba0f16cb641e36f63e7515a00b2415964a",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "6cd38d5fa0dc9d5413ec4e062bcb209a598763b419f8bab54f60352dd26bef5d",
+          "version": "WCPP-AUS-EXPERT-0.1.1-DATAFIX",
+          "engine": "aus_expert"
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      },
+      {
+        "route_key": "afc.champions:ELITE:league_phase",
+        "status": "active",
+        "registry_status": "ACTIVE_RESEARCH",
+        "current": {
+          "artifact_sha256": "c6528dec375c8d03986abc3fbe07a6312b5fb4567828e71193ea0e8a6e07ce4d",
+          "engine": null
+        },
+        "fixed_baseline": {
+          "role": "existing_test",
+          "artifact_sha256": "5c30631e3f3552aa8d9d60812848695e04393c73ccd9a22d12551009a5b4e9de",
+          "version": "WCPP-AFC-ELITE-TEST-POISSON-0.1",
+          "engine": "generic_poisson"
+        },
+        "integration_candidates": [],
+        "analysis_eligible": true
+      }
+    ]
+  },
+  "consolidation": {
+    "max_integration_candidates_per_phase": 1,
+    "automatic_promotion": false,
+    "candidate_recipe": [
+      "existing_current",
+      "market_calibration",
+      "lightgbm_state_correction"
+    ],
+    "optional_components": [
+      "league_calibration"
+    ],
+    "comparison_key": [
+      "competition",
+      "stage",
+      "match_id",
+      "cutoff_at"
+    ],
+    "primary_metric": "Primary Top1",
+    "probability_constraints": [
+      "score_log_loss",
+      "WDL_Brier",
+      "calibration"
+    ],
+    "historical_development_is_acceptance": false,
+    "phase_portfolios": [
+      {
+        "competition": "bra.1",
+        "stage": "regular",
+        "current": "existing_current",
+        "fixed_baseline": "market_baseline",
+        "integration_candidates": [
+          "current_market_lightgbm"
+        ],
+        "candidate_status": "validation_design_existing_components",
+        "league_calibration_default": false
+      }
+    ],
+    "frozen_exceptions": [
+      {
+        "id": "three-arm",
+        "status": "validation",
+        "action": "complete_original_protocol_before_retirement",
+        "data_path": "workspace-updates/20261118-three-arm"
+      },
+      {
+        "id": "sequence",
+        "status": "validation",
+        "action": "complete_original_protocol_before_retirement",
+        "data_path": "workspace-updates/20261118-sequence"
+      },
+      {
+        "id": "transformer",
+        "status": "validation",
+        "action": "complete_original_protocol_before_retirement",
+        "data_path": "workspace-updates/20261118-transformer"
+      },
+      {
+        "id": "market-signals",
+        "status": "validation",
+        "action": "complete_original_protocol_before_retirement",
+        "data_path": "workspace-updates/20261118-market-signals"
+      }
+    ]
+  },
+  "retired_entrypoints": [
+    {
+      "path": "scripts/setup_unattended.py",
+      "status": "retired",
+      "reason": "superseded deploy-key activation; current data workflow uses its own GITHUB_TOKEN",
+      "archive": "docs/archive/setup_unattended.py.txt",
+      "archive_sha256": "ad04718861c87bc1b18545decaa843227dc4ed7748eb7293ba0473ef7c9b173f"
+    },
+    {
+      "path": ".github/workflows/unattended.yml",
+      "status": "archived",
+      "reason": "obsolete public execution workflow; data repository is the sole scheduler",
+      "archive": "docs/archive/unattended-public.yml",
+      "archive_sha256": "ef8065412958925551ab1675ff30a666f80732cbaba194f64f6af9d8fee4d073"
+    }
+  ],
+  "research_lifecycle": [
+    {
+      "id": "active-paired",
+      "status": "active",
+      "role": "existing current/test and independently issued comprehensive Primary; registry unchanged"
+    },
+    {
+      "id": "bounded-lightgbm-mixture-grid-20261118",
+      "status": "retired",
+      "role": "closed development search, not production model retirement",
+      "evidence": "data:workspace-updates/20261118-governance/third/report.json",
+      "reason": "all five cohorts fail to establish downstream diagnostic Top1 advantage; do not enroll a new permanent arm"
+    },
+    {
+      "id": "equal-weight-fusion-reference",
+      "status": "archived",
+      "role": "untrained 50/50 reference only; implementation retained",
+      "path": "runtime/fuse_models.py"
+    },
+    {
+      "id": "score-mixture-selector",
+      "status": "active",
+      "role": "reused development selection/gating library, not an accepted predictor",
+      "path": "runtime/research_program/score_mixture_shadow.py"
+    },
+    {
+      "id": "original-three-arm-sequence-transformer",
+      "status": "validation",
+      "role": "original fixed batches finish unchanged; lifecycle policy governs next-round recommendations"
+    },
+    {
+      "id": "market-signals-and-nations-elo",
+      "status": "validation",
+      "role": "retain newly merged original protocols and monitoring; no evidence of promotion"
+    }
+  ]
+}

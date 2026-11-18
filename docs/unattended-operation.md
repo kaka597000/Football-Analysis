@@ -28,7 +28,7 @@ GitHub实际调度可能延迟；额度耗尽、仓库设置或平台故障可�
 ## 存储和数据范围
 
 源码和workflow模板位于公开Football-Analysis；真实workflow安装到私有数据仓库，执行器为标准ubuntu-latest。公开源码固定到完整commit，避免后台运行内容无法追溯。模板位于`.github/workflow-templates/unattended-private.yml`，更新代码需验证后同步固定commit。
-采集原文、赛果增量、事件索引、训练种子及候选工件只写私有`kaka597000/kaka597000-Football-Analysis-Data`，不上传公开Actions artifact或公开训练数据。当前workflow用其自身的短期GITHUB_TOKEN写回本仓库，不授予其他仓库权限，不需要Secrets管理或SSH密钥。公开仓库原`unattended.yml`仅作停用备用。
+采集原文、赛果增量、事件索引、训练种子及候选工件只写私有`kaka597000/kaka597000-Football-Analysis-Data`，不上传公开Actions artifact或公开训练数据。当前workflow用其自身的短期GITHUB_TOKEN写回本仓库，不授予其他仓库权限，不需要Secrets管理或SSH密钥。公开仓库原工作流已归档到 `docs/archive/unattended-public.yml`，不再提供第二个执行入口。
 私有数据Git提交提供跨任务恢复历史；它不是独立异地备份。当前1GB统一库、3GB历史模型仍在原处，种子不是完整数据库备份。
 
 种子从21个已登记队列的当前工件及数据清单核验后导出，9127条、压缩约268KB。每条标为SEED_RETROSPECTIVE，缺first_known_at不反补，导出时间仅表示此次接收。历史中明确的SQLite neutral=0/1转换为布尔值；未知场地仍保留未知。
@@ -48,7 +48,7 @@ GitHub实际调度可能延迟；额度耗尽、仓库设置或平台故障可�
 代理核查仓库为private，将已独立验证SHA256的seed和明确scopes上传；不覆盖已有不同种子。将模板的`__WCPP_CODE_REF__`替换为已推送的完整源码commit，安装为私有`.github/workflows/unattended.yml`。
 先关闭旧公开仓库的unattended workflow，避免重复定时；不影响公开Python测试CI。手动dispatch collect、确认远端成功并在私有runs查到状态；再dispatch train，核查候选、诊断和私有提交。两者成功后才能登记DEPLOYED。
 私有状态checkout明确指定`ref: main`，让排队任务读取前一任务刚保存的状态；不能用dispatch时的旧event SHA，否则即使串行也可能产生非快进推送失败。禁止force push解决此类问题。
-`scripts/setup_unattended.py`和旧zip保留为原公开执行/部署密钥方案的历史备用，当前方案不使用它们，不要求用户在任何电脑登录或安装。
+`scripts/setup_unattended.py` 已退役为无副作用提示入口；原字节保存在 `docs/archive/setup_unattended.py.txt`，原工作流保存在 `docs/archive/unattended-public.yml`。当前数据仓方案不使用部署密钥安装器；恢复旧方案必须作为显式迁移审查，不能运行旧安装入口偷偷启用第二套任务。
 
 ## 停止、失败和恢复
 

@@ -19,3 +19,5 @@
 基础安装与测试统一使用根目录 `requirements.txt` 和 `requirements-test.txt`；可选研究依赖仍在 `runtime/research/requirements.txt`。历史工具自身的限制不覆盖项目当前冻结规范。
 
 2026-11-11整理删除了重复依赖清单及过时交接页，保留所有模型参数和Python实现。历史原始交接材料继续位于 `docs/archive/`，当前状态只在 [CURRENT_STATE.md](../CURRENT_STATE.md) 维护。
+
+治理入口：[模块状态、有限候选与跨仓接口](../docs/model-governance.md)。
