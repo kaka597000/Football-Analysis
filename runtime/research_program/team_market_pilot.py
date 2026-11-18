@@ -20,6 +20,10 @@ from . import three_arm_model as grid
 BATCH = team.DEFAULT_BATCH / "england"
 REGISTRY = "923e34fc44cda33fe965498a24a2435abb37a01a80c539108d8ec20d490bf013"
 TRACK = "england-btts-both-teams-scoring"
+# Pinned NumPy/SciPy, different x86 BLAS kernels: replayed individual probabilities
+# differed by at most 9e-11; differences between two separate KL fits by 1.6e-9.
+PROBABILITY_ATOL = 5e-10
+ABLATION_ATOL = 5e-9
 read = team.read
 
 
@@ -268,24 +272,34 @@ def run(data, batch, operation):
             ):
                 raise ValueError("active Current identity differs")
             for expected, actual in zip(saved["features"], restored["features"], strict=True):
-                for k in ("market", "family", "team", "line"):
+                for k in ("market", "family", "team", "line", "weight", "market_probability"):
                     if expected[k] != actual[k]:
                         raise ValueError("replayed feature identity differs")
-                for k in ("market_probability", "original_probability", "adjusted_probability", "weight"):
-                    np.testing.assert_allclose(expected[k], actual[k], rtol=1e-8, atol=1e-11)
+                for k in ("original_probability", "adjusted_probability"):
+                    np.testing.assert_allclose(expected[k], actual[k], rtol=0, atol=PROBABILITY_ATOL)
+            if restored["leave_one_out"].keys() != saved["leave_one_out"].keys():
+                raise ValueError("leave-one-market-out families differ")
             for family, values in restored["leave_one_out"].items():
                 ref = saved["leave_one_out"][family]
                 metric = "max_cell_probability_difference_from_full"
-                np.testing.assert_allclose(ref[metric], values[metric], rtol=1e-8, atol=1e-11)
+                np.testing.assert_allclose(ref[metric], values[metric], rtol=0, atol=ABLATION_ATOL)
                 if any(ref[k] != v for k, v in values.items() if k != metric):
                     raise ValueError("leave-one-market-out selections differ")
             for name in team.ARMS:
                 arm, other = restored["arms"][name], saved["arms"][name]
-                np.testing.assert_allclose(arm["matrix"], other["matrix"], rtol=1e-8, atol=1e-12)
+                np.testing.assert_allclose(arm["matrix"], other["matrix"], rtol=0, atol=PROBABILITY_ATOL)
+                for side in ("over", "under"):
+                    expected = other["total"]["settlements"][side]
+                    actual = arm["total"]["settlements"][side]
+                    if expected.keys() != actual.keys():
+                        raise ValueError("total settlement categories differ")
+                    np.testing.assert_allclose(
+                        [actual[k] for k in expected], list(expected.values()), rtol=0, atol=PROBABILITY_ATOL
+                    )
                 if (
                     other["matrix_sha256"] != digest(other["matrix"])
                     or any(arm[k] != other[k] for k in ("primary", "top3", "wdl"))
-                    or arm["total"]["direction"] != other["total"]["direction"]
+                    or any(arm["total"][k] != other["total"][k] for k in ("direction", "line", "objective"))
                 ):
                     raise ValueError("frozen selections differ")
                 checks += 1
