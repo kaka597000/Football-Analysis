@@ -177,7 +177,8 @@ def review(data, batch, replay=False):
         stamps = [reg['registered_at'], *(row['recorded_at'] for row in records.values()),
                   *(result['source']['captured_at'] for result in matches.values())]
         group['cutoff_at'] = max(stamps, key=aware)
-        save(report, group, stage='review', track='named-book-consensus-review', root=batch / 'reviews', idempotency_key=digest(report))
+        save(report, group, stage='review', track='named-book-consensus-review', root=batch / 'reviews',
+             idempotency_key=digest([group['cutoff_at'], report]))
         atomic_json(batch / 'review.json', report)
     return {k: report[k] for k in ('population', 'issued', 'settled', 'pending')}
 
