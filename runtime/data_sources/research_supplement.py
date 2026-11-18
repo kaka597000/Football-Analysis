@@ -339,6 +339,13 @@ def markets(data, fixtures, stamp):
     return result
 
 
+def prematch_observation(obs, kickoff):
+    if obs and obs.get('observed_at') and aware(obs['observed_at']) >= kickoff:
+        return {'status':'missing','reason':'observed_at_or_after_kickoff','url':obs.get('url'),
+                'observed_at':obs['observed_at'],'source_sha256':obs.get('source_sha256')}
+    return obs or {}
+
+
 def has_real_xg(obs):
     if obs.get('status') != 'ok':
         return False
@@ -448,16 +455,19 @@ def collect(data, out, *, clock=now):
             window = lineup_window(ko,done,live,old.get('lineup_window_evidence'))
             reported_xg = lambda event: event.get('status')=='ok' and all(any(event['facts']['teams'][s][key] is not None for key in ('expected_goals','xg_actual')) for s in SIDES)
             history_ids = membership[mid]
-            paired_shots = all(all(shots.get(history_ids.get(s),{}).get('facts',{}).get('statistics',{}).get(side,{}).get('totalShots') is not None for side in SIDES) for s in SIDES)
+            eligible_shots = {key:prematch_observation(shots.get(key),ko) for key in history_ids.values()}
+            eligible_xg = {key:prematch_observation(xg.get(key),ko) for key in history_ids.values()}
+            open_fixture = prematch_observation(openfile.get(mid),ko)
+            paired_shots = all(all(eligible_shots.get(history_ids.get(s),{}).get('facts',{}).get('statistics',{}).get(side,{}).get('totalShots') is not None for side in SIDES) for s in SIDES)
             quality = {'original_first_issue':{'confirmed_lineups':first[mid]['facts']['both_elevens'],
                            'timed_h2h_and_total':bool(plan['payload']['markets'][mid])},
                        'latest_observation':{'confirmed_lineups':lineup,'fresh_h2h_and_total':mid in quote,
-                           'both_prior_games_reported_xg':all(reported_xg(xg.get(history_ids.get(s),{})) for s in SIDES),
-                           'both_prior_games_shots':paired_shots,'both_prior_games_xg':all(has_real_xg(xg.get(history_ids.get(s),{})) for s in SIDES),
-                           'open_file_date_and_teams':openfile.get(mid,{}).get('date_and_sides_verified',False)},
+                           'both_prior_games_reported_xg':all(reported_xg(eligible_xg.get(history_ids.get(s),{})) for s in SIDES),
+                           'both_prior_games_shots':paired_shots,'both_prior_games_xg':all(has_real_xg(eligible_xg.get(history_ids.get(s),{})) for s in SIDES),
+                           'open_file_date_and_teams':open_fixture.get('date_and_sides_verified',False)},
                        'lineup_window':window['state']}
             rows.append({'match_id':mid,'kickoff_at':f['kickoff_at'],'history_ids':history_ids,'quality':quality,'lineup_window_evidence':window,
-                         'market_cutoff_at':stamp.isoformat(),'first_cutoff_at':f['cutoff_at'],'original_lineup':first[mid],'current_lineup':live,'openfootball':openfile.get(mid),
+                         'market_cutoff_at':stamp.isoformat(),'first_cutoff_at':f['cutoff_at'],'original_lineup':first[mid],'current_lineup':live,'openfootball':open_fixture,
                          'latest_valid_market':quote.get(mid),'original_market':plan['payload']['markets'][mid]})
         quality = quality_counts(rows)
         evidence = {'schema':'WCPP-BRAZIL-SUPPLEMENT-1','status':'prematch_observation','started_at':stamp.isoformat(),'observed_through':done.isoformat(),
@@ -551,8 +561,8 @@ def verify_only(data, out):
             if len(matched)!=1 or matched[0]!={k:v for k,v in quote.items() if k!='archive'}:
                 raise ValueError('quote differs from original market evidence')
         sides_history=r['history_ids']
-        xg=[report['previous_games_bsd'].get(sides_history.get(s),{}) for s in SIDES]
-        proc=[report['previous_games_espn'].get(sides_history.get(s),{}) for s in SIDES]
+        xg=[prematch_observation(report['previous_games_bsd'].get(sides_history.get(s)),ko) for s in SIDES]
+        proc=[prematch_observation(report['previous_games_espn'].get(sides_history.get(s)),ko) for s in SIDES]
         reported=all(entry.get('status')=='ok' and all(any(entry['facts']['teams'][s][key] is not None for key in ('expected_goals','xg_actual')) for s in SIDES) for entry in xg)
         shots=all(all(entry.get('facts',{}).get('statistics',{}).get(s,{}).get('totalShots') is not None for s in SIDES) for entry in proc)
         if report['status']!='batch_closed' and aware(r['kickoff_at'])>aware(report['started_at']):

@@ -51,6 +51,16 @@ class CoverageTests(unittest.TestCase):
         self.assertEqual(value['teams']['home']['expected_goals'],0.44)
         self.assertFalse(monitor.has_real_xg({'status':'ok','facts':value}))
 
+    def test_response_that_arrives_at_or_after_kickoff_cannot_count_as_prematch(self):
+        before = {'status':'ok','observed_at':(KICK-timedelta(microseconds=1)).isoformat(),'facts':{'shots':3}}
+        self.assertEqual(monitor.prematch_observation(before,KICK),before)
+        for stamp in (KICK,KICK+timedelta(seconds=4)):
+            late = dict(before,observed_at=stamp.isoformat(),source_sha256='raw-reference')
+            missing = monitor.prematch_observation(late,KICK)
+            self.assertEqual(missing['status'],'missing')
+            self.assertEqual(missing['source_sha256'],'raw-reference')
+            self.assertNotIn('facts',missing)
+
     def test_non_api_file_date_and_teams_source_match(self):
         text = b'  Wed Nov 18\n           A Club    v B Club \n   20:00   Home Team v Away Team   0-0 (0-0)\n'
         self.assertEqual(monitor.open_rows(text),[['2026-11-18','A Club','B Club'],['2026-11-18','Home Team','Away Team']])
