@@ -47,6 +47,18 @@ class ReviewAccountingTests(unittest.TestCase):
         self.assertEqual(r['models']['当前模型']['population'], 1)
         self.assertEqual(r['models']['当前模型']['coverage']['primary'], 1.)
 
+    def test_conflicting_result_sides_and_kickoff_do_not_settle(self):
+        pair, result = self.fixture()
+        for role in ('current_model', 'test_model'):
+            pair[role]['input'].update(home='espn:10', away='espn:20', cohort='eng.1', stage='regular')
+        for change in ({'home': 'espn:20', 'away': 'espn:10'}, {'cohort': 'bra.1'},
+                       {'stage': 'final'}, {'kickoff_at': '2020-01-01T02:00:00Z'}):
+            with self.subTest(change=change), self.assertRaisesRegex(ValueError, 'identity mismatch'):
+                review([pair], [dict(result, **change)])
+        result.update(home='espn:10', away='espn:20', kickoff_at='2020-01-01T09:00:00+08:00',
+                      event_status='completed')
+        self.assertEqual(review(iter([pair]), [result])['models']['当前模型']['primary_hits'], 1)
+
     def test_live_or_interrupted_result_never_becomes_a_win(self):
         pair,result=self.fixture()
         for status in ('LIVE','SUSPENDED','POSTPONED'):
@@ -95,6 +107,23 @@ class ReviewAccountingTests(unittest.TestCase):
         self.assertEqual(r['primary_hits'],1);self.assertEqual(r['wdl_hits'],1)
         self.assertEqual(r['total_eligible'],0);self.assertEqual(r['coverage']['total'],0.)
         self.assertIn('MISSING_OR_INVALID_REAL_QUOTE_TIME',r['total_ineligible_reasons'])
+
+    def test_explicit_quote_provenance_conflict_only_affects_totals(self):
+        pair, result = self.fixture()
+        quote = {'match_id': 'synthetic', 'verified': True, 'bookmaker': 'SYNTHETIC',
+                 'market': 'asian_total', 'line': 2.5, 'over_odds': 1.9, 'under_odds': 1.9,
+                 'source_url': 'https://example.test/quote', 'source_sha256': '1' * 64,
+                 'quoted_at': '2020-01-01T00:00:00Z', 'query_time': '2020-01-01T00:00:00Z'}
+        for name in ('current_model', 'test_model'):
+            pair[name]['input']['total_quote'] = quote
+            pair[name]['total'] = {'quote': dict(quote), 'reference_direction': 'under'}
+        pair['current_model']['total']['quote'].pop('source_sha256')
+        pair['test_model']['total']['quote']['source_sha256'] = '2' * 64
+        models = review([pair], [result])['models']
+        self.assertEqual(models['当前模型']['total_eligible'], 1)
+        self.assertEqual(models['test模型']['total_eligible'], 0)
+        self.assertEqual(models['test模型']['primary_eligible'], 1)
+        self.assertIn('FROZEN_TOTAL_QUOTE_MISMATCH', models['test模型']['total_ineligible_reasons'])
 
     def test_pending_new_version_retains_its_own_population(self):
         pair,result=self.fixture();pending=copy.deepcopy(pair);pending['match_id']='pending'

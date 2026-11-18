@@ -1,6 +1,6 @@
 """Offline evidence/identity/freshness regressions for the market adapter."""
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -310,7 +310,7 @@ class MarketSnapshotTests(unittest.TestCase):
         self.assertEqual(ALIAS_REGISTRY['reviews'][1]['reviewed_at'], '2026-11-16T09:30:46+00:00')
         team = {'id': '452', 'displayName': 'Bosnia-Herzegovina'}
         self.assertIsNone(team_identity(team, 'Bosnia & Herzegovina', '2026-11-17T00:00:00Z', 'bra.1'))
-        self.assertEqual([r['cohort'] for r in ADDITIONAL_ALIAS_REVIEWS], ['bra.1'])
+        self.assertEqual({r['cohort'] for r in ADDITIONAL_ALIAS_REVIEWS}, {'bra.1'})
 
     def test_brazil_calendar_season_is_regular_but_cup_and_wrong_year_are_not(self):
         def setup(o, b):
@@ -332,9 +332,10 @@ class MarketSnapshotTests(unittest.TestCase):
         for review in ADDITIONAL_ALIAS_REVIEWS:
             rule = review['teams'][0]
             team = {'id':rule['espn_id'], 'displayName':rule['espn_name']}
-            args = (team, rule['provider_name'], '2026-11-15T00:00:00Z', review['cohort'])
+            at = datetime.fromisoformat(review['reviewed_at'])
+            args = (team, rule['provider_name'], at.isoformat(), review['cohort'])
             self.assertEqual(team_identity(*args), rule)
-            self.assertIsNone(team_identity(team,rule['provider_name'],'2026-11-14T12:00:00Z',review['cohort']))
+            self.assertIsNone(team_identity(team, rule['provider_name'], (at - timedelta(seconds=1)).isoformat(), review['cohort']))
             self.assertIsNone(team_identity(dict(team,id='999'),*args[1:]))
             other = 'bra.1' if review['cohort']=='uefa.nations' else 'uefa.nations'
             self.assertIsNone(team_identity(team,rule['provider_name'],args[2],other))
@@ -342,15 +343,17 @@ class MarketSnapshotTests(unittest.TestCase):
     def test_new_alias_snapshot_records_its_own_review_not_the_old_catalog(self):
         for review in ADDITIONAL_ALIAS_REVIEWS:
             rule = review['teams'][0]
+            at = datetime.fromisoformat(review['reviewed_at'])
             def setup(o,b):
                 b['leagues'][0]['slug'] = review['cohort']
-                event=b['events'][0]; event['date']='2026-11-14T23:30:00Z'
-                event['season'] = ({'year':2026,'slug':'2026-brasileiro-serie-a'}
+                event=b['events'][0]; event['date']=(at+timedelta(hours=3)).isoformat()
+                year = datetime.fromisoformat(event['date']).year
+                event['season'] = ({'year':year,'slug':f'{year}-brasileiro-serie-a'}
                                    if review['cohort']=='bra.1' else {'slug':'league-phase'})
                 event['competitions'][0]['competitors'][1]['team'].update(id=rule['espn_id'],displayName=rule['espn_name'])
                 o[0].update(sport_key=review['sport_key'],commence_time=event['date'],away_team=rule['provider_name'])
-                o[0]['bookmakers'][0]['markets'][0]['last_update']='2026-11-14T19:00:00Z'
-            result=self.run_case(setup,now=datetime(2026,11,14,19,0,30,tzinfo=timezone.utc),captured_at='2026-11-14T19:00:20Z',competition=review['cohort'])
+                o[0]['bookmakers'][0]['markets'][0]['last_update']=at.isoformat()
+            result=self.run_case(setup,now=at+timedelta(seconds=30),captured_at=(at+timedelta(seconds=20)).isoformat(),competition=review['cohort'])
             self.assertEqual(result['covered_fixture_count'],1)
             evidence=result['snapshots'][0]['observations'][0]['identity_alias_review']
             self.assertEqual(evidence['used_reviews'],[review])
