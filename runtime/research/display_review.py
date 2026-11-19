@@ -13,6 +13,7 @@ from urllib.parse import urlsplit
 
 from research.analysis_freeze import aware, verify
 from research_program.three_arm_review import _certify
+from automation.collector import regulation_row
 
 SCHEMA='WCPP-ACTUAL-DISPLAY-1'
 
@@ -47,10 +48,10 @@ def certify_retained(provider, fixture, meta, state, *, at=None):
     data=json.loads(raw);u=urlsplit(meta['source_url'])
     if provider=='espn':
         if u.hostname not in ('site.api.espn.com','site.web.api.espn.com'):raise ValueError('unapproved ESPN source')
-        comp=data['header']['competitions'][0];sides={c['homeAway']:c for c in comp['competitors']}
-        def score(side):
-            value=sides[side]['score'];return int(value['displayValue'] if isinstance(value,dict) else value)
-        row={**fixture,'home_goals':score('home'),'away_goals':score('away'),'score_basis':'regulation_90','known_at':meta['captured_at'],'raw_reference':meta,'source_url':meta['source_url']}
+        comp=data['header']['competitions'][0]
+        scope={'competition':fixture['cohort'].split(':')[0],'cohort':fixture['cohort'],'stages':[fixture['stage']]}
+        event={**data['header'],'date':comp['date']}
+        row=regulation_row(scope,event,data,meta['captured_at'],meta)
         _certify(row,fixture,root,at)
         h,a=row['home_goals'],row['away_goals']
     elif provider=='football-data.org':

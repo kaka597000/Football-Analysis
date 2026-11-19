@@ -82,6 +82,8 @@ class SharedDisplayTests(unittest.TestCase):
             with self.assertRaises(ValueError):d.certify_retained('football-data.org',f,m,root)
             m['sha256']='0'*64
             with self.assertRaises(ValueError):d.certify_retained('football-data.org',f,m,root)
+            f=self.fixture('usa.1');raw=self.raw(f,1,0);raw['header']['season']['name']='Playoffs';m=self.meta(root,f,raw)
+            with self.assertRaises(ValueError):d.certify_retained('espn',f,m,root)
             f=self.fixture();r=self.freeze(root,f);r['payload']['displayed_scores']['first']='9-9'
             with self.assertRaises(ValueError):d.settle(r,f,'display:comprehensive')
 
