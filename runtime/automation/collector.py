@@ -111,17 +111,23 @@ def phase_for(scope, event):
     comp=scope['competition'];cohort=scope['cohort'];season=event.get('season',{})
     text=' '.join(str(season.get(k,'')) for k in ('name','slug','type')).lower().replace('_',' ').replace('-',' ')
     stages=scope['stages']
-    if comp=='uefa.champions':
+    if comp in ('uefa.champions','afc.champions'):
         # NEW_FORMAT is an era, not an arbitrary prefix to strip. Preserve
         # the configured representation so downstream scope matching agrees.
-        if cohort!='uefa.champions:NEW_FORMAT:league_phase':return None
+        expected,slugs,names,allowed = {
+            'uefa.champions':('uefa.champions:NEW_FORMAT:league_phase',
+                ('league-phase',),('league phase',),('NEW_FORMAT:league_phase','league_phase')),
+            'afc.champions':('afc.champions:ELITE:league_phase',
+                ('league-stage','league-phase'),('league stage','league phase'),('league_phase',)),
+        }[comp]
+        if cohort!=expected:return None
         year=season.get('year')
         if type(year) is not int or year<2024:return None
         slug=season.get('slug');name=season.get('name')
-        if slug is not None and slug!='league-phase':return None
-        if name is not None and str(name).split(',')[-1].strip().lower()!='league phase':return None
+        if slug is not None and slug not in slugs:return None
+        if name is not None and str(name).split(',')[-1].strip().lower() not in names:return None
         if slug is None and name is None:return None
-        return next((s for s in ('NEW_FORMAT:league_phase','league_phase') if s in stages),None)
+        return next((s for s in allowed if s in stages),None)
     if comp in PHASED_RESEARCH:
         # Native slug must exactly match the configured phase; no substring
         # match can turn a semifinal into a final or a knockout into a league.
@@ -131,13 +137,11 @@ def phase_for(scope, event):
         for stage, needle in CUP_STAGES.items():
             if needle in text and stage in stages:return stage
         return None
-    if comp in ('afc.cup','afc.champions','uefa.champions'):
+    if comp=='afc.cup':
         year=season.get('year')
         if type(year) is not int or year<2024:return None
         if comp=='afc.cup' and 'CHAMPIONS_TWO' in cohort and 'group' in text and 'group_stage' in stages:
             return 'group_stage'
-        if comp in ('afc.champions','uefa.champions') and 'league phase' in text and 'league_phase' in stages:
-            return 'league_phase'
         return None
     if comp=='mex.1':
         if ('apertura' in cohort and 'apertura' not in text) or ('clausura' in cohort and 'clausura' not in text):return None
@@ -162,7 +166,9 @@ def regulation_row(scope, event, summary, captured_at, raw_ref):
     if aware(c['date'])!=aware(event.get('date',c['date'])):raise ValueError('kickoff conflict')
     if aware(c['date'])>=aware(captured_at):raise ValueError('future result')
     merged=dict(event,**header)
-    if scope['competition']=='uefa.champions':
+    if scope['competition'] in ('uefa.champions','afc.champions'):
+        if header.get('league',{}).get('slug',scope['competition'])!=scope['competition']:
+            raise ValueError('summary league identity conflict')
         native=event.get('season',{});reported=header.get('season',{})
         for key in ('year','type'):
             if native.get(key) is not None and reported.get(key) is not None and native[key]!=reported[key]:

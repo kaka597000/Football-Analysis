@@ -9,6 +9,34 @@ from collector import collect,regulation_row,phase_for,ASIAN
 
 
 class CollectorTests(unittest.TestCase):
+    def test_elite_league_stage_alias_preserves_route_across_seasons(self):
+        scope={'competition':'afc.champions','cohort':'afc.champions:ELITE:league_phase','stages':['league_phase']}
+        for year,typ in ((2024,12868),(2025,13662)):
+            event=copy.deepcopy(self.event);summary=copy.deepcopy(self.summary)
+            event['season']={'year':year,'type':typ,'slug':'league-stage'}
+            summary['header']['season']={'year':year,'type':typ,'name':'AFC Champions League Elite, League Stage'}
+            summary['header']['league']={'slug':'afc.champions'}
+            row=regulation_row(scope,event,summary,self.now.isoformat(),{})
+            self.assertEqual((row['cohort'],row['stage']),(scope['cohort'],'league_phase'))
+            for change in ({'year':2023},{'type':999},{'slug':'round-of-16'},
+                           {'name':'AFC Champions League, Group Stage'}):
+                broken=copy.deepcopy(summary);broken['header']['season'].update(change)
+                with self.subTest(change=change),self.assertRaises(ValueError):
+                    regulation_row(scope,event,broken,self.now.isoformat(),{})
+            broken=copy.deepcopy(summary);broken['header']['league']['slug']='afc.cup'
+            with self.assertRaises(ValueError):regulation_row(scope,event,broken,self.now.isoformat(),{})
+
+    def test_elite_old_qualifying_knockout_and_unknown_routes_rejected(self):
+        scope={'competition':'afc.champions','cohort':'afc.champions:ELITE:league_phase','stages':['league_phase']}
+        for season in ({'year':2023,'slug':'league-stage'},
+                       {'year':2024,'slug':'group-stage'},
+                       {'year':2024,'slug':'qualifying'},
+                       {'year':2024,'slug':'round-of-16','name':'League Stage'}):
+            self.assertIsNone(phase_for(scope,{'season':season}))
+        event={'season':{'year':2025,'slug':'league-stage'}}
+        self.assertIsNone(phase_for(dict(scope,cohort='afc.champions:OLD:league_phase'),event))
+        self.assertIsNone(phase_for(dict(scope,stages=['UNKNOWN:league_phase']),event))
+
     def test_ucl_era_phase_alias_is_explicit_and_preserves_config(self):
         scope={'competition':'uefa.champions','cohort':'uefa.champions:NEW_FORMAT:league_phase','stages':['NEW_FORMAT:league_phase']}
         event={'season':{'year':2026,'slug':'league-phase'}}
