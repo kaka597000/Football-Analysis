@@ -186,7 +186,7 @@ def regulation_row(scope, event, summary, captured_at, raw_ref):
         'raw_reference':raw_ref,'event_coverage':'NOT_CERTIFIED'}
 
 
-def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seconds=300):
+def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seconds=300, include_market=True):
     """Collect bounded private snapshots; caller serializes whole automation runs.
 
     fetcher(url, headers=None) -> JSON-compatible object or raw UTF-8 JSON bytes.
@@ -295,12 +295,12 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
             if not matched:
                 quarantine+=1;coverage[comp]['quarantined']+=1
                 append(root/'quarantine.jsonl',{'competition':comp,'event_id':eid,'captured_at':stamp,'reason':'PHASE_IDENTITY_OR_90MIN_NOT_VERIFIED','raw_reference':detail[1]})
-    market=get(ASIAN,{'X-AO':'1','Referer':'https://asianodds.org/'})
+    market=get(ASIAN,{'X-AO':'1','Referer':'https://asianodds.org/'}) if include_market else None
     if market:append(root/'market-snapshots.jsonl',{'source_url':ASIAN,'bookmaker':'BetInAsia via AsianOdds','captured_at':market[1]['captured_at'],'quote_time':None,'quote_time_status':'UNKNOWN_NOT_CAPTURE_TIME','raw_reference':market[1],'used_for_training':False})
     result={'schema':'WCPP-AUTOMATION-COLLECTION-1','captured_at':stamp,'request_count':calls,
         'successful_requests':successful,'max_requests':MAX_REQUESTS,'retry_used':retry_used,
         'events_seen':events_seen,'new_result_observations':len(rows),'quarantined':quarantine,
-        'market_snapshot_saved':bool(market),'all_sources_free_public':True,
+        'market_requested':include_market,'market_snapshot_saved':bool(market),'all_sources_free_public':True,
         'wallclock_limit_seconds':max_seconds,
         'budget_status':'TIME_LIMIT_REACHED' if time_limit_reached else 'REQUEST_LIMIT_REACHED' if calls>=MAX_REQUESTS else 'BOUNDED_SCAN_FINISHED',
         'coverage_complete':False,'coverage_by_competition':coverage,'new_rows':rows}
