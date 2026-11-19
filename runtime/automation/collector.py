@@ -286,7 +286,8 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
             matched=False
             for scope in group:
                 try:
-                    row=regulation_row(scope,event,detail[0],detail[1]['captured_at'],detail[1]);matched=True
+                    reference=dict(detail[1],scoreboard_reference=data[1])
+                    row=regulation_row(scope,event,detail[0],detail[1]['captured_at'],reference);matched=True
                 except (ValueError,KeyError,TypeError,IndexError,OverflowError):continue
                 key=(row['cohort'],row['match_id'],row['home_goals'],row['away_goals'])
                 if key not in existing:

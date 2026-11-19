@@ -1,0 +1,186 @@
+{
+  "mode": "READ_ONLY_RETAINED_RESULT_ADAPTER_REPLAY_NOT_FORECAST_OR_OFFICIAL_SETTLEMENT",
+  "espn_real_paired_cases": [
+    {
+      "match_id": "espn:720473",
+      "cohort": "uefa.europa",
+      "scoreboard_native_season": {
+        "year": 2024,
+        "type": 12892,
+        "slug": "league-phase"
+      },
+      "without_scoreboard_reference": [
+        "phase or era not compatible"
+      ],
+      "after": {
+        "match_id": "espn:720473",
+        "home_goals": 3,
+        "away_goals": 3,
+        "score_basis": "regulation_90",
+        "evidence": {
+          "captured_at": "2026-11-04T07:12:08.217210+00:00",
+          "path": "raw/c14a71de3f0d096df4f33f331e0c3418ba671bdcc22178ad30b9014092da409c.json.gz",
+          "sha256": "c14a71de3f0d096df4f33f331e0c3418ba671bdcc22178ad30b9014092da409c",
+          "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/summary?event=720473",
+          "scoreboard_reference": {
+            "path": "workspace-updates/20261104-data-supplement/uefa.europa-2025.json",
+            "sha256": "f984b39ecf8c317b742392027aabc161266aea6cbc4ad978ed7aa22b2a4d8d2b",
+            "captured_at": "2026-11-04T06:56:01.125427+00:00",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa/scoreboard?dates=2025&limit=1000"
+          }
+        },
+        "adapter": "espn"
+      },
+      "archive": "/workspace/brazil-results-data/workspace-updates/20261104-data-supplement",
+      "provenance_manifest_sha256": "e01f2931690c93e50bc7e65c8f6a17ec6dc6a48bee7c89f634d676fd91d46d36"
+    },
+    {
+      "match_id": "espn:757965",
+      "cohort": "uefa.europa.conf",
+      "scoreboard_native_season": {
+        "year": 2025,
+        "type": 13694,
+        "slug": "league-phase"
+      },
+      "without_scoreboard_reference": [
+        "phase or era not compatible"
+      ],
+      "after": {
+        "match_id": "espn:757965",
+        "home_goals": 4,
+        "away_goals": 1,
+        "score_basis": "regulation_90",
+        "evidence": {
+          "captured_at": "2026-11-04T07:13:43.630550+00:00",
+          "path": "raw/115235325c04d8ce26e807bcd165a9b2fb8f9972a7ec4d794d7e1cd1e81ec647.json.gz",
+          "sha256": "115235325c04d8ce26e807bcd165a9b2fb8f9972a7ec4d794d7e1cd1e81ec647",
+          "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa.conf/summary?event=757965",
+          "scoreboard_reference": {
+            "path": "workspace-updates/20261104-data-supplement/uefa.europa.conf-2025.json",
+            "sha256": "889ae43a9c0a7ae61195ab120ae2f2c9b118d7d8efb7ddca66bf86567d75ad70",
+            "captured_at": "2026-11-04T06:56:01.694883+00:00",
+            "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.europa.conf/scoreboard?dates=2025&limit=1000"
+          }
+        },
+        "adapter": "espn"
+      },
+      "archive": "/workspace/brazil-results-data/workspace-updates/20261104-data-supplement",
+      "provenance_manifest_sha256": "e01f2931690c93e50bc7e65c8f6a17ec6dc6a48bee7c89f634d676fd91d46d36"
+    }
+  ],
+  "football_data_real_regular_cases": [
+    {
+      "fixture": {
+        "match_id": "fdorg:558571",
+        "cohort": "ita.1",
+        "stage": "regular",
+        "home": "fdorg:103",
+        "away": "fdorg:108",
+        "kickoff_at": "2026-10-17T16:00:00Z",
+        "provider_competition": "SA",
+        "provider_stage": "REGULAR_SEASON"
+      },
+      "result": {
+        "match_id": "fdorg:558571",
+        "home_goals": 1,
+        "away_goals": 3,
+        "score_basis": "regulation_90",
+        "evidence": {
+          "path": "raw/football-data-match-558571.json",
+          "sha256": "fc8cbbd7348fd7119c4c5d21028571dc48bd28e3d3e5e291498a641223995037",
+          "source_url": "https://api.football-data.org/v4/matches/558571",
+          "captured_at": "2026-10-19T00:32:13.602744+00:00"
+        },
+        "adapter": "football-data.org"
+      },
+      "duration": "REGULAR",
+      "provenance_file": "/workspace/WCPP/reports/review-20261019-0831/four-results/source-captures.json"
+    },
+    {
+      "fixture": {
+        "match_id": "fdorg:560607",
+        "cohort": "eng.1",
+        "stage": "regular",
+        "home": "fdorg:67",
+        "away": "fdorg:58",
+        "kickoff_at": "2026-10-17T16:30:00Z",
+        "provider_competition": "PL",
+        "provider_stage": "REGULAR_SEASON"
+      },
+      "result": {
+        "match_id": "fdorg:560607",
+        "home_goals": 0,
+        "away_goals": 1,
+        "score_basis": "regulation_90",
+        "evidence": {
+          "path": "raw/football-data-match-560607.json",
+          "sha256": "2abeabedda1dc994253011bdde7c6c8b319d04a1a27be90ee947915a9c959024",
+          "source_url": "https://api.football-data.org/v4/matches/560607",
+          "captured_at": "2026-10-19T00:32:14.445081+00:00"
+        },
+        "adapter": "football-data.org"
+      },
+      "duration": "REGULAR",
+      "provenance_file": "/workspace/WCPP/reports/review-20261019-0831/four-results/source-captures.json"
+    },
+    {
+      "fixture": {
+        "match_id": "fdorg:565825",
+        "cohort": "ger.1",
+        "stage": "regular",
+        "home": "fdorg:5",
+        "away": "fdorg:721",
+        "kickoff_at": "2026-10-17T16:30:00Z",
+        "provider_competition": "BL1",
+        "provider_stage": "REGULAR_SEASON"
+      },
+      "result": {
+        "match_id": "fdorg:565825",
+        "home_goals": 6,
+        "away_goals": 1,
+        "score_basis": "regulation_90",
+        "evidence": {
+          "path": "raw/football-data-match-565825.json",
+          "sha256": "3a46bb2198c487ba98a946ac7ae662591303d648e3bdebea01654d1f1923e9d3",
+          "source_url": "https://api.football-data.org/v4/matches/565825",
+          "captured_at": "2026-10-19T00:32:15.255591+00:00"
+        },
+        "adapter": "football-data.org"
+      },
+      "duration": "REGULAR",
+      "provenance_file": "/workspace/WCPP/reports/review-20261019-0831/four-results/source-captures.json"
+    },
+    {
+      "fixture": {
+        "match_id": "fdorg:564713",
+        "cohort": "esp.1",
+        "stage": "regular",
+        "home": "fdorg:90",
+        "away": "fdorg:81",
+        "kickoff_at": "2026-10-17T16:30:00Z",
+        "provider_competition": "PD",
+        "provider_stage": "REGULAR_SEASON"
+      },
+      "result": {
+        "match_id": "fdorg:564713",
+        "home_goals": 2,
+        "away_goals": 5,
+        "score_basis": "regulation_90",
+        "evidence": {
+          "path": "raw/football-data-match-564713.json",
+          "sha256": "4fb2deca1618911aa476cf04bad0e595a433092d7dd51db547a2ced2f0adcc41",
+          "source_url": "https://api.football-data.org/v4/matches/564713",
+          "captured_at": "2026-10-19T00:32:14.589413+00:00"
+        },
+        "adapter": "football-data.org"
+      },
+      "duration": "REGULAR",
+      "provenance_file": "/workspace/WCPP/reports/review-20261019-0831/four-results/source-captures.json"
+    }
+  ],
+  "football_data_real_extra_time_or_shootout_cases": [],
+  "real_et_limit": "Bounded search of named retained .org captures (39-match and46-match responses, four details, UCL/pre-match/API probes) found no EXTRA_TIME/PENALTY_SHOOTOUT or regularTime payload. Synthetic tests and official documentation are not repository empirical evidence.",
+  "espn_fixture_identity_note": "Historical normalized rows lacked kickoff_at; result-audit fixture identity was read from the paired archived event.date. No prematch prediction or freeze was constructed.",
+  "referenced_document_limit": "docs/europe-research-pairs-20261117.md was not present in checked local snapshots; used preserved 20261104 data-supplement archives instead.",
+  "schema_reference": "https://docs.football-data.org/general/v4/overtime.html"
+}

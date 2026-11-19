@@ -65,10 +65,10 @@ class SharedDisplayTests(unittest.TestCase):
             def fetch(url,headers=None):
                 calls.append(url)
                 self.assertIn('site.api.espn.com',url)
-                return raw if '/summary?' in url else {'events':[event]}
+                return raw if '/summary?' in url else {'leagues':[{'slug':f['cohort']}],'events':[event]}
             scopes=[{'competition':'usa.1','cohort':'usa.1','stages':['regular']}]
             first=collect(root,scopes,now=datetime(2026,1,3,tzinfo=timezone.utc),lookback_days=0,fetcher=fetch,include_market=False)
-            self.assertEqual(len(first['new_rows']),1);meta=first['new_rows'][0]['raw_reference'];s=d.summarize([d.settle(r,f,'display:comprehensive','espn',meta,root)])
+            self.assertEqual(len(first['new_rows']),1);meta=first['new_rows'][0]['raw_reference'];self.assertIn('scoreboard_reference',meta);s=d.summarize([d.settle(r,f,'display:comprehensive','espn',meta,root)])
             self.assertEqual(s['top3']['hits'],1)
             before=(Path(root)/'normalized-results.jsonl').read_bytes();second=collect(root,scopes,now=datetime(2026,1,3,tzinfo=timezone.utc),lookback_days=0,fetcher=fetch,include_market=False)
             self.assertEqual(len(second['new_rows']),0);self.assertEqual(before,(Path(root)/'normalized-results.jsonl').read_bytes());self.assertFalse(first['market_requested'])
@@ -86,5 +86,63 @@ class SharedDisplayTests(unittest.TestCase):
             with self.assertRaises(ValueError):d.certify_retained('espn',f,m,root)
             f=self.fixture();r=self.freeze(root,f);r['payload']['displayed_scores']['first']='9-9'
             with self.assertRaises(ValueError):d.settle(r,f,'display:comprehensive')
+
+    def test_finished_extra_time_and_shootout_use_explicit_regular_time(self):
+        for duration in ('EXTRA_TIME','PENALTY_SHOOTOUT'):
+            for keys in [('home','away'),('homeTeam','awayTeam')]:
+                with self.subTest(duration=duration,keys=keys),tempfile.TemporaryDirectory() as root:
+                    f=self.fixture('eng.1','fdorg');raw=self.raw(f,7,6,'football-data.org')
+                    raw['score'].update(duration=duration,regularTime=dict(zip(keys,[1,1])),extraTime={'home':1,'away':0},penalties={'home':5,'away':5})
+                    m=self.meta(root,f,raw,'football-data.org');r=d.certify_retained('football-data.org',f,m,root)
+                    self.assertEqual((r['home_goals'],r['away_goals']),(1,1))
+
+    def test_regular_time_missing_invalid_conflicting_or_unfinished_rejected(self):
+        cases=[None,{}, {'home':None,'away':1},{'home':True,'away':1},{'home':-1,'away':1},{'home':1,'away':1,'homeTeam':2,'awayTeam':1}]
+        for value in cases:
+            with self.subTest(value=value),tempfile.TemporaryDirectory() as root:
+                f=self.fixture('eng.1','fdorg');raw=self.raw(f,7,6,'football-data.org');raw['score'].update(duration='PENALTY_SHOOTOUT',regularTime=value);m=self.meta(root,f,raw,'football-data.org')
+                with self.assertRaises(ValueError):d.certify_retained('football-data.org',f,m,root)
+        with tempfile.TemporaryDirectory() as root:
+            f=self.fixture('eng.1','fdorg');raw=self.raw(f,1,1,'football-data.org');raw['score']['regularTime']={'home':None,'away':None};m=self.meta(root,f,raw,'football-data.org')
+            self.assertEqual(d.certify_retained('football-data.org',f,m,root)['home_goals'],1)
+            raw['score']['regularTime']={'home':1,'away':0};m=self.meta(root,f,raw,'football-data.org')
+            with self.assertRaises(ValueError):d.certify_retained('football-data.org',f,m,root)
+            raw['score'].update(duration='EXTRA_TIME',regularTime={'home':1,'away':1});raw['status']='IN_PLAY';m=self.meta(root,f,raw,'football-data.org')
+            with self.assertRaises(ValueError):d.certify_retained('football-data.org',f,m,root)
+            raw['status']='FINISHED';raw['homeTeam']['id']=999;m=self.meta(root,f,raw,'football-data.org')
+            with self.assertRaises(ValueError):d.certify_retained('football-data.org',f,m,root)
+
+    def board_meta(self,root,f,raw,stage):
+        event=copy.deepcopy(raw['header']);event['date']=f['kickoff_at'];event['season']['slug']=stage
+        board={'leagues':[{'slug':f['cohort']}],'events':[event]}
+        p=Path(root)/'scoreboard.json';p.write_text(json.dumps(board))
+        meta={'path':p.name,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'captured_at':'2026-01-03T11:00:00Z','source_url':f"https://site.api.espn.com/apis/site/v2/sports/soccer/{f['cohort']}/scoreboard?dates=20260102"}
+        return board,meta
+
+    def test_paired_native_stage_survives_missing_summary_slug(self):
+        for league,stage in [('uefa.europa','league-phase'),('uefa.europa.conf','league-phase'),('fifa.world','group-stage')]:
+            with self.subTest(league=league),tempfile.TemporaryDirectory() as root:
+                f=dict(self.fixture(league),stage=stage);raw=self.raw(f,1,1);m=self.meta(root,f,raw)
+                with self.assertRaises(ValueError):d.certify_retained('espn',f,m,root)
+                board,bm=self.board_meta(root,f,raw,stage);m['scoreboard_reference']=bm
+                self.assertEqual(d.certify_retained('espn',f,m,root)['home_goals'],1)
+
+    def test_paired_stage_missing_conflict_wrong_fixture_and_root_rejected(self):
+        with tempfile.TemporaryDirectory() as root:
+            f=dict(self.fixture('uefa.europa'),stage='league-phase');raw=self.raw(f,1,1);m=self.meta(root,f,raw);board,bm=self.board_meta(root,f,raw,'league-phase');m['scoreboard_reference']=bm
+            def check_bad(changed):
+                p=Path(root)/'scoreboard.json';p.write_text(json.dumps(changed));bm['sha256']=hashlib.sha256(p.read_bytes()).hexdigest()
+                with self.assertRaises(ValueError):d.certify_retained('espn',f,m,root)
+            bad=copy.deepcopy(board);del bad['events'][0]['season']['slug'];check_bad(bad)
+            bad=copy.deepcopy(board);bad['events'][0]['season']['slug']='final';check_bad(bad)
+            bad=copy.deepcopy(board);bad['leagues'][0]['slug']='fifa.world';check_bad(bad)
+            bad=copy.deepcopy(board);bad['events'][0]['id']='999';check_bad(bad)
+            bad=copy.deepcopy(board);bad['events'][0]['competitions'][0]['competitors'][0]['team']['id']='999';check_bad(bad)
+            bad=copy.deepcopy(board);bad['events'][0]['date']='2026-01-02T14:00:00Z';check_bad(bad)
+            bad=copy.deepcopy(board);bad['events']*=2;check_bad(bad)
+            board,bm=self.board_meta(root,f,raw,'league-phase');m['scoreboard_reference']=bm;raw['header']['season']['slug']='final';m.update(self.meta(root,f,raw))
+            with self.assertRaises(ValueError):d.certify_retained('espn',f,m,root)
+            bm['path']='../outside.json'
+            with self.assertRaisesRegex(ValueError,'outside retained root'):d.certify_retained('espn',f,m,root)
 
 if __name__=='__main__':unittest.main()
