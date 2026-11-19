@@ -43,6 +43,7 @@ class SharedDisplayTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             f=self.fixture();r=self.freeze(root,f)
             with self.assertRaises(ValueError):d.settle(r,f,'other-track')
+            with self.assertRaises(ValueError):d.settle(r,dict(f,provider_competition='OTHER'), 'display:comprehensive')
             for field,value in [('recorded_at','2026-01-03T00:00:00Z'),('revision',2)]:
                 bad=copy.deepcopy(r);bad[field]=value;bad['record_sha256']=digest({k:v for k,v in bad.items() if k!='record_sha256'})
                 with self.assertRaises(ValueError):d.settle(bad,f,'display:comprehensive')

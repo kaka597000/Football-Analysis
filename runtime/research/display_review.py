@@ -72,6 +72,7 @@ def settle(record, fixture, track, provider=None, meta=None, state=None, *, at=N
     if r['stage']!='prematch' or r['revision']!=1 or r['track']!=track or r['evaluation_slot']!='FIRST_PREMATCH':raise ValueError('wrong track/version/stage')
     f=r['fixture']
     if any(f[k]!=fixture[k] for k in ('match_id','cohort','stage','home','away','kickoff_at')):raise ValueError('fixture mismatch')
+    if any(f.get(k)!=fixture.get(k) for k in ('provider_competition','provider_stage')):raise ValueError('frozen provider scope mismatch')
     if not aware(f['cutoff_at'])<=aware(r['recorded_at'])<aware(f['kickoff_at']):raise ValueError('not original prematch display')
     d=r['payload'].get('displayed_scores')
     if not isinstance(d,dict) or d.get('schema')!=SCHEMA:return row
