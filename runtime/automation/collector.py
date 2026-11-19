@@ -111,6 +111,15 @@ def phase_for(scope, event):
     comp=scope['competition'];cohort=scope['cohort'];season=event.get('season',{})
     text=' '.join(str(season.get(k,'')) for k in ('name','slug','type')).lower().replace('_',' ').replace('-',' ')
     stages=scope['stages']
+    if comp=='aus.1':
+        # A-League finals have provider-native stages that a generic text
+        # denylist cannot safely distinguish from the regular season.
+        if cohort!='aus.1':return None
+        slug=season.get('slug');name=season.get('name')
+        if slug is not None and slug!='regular-season':return None
+        if name is not None and str(name).split(',')[-1].strip().lower()!='regular season':return None
+        if slug is None and name is None:return None
+        return next((s for s in stages if s in ('regular','regular-season')),None)
     if comp in ('uefa.champions','afc.champions'):
         # NEW_FORMAT is an era, not an arbitrary prefix to strip. Preserve
         # the configured representation so downstream scope matching agrees.
@@ -166,7 +175,7 @@ def regulation_row(scope, event, summary, captured_at, raw_ref):
     if aware(c['date'])!=aware(event.get('date',c['date'])):raise ValueError('kickoff conflict')
     if aware(c['date'])>=aware(captured_at):raise ValueError('future result')
     merged=dict(event,**header)
-    if scope['competition'] in ('uefa.champions','afc.champions'):
+    if scope['competition'] in ('uefa.champions','afc.champions','aus.1'):
         if header.get('league',{}).get('slug',scope['competition'])!=scope['competition']:
             raise ValueError('summary league identity conflict')
         native=event.get('season',{});reported=header.get('season',{})

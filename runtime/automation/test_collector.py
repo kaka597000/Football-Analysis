@@ -9,6 +9,29 @@ from collector import collect,regulation_row,phase_for,ASIAN
 
 
 class CollectorTests(unittest.TestCase):
+    def test_australian_regular_stage_is_explicit_and_config_preserved(self):
+        scope={'competition':'aus.1','cohort':'aus.1','stages':['regular']}
+        for season in ({'slug':'regular-season'},{'name':'2024-25 Australian A-League Men, Regular Season'}):
+            self.assertEqual(phase_for(scope,{'season':season}),'regular')
+            self.assertEqual(phase_for(dict(scope,stages=['regular-season']),{'season':season}),'regular-season')
+        for slug in ('elimination-finals','semifinals','grand-final','unknown','regular'):
+            self.assertIsNone(phase_for(scope,{'season':{'slug':slug,'name':'Regular Season'}}))
+        self.assertIsNone(phase_for(scope,{'season':{}}))
+        self.assertIsNone(phase_for(scope,{'season':{'slug':'regular-season','name':'Grand Final'}}))
+
+    def test_australian_paired_final_cannot_be_overwritten(self):
+        scope={'competition':'aus.1','cohort':'aus.1','stages':['regular']}
+        event=copy.deepcopy(self.event);summary=copy.deepcopy(self.summary)
+        event['season']={'year':2024,'type':12851,'slug':'regular-season'}
+        summary['header']['season']={'year':2024,'type':12851,'name':'Australian A-League Men, Regular Season'}
+        self.assertEqual(regulation_row(scope,event,summary,self.now.isoformat(),{})['stage'],'regular')
+        for slug in ('elimination-finals','semifinals','grand-final'):
+            broken=copy.deepcopy(event);broken['season']['slug']=slug
+            with self.assertRaises(ValueError):regulation_row(scope,broken,summary,self.now.isoformat(),{})
+        for change in ({'name':'Australian A-League Men, Grand Final'},{'year':2025},{'type':12848}):
+            broken=copy.deepcopy(summary);broken['header']['season'].update(change)
+            with self.assertRaises(ValueError):regulation_row(scope,event,broken,self.now.isoformat(),{})
+
     def test_elite_league_stage_alias_preserves_route_across_seasons(self):
         scope={'competition':'afc.champions','cohort':'afc.champions:ELITE:league_phase','stages':['league_phase']}
         for year,typ in ((2024,12868),(2025,13662)):
