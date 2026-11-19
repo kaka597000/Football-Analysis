@@ -111,6 +111,17 @@ def phase_for(scope, event):
     comp=scope['competition'];cohort=scope['cohort'];season=event.get('season',{})
     text=' '.join(str(season.get(k,'')) for k in ('name','slug','type')).lower().replace('_',' ').replace('-',' ')
     stages=scope['stages']
+    if comp=='uefa.champions':
+        # NEW_FORMAT is an era, not an arbitrary prefix to strip. Preserve
+        # the configured representation so downstream scope matching agrees.
+        if cohort!='uefa.champions:NEW_FORMAT:league_phase':return None
+        year=season.get('year')
+        if type(year) is not int or year<2024:return None
+        slug=season.get('slug');name=season.get('name')
+        if slug is not None and slug!='league-phase':return None
+        if name is not None and str(name).split(',')[-1].strip().lower()!='league phase':return None
+        if slug is None and name is None:return None
+        return next((s for s in ('NEW_FORMAT:league_phase','league_phase') if s in stages),None)
     if comp in PHASED_RESEARCH:
         # Native slug must exactly match the configured phase; no substring
         # match can turn a semifinal into a final or a knockout into a league.
@@ -151,6 +162,14 @@ def regulation_row(scope, event, summary, captured_at, raw_ref):
     if aware(c['date'])!=aware(event.get('date',c['date'])):raise ValueError('kickoff conflict')
     if aware(c['date'])>=aware(captured_at):raise ValueError('future result')
     merged=dict(event,**header)
+    if scope['competition']=='uefa.champions':
+        native=event.get('season',{});reported=header.get('season',{})
+        for key in ('year','type'):
+            if native.get(key) is not None and reported.get(key) is not None and native[key]!=reported[key]:
+                raise ValueError('scoreboard/summary season conflict')
+        for season in (native,reported):
+            if phase_for(scope,{'season':season}) is None:
+                raise ValueError('phase or era not compatible')
     if scope['competition'] in PHASED_RESEARCH:
         # Scoreboards retain native phase slug; header season often contains
         # only year/type/name. Keep that exact phase after event reconciliation.
