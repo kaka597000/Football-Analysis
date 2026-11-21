@@ -2,40 +2,19 @@
 
 Matrix ranks, compared_scores and other tracks are never display evidence.
 """
-from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 import gzip
 import hashlib
 import json
 from pathlib import Path
-import re
 from urllib.parse import urlsplit
 
 from research.analysis_freeze import aware, verify
+from research.display_delivery import (
+    DISPLAY_TRACK, SCHEMA, attach_display, delivery_request, display_slot, render, valid_score, verify_delivery,
+)
 from research_program.three_arm_review import _certify
 from automation.collector import regulation_row, PHASED_RESEARCH
-
-SCHEMA='WCPP-ACTUAL-DISPLAY-1'
-
-def valid_score(value):
-    return isinstance(value,str) and re.fullmatch(r'(?:0|[1-9][0-9]?)-(?:0|[1-9][0-9]?)',value) is not None
-
-def render(first, alternatives):
-    return f'第一比分：{first}；备选一：{alternatives[0]}；备选二：{alternatives[1]}'
-
-def attach_display(payload, first=None, alternatives=(), *, abstain=False):
-    """Return the exact text to display and freeze together in an existing payload."""
-    out=deepcopy(payload)
-    if 'displayed_scores' in out:raise ValueError('display already present; append a new real prematch version instead')
-    if abstain:
-        if first is not None or alternatives:raise ValueError('abstention cannot carry scores')
-        display={'schema':SCHEMA,'status':'ABSTAIN','first':None,'alternatives':[], 'text':'第一比分待定；两项备选待定'}
-    else:
-        values=[first,*alternatives]
-        if len(values)!=3 or not all(map(valid_score,values)) or len(set(values))!=3:raise ValueError('exactly three distinct ordered scores required')
-        display={'schema':SCHEMA,'status':'ISSUED','first':first,'alternatives':list(alternatives),'text':render(first,alternatives)}
-    out['displayed_scores']=display
-    return out,display['text']
 
 def _retained_json(meta, root):
     path=(root/meta['path']).resolve()
@@ -107,32 +86,64 @@ def certify_retained(provider, fixture, meta, state, *, at=None):
     if any(type(x)is not int or x<0 for x in (h,a)):raise ValueError('invalid goals')
     return {'match_id':fixture['match_id'],'home_goals':h,'away_goals':a,'score_basis':'regulation_90','evidence':meta,'adapter':provider}
 
-def settle(record, fixture, track, provider=None, meta=None, state=None, *, at=None):
-    """One first-issued track, with separate Top1/Top3 coverage and denominators."""
-    result=certify_retained(provider,fixture,meta,state,at=at) if meta is not None else None
-    row={'match_id':fixture['match_id'],'track':track,'verified_completed':result is not None,'top1_issued':False,'top3_issued':False,'top1_hit':None,'top3_hit':None,'display_status':'MISSING','result':result}
-    if record is None:return row
-    r=verify(record)
-    if r['stage']!='prematch' or r['revision']!=1 or r['track']!=track or r['evaluation_slot']!='FIRST_PREMATCH':raise ValueError('wrong track/version/stage')
-    f=r['fixture']
-    if any(f[k]!=fixture[k] for k in ('match_id','cohort','stage','home','away','kickoff_at')):raise ValueError('fixture mismatch')
-    if any(f.get(k)!=fixture.get(k) for k in ('provider_competition','provider_stage')):raise ValueError('frozen provider scope mismatch')
-    if not aware(f['cutoff_at'])<=aware(r['recorded_at'])<aware(f['kickoff_at']):raise ValueError('not original prematch display')
-    d=r['payload'].get('displayed_scores')
-    if not isinstance(d,dict) or d.get('schema')!=SCHEMA:return row
-    row['freeze_sha256']=r['record_sha256'];row['display_status']=d.get('status','MISSING')
-    if d.get('status')!='ISSUED':return row
-    first=d.get('first');alts=d.get('alternatives');row['top1_issued']=valid_score(first)
-    row['top3_issued']=row['top1_issued'] and isinstance(alts,list) and len(alts)==2 and all(map(valid_score,alts)) and len(set([first,*alts]))==3
-    # A stored rank list without its actual displayed text is not display evidence.
-    text=d.get('text')
-    if not isinstance(text,str) or not text.startswith(f'第一比分：{first}；'):
-        row['top1_issued']=row['top3_issued']=False
-    if row['top3_issued'] and text!=render(first,alts):row['top3_issued']=False
-    if result:
-        actual=f"{result['home_goals']}-{result['away_goals']}"
-        if row['top1_issued']:row['top1_hit']=actual==first
-        if row['top3_issued']:row['top3_hit']=actual in [first,*alts]
+def settle(record, fixture, track, provider=None, meta=None, state=None, *, at=None,
+           lookup_first=None, lookup_actual_kickoff=None):
+    """Settle the first confirmed comprehensive display against a retained 90-minute result.
+
+    The caller configures trusted readers. lookup_first uses the same delivery
+    authority as publication. lookup_actual_kickoff verifies the start of this
+    exact fixture and returns a timezone-aware ISO timestamp, or None.
+    """
+    if track != DISPLAY_TRACK:
+        raise ValueError('comprehensive display has its own settlement track')
+    at = at or datetime.now(timezone.utc)
+    result = certify_retained(provider, fixture, meta, state, at=at) if meta is not None else None
+    row = {'match_id': fixture['match_id'], 'track': track, 'verified_completed': result is not None,
+           'top1_issued': False, 'top3_issued': False, 'top1_hit': None, 'top3_hit': None,
+           'display_status': 'MISSING', 'result': result}
+    if record is None:
+        return row
+    record = verify(record)
+    if record['stage'] != 'prematch' or record['track'] != track:
+        raise ValueError('wrong display track or stage')
+    frozen = record['fixture']
+    if record['match_id'] != fixture['match_id'] or any(
+        frozen[k] != fixture[k] for k in ('match_id', 'cohort', 'stage', 'home', 'away', 'kickoff_at')
+    ):
+        raise ValueError('fixture mismatch')
+    if any(frozen.get(k) != fixture.get(k) for k in ('provider_competition', 'provider_stage')):
+        raise ValueError('frozen provider scope mismatch')
+    if not aware(frozen['cutoff_at']) <= aware(record['recorded_at']) < aware(frozen['kickoff_at']):
+        raise ValueError('freeze is outside the prematch window')
+    display = record['payload'].get('displayed_scores')
+    if not isinstance(display, dict) or display.get('schema') != SCHEMA:
+        return row
+    if lookup_first is None:
+        return dict(row, display_issue='UNCONFIRMED_DELIVERY')
+    confirmation = lookup_first(display_slot(fixture['match_id']))
+    if confirmation is None:
+        return dict(row, display_issue='UNCONFIRMED_DELIVERY')
+    sent = verify_delivery(confirmation, delivery_request(record), record, at=at)
+    kickoff = lookup_actual_kickoff(fixture) if lookup_actual_kickoff is not None else None
+    if kickoff is None:
+        return dict(row, display_issue='UNVERIFIED_ACTUAL_KICKOFF')
+    started = aware(kickoff)
+    if started > at:
+        return dict(row, display_issue='UNVERIFIED_ACTUAL_KICKOFF')
+    if sent >= started:
+        return dict(row, display_issue='DELIVERED_AT_OR_AFTER_KICKOFF')
+    if result is not None and aware(meta['captured_at']) < started + timedelta(minutes=90):
+        raise ValueError('result captured before actual regulation could finish')
+
+    row.update(freeze_sha256=record['record_sha256'], display_status=display['status'],
+               message_id=confirmation['message_id'], delivered_at=confirmation['delivered_at'],
+               actual_kickoff_at=kickoff)
+    if display['status'] == 'ISSUED':
+        row.update(top1_issued=True, top3_issued=True)
+        if result is not None:
+            actual = f"{result['home_goals']}-{result['away_goals']}"
+            row.update(top1_hit=actual == display['first'],
+                       top3_hit=actual in [display['first'], *display['alternatives']])
     return row
 
 def summarize(rows):
