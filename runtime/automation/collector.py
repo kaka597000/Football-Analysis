@@ -111,6 +111,32 @@ def phase_for(scope, event):
     comp=scope['competition'];cohort=scope['cohort'];season=event.get('season',{})
     text=' '.join(str(season.get(k,'')) for k in ('name','slug','type')).lower().replace('_',' ').replace('-',' ')
     stages=scope['stages']
+    if comp=='aus.1':
+        # A-League finals have provider-native stages that a generic text
+        # denylist cannot safely distinguish from the regular season.
+        if cohort!='aus.1':return None
+        slug=season.get('slug');name=season.get('name')
+        if slug is not None and slug!='regular-season':return None
+        if name is not None and str(name).split(',')[-1].strip().lower()!='regular season':return None
+        if slug is None and name is None:return None
+        return next((s for s in stages if s in ('regular','regular-season')),None)
+    if comp in ('uefa.champions','afc.champions'):
+        # NEW_FORMAT is an era, not an arbitrary prefix to strip. Preserve
+        # the configured representation so downstream scope matching agrees.
+        expected,slugs,names,allowed = {
+            'uefa.champions':('uefa.champions:NEW_FORMAT:league_phase',
+                ('league-phase',),('league phase',),('NEW_FORMAT:league_phase','league_phase')),
+            'afc.champions':('afc.champions:ELITE:league_phase',
+                ('league-stage','league-phase'),('league stage','league phase'),('league_phase',)),
+        }[comp]
+        if cohort!=expected:return None
+        year=season.get('year')
+        if type(year) is not int or year<2024:return None
+        slug=season.get('slug');name=season.get('name')
+        if slug is not None and slug not in slugs:return None
+        if name is not None and str(name).split(',')[-1].strip().lower() not in names:return None
+        if slug is None and name is None:return None
+        return next((s for s in allowed if s in stages),None)
     if comp in PHASED_RESEARCH:
         # Native slug must exactly match the configured phase; no substring
         # match can turn a semifinal into a final or a knockout into a league.
@@ -120,13 +146,11 @@ def phase_for(scope, event):
         for stage, needle in CUP_STAGES.items():
             if needle in text and stage in stages:return stage
         return None
-    if comp in ('afc.cup','afc.champions','uefa.champions'):
+    if comp=='afc.cup':
         year=season.get('year')
         if type(year) is not int or year<2024:return None
         if comp=='afc.cup' and 'CHAMPIONS_TWO' in cohort and 'group' in text and 'group_stage' in stages:
             return 'group_stage'
-        if comp in ('afc.champions','uefa.champions') and 'league phase' in text and 'league_phase' in stages:
-            return 'league_phase'
         return None
     if comp=='mex.1':
         if ('apertura' in cohort and 'apertura' not in text) or ('clausura' in cohort and 'clausura' not in text):return None
@@ -151,6 +175,16 @@ def regulation_row(scope, event, summary, captured_at, raw_ref):
     if aware(c['date'])!=aware(event.get('date',c['date'])):raise ValueError('kickoff conflict')
     if aware(c['date'])>=aware(captured_at):raise ValueError('future result')
     merged=dict(event,**header)
+    if scope['competition'] in ('uefa.champions','afc.champions','aus.1'):
+        if header.get('league',{}).get('slug',scope['competition'])!=scope['competition']:
+            raise ValueError('summary league identity conflict')
+        native=event.get('season',{});reported=header.get('season',{})
+        for key in ('year','type'):
+            if native.get(key) is not None and reported.get(key) is not None and native[key]!=reported[key]:
+                raise ValueError('scoreboard/summary season conflict')
+        for season in (native,reported):
+            if phase_for(scope,{'season':season}) is None:
+                raise ValueError('phase or era not compatible')
     if scope['competition'] in PHASED_RESEARCH:
         # Scoreboards retain native phase slug; header season often contains
         # only year/type/name. Keep that exact phase after event reconciliation.
@@ -186,7 +220,7 @@ def regulation_row(scope, event, summary, captured_at, raw_ref):
         'raw_reference':raw_ref,'event_coverage':'NOT_CERTIFIED'}
 
 
-def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seconds=300):
+def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seconds=300, include_market=True):
     """Collect bounded private snapshots; caller serializes whole automation runs.
 
     fetcher(url, headers=None) -> JSON-compatible object or raw UTF-8 JSON bytes.
@@ -286,7 +320,8 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
             matched=False
             for scope in group:
                 try:
-                    row=regulation_row(scope,event,detail[0],detail[1]['captured_at'],detail[1]);matched=True
+                    reference=dict(detail[1],scoreboard_reference=data[1])
+                    row=regulation_row(scope,event,detail[0],detail[1]['captured_at'],reference);matched=True
                 except (ValueError,KeyError,TypeError,IndexError,OverflowError):continue
                 key=(row['cohort'],row['match_id'],row['home_goals'],row['away_goals'])
                 if key not in existing:
@@ -295,12 +330,12 @@ def collect(state_dir, scopes, now=None, fetcher=None, lookback_days=2, max_seco
             if not matched:
                 quarantine+=1;coverage[comp]['quarantined']+=1
                 append(root/'quarantine.jsonl',{'competition':comp,'event_id':eid,'captured_at':stamp,'reason':'PHASE_IDENTITY_OR_90MIN_NOT_VERIFIED','raw_reference':detail[1]})
-    market=get(ASIAN,{'X-AO':'1','Referer':'https://asianodds.org/'})
+    market=get(ASIAN,{'X-AO':'1','Referer':'https://asianodds.org/'}) if include_market else None
     if market:append(root/'market-snapshots.jsonl',{'source_url':ASIAN,'bookmaker':'BetInAsia via AsianOdds','captured_at':market[1]['captured_at'],'quote_time':None,'quote_time_status':'UNKNOWN_NOT_CAPTURE_TIME','raw_reference':market[1],'used_for_training':False})
     result={'schema':'WCPP-AUTOMATION-COLLECTION-1','captured_at':stamp,'request_count':calls,
         'successful_requests':successful,'max_requests':MAX_REQUESTS,'retry_used':retry_used,
         'events_seen':events_seen,'new_result_observations':len(rows),'quarantined':quarantine,
-        'market_snapshot_saved':bool(market),'all_sources_free_public':True,
+        'market_requested':include_market,'market_snapshot_saved':bool(market),'all_sources_free_public':True,
         'wallclock_limit_seconds':max_seconds,
         'budget_status':'TIME_LIMIT_REACHED' if time_limit_reached else 'REQUEST_LIMIT_REACHED' if calls>=MAX_REQUESTS else 'BOUNDED_SCAN_FINISHED',
         'coverage_complete':False,'coverage_by_competition':coverage,'new_rows':rows}

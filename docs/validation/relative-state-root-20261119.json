@@ -1,0 +1,214 @@
+{
+  "archive_commit": "69821e4cb6db23ac51cc81159ed4a1a0058ca39e",
+  "mode": "ISOLATED_REGRESSION_REPLAY_NOT_OFFICIAL_SETTLEMENT",
+  "persistence": "consensus save disabled and atomic_json captured in memory; no prematch or review records created",
+  "before": {
+    "relative": {
+      "population": 6,
+      "issued": 6,
+      "settled": 0,
+      "pending": 6
+    },
+    "absolute": {
+      "population": 6,
+      "issued": 6,
+      "settled": 6,
+      "pending": 0
+    }
+  },
+  "after": {
+    "relative": {
+      "population": 6,
+      "issued": 6,
+      "settled": 6,
+      "pending": 0
+    },
+    "absolute": {
+      "population": 6,
+      "issued": 6,
+      "settled": 6,
+      "pending": 0
+    }
+  },
+  "full_relative_absolute_reports_identical": true,
+  "archive_files_unchanged": true,
+  "six_results": [
+    {
+      "match_id": "espn:401841315",
+      "score": [
+        0,
+        1
+      ],
+      "raw_reference": {
+        "captured_at": "2026-11-19T07:24:31.433073+00:00",
+        "path": "raw/89798dd99fb2532bb64554327ec0d4ac70b81c80de3db205a44d49e5a8d4764d.json.gz",
+        "sha256": "89798dd99fb2532bb64554327ec0d4ac70b81c80de3db205a44d49e5a8d4764d",
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/summary?event=401841315"
+      },
+      "source_issues": [],
+      "prematch_freeze_sha256": "106236b87e7e054835c0c991585f43c64955e0dd90d5f5125ca8ee21c873af75"
+    },
+    {
+      "match_id": "espn:401841310",
+      "score": [
+        2,
+        0
+      ],
+      "raw_reference": {
+        "captured_at": "2026-11-19T07:24:31.709857+00:00",
+        "path": "raw/3ba08e2023e13d9bbc8a1beab65662c836b57e2a5cc578451fe2cc70d419744e.json.gz",
+        "sha256": "3ba08e2023e13d9bbc8a1beab65662c836b57e2a5cc578451fe2cc70d419744e",
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/summary?event=401841310"
+      },
+      "source_issues": [],
+      "prematch_freeze_sha256": "9324d16805140948381a41e24dde54842883049ecc6a6e83bb8fe18a5308e0b7"
+    },
+    {
+      "match_id": "espn:401841313",
+      "score": [
+        2,
+        1
+      ],
+      "raw_reference": {
+        "captured_at": "2026-11-19T07:24:32.242119+00:00",
+        "path": "raw/ff947f2783ca63c76ff6e0cb3f8b3808f114ed4ea69b536303199d987b46836c.json.gz",
+        "sha256": "ff947f2783ca63c76ff6e0cb3f8b3808f114ed4ea69b536303199d987b46836c",
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/summary?event=401841313"
+      },
+      "source_issues": [],
+      "prematch_freeze_sha256": "f7524e8fb5ff98f133398db79d2c65411fce55c15ae393c5f443c35a6941b825"
+    },
+    {
+      "match_id": "espn:401841314",
+      "score": [
+        2,
+        1
+      ],
+      "raw_reference": {
+        "captured_at": "2026-11-19T07:24:31.988450+00:00",
+        "path": "raw/03167cc2d776f6455b879e4822c11141e3e1fe564bb4babfda6c3f30a20a6598.json.gz",
+        "sha256": "03167cc2d776f6455b879e4822c11141e3e1fe564bb4babfda6c3f30a20a6598",
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/summary?event=401841314"
+      },
+      "source_issues": [],
+      "prematch_freeze_sha256": "ce73adf63d0c9d5109dd3126bec4b54d2763d8e24dc68f7417db08e1bd0f3920"
+    },
+    {
+      "match_id": "espn:401841312",
+      "score": [
+        0,
+        0
+      ],
+      "raw_reference": {
+        "captured_at": "2026-11-19T07:24:32.836534+00:00",
+        "path": "raw/b1988d3ee9005e14efc14034f962b6ba11f418d282d8ac6141b468302a07ae86.json.gz",
+        "sha256": "b1988d3ee9005e14efc14034f962b6ba11f418d282d8ac6141b468302a07ae86",
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/summary?event=401841312"
+      },
+      "source_issues": [],
+      "prematch_freeze_sha256": "a2c0727aebd70cfbae3bc7d703ec14b58255b307fb390dfd1589269acacfe589"
+    },
+    {
+      "match_id": "espn:401841316",
+      "score": [
+        4,
+        0
+      ],
+      "raw_reference": {
+        "captured_at": "2026-11-19T07:24:32.497984+00:00",
+        "path": "raw/f5be88a1162521920b95302fa4af4e3051960f43c8b847c0c32dc7b2966ef99a.json.gz",
+        "sha256": "f5be88a1162521920b95302fa4af4e3051960f43c8b847c0c32dc7b2966ef99a",
+        "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/summary?event=401841316"
+      },
+      "source_issues": [],
+      "prematch_freeze_sha256": "f3dcc97aca391904559c91f67385d381aebf9b3a812cdbd8103f3d669bed4f72"
+    }
+  ],
+  "non_brazil": {
+    "match_id": "espn:401879248",
+    "cohort": "eng.1",
+    "before": {
+      "relative": {
+        "error": "result evidence outside retained state"
+      },
+      "absolute": {
+        "home": 2,
+        "away": 0,
+        "source": {
+          "captured_at": "2026-10-31T21:41:12.204567+00:00",
+          "path": "raw/3701eed086e378b228d7f14782ab21f179c24c6cdfd37b7266ca64a1cc46e0d1.json.gz",
+          "sha256": "3701eed086e378b228d7f14782ab21f179c24c6cdfd37b7266ca64a1cc46e0d1",
+          "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=401879248"
+        }
+      }
+    },
+    "after": {
+      "relative": {
+        "home": 2,
+        "away": 0,
+        "source": {
+          "captured_at": "2026-10-31T21:41:12.204567+00:00",
+          "path": "raw/3701eed086e378b228d7f14782ab21f179c24c6cdfd37b7266ca64a1cc46e0d1.json.gz",
+          "sha256": "3701eed086e378b228d7f14782ab21f179c24c6cdfd37b7266ca64a1cc46e0d1",
+          "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=401879248"
+        }
+      },
+      "absolute": {
+        "home": 2,
+        "away": 0,
+        "source": {
+          "captured_at": "2026-10-31T21:41:12.204567+00:00",
+          "path": "raw/3701eed086e378b228d7f14782ab21f179c24c6cdfd37b7266ca64a1cc46e0d1.json.gz",
+          "sha256": "3701eed086e378b228d7f14782ab21f179c24c6cdfd37b7266ca64a1cc46e0d1",
+          "source_url": "https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/summary?event=401879248"
+        }
+      }
+    }
+  },
+  "archive_files_sha256": {
+    "workspace-updates/20261118-transformer/forward/plan.json": "7bd29be2d5b6a4c1116ed08700391e0f1dc4fc88a7bbb2e483c979b87079ff10",
+    "workspace-updates/20261118-transformer/forward/freezes/espn-401841310.json": "b2db585cf669ed8d6302e108d81102a499f98c10e334de2cde36fb11baf4991d",
+    "raw/b1988d3ee9005e14efc14034f962b6ba11f418d282d8ac6141b468302a07ae86.json.gz": "01e3795dd8909c5cb6c8aa8464c0977f8aeb76841520024a56a5b4d4bbff2023",
+    "workspace-updates/20261118-market-signals/consensus/forward/records/cfd871bb97b7495f0cffb17c7617be2b9481623ff6ddd5622637fd121e41306d/000001.json": "a59cfe5562c532d7cf4d35a8efe375d2c0b6fd5e1d42b09c9613126bd3d413d4",
+    "raw/89798dd99fb2532bb64554327ec0d4ac70b81c80de3db205a44d49e5a8d4764d.json.gz": "2e728f0a28e72130dc6e3e8d0705c8ab2dc0c8051396553d8d713c375c7c4f52",
+    "workspace-updates/20261118-transformer/forward/records/e97055c7ed9b81e2b4068aeb06d26efe9fe57b1d571535bbc34f0df95be68a67/000001.json": "b2db585cf669ed8d6302e108d81102a499f98c10e334de2cde36fb11baf4991d",
+    "workspace-updates/20261118-transformer/forward/summary.json": "7dea047713cd1bbbc95113460ca4dd62149b69453019a195535dfee2eb09db3a",
+    "workspace-updates/20261118-market-signals/consensus/forward/freezes/espn-401841315.json": "a59cfe5562c532d7cf4d35a8efe375d2c0b6fd5e1d42b09c9613126bd3d413d4",
+    "workspace-updates/20261118-market-signals/consensus/forward/records/c352dd56ed8587a2dc32f8dd02db5ac641458fcd582426cab76006cf7c293ecc/000001.json": "76f621be4c8d61c06e0808bc98e0c73c20ad90f4910aad985d0c56936f54e79e",
+    "workspace-updates/20261118-market-signals/consensus/forward/reviews/73fac931d7e773305a2488e7947617c12e2c22992bd4faaef28ccc3b493cc2f9/000003.json": "bed455380b63b885956ca5e0f10f8759502b2d60e9edb4920ae6d69594082427",
+    "workspace-updates/20261118-market-signals/consensus/forward/freezes/espn-401841310.json": "302b97dc10ffa0895e18d8e32dee9be3139f890113bfd74ba32393613313fe3c",
+    "workspace-updates/20261118-transformer/forward/records/5e6c2addf432f095c7422e080d769bb29215f04c07d50f1a863db34a4c2f7112/000001.json": "17a65922e0eb5326bc42014baa3e6f7a83fbcb312b5f73df12a6c3714623d3f7",
+    "raw/f5be88a1162521920b95302fa4af4e3051960f43c8b847c0c32dc7b2966ef99a.json.gz": "94d7be5efed4138d7bd75693e4f277464403386e43b21d42757753056f31ace8",
+    "workspace-updates/20261118-market-signals/consensus/forward/review.json": "761ae48cb3b98110b759472e76a7875527c19dff0d1cfd3473105bdba9cb00d4",
+    "workspace-updates/20261118-market-signals/consensus/forward/freezes/espn-401841312.json": "76f621be4c8d61c06e0808bc98e0c73c20ad90f4910aad985d0c56936f54e79e",
+    "workspace-updates/20261118-market-signals/consensus/forward/records/bfe46825349b30d81d2d6d1bedacd5cc1df642f547b826118665d905200fac99/000001.json": "302b97dc10ffa0895e18d8e32dee9be3139f890113bfd74ba32393613313fe3c",
+    "raw/03167cc2d776f6455b879e4822c11141e3e1fe564bb4babfda6c3f30a20a6598.json.gz": "f7a0990fcf4320abb5e032b82ab6329d4437bc5c7d66fecff526f3254286b2bd",
+    "raw/ff947f2783ca63c76ff6e0cb3f8b3808f114ed4ea69b536303199d987b46836c.json.gz": "d541f6d84ecca69db783e57db7724452e9cbee5c910d218d5f330bfba8accdcc",
+    "workspace-updates/20261118-transformer/forward/records/33db0f863e31e613449ba2617fa903502d4ef2d4c9ce0526d9bef9dbf4fe1b6c/000001.json": "c835fd667408a38c1a52ebe4a04e053ad69cd88a9a093d1d4f3b5edf41571144",
+    "workspace-updates/20261118-market-signals/consensus/forward/reviews/73fac931d7e773305a2488e7947617c12e2c22992bd4faaef28ccc3b493cc2f9/000001.json": "b1396b865f4922a21510a8079f3ab9ce14ae11649486286884fb252e34beedb9",
+    "workspace-updates/20261118-market-signals/consensus/forward/freezes/espn-401841313.json": "0c0e8358545616ae667641b4e1879f353fee238b60a94cf41eb7089d1b602276",
+    "workspace-updates/20261118-market-signals/registration.json": "ca6199ea34a46151da441dcd326c28a5bc692c5e0983cc3296232b00d8f9b32c",
+    "workspace-updates/20261118-market-signals/consensus/forward/freezes/espn-401841314.json": "9772c420d9237a41644af6f96d47132813e1f56b58d99b01892c4f901c84a577",
+    "workspace-updates/20261118-transformer/forward/freezes/espn-401841314.json": "17a65922e0eb5326bc42014baa3e6f7a83fbcb312b5f73df12a6c3714623d3f7",
+    "normalized-results.jsonl": "b8b5c96a77e93cedf5aaf8587bb72dd42ab56806c34e87407d862f5dfe59d18d",
+    "workspace-updates/20261118-market-signals/consensus/forward/freezes/espn-401841316.json": "9bae523afcaa3f919ec32e256e4cbbee4ac9f1188dfa2596475e97b89eb9fcd0",
+    "workspace-updates/20261118-transformer/forward/freezes/espn-401841313.json": "b00cb3a56e3006f2870b1ae4c1c0dfa3462b82bfd030d89cf9aad161811a60b1",
+    "workspace-updates/20261118-transformer/forward/records/58b74692b1a95d4ce70520ea42a11bb59c4b62a34a7347be230508acedb56e3b/000001.json": "4ae056c9fdc05dd3a22fb3fa9d3ab606ec2fc7fcc24ce956b84053171cbbdaf5",
+    "workspace-updates/20261118-market-signals/consensus/forward/records/04d812027b3dc6749441a5201b2db81aac250f40eddca3bc11147c4580853cbd/000001.json": "9772c420d9237a41644af6f96d47132813e1f56b58d99b01892c4f901c84a577",
+    "workspace-updates/20261118-transformer/forward/records/7d0e54451b93e4cfa4539a703d555afed795781257bf96fede4bf3cf8658d7bd/000001.json": "b00cb3a56e3006f2870b1ae4c1c0dfa3462b82bfd030d89cf9aad161811a60b1",
+    "workspace-updates/20261118-transformer/forward/reviews/059be53cc4ea1e612fab951c6d475e297fbb7094ae4a16fb5b9611ac1fa9c3a7/000002.json": "4d957a118a0b5daf192bf403403a2fd559a7e5fd9f8544cf15f30bb079c4766c",
+    "workspace-updates/20261118-market-signals/consensus/forward/records/b964bdd5500641472e7486f078765a1b8517bac62700046fc9ad375c08043638/000001.json": "9bae523afcaa3f919ec32e256e4cbbee4ac9f1188dfa2596475e97b89eb9fcd0",
+    "raw/3ba08e2023e13d9bbc8a1beab65662c836b57e2a5cc578451fe2cc70d419744e.json.gz": "50dab288c3efde29d7676aba4483f521cfd54f878030a5e63ec6cf78cd2aaa22",
+    "workspace-updates/20261118-transformer/forward/review.json": "710d5f35c565c3796ababddcbcf0f624763e6e0f3a4c1faf89dc4331542fb11e",
+    "workspace-updates/20261118-market-signals/consensus/forward/reviews/73fac931d7e773305a2488e7947617c12e2c22992bd4faaef28ccc3b493cc2f9/000002.json": "5156173507fd68cd240b3ac1d0a6039a1e385b6e2548d1144a681cc0d3f303bb",
+    "workspace-updates/20261118-transformer/forward/freezes/espn-401841316.json": "8d67f0783115db6b02dabec754a740c67ad0e995ee457e17a0ea92be7311b909",
+    "workspace-updates/20261118-transformer/forward/records/bef314c812d7ae7629c127704a568ecd0302cc32e20932b8bc9b29e41fb777f4/000001.json": "8d67f0783115db6b02dabec754a740c67ad0e995ee457e17a0ea92be7311b909",
+    "raw/3701eed086e378b228d7f14782ab21f179c24c6cdfd37b7266ca64a1cc46e0d1.json.gz": "7072c7df6badc65eecec2ebb5c248a477f484aba883d7b7643a95a4f576fcac9",
+    "workspace-updates/20261118-transformer/forward/freezes/espn-401841315.json": "c835fd667408a38c1a52ebe4a04e053ad69cd88a9a093d1d4f3b5edf41571144",
+    "workspace-updates/20261118-transformer/forward/replay-receipt.json": "64bc29c20f2bbe8451973ce02064bb606730e8d79e77d2939fcb75f566667f69",
+    "workspace-updates/20261118-transformer/forward/freezes/espn-401841312.json": "4ae056c9fdc05dd3a22fb3fa9d3ab606ec2fc7fcc24ce956b84053171cbbdaf5",
+    "workspace-updates/20261118-transformer/forward/reviews/059be53cc4ea1e612fab951c6d475e297fbb7094ae4a16fb5b9611ac1fa9c3a7/000001.json": "efa798fcde972bb6830645dd2e639fca7cade99776380f3f4897a91b38fd87ae",
+    "workspace-updates/20261118-market-signals/consensus/forward/records/797c2b1c2d0b4a8964848443b1eb211e80fd71ceec5cb6e40c468664d8ebe5c0/000001.json": "0c0e8358545616ae667641b4e1879f353fee238b60a94cf41eb7089d1b602276",
+    "workspace-updates/20261118-transformer/forward/records/75855afacc20a56112fb5c5f3c3766fe609f0e9c624935db9e7bedfdba3dfc30/000001.json": "7bd29be2d5b6a4c1116ed08700391e0f1dc4fc88a7bbb2e483c979b87079ff10"
+  }
+}

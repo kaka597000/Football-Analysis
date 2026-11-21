@@ -103,6 +103,7 @@ def _certify(row, fixture, state, now):
             or not url.path.endswith('/soccer/' + league + '/summary')
             or parse_qs(url.query).get('event') != [row['match_id'].removeprefix('espn:')]):
         raise ValueError('result source endpoint differs from fixture')
+    state = Path(state).resolve()
     path = (state / meta['path']).resolve()
     if not path.is_relative_to(state):
         raise ValueError('result evidence outside retained state')
