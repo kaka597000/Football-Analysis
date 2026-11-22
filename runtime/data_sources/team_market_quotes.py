@@ -179,6 +179,17 @@ def _fetch(f, regions, key, directory, markets):
     return dict(metadata, status='OK', source_file=file, source_sha256=hashlib.sha256(raw).hexdigest()), event
 
 
+def _brazil_first_issue_hashes(data_root, plan, started_at):
+    from research_program.team_market_candidate import DEFAULT_BATCH, preflight
+
+    root = Path(data_root).resolve()
+    if (root / plan).resolve() != root / DEFAULT_PLAN:
+        raise ValueError('Brazil first-issue preflight requires the original registered plan')
+    receipt = preflight(root, root / DEFAULT_BATCH, as_of=aware(started_at))
+    return {row['match_id']: row['first_sha256'] for row in receipt['rows']
+            if row['status'] == 'PREVIOUSLY_ISSUED'}
+
+
 def verify_run(data_root, path):
     """Recompute every retained price pair from its original provider bytes, offline."""
     path = Path(path).resolve()
@@ -195,6 +206,12 @@ def verify_run(data_root, path):
         raise ValueError('source fixture identities differ')
     by_id = {f['match_id']: f for f in targets}
     requests = read(path / 'requests.json')
+    if report.get('collection_settings', {}).get('brazil_first_issue_preflight'):
+        first = _brazil_first_issue_hashes(data_root, report['plan'], report['started_at'])
+        skipped = {f['match_id']: f.get('first_sha256') for f in report['fixtures']
+                   if f['status'] == 'PREVIOUSLY_ISSUED'}
+        if skipped != first or set(skipped).intersection(r['match_id'] for r in requests):
+            raise ValueError('retained Brazil first-issue preflight differs')
     rows = []
     exclusions_by_id = {}
     for meta in requests:
@@ -227,7 +244,7 @@ def verify_run(data_root, path):
 
 
 def collect(data_root, out, *, plan=DEFAULT_PLAN, regions='eu', max_events=None, discover=None,
-            days=4, match_markets=False, fetcher=_fetch):
+            days=4, match_markets=False, brazil_first_issue_preflight=False, fetcher=_fetch):
     """One event call per upcoming fixture; aggregate all requested paid markets in that call."""
     if (not regions or len(set(regions.split(','))) != len(regions.split(','))
             or any(r not in {'eu', 'uk', 'us', 'us2', 'au'} for r in regions.split(','))):
@@ -241,6 +258,10 @@ def collect(data_root, out, *, plan=DEFAULT_PLAN, regions='eu', max_events=None,
         max_events = 1
     markets = (*MARKETS, 'h2h', 'totals') if match_markets else MARKETS
     settings = dict(max_events=max_events, days=days if discover else None)
+    if brazil_first_issue_preflight:
+        if discover or match_markets:
+            raise ValueError('Brazil first-issue preflight is for registered team markets only')
+        settings['brazil_first_issue_preflight'] = True
     if out.exists():
         old = verify_run(data_root, out)
         if (old['plan'] != (None if discover else str(plan)) or old.get('discovery_competition') != discover
@@ -250,6 +271,7 @@ def collect(data_root, out, *, plan=DEFAULT_PLAN, regions='eu', max_events=None,
         return old
     out.parent.mkdir(parents=True, exist_ok=True)
     started = now()
+    first = _brazil_first_issue_hashes(data_root, plan, started) if brazil_first_issue_preflight else {}
     key = os.environ.get('THE_ODDS') or os.environ.get('WCPP_ODDS_API_KEY') or os.environ.get('WCPP_THE_ODDS_API_KEY')
     requests, quotes, coverage = [], [], []
     remaining = None
@@ -279,7 +301,9 @@ def collect(data_root, out, *, plan=DEFAULT_PLAN, regions='eu', max_events=None,
         for f in order:
             mid = f['match_id']
             reason = stop
-            if aware(f['kickoff_at']) <= aware(now()):
+            if mid in first:
+                reason = 'PREVIOUSLY_ISSUED'
+            elif aware(f['kickoff_at']) <= aware(now()):
                 reason = 'KICKED_OFF'
             elif not key:
                 reason = 'MISSING_CREDENTIAL'
@@ -305,6 +329,8 @@ def collect(data_root, out, *, plan=DEFAULT_PLAN, regions='eu', max_events=None,
                 btts_books=sorted({r['bookmaker'] for r in rows if r['market'] == 'btts'}),
                 home_team_05_books=sorted({r['bookmaker'] for r in rows if r['team'] == 'home' and r['line'] == .5}),
                 away_team_05_books=sorted({r['bookmaker'] for r in rows if r['team'] == 'away' and r['line'] == .5})))
+            if mid in first:
+                coverage[-1]['first_sha256'] = first[mid]
         write(stage / 'requests.json', requests)
         write(stage / 'quotes.json', quotes)
         summary = dict(schema='WCPP-TEAM-MARKETS-1', registered=len(targets), started_at=started, completed_at=now(),
@@ -334,10 +360,13 @@ if __name__ == '__main__':
     parser.add_argument('--discover', choices=['eng.1', 'bra.1'], help='rolling official fixture discovery, independent of the original six')
     parser.add_argument('--days', type=int, default=4)
     parser.add_argument('--match-markets', action='store_true', help='also retain same-response raw 1X2 and full-match O/U')
+    parser.add_argument('--brazil-first-issue-preflight', action='store_true',
+                        help='skip verified first issues in the registered Brazil research batch')
     args = parser.parse_args()
     if args.verify_run:
         result = verify_run(args.data_root, args.verify_run)
     else:
         result = collect(args.data_root, args.out, plan=args.plan, regions=args.regions, max_events=args.max_events,
-                         discover=args.discover, days=args.days, match_markets=args.match_markets)
+                         discover=args.discover, days=args.days, match_markets=args.match_markets,
+                         brazil_first_issue_preflight=args.brazil_first_issue_preflight)
     print(json.dumps({k: v for k, v in result.items() if k != 'fixtures'}, sort_keys=True))

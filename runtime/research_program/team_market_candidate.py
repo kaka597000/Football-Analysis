@@ -19,6 +19,7 @@ from .three_arm_model import _matrix, score_picks
 
 
 VERSION = "WCPP-TEAM-SCORING-MARKETS-1"
+TRACK = "team-scoring-market-study"
 PARENT = Path("workspace-updates/20261118-transformer/forward")
 DEFAULT_BATCH = Path("workspace-updates/20261118-market-signals/team-candidate")
 ARMS = ("frozen_market_baseline", "prematch_team_and_btts_adjustment")
@@ -218,36 +219,85 @@ def bases(data, batch):
         raise ValueError("registered parent or comparison changed")
     snapshots = [verify(read(f)) for f in (data / PARENT / "freezes").glob("*.json")]
     originals = {r["match_id"]: r for r in snapshots}
-    if len(originals) != len(snapshots) or set(originals) != set(registration["forward_ids"]):
+    plan_fixtures = plan["payload"]["fixtures"]
+    fixtures = {f["match_id"]: f for f in plan_fixtures}
+    if (
+        len(originals) != len(snapshots)
+        or len(fixtures) != len(plan_fixtures)
+        or set(originals) != set(registration["forward_ids"])
+        or set(originals) != set(fixtures)
+    ):
         raise ValueError("original population changed")
     for mid, record in originals.items():
         if (
             record["evaluation_slot"] != "FIRST_PREMATCH"
             or record["payload"]["plan_sha256"] != plan["record_sha256"]
-            or record["fixture"]["match_id"] != mid
+            or record["fixture"] != fixtures[mid]
+            or record["payload"]["market"] != plan["payload"]["markets"][mid]
         ):
             raise ValueError("wrong original freeze")
     return originals, digest(protocol)
 
 
-def issued(batch, originals):
+def issued(batch, originals, protocol_sha):
     records = {}
     for path in sorted((batch / "records").glob("*/*.json")):
         r = verify(read(path))
         mid = r["match_id"]
+        original = originals.get(mid)
         if (
             mid in records
-            or mid not in originals
+            or original is None
             or r["stage"] != "prematch"
+            or r["track"] != TRACK
+            or r["revision"] != 1
+            or r["previous_sha256"] is not None
             or r["evaluation_slot"] != "FIRST_PREMATCH"
-            or r["payload"]["base_freeze_sha256"] != originals[mid]["record_sha256"]
-            or not aware(r["fixture"]["cutoff_at"])
-            <= aware(r["recorded_at"])
-            < aware(r["fixture"]["kickoff_at"])
         ):
-            raise ValueError("team candidate first issue or chronology conflict")
+            raise ValueError("team candidate first issue conflict: " + mid)
+        f, payload = r["fixture"], r["payload"]
+        if (
+            f != dict(original["fixture"], cutoff_at=f["cutoff_at"])
+            or payload["version"] != VERSION
+            or payload["protocol_sha256"] != protocol_sha
+            or payload["base_freeze_sha256"] != original["record_sha256"]
+            or payload["base_market"] != original["payload"]["market"]
+            or set(payload["arms"]) != set(ARMS)
+            or not aware(original["recorded_at"]) <= aware(f["cutoff_at"])
+            <= aware(r["recorded_at"])
+            < aware(f["kickoff_at"])
+        ):
+            raise ValueError("team candidate first issue identity or chronology conflict: " + mid)
         records[mid] = r
     return records
+
+
+def preflight(data, batch, *, as_of=None):
+    """Read the registered Brazil queue before collecting any extra markets."""
+    at = as_of if as_of is not None else cutoff_now()
+    originals, protocol_sha = bases(data, batch)
+    first = issued(batch, originals, protocol_sha)
+    rows = []
+    for mid, original in sorted(originals.items()):
+        f = original["fixture"]
+        if (
+            f["cohort"] != "bra.1"
+            or f["competition"] != "bra.1"
+            or f["stage"] != "regular"
+            or f["identity_verified"] is not True
+            or f["score_basis"] != "regulation_90"
+        ):
+            raise ValueError("preflight requires verified Brazil regular-season fixtures")
+        row = {"match_id": mid, "base_freeze_sha256": original["record_sha256"]}
+        if mid in first and aware(first[mid]["recorded_at"]) <= at:
+            row.update(status="PREVIOUSLY_ISSUED", first_sha256=first[mid]["record_sha256"])
+        elif aware(f["kickoff_at"]) <= at:
+            row["status"] = "PAST_KICKOFF"
+        else:
+            row["status"] = "ELIGIBLE"
+        rows.append(row)
+    return {"as_of": at.isoformat(), "protocol_sha256": protocol_sha, "population": len(rows),
+            "status_counts": dict(Counter(r["status"] for r in rows)), "rows": rows}
 
 
 def issue(data, batch, run):
@@ -257,7 +307,7 @@ def issue(data, batch, run):
         quotes = verified_quotes(data, run)
         inputs_sha = digest(quotes)
         output = batch / "runs" / (run.name + ".json")
-        prior = issued(batch, originals)
+        prior = issued(batch, originals, protocol_sha)
         if output.exists():
             saved = read(output)
             if saved["input_sha256"] != inputs_sha or saved["protocol_sha256"] != protocol_sha:
@@ -306,7 +356,7 @@ def issue(data, batch, run):
                 out,
                 dict(f, cutoff_at=now.isoformat()),
                 stage="prematch",
-                track="team-scoring-market-study",
+                track=TRACK,
                 root=batch / "records",
                 idempotency_key=digest([mid, VERSION]),
             )
@@ -329,7 +379,7 @@ def issue(data, batch, run):
 
 def review(data, batch):
     originals, protocol_sha = bases(data, batch)
-    first = issued(batch, originals)
+    first = issued(batch, originals, protocol_sha)
     fixtures = {mid: rec["fixture"] for mid, rec in originals.items()}
     return review_registered(data, batch, protocol_sha, fixtures, first)
 
@@ -391,14 +441,12 @@ def review_registered(data, batch, protocol_sha, fixtures, first):
 
 def replay(data, batch):
     originals, protocol_sha = bases(data, batch)
-    first = issued(batch, originals)
+    first = issued(batch, originals, protocol_sha)
     channels = {}
     coverage = Counter()
     changes = Counter(primary=0, wdl=0, total=0, top3=0)
     for mid, frozen in sorted(first.items()):
         orig, report = originals[mid], frozen["payload"]
-        if report["protocol_sha256"] != protocol_sha:
-            raise ValueError("original research recipe differs")
         run = data / report["quote_run"]
         if run not in channels:
             channels[run] = verified_quotes(data, run)
@@ -451,15 +499,20 @@ def replay(data, batch):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="operation", required=True)
-    for operation in ("issue", "review", "replay"):
+    for operation in ("preflight", "issue", "review", "replay"):
         cmd = sub.add_parser(operation)
         cmd.add_argument("--state-dir", type=Path, required=True)
         cmd.add_argument("--batch", type=Path, default=DEFAULT_BATCH)
         if operation == "issue":
             cmd.add_argument("--quotes-run", type=Path, required=True)
+        if operation == "preflight":
+            cmd.add_argument("--as-of", type=aware, help="timezone-aware time for a read-only replay")
     args = parser.parse_args()
     data = args.state_dir.resolve()
     batch = data / args.batch
+    if args.operation == "preflight":
+        print(json.dumps(preflight(data, batch, as_of=args.as_of), indent=2))
+        return
     if args.operation == "issue":
         report = issue(data, batch, data / args.quotes_run)
     elif args.operation == "review":
