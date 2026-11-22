@@ -230,7 +230,17 @@ def comprehensive_audit(payload, pair):
         if payload.get('override_validation_status')!='UNVALIDATED_MANUAL_RESEARCH':
             policy_checks.append('EXPLICIT_UNVALIDATED_MANUAL_OVERRIDE_STATUS')
         missing.extend(policy_checks)
-    return {'version': VERSION, 'status':'NEEDS_COMPARISON' if missing else 'COMPARISONS_DOCUMENTED',
+    comparison = {}
+    candidate = pair.get('score_form_candidate') or {}
+    if candidate.get('status') == 'AVAILABLE':
+        from research_program.score_form import select_scores, rerank_issued
+        choice = select_scores(candidate, primary)
+        issued = [primary, *(payload.get('alternates') or [])]
+        comparison['score_form_comparison'] = {
+            **choice, 'within_issued_three': rerank_issued(issued, choice['primary']), 'candidate_version': candidate['version'],
+            'snapshot_sha256': candidate['snapshot_sha256'], 'experts': candidate['expert_primaries'],
+            'original_alternates': payload.get('alternates'), 'formal_kpi_eligible': False}
+    return {**comparison, 'version': VERSION, 'status':'NEEDS_COMPARISON' if missing else 'COMPARISONS_DOCUMENTED',
             'top3_ready':not missing,'models':audits,'missing_comparisons':missing,
             'decision_policy_version':policy,'independent_wdl_comparison':directions,
             'direction_disagrees_with_all_referenced_models':bool(unsupported_direction),
