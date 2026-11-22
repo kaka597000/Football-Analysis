@@ -1,6 +1,8 @@
 import copy
 from datetime import date
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 import sys
 import unittest
 import numpy as np
@@ -11,7 +13,7 @@ from research import score_distribution_audit
 from research_program.selection_review import compare
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'scripts'))
-from train_score_form import examples
+from train_score_form import examples, publish_training
 
 
 class ScoreFormTests(unittest.TestCase):
@@ -72,6 +74,20 @@ class ScoreFormTests(unittest.TestCase):
         live.attach_candidate(out,self.fixture,{},self.snap)
         self.assertEqual(out['score_form_candidate']['status'],'UNSUPPORTED_TEST_ROUTE')
         self.assertEqual(out['test_model'],{'version':'unsupported'})
+
+    def test_failed_training_does_not_publish_or_replace_a_release(self):
+        with TemporaryDirectory() as folder:
+            out=Path(folder)/'model'
+            with patch('train_score_form.write_training',side_effect=ValueError('bad season')):
+                with self.assertRaises(ValueError):
+                    publish_training(Path(folder),out)
+            self.assertFalse(out.exists())
+            out.mkdir()
+            sentinel=out/'previous.json'
+            sentinel.write_text('old fit')
+            with self.assertRaises(FileExistsError):
+                publish_training(Path(folder),out)
+            self.assertEqual(sentinel.read_text(),'old fit')
 
     def test_selection_audit_and_review_with_pending_result(self):
         # Comparison here only needs an authenticated pair and its numerical distributions.

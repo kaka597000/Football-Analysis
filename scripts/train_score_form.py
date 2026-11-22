@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import sys
 
 import numpy as np
@@ -120,23 +121,41 @@ def train(cohort, games, sources, built_at):
     return model,records,metrics
 
 
-def main():
-    p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--understat-root',type=Path,required=True);p.add_argument('--out',type=Path,required=True)
-    a=p.parse_args();a.out.mkdir(parents=True,exist_ok=True)
+def write_training(understat_root, out):
     stamp=datetime.now(timezone.utc).isoformat()
     all_rows=[]; report={};files={}
     for cohort,league in LEAGUES.items():
-        games,src=load_seasons(a.understat_root,league)
+        games,src=load_seasons(understat_root,league)
         model,records,metrics=train(cohort,games,src,stamp)
-        (a.out/(cohort+'.json')).write_text(json.dumps(model,indent=2,allow_nan=False)+'\n')
+        (out/(cohort+'.json')).write_text(json.dumps(model,indent=2,allow_nan=False)+'\n')
         report[cohort]=metrics;files[cohort]=src;all_rows+=records
-    with (a.out/'holdout.jsonl').open('w') as f:
+    with (out/'holdout.jsonl').open('w') as f:
         for r in all_rows:f.write(json.dumps(r,allow_nan=False)+'\n')
     overall={k:tally([r['arms'][k] for r in all_rows]) for k in all_rows[0]['arms']}
     summary={'built_at':stamp,'historical_source_availability':'retrospective source snapshot; first-known times unproven',
              'league_results':report,'total_holdout':overall,'sources':files,
              'historical_source_timed_ou_n':0,'holdout_season':'2025/26'}
-    (a.out/'evaluation.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')
+    (out/'evaluation.json').write_text(json.dumps(summary,indent=2,allow_nan=False)+'\n')
     print(json.dumps(overall))
+
+
+def publish_training(understat_root, out):
+    out.parent.mkdir(parents=True,exist_ok=True)
+    if out.exists():
+        raise FileExistsError(out)
+    with TemporaryDirectory(prefix='.score-form-',dir=out.parent) as temp:
+        staging=Path(temp)/'artifacts'
+        staging.mkdir()
+        write_training(understat_root,staging)
+        staging.rename(out)
+
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--understat-root',type=Path,required=True)
+    p.add_argument('--out',type=Path,required=True,help='New directory for the complete training release')
+    args=p.parse_args()
+    publish_training(args.understat_root,args.out)
+
+
 if __name__=='__main__':main()
