@@ -11,6 +11,61 @@ class PhoenixTests(unittest.TestCase):
         self.assertEqual(wall_seconds('2025-01-01 01:00','01-01 01:04'),-240)
         self.assertIsNone(wall_seconds('2025-01-01 01:00','bad'))
 
+    def test_resume_reuses_committed_receipts_and_stops_on_final_quota(self):
+        import json
+        from phoenix_resume import resume
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);(root/'trial').mkdir()
+            queue=[dict(fixture_id=i,provider_league_code='epl',status='finished') for i in (1,2)]
+            (root/'trial/remaining-market-fixture-queue.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in queue))
+            db=Store(root/'db').db
+            db.executescript(SCHEMA)
+            stamp='2026-11-22T20:00:00+08:00'
+            db.execute('insert into sources(source_id,imported_at) values(?,?)',('src',stamp))
+            for i in (1,2):
+                trial_fixture(db,dict(fixture_id=i,league_code='epl',home_team='H',away_team='A',
+                    kickoff_at=stamp,status='finished',season_code='2627'),'src',stamp)
+            calls=[]
+            def fetch(path):
+                calls.append(path)
+                if path=='/api/me':
+                    return 200,b'{"data":{"leagues":["epl"],"rps":5}}','1'
+                body=json.dumps({'ok':True,'data':{'fixture_id':int(path.split('/')[3]),'league_code':'epl'}})
+                return 200,body.encode(),'0'
+            for i in (1,2):
+                self.assertEqual(resume(root,db,10,fetch,lambda _:None)['added'],1)
+                self.assertTrue((root/f'trial/resumed/receipts/{i}.json').exists())
+            self.assertEqual(resume(root,db,10,fetch,lambda _:None)['added'],0)
+            self.assertEqual(calls,['/api/me','/api/matches/1/all?tick_limit=100',
+                                    '/api/me','/api/matches/2/all?tick_limit=100'])
+            db.close()
+
+    def test_snapshot_clock_and_separate_database_scope(self):
+        from scope_registry import competition,season_for
+        import registry
+        self.assertNotIn('uefa.europa',registry.LEAGUES)
+        self.assertEqual(competition('UEFA Europa Conference League'),'uefa.europa.conf')
+        self.assertEqual(season_for('uefa.europa','2026-11-01'),'2026/27')
+        self.assertEqual(season_for('fifa.world','2026-06-20'),'2026')
+        with tempfile.TemporaryDirectory() as temp:
+            store=Store(Path(temp)/'db')
+            db=store.db
+            db.executescript(SCHEMA)
+            kick='2026-11-22T20:00:00+08:00'
+            db.execute('insert into sources(source_id,imported_at) values(?,?)',('src',kick))
+            trial_fixture(db,dict(fixture_id=99,league_code='epl',home_team='H',away_team='A',
+                kickoff_at=kick,status='scheduled',season_code='2627'),'src',kick)
+            data={'fixture_id':99,'league_code':'epl','odds_ticks':[
+                {'code':'b','changed_at':'2026-11-22T20:01:00+08:00','is_inplay':False,'eu_home':2}],
+                'books':[{'bookmaker_code':'b','at':{
+                    '60':{'eu':[2,3,4],'asia':[0,.91,.92],'changed_at':'2026-11-22T18:59:00+08:00'},
+                    '30':{'eu':[2,3,4],'changed_at':'2026-11-22T19:31:00+08:00'}}}]}
+            trial_market(db,'99','snapshot',{'ok':True,'data':data},'src')
+            prices=db.execute('select market,phase from phoenix_trial_prematch_prices order by market').fetchall()
+            self.assertEqual([tuple(v) for v in prices],
+                [('snapshot_1x2','T-60'),('snapshot_handicap_provider_water','T-60')])
+            db.close()
+
     def test_source_snapshots_do_not_double_count_tracks_or_conflate_league_ids(self):
         with tempfile.TemporaryDirectory() as t:
             store=Store(Path(t)/'db');db=store.db;db.executescript(SCHEMA)

@@ -7,7 +7,7 @@ from pathlib import Path
 import time
 import urllib.parse
 import urllib.request
-from registry import season_for
+from scope_registry import season_for
 from store import now, digest
 
 LEAGUES={3492701972:'jpn.2',3594495926:'jpn.centennial.2_3'}

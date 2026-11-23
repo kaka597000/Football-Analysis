@@ -52,11 +52,28 @@ def audit(path):
               sum(source_time IS NOT NULL) AS source_timed FROM phoenix_trial_prices GROUP BY market,phase ORDER BY market,phase"""),
         price_replay={str(hours)+'h':rows(SQL,(3600*hours,)) for hours in (24,1)},
         replay_clock='Archive provider display-clock relative time. Only the most recent eligible quote per bookmaker is used. The year is nearest to kickoff. Publisher first-known times were not observed historically.',
-        raw_sources=rows("SELECT count(*) AS sources,count(DISTINCT sha256) AS unique_responses FROM sources WHERE provider='phoenix'")[0])
+        raw_sources=rows('''SELECT count(*) AS sources,count(DISTINCT sha256) AS unique_responses FROM sources WHERE source_id IN (
+            SELECT catalog_source FROM phoenix_league_coverage UNION SELECT coverage_source FROM phoenix_league_coverage
+            UNION SELECT source_id FROM phoenix_fixture_evidence UNION SELECT source_id FROM phoenix_price_points
+            UNION SELECT source_id FROM phoenix_market_evidence UNION SELECT source_id FROM phoenix_review_evidence
+            UNION SELECT source_id FROM phoenix_review_details)''')[0])
     if db.execute("select 1 from sqlite_master where name='phoenix_review_evidence'").fetchone():
         result['published_review']=rows("""SELECT competition,count(DISTINCT prediction_id) AS provider_reviews,
-              count(DISTINCT fixture_id) AS matches,count(DISTINCT CASE WHEN open_total_line IS NOT NULL OR close_total_line IS NOT NULL THEN fixture_id END) AS with_totals_line
+              count(DISTINCT review_match_id) AS matches,count(DISTINCT CASE WHEN open_total_line IS NOT NULL OR close_total_line IS NOT NULL THEN review_match_id END) AS with_totals_line
               FROM phoenix_review_evidence GROUP BY competition ORDER BY competition""")
+    result['review_detail_matches']=db.execute('SELECT count(DISTINCT review_match_id) FROM phoenix_review_details').fetchone()[0]
+    result['trial_price_timing']=rows("""SELECT p.market,count(*) AS observations,
+        sum(julianday(p.source_time)<julianday(f.kickoff_source)) AS before_kickoff,
+        sum(julianday(p.source_time)=julianday(f.kickoff_source)) AS at_kickoff,
+        sum(julianday(p.source_time)>julianday(f.kickoff_source)) AS after_kickoff,
+        sum(julianday(p.source_time) IS NULL) AS unknown
+        FROM phoenix_trial_prices p JOIN phoenix_fixtures f ON f.feed='trial' AND p.fixture_id=f.fixture_id
+        GROUP BY p.market ORDER BY p.market""")
+    result['trial_eligible_quotes']=rows("""SELECT market,count(*) AS observations FROM phoenix_trial_prematch_prices
+        GROUP BY market ORDER BY market""")
+    result['trial_details_by_competition']=rows("""SELECT f.competition,m.endpoint,count(DISTINCT m.fixture_id) AS matches
+        FROM phoenix_market_evidence m JOIN phoenix_fixtures f USING(feed,fixture_id)
+        WHERE m.feed='trial' GROUP BY f.competition,m.endpoint ORDER BY f.competition,m.endpoint""")
     db.close()
     return result
 

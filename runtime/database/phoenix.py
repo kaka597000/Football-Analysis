@@ -53,11 +53,14 @@ CREATE TABLE IF NOT EXISTS phoenix_price_points(
   PRIMARY KEY(source_id,feed,fixture_id,bookmaker,market,seq));
 CREATE INDEX IF NOT EXISTS phoenix_price_lookup ON phoenix_price_points(feed,fixture_id,bookmaker,seconds_to_kickoff);
 CREATE TABLE IF NOT EXISTS phoenix_review_evidence(
-  source_id TEXT REFERENCES sources(source_id),prediction_id TEXT,fixture_id TEXT,competition TEXT REFERENCES competitions(code),
+  source_id TEXT REFERENCES sources(source_id),prediction_id TEXT,review_match_id TEXT,competition TEXT REFERENCES competitions(code),
   kickoff_source TEXT,home TEXT,away TEXT,bookmaker TEXT,open_h REAL,open_d REAL,open_a REAL,
   close_h REAL,close_d REAL,close_a REAL,open_handicap REAL,close_handicap REAL,
-  open_total_line REAL,close_total_line REAL,payload_json TEXT,PRIMARY KEY(source_id,prediction_id,fixture_id));
-CREATE INDEX IF NOT EXISTS phoenix_provider_review_match ON phoenix_review_evidence(competition,fixture_id);
+  open_total_line REAL,close_total_line REAL,payload_json TEXT,PRIMARY KEY(source_id,prediction_id,review_match_id));
+CREATE INDEX IF NOT EXISTS phoenix_provider_review_match ON phoenix_review_evidence(competition,review_match_id);
+CREATE TABLE IF NOT EXISTS phoenix_review_details(
+  source_id TEXT REFERENCES sources(source_id),review_match_id TEXT,payload_json TEXT,
+  PRIMARY KEY(source_id,review_match_id));
 CREATE TABLE IF NOT EXISTS phoenix_market_evidence(
   source_id TEXT REFERENCES sources(source_id),feed TEXT,fixture_id TEXT,endpoint TEXT,
   payload_json TEXT, PRIMARY KEY(source_id,feed,fixture_id,endpoint));
@@ -87,6 +90,12 @@ CREATE VIEW IF NOT EXISTS phoenix_archive_trial_links AS
     AND a.kickoff_source=replace(substr(t.kickoff_source,1,16),'T',' ')
     AND substr(t.kickoff_source,-6)='+08:00'
   WHERE a.feed='archive' AND t.feed='trial';
+CREATE VIEW IF NOT EXISTS phoenix_trial_prematch_prices AS
+  SELECT p.*, f.competition, f.kickoff_source,
+    (julianday(f.kickoff_source)-julianday(p.source_time))*86400 AS seconds_to_kickoff
+  FROM phoenix_trial_prices p JOIN phoenix_fixtures f ON f.feed='trial' AND p.fixture_id=f.fixture_id
+  WHERE julianday(p.source_time)<julianday(f.kickoff_source) AND p.phase!='inplay'
+    AND (p.phase NOT LIKE 'T-%' OR julianday(p.source_time)<=julianday(f.kickoff_source,'-'||substr(p.phase,3)||' minutes'));
 CREATE VIEW IF NOT EXISTS phoenix_archive_prematch_1x2 AS
   SELECT p.*,f.competition,f.kickoff_source,f.home AS home_team,f.away AS away_team,
          f.score_home,f.score_away
@@ -255,6 +264,11 @@ def trial_market(db,mid,endpoint,value,sid):
             eu=slot.get('eu')
             if eu and len(eu)==3:
                 add('snapshot_1x2',book['bookmaker_code'],'T-'+minute,i,slot.get('changed_at'),None,eu,slot)
+            asian=slot.get('asia')
+            if asian and len(asian)==3:
+                line,home,away=asian
+                add('snapshot_handicap_provider_water',book['bookmaker_code'],'T-'+minute,i,
+                    slot.get('changed_at'),line,[home,None,away],slot)
     db.executemany('INSERT OR IGNORE INTO phoenix_trial_prices VALUES(?,?,?,?,?,?,?,?,?,?,?,?)',values)
 
 
@@ -281,13 +295,15 @@ def capture_manifest(root,path):
             if kind=='trial-market':
                 record.update(fixture_id=item['fixture_id'],endpoint=urlparse(item['url']).path.split('/')[-1])
             records.append(record)
+    for path in sorted((root/'trial/resumed/receipts').glob('*.json')):
+        records.append(json.loads(path.read_bytes()))
     review=root/'review/database-receipts.jsonl'
     if review.exists():
-        for item in map(json.loads,review.read_bytes().splitlines()):
+        for item in sorted(map(json.loads,review.read_bytes().splitlines()),key=lambda r:r.get('kind')=='review-detail'):
             if item.get('http_status')!=200 or item.get('kind') not in ('review-list','review-detail'):continue
             rec=dict(kind=item['kind'],url=item['url'],file='review/'+item['file'],observed_at=item['fetched_at_utc'],
                      sha256=item['payload_sha256'])
-            if item['kind']=='review-detail':rec['fixture_id']=item['fixture_id']
+            if item['kind']=='review-detail':rec['review_match_id']=str(item['match_id'])
             records.append(rec)
     tmp=path.with_suffix('.tmp')
     with tmp.open('w',encoding='utf8') as f:
@@ -299,6 +315,9 @@ def import_receipts(database,root,manifest,scope):
     items=[json.loads(line) for line in manifest.open() if line.strip()]
     with closing(sqlite3.connect(database,timeout=45)) as db:
         db.execute('PRAGMA foreign_keys=ON')
+        columns={row[1] for row in db.execute('PRAGMA table_info(phoenix_review_evidence)')}
+        if 'fixture_id' in columns:
+            db.execute('ALTER TABLE phoenix_review_evidence RENAME COLUMN fixture_id TO review_match_id')
         db.executescript(SCHEMA+phoenix_identity.SCHEMA)
         with db:
             catalog_data={}
@@ -328,10 +347,12 @@ def import_receipts(database,root,manifest,scope):
                             (sid,str(g['prediction_id']),str(g['match_id']),code,g['kickoff'],g['home_team'],g['away_team'],
                              g.get('base_code') or g.get('base_company_id'),*vals,compact(g)))
                 elif kind=='review-detail':
-                    mid=str(rec['fixture_id'])
-                    if db.execute('SELECT 1 FROM phoenix_review_evidence WHERE fixture_id=? LIMIT 1',(mid,)).fetchone():
-                        db.execute('INSERT OR IGNORE INTO phoenix_market_evidence VALUES(?,?,?,?,?)',
-                                   (sid,'publisher_review',mid,'published_match',compact(value)))
+                    mid=str(rec.get('review_match_id') or '')
+                    if str(value.get('match_id'))!=mid or urlparse(rec['url']).path.split('/')[-1]!=mid:
+                        raise ValueError('published review match identity mismatch')
+                    if not db.execute('SELECT 1 FROM phoenix_review_evidence WHERE review_match_id=? LIMIT 1',(mid,)).fetchone():
+                        raise ValueError('published review match outside the captured scope: '+mid)
+                    db.execute('INSERT OR IGNORE INTO phoenix_review_details VALUES(?,?,?)',(sid,mid,compact(value)))
                 elif kind=='trial-market':
                     mid=str(rec['fixture_id'])
                     trial_market(db,mid,rec['endpoint'],value,sid)
