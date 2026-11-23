@@ -8,7 +8,7 @@
 
 ```bash
 export PYTHONPATH=runtime
-python -m research_program.goal_state_study fit --inputs events/events.jsonl --out study
+python -m research_program.goal_state_study fit --inputs events/locked-training.jsonl --out study
 python -m research_program.goal_state_study selection --inputs modern-market-paths.jsonl --out study
 python -m research_program.goal_state_study known --inputs modern-market-paths.jsonl --out study
 python -m research_program.goal_state_study dutch --inputs new-panels/normalized.jsonl --out study
@@ -16,6 +16,6 @@ python -m research_program.goal_state_study english_second --inputs new-panels/n
 python -m research_program.goal_state_study portuguese --inputs new-panels/normalized.jsonl --out study
 ```
 
-单一候选由2024/25五大联赛的首选命中数决定，同数依次比较三选、胜平负、全赢大小球及联合比分对数损失。另存一套四项目标配方，分别固定首选来源、两项备选的来源、胜平负与大小球来源。选出备选时先放入固定的首选比分，去重后补足三项。荷甲外测与英冠、葡超外部对照各自报告。历史收盘快照缺少机构报价时钟，前向实盘采用单条报价时钟。
+单一候选由2024/25五大联赛的首选命中数决定，同数依次比较三选、胜平负、全赢大小球及联合比分对数损失。另存一套四项目标配方，分别固定首选来源、两项备选的来源、胜平负与大小球来源。选出备选时先放入固定的首选比分，去重后补足三项。荷甲外测与英冠、葡超外部对照各自报告。历史收盘快照缺少机构报价时钟，前向实盘采用单条报价时钟。标准窗口为1小时，另行登记的24小时早盘研究窗口保存各市场实际报价年龄。
 
 `goal_state_process.predict` 接受工件、赛前赛事及已锁定的配方；其结果含同机构参考、候选和报价证据。保存首次研究预测使用 `goal_state_forward.register` 与 `issue`。赛后用 `python -m research_program.goal_state_forward --issued DIR --results RESULTS.json --evidence-root RAW --out NEW.json` 核验首次记录和90分钟赛果，再按固定名单结算。待赛可传入空数组，缺少报价的比赛保留在覆盖分母。

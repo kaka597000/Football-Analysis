@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import unittest
 
 from research_program.club_market_capture import choose_total, fresh_rows
@@ -19,6 +19,16 @@ class ClubMarketTests(unittest.TestCase):
     def rows(self,*rows,stale=False):
         return fresh_rows({'event_id':'evt_A','stale':stale,'odds':rows,'as_of':self.quote_time},
                           self.meta,'espn:1',self.now)
+
+    def test_opening_window_keeps_actual_source_time_and_the_normal_window_stays_one_hour(self):
+        row = self.row('1x2', as_of='2026-11-22T18:00:00Z')
+        raw = {'stale': False, 'event_id': 'evt_A', 'odds': [row]}
+        self.assertEqual(fresh_rows(raw, self.meta, 'espn:1', self.now), [])
+        opening = fresh_rows(raw, self.meta, 'espn:1', self.now, maximum_age=timedelta(hours=24))
+        self.assertEqual(opening[0]['quoted_at'], row['as_of'])
+        self.assertEqual(opening[0]['query_time'], self.meta['captured_at'])
+        row['as_of'] = '2026-11-22T03:09:59Z'
+        self.assertEqual(fresh_rows(raw, self.meta, 'espn:1', self.now, maximum_age=timedelta(hours=24)), [])
 
     def test_established_source_time_and_split_lines(self):
         hda = self.row('1x2')
