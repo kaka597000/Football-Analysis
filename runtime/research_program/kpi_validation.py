@@ -201,6 +201,9 @@ def _actual(result, fixture, evidence_root, now):
     if fixture['match_id'].startswith('kleague:'):
         from research_program.kleague_result import regulation
         regulation(result, evidence, path)
+    elif evidence.get('score_extraction')=='first_two_halves':
+        from research_program.regulation_halves import verify
+        verify(result, evidence, path)
     else:
         _finished_espn_label(result, evidence, path)
     return result['home_goals'], result['away_goals']
