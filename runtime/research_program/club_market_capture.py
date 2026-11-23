@@ -13,7 +13,7 @@ LEAGUES = {'eng.1': ('lg_T9268DXK','ENPL'), 'ger.1': ('lg_PGYWSDEA','GER'),
            'ita.1': ('lg_QXCSBRME','ITA'), 'esp.1': ('lg_PYBWSDEA','SPA'), 'fra.1': ('lg_CNSP3BPA','FRA')}
 
 
-def fresh_rows(raw, meta, match_id, cutoff):
+def fresh_rows(raw, meta, match_id, cutoff, *, maximum_age=MAXIMUM_QUOTE_AGE):
     capture = aware(meta['captured_at'])
     groups = defaultdict(dict)
     if raw.get('stale') is not False or not capture <= cutoff:
@@ -32,7 +32,7 @@ def fresh_rows(raw, meta, match_id, cutoff):
             live = aware(row['as_of'])
         except (KeyError, ValueError, TypeError, AttributeError):
             continue
-        if live > capture or not timedelta(0) <= cutoff - live <= MAXIMUM_QUOTE_AGE:
+        if live > capture or not timedelta(0) <= cutoff - live <= maximum_age:
             continue
         line = row.get('line')
         if market == '1x2' and line is not None:
@@ -79,7 +79,7 @@ def choose_total(rows):
     return min((min(group, key=balance) for group in totals.values()), key=priority)
 
 
-def attach(fixture, root, evidence, team_ids, cutoff):
+def attach(fixture, root, evidence, team_ids, cutoff, *, maximum_age=MAXIMUM_QUOTE_AGE):
     """Read and verify all three raw responses before admitting their prices."""
     league = fixture['cohort']
     board = read_evidence(root, evidence['espn'], cutoff=cutoff,
@@ -102,7 +102,7 @@ def attach(fixture, root, evidence, team_ids, cutoff):
         if ('espn:'+teams[side]['id'] != fixture[side] or reviewed['espn_name'] != teams[side]['displayName']
                 or (provider['id'],provider['name']) != (reviewed['provider_id'],reviewed['provider_name'])):
             raise ValueError('club market home/away identity mismatch')
-    rows = fresh_rows(raw, evidence['odds'], fixture['match_id'], aware(cutoff))
+    rows = fresh_rows(raw, evidence['odds'], fixture['match_id'], aware(cutoff), maximum_age=maximum_age)
     result = dict(fixture, market_snapshots=rows, market_evidence=evidence)
     result.pop('total_quote', None)
     choice = choose_total(rows)
@@ -114,4 +114,9 @@ def attach(fixture, root, evidence, team_ids, cutoff):
     result['market_availability'] = ('FRESH_SAME_BOOK_PAIR' if choice and any(
         r['market']=='1x2' and r['bookmaker']==choice['bookmaker'] for r in rows)
         else 'FRESH_TOTAL_ONLY' if choice else 'NO_FRESH_VERIFIED_TOTAL')
+    if maximum_age != MAXIMUM_QUOTE_AGE:
+        result['market_availability'] = {'FRESH_SAME_BOOK_PAIR': 'AGE_WINDOW_SAME_BOOK_PAIR',
+                                         'FRESH_TOTAL_ONLY': 'AGE_WINDOW_TOTAL_ONLY',
+                                         'NO_FRESH_VERIFIED_TOTAL': 'NO_TOTAL_IN_AGE_WINDOW'}[result['market_availability']]
+        result['quote_age_window_seconds'] = maximum_age.total_seconds()
     return result

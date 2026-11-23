@@ -12,7 +12,7 @@ from urllib.request import Request, urlopen
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'v4'))
 from provider_feed import scrub
-from registry import LEAGUES, normalize_name, season_for
+from scope_registry import LEAGUES, normalize_name, season_for
 from store import Store, now, digest
 
 TARGETS = {
