@@ -15,7 +15,7 @@ from optimization.evaluate import settle_ou
 from research.analysis_freeze import DEFAULT_ROOT, aware, digest, save, verify
 from research_program.future_identity import fixture_identity
 from research_program.future_validation import quote_audit, read, sha, write_new
-from research_program.kpi_targets import CURRENT_SCHEMA, ORIGINAL_SCHEMA, PROTOCOLS, TARGETS
+from research_program.kpi_targets import CURRENT_SCHEMA, PROTOCOLS, TARGETS
 from research_program.replay import _finished_espn_label
 
 REGISTRATION = 'kpi-preregistration'
@@ -84,11 +84,13 @@ def register(fixtures, candidate, market_baseline, *, freeze_root=DEFAULT_ROOT):
         'total_rule': 'STRICT_FULL_WIN_EXCLUDING_PUSH; COVERAGE_ACCOUNTED_SEPARATELY',
     }
     # An upgraded runner retrying the same cohort must resume the original contract.
-    legacy = dict(payload, schema=ORIGINAL_SCHEMA, targets=PROTOCOLS[ORIGINAL_SCHEMA])
-    for prior in (legacy, payload):
-        receipt = _registered_receipt(prior, freeze_root)
+    receipts = []
+    for schema, targets in PROTOCOLS.items():
+        receipt = _registered_receipt(dict(payload, schema=schema, targets=targets), freeze_root)
         if receipt is not None:
-            return receipt
+            receipts.append(receipt)
+    if receipts:
+        return min(receipts, key=lambda item: aware(item['recorded_at']))
     kickoff = min(aware(f['kickoff_at']) for f in identities.values())
     if kickoff <= now:
         raise ValueError('only future fixtures may register')
