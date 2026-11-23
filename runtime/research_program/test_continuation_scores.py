@@ -9,6 +9,13 @@ from research_program.score_form import poisson_matrix
 
 
 class ContinuationTests(unittest.TestCase):
+    def test_chunked_matchday_bootstrap_preserves_every_registered_draw(self):
+        from research_program.continuation_report import bootstrap_days
+
+        daily = np.random.default_rng(57).integers(8, size=(37, 4, 4))
+        indices = np.random.default_rng(20261123).integers(len(daily), size=(1000, len(daily)))
+        np.testing.assert_array_equal(bootstrap_days(daily), daily[indices].sum(axis=1))
+
     def test_factorization_reconstructs_every_cell_and_its_tail(self):
         prior=np.stack([poisson_matrix([h,a],m.base.H.shape) for h,a in [(1.2,1.5),(.3,3.8)]])
         xs=np.zeros((2,len(m.COMMON)))

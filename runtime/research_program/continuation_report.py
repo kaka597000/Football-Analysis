@@ -1,12 +1,12 @@
 """Paired hit counts, date-cluster uncertainty and probability checks on frozen predictions."""
 from collections import Counter, defaultdict
-from functools import lru_cache
 import hashlib
 
 import numpy as np
 
 from optimization.evaluate import settle_ou
 from .all_scope_study import KPI
+from .kpi_targets import ORIGINAL_TARGETS
 
 
 def indicators(row,arm):
@@ -20,10 +20,15 @@ def indicators(row,arm):
     return vals,settlement
 
 
-@lru_cache(maxsize=32)
-def draws(n):
-    rng=np.random.default_rng(20261123)
-    return rng.integers(n,size=(1000,n))
+def bootstrap_days(daily):
+    """Reproduce the registered 1,000 whole-date draws with bounded working memory."""
+    rng = np.random.default_rng(20261123)
+    totals = np.empty((1000, *daily.shape[1:]), dtype=daily.dtype)
+    for start in range(0, len(totals), 32):
+        batch = totals[start:start + 32]
+        indices = rng.integers(len(daily), size=(len(batch), len(daily)))
+        batch[:] = daily[indices].sum(axis=1)
+    return totals
 
 
 def rates(rows,arm):
@@ -54,7 +59,7 @@ def paired(rows,control,challenger):
                 dates[r['date']][i]+=[int(a),int(b),1,int(a!=b)]
     if not dates:return {}
     ds=np.array([dates[k] for k in sorted(dates)])
-    total=ds.sum(axis=0);boot=ds[draws(len(ds))].sum(axis=1)
+    total=ds.sum(axis=0);boot=bootstrap_days(ds)
     result={}
     for i,name in enumerate(KPI):
         old,new,n,diff=map(int,total[i])
@@ -83,8 +88,8 @@ def result(rows):
     overall=summarize(rows)
     if 'candidate' in arms:
         def attained(report):
-            return all(n>0 and h/n>=target for (h,n),target in zip(
-                [report['scores']['candidate']['counts'][k] for k in KPI],[.2,.4,.65,.7]))
+            counts = report['scores']['candidate']['counts']
+            return all(counts[k][1] and counts[k][0] / counts[k][1] >= ORIGINAL_TARGETS[k] for k in KPI)
         overall['all_four_targets_met']=[c for c,v in by.items() if attained(v)]
     return dict(overall=overall,competitions=by,
         fixture_set_sha256=hashlib.sha256('\n'.join(sorted(r['cohort']+'|'+r['id'] for r in rows)).encode()).hexdigest())

@@ -132,3 +132,51 @@ class KPIValidationTests(TestCase):
         first = kpi.register(fixtures, *self.specs, freeze_root=self.freeze)
         second = kpi.register(fixtures, *self.specs, freeze_root=self.freeze)
         self.assertEqual(first, second)
+
+    def test_new_targets_match_the_project_goals_and_settle_at_sixty_percent(self):
+        goals = kpi.read(Path(__file__).resolve().parents[2] / 'project-goals.json')['first_release_acceptance_20261123']
+        plan = self.plan(5)
+        self.assertEqual(plan['payload']['schema'], goals['registration_schema'])
+        self.assertEqual(plan['payload']['targets'], dict(
+            score_top1=goals['first_exact_score'], score_top3=goals['three_exact_scores'],
+            wdl=goals['wdl'], actual_ou=goals['actual_line_full_win_nonpush']))
+        captures = [self.capture(plan, i, 2.5) for i in range(5)]
+        goals = [(1, 0), (1, 0), (2, 0), (0, 1), (0, 1)]
+        results = [self.result(i, home, away) for i, (home, away) in enumerate(goals)]
+        review = self.review(plan, captures, results)
+        metrics = review['tracks']['candidate']['metrics']
+        self.assertEqual([metrics[k]['hits'] for k in ('score_top1','score_top3','wdl','actual_ou')], [1,3,3,5])
+        self.assertEqual(metrics['wdl']['target'], .60)
+        self.assertTrue(review['targets_met_on_complete_population'])
+
+    def test_original_registration_resumes_and_scores_under_its_locked_targets(self):
+        from research_program.paired_kpi_inference import compare_audited
+
+        fixtures = [self.fixture(0)]
+        sample = kpi.read(kpi.register(fixtures, *self.specs, freeze_root=self.root / 'new')['path'])
+        payload = dict(sample['payload'], schema='WCPP-KPI-REGISTRATION-1',
+                       targets=dict(sample['payload']['targets'], wdl=.65))
+        mid = 'kpi-plan:' + digest(payload)
+        receipt = kpi.save(payload, dict(sample['fixture'], match_id=mid), stage='prematch',
+                           track=kpi.REGISTRATION, root=self.freeze, idempotency_key=mid)
+        path = Path(receipt['path'])
+        original_bytes = path.read_bytes()
+        self.assertEqual(kpi.register(fixtures, *self.specs, freeze_root=self.freeze), receipt)
+        plan = kpi.read(path)
+        capture = self.capture(plan, 0)
+        certified = compare_audited(plan, [capture], [], evidence_root=self.root)
+        self.assertEqual(certified['tracks']['candidate']['metrics']['wdl']['target'], .65)
+        self.assertEqual(self.review(plan, [capture], [])['tracks']['candidate']['metrics']['wdl']['target'], .65)
+        with patch.object(kpi, '_utcnow', return_value=self.kickoff):
+            self.assertEqual(kpi.register(fixtures, *self.specs, freeze_root=self.freeze), receipt)
+            with self.assertRaisesRegex(ValueError, 'only future'):
+                kpi.register([self.fixture(1)], *self.specs, freeze_root=self.freeze)
+        self.assertEqual(path.read_bytes(), original_bytes)
+
+        # Even a consistently rehashed plan cannot exchange the thresholds of two schemas.
+        payload = dict(payload, targets=kpi.TARGETS)
+        mid = 'kpi-plan:' + digest(payload)
+        forged = kpi.save(payload, dict(sample['fixture'], match_id=mid), stage='prematch',
+                          track=kpi.REGISTRATION, root=self.root / 'invalid', idempotency_key=mid)
+        with self.assertRaisesRegex(ValueError, 'registered KPI protocol'):
+            kpi.review(kpi.read(forged['path']), [], [])
