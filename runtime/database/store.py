@@ -4,7 +4,7 @@ import hashlib
 import json
 import sqlite3
 from pathlib import Path
-from registry import LEAGUES, normalize_name, season_for
+from scope_registry import LEAGUES, normalize_name, season_for
 
 def now():
     return dt.datetime.now(dt.timezone.utc).isoformat()

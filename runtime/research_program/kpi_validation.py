@@ -15,9 +15,9 @@ from optimization.evaluate import settle_ou
 from research.analysis_freeze import DEFAULT_ROOT, aware, digest, save, verify
 from research_program.future_identity import fixture_identity
 from research_program.future_validation import quote_audit, read, sha, write_new
+from research_program.kpi_targets import CURRENT_SCHEMA, ORIGINAL_SCHEMA, PROTOCOLS, TARGETS
 from research_program.replay import _finished_espn_label
 
-TARGETS = {'score_top1': .20, 'score_top3': .40, 'wdl': .65, 'actual_ou': .70}
 REGISTRATION = 'kpi-preregistration'
 FORECAST = 'kpi-first-forecast'
 IDENTITY_FIELDS = ('match_id', 'cohort', 'stage', 'kickoff_at', 'home', 'away')
@@ -46,6 +46,19 @@ def _artifact(spec):
     return {'version': version, 'artifact_sha256': sha256}
 
 
+def _registered_receipt(payload, root):
+    mid = 'kpi-plan:' + digest(payload)
+    scope = {'match_id': mid, 'stage': 'prematch', 'track': REGISTRATION}
+    path = Path(root) / digest(scope) / '000001.json'
+    if not path.is_file():
+        return None
+    record = read(path)
+    if _plan(record) != payload:
+        raise ValueError('conflicting saved KPI registration')
+    return {'path': str(path), 'freeze_id': record['freeze_id'], 'recorded_at': record['recorded_at'],
+            'sha256': record['record_sha256'], 'evaluation_slot': record['evaluation_slot']}
+
+
 def register(fixtures, candidate, market_baseline, *, freeze_root=DEFAULT_ROOT):
     """Lock the complete stated fixture universe and both model identities before kickoff."""
     now = _utcnow()
@@ -57,14 +70,12 @@ def register(fixtures, candidate, market_baseline, *, freeze_root=DEFAULT_ROOT):
         natural_key = tuple(key)
         if mid in identities or natural_key in natural_keys:
             raise ValueError('duplicate registered fixture')
-        if aware(fixture['kickoff_at']) <= now:
-            raise ValueError('only future fixtures may register')
         identities[mid] = {key: fixture[key] for key in IDENTITY_FIELDS}
         natural_keys.add(natural_key)
     if not identities:
         raise ValueError('explicit future population required')
     payload = {
-        'schema': 'WCPP-KPI-REGISTRATION-1',
+        'schema': CURRENT_SCHEMA,
         'targets': TARGETS,
         'fixtures': identities,
         'candidate': _artifact(candidate),
@@ -72,30 +83,33 @@ def register(fixtures, candidate, market_baseline, *, freeze_root=DEFAULT_ROOT):
         'population_rule': 'ALL_REGISTERED_FIXTURES_FIRST_PREMATCH',
         'total_rule': 'STRICT_FULL_WIN_EXCLUDING_PUSH; COVERAGE_ACCOUNTED_SEPARATELY',
     }
-    shell = {'match_id': 'kpi-plan:' + digest(payload), 'cutoff_at': now.isoformat(),
-             'kickoff_at': min(aware(f['kickoff_at']) for f in identities.values()).isoformat()}
-    plan_id = shell['match_id']
-    scope = {'match_id': plan_id, 'stage': 'prematch', 'track': REGISTRATION}
-    path = Path(freeze_root) / digest(scope) / '000001.json'
+    # An upgraded runner retrying the same cohort must resume the original contract.
+    legacy = dict(payload, schema=ORIGINAL_SCHEMA, targets=PROTOCOLS[ORIGINAL_SCHEMA])
+    for prior in (legacy, payload):
+        receipt = _registered_receipt(prior, freeze_root)
+        if receipt is not None:
+            return receipt
+    kickoff = min(aware(f['kickoff_at']) for f in identities.values())
+    if kickoff <= now:
+        raise ValueError('only future fixtures may register')
+    plan_id = 'kpi-plan:' + digest(payload)
+    shell = {'match_id': plan_id, 'cutoff_at': now.isoformat(), 'kickoff_at': kickoff.isoformat()}
     try:
         return save(payload, shell, stage='prematch', track=REGISTRATION, root=freeze_root,
                     idempotency_key=plan_id)
     except ValueError as error:
-        if str(error) != 'publication idempotency conflict' or not path.is_file():
-            raise
-        existing = _first(read(path), REGISTRATION)
-        if existing['payload'] != payload:
-            raise
-        return {'path': str(path), 'freeze_id': existing['freeze_id'],
-                'recorded_at': existing['recorded_at'], 'sha256': existing['record_sha256'],
-                'evaluation_slot': existing['evaluation_slot']}
+        if str(error) == 'publication idempotency conflict':
+            receipt = _registered_receipt(payload, freeze_root)
+            if receipt is not None:
+                return receipt
+        raise
 
 
 def _plan(record):
     record = _first(record, REGISTRATION)
     payload = record['payload']
-    if (payload.get('schema') != 'WCPP-KPI-REGISTRATION-1'
-            or payload.get('targets') != TARGETS or not payload.get('fixtures')
+    schema = payload.get('schema')
+    if (schema not in PROTOCOLS or payload.get('targets') != PROTOCOLS[schema] or not payload.get('fixtures')
             or record['match_id'] != 'kpi-plan:' + digest(payload)
             or record['match_id'] != record['fixture']['match_id']):
         raise ValueError('registered KPI protocol required')
@@ -198,7 +212,14 @@ def _actual(result, fixture, evidence_root, now):
     if (not path.is_relative_to(root) or evidence.get('identity_verified') is not True
             or aware(evidence['query_time']) != observed or sha(path) != evidence['sha256']):
         raise ValueError('retained result evidence checksum, identity or timestamp mismatch')
-    _finished_espn_label(result, evidence, path)
+    if fixture['match_id'].startswith('kleague:'):
+        from research_program.kleague_result import regulation
+        regulation(result, evidence, path)
+    elif evidence.get('score_extraction')=='first_two_halves':
+        from research_program.regulation_halves import verify
+        verify(result, evidence, path)
+    else:
+        _finished_espn_label(result, evidence, path)
     return result['home_goals'], result['away_goals']
 
 
@@ -237,11 +258,11 @@ def _wilson(wins, n):
     return [max(0., center - half), min(1., center + half)]
 
 
-def _summarize(rows, role, settled):
+def _summarize(rows, role, settled, targets):
     settled_rows = [r for r in rows if r['result'] is not None]
     outcomes = Counter(r['settlements'][role] for r in settled_rows)
     result = {'total_settlements': {key: outcomes[key] for key in OUTCOMES}, 'metrics': {}}
-    for metric, target in TARGETS.items():
+    for metric, target in targets.items():
         scored = [r['outcomes'][role][metric] for r in settled_rows]
         wins = sum(v is True for v in scored)
         n = sum(v is not None for v in scored)
@@ -305,7 +326,7 @@ def review(plan_record, captures, results, *, evidence_root=None):
         rows.append({'match_id': mid, 'captured': mid in predictions, 'result': goals, 'actual_line': line,
                      'common_line_push': common_push, 'outcomes': outcomes, 'settlements': settlements})
     settled = sum(r['result'] is not None for r in rows)
-    tracks = {role: _summarize(rows, role, settled) for role in ROLES}
+    tracks = {role: _summarize(rows, role, settled, plan['targets']) for role in ROLES}
     metrics = tracks['candidate']['metrics']
     complete = settled == len(rows)
     meets_targets = complete and all(

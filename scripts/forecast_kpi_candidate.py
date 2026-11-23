@@ -8,12 +8,17 @@ import sys
 HERE = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(HERE/'runtime'), str(HERE/'runtime/v5'), str(HERE)]
 from research.analysis_freeze import digest, verify
-from research_program import kpi_score_candidate, kpi_validation, market_baseline
+from research_program import kpi_score_candidate, kpi_validation, market_baseline, market_score_ranker, prior_team_strength
 from research_program.future_validation import read, sha, write_new
 
 
 def issue(data, artifact, out):
     out.mkdir(parents=True, exist_ok=True)
+    engines = {kpi_score_candidate.VERSION:kpi_score_candidate.predict,
+               market_score_ranker.VERSION:market_score_ranker.predict,
+               prior_team_strength.VERSION:prior_team_strength.predict}
+    forecast = engines[artifact['version']]
+
     candidate_id = {'version':artifact['version'], 'artifact_sha256':artifact['artifact_sha256']}
     baseline_id = {'version':market_baseline.VERSION,
                    'artifact_sha256':digest({'formula':sha(market_baseline.__file__),
@@ -38,11 +43,17 @@ def issue(data, artifact, out):
             fixture=evidence['fixture']
         else:
             fixture['cutoff_at'] = datetime.now(timezone.utc).isoformat()
-            candidate = kpi_score_candidate.predict(artifact, fixture)
+            candidate = forecast(artifact, fixture)
             baseline = market_baseline.predict(fixture)
             evidence={'fixture':fixture,'candidate':candidate,'baseline':baseline,
                       'generated_at':datetime.now(timezone.utc).isoformat()}
             write_new(details,evidence)
+        if (evidence['fixture']['match_id'] != row['match_id']
+                or evidence['candidate'].get('version') != candidate_id['version']
+                or evidence['candidate'].get('artifact_sha256') != candidate_id['artifact_sha256']
+                or evidence['baseline'].get('version') != baseline_id['version']
+                or evidence['baseline'].get('match_id') != row['match_id']):
+            raise ValueError('stored forecast evidence differs from registered models or fixture')
         def selection(spec,value,total,wdl):
             return {**spec,'generated_at':evidence['generated_at'],'primary':value.get('primary'),
                     'top3':value.get('top3'),'wdl':wdl,'total_line':total.get('line'),
