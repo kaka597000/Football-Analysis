@@ -108,3 +108,15 @@ class AdditionalScoreTests(unittest.TestCase):
         r['total']['close']=ou
         self.assertTrue(prices(r)[2])
         self.assertEqual(prices(r)[3],'close')
+
+
+    def test_retained_pair_metadata_requires_explicit_source_identity(self):
+        from research_program.all_scope_ingest import paired_market
+        row=dict(h2h={'home':2},total={'line':2.5},bookmaker='Bet 365',
+                 paired_market='paired Bet 365 HDA and O/U from same ESPN event summary response',
+                 sources=[{'url':'https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/summary?event=123','sha256':'1'*64}])
+        self.assertTrue(paired_market(row))
+        self.assertFalse(paired_market(dict(row,bookmaker='Pinnacle')))
+        self.assertFalse(paired_market(dict(row,paired_market=False)))
+        self.assertFalse(paired_market(dict(row,sources=[])))
+        self.assertFalse(paired_market(dict(row,paired_market='true')))

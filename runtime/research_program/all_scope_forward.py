@@ -146,7 +146,7 @@ def predict(f,market,run,aliases,cutoff):
                 fixture_sources=f['sources'],neutral=f.get('neutral'),status='PENDING')
 
 
-def run(study,fixtures,markets,aliases,out,freeze_root=DEFAULT_ROOT):
+def run(study,fixtures,markets,aliases,out,freeze_root=DEFAULT_ROOT,track=TRACK):
     schedule=list(read_lines(fixtures))
     market_rows=list(read_lines(markets))
     market={v['match_id']:v for v in market_rows}
@@ -167,14 +167,14 @@ def run(study,fixtures,markets,aliases,out,freeze_root=DEFAULT_ROOT):
                market_status_sha256=sha(markets),team_aliases_sha256=digest(aliases),
                pairs={'locked_vs_market':['market','candidate'],'refreshed_vs_locked':['candidate','refreshed'],
                       'locked_vs_team':['team','candidate'],'neighbor_vs_locked':['candidate','neighbor'],'neighbor_vs_market':['market','neighbor']})
-    plan=register([identity(f) for f in schedule],ident,TRACK,out,freeze_root=freeze_root)
+    plan=register([identity(f) for f in schedule],ident,track,out,freeze_root=freeze_root)
     items={}
     for f in schedule:
         mid=f['match_id']
         fixture=identity(f)
         fixture['cutoff_at']=datetime.now(timezone.utc).isoformat()
         pred=predict(f,market[mid],models[f['competition']],aliases,fixture['cutoff_at'])
-        items[mid]=issue(plan,fixture,pred,TRACK,out,freeze_root=freeze_root)
+        items[mid]=issue(plan,fixture,pred,track,out,freeze_root=freeze_root)
     write_new(out/'receipts.json',dict(registration=plan,matches=items))
 
 
@@ -183,5 +183,6 @@ if __name__=='__main__':
     for keyname in ('study','fixtures','markets','aliases','out'):
         p.add_argument('--'+keyname,type=Path,required=True)
     p.add_argument('--freeze-root',type=Path,default=DEFAULT_ROOT)
+    p.add_argument('--track',default=TRACK)
     args=p.parse_args()
     run(**vars(args))
