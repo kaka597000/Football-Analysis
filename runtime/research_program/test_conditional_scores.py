@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 from research_program import conditional_scores as m
 from research_program import score_gap_study as study
+from research_program.score_gap_first import decisions
 
 
 class ConditionalScoresTests(unittest.TestCase):
@@ -57,6 +58,17 @@ class ConditionalScoresTests(unittest.TestCase):
         self.assertEqual(picks['conditional']['primary'],picks['conditional']['top3'][0])
         self.assertEqual(len(set(picks['conditional']['top3'])),3)
         self.assertIsNone(picks['conditional']['total_side'])
+
+    def test_first_score_requires_independent_confirmation_and_keeps_two_distinct_backups(self):
+        raw=dict(primary='1-1',top3=['1-1','2-0','2-1'],wdl='home',total_side=None,total_line=None)
+        f=dict(conditional=raw,r5=dict(primary='2-0'),no_process=raw)
+        q={'conditional':{'p1':.16,'p3':.4}}
+        self.assertEqual(decisions(f,q)['agreement']['top3'],['2-0','1-1','2-1'])
+        f['price_pair_proxy']=raw
+        q['conditional']['p1']=.17
+        self.assertEqual(decisions(f,q)['agreement']['primary'],'1-1')
+        q['conditional']['p1']=.15
+        self.assertEqual(decisions(f,q)['agreement']['primary'],'2-0')
 
     def test_early_totals_require_matching_source_and_no_replacement(self):
         g=self.fixture(source_sha256='a')
