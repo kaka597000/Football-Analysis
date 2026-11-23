@@ -9,10 +9,10 @@ from optimization.evaluate import settle_ou
 from . import all_scope_study as study
 from .goal_state_study import read_lines,write_new
 from .paired_kpi_inference import compare
+from .kpi_targets import ORIGINAL_TARGETS
 from .score_gap_first import decisions
 
 ARMS=('r5','local_anchor','structural','no_process','conditional','market','price_pair_proxy')
-TARGETS=(.20,.40,.65,.70)
 
 
 def summarize(rows, target_n=None):
@@ -62,11 +62,11 @@ def summarize(rows, target_n=None):
         q['expected_full_win']=sum(v['full_mass'] for v in priced)/sum(v['nonpush_mass'] for v in priced) if priced else None
         quality[label]=dict(n=len(values),**q)
     gate=bool(rows and target_n==len(rows) and all(
-        d==len(rows)-(pushes if k=='actual_ou' else 0) and d and n/d>=goal
-        for (k,(n,d)),goal in zip(all_scores['conditional'].items(),TARGETS)))
+        d==len(rows)-(pushes if k=='actual_ou' else 0) and d and n/d>=ORIGINAL_TARGETS[k]
+        for k,(n,d) in all_scores['conditional'].items()))
     agreement_pass=bool(rows and target_n==len(rows) and all(
-        d==len(rows)-(pushes if k=='actual_ou' else 0) and d and n/d>=goal
-        for (k,(n,d)),goal in zip(all_scores['agreement'].items(),TARGETS)))
+        d==len(rows)-(pushes if k=='actual_ou' else 0) and d and n/d>=ORIGINAL_TARGETS[k]
+        for k,(n,d) in all_scores['agreement'].items()))
     switches=sum(r['forecast']['r5']['primary']!=r['forecast']['agreement']['primary'] for r in rows)
     return dict(n=len(rows),known_schedule_n=target_n,agreement_all_four_pass=agreement_pass,
         agreement_first_switches=switches,agreement_paired=agreement_pairs,all_four_pass=gate,actual_lines=len(quotes),pushes=pushes,
