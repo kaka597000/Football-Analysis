@@ -10,8 +10,6 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('fixture', nargs='?'); p.add_argument('--out', required=True)
     p.add_argument('--registry')
-    p.add_argument('--recent-form', type=Path, help='Source-timed six-game league form JSON for the independent score candidate')
-    p.add_argument('--score-form-artifact', type=Path, help='Optional fitted league xG score-form JSON')
     p.add_argument('--retain-current-on-test-failure', action='store_true',
                    help='Freeze successful Current with explicit failed Test; never substitute predictions')
     p.add_argument('--report', help='New Markdown path for the eight-module evidence report')
@@ -29,12 +27,6 @@ def main():
     if not a.fixture:
         p.error('fixture is required unless resuming publication')
     fixture = json.loads(Path(a.fixture).read_text())
-    if a.recent_form:
-        fixture['recent_league_form'] = json.loads(a.recent_form.read_text())
-    if a.score_form_artifact:
-        fixture['score_form_artifact'] = json.loads(a.score_form_artifact.read_text())
-    if 'score_form_artifact' in fixture and 'recent_league_form' not in fixture:
-        p.error('score-form artifact requires a recent league form snapshot')
     # Reject an existing output before producing any new freeze revision.
     if a.report and (Path(a.report).exists() or Path(a.report).resolve() == Path(a.out).resolve()):
         raise FileExistsError(a.report)

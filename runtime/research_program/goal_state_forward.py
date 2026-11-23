@@ -80,7 +80,7 @@ def _read(folder, ref):
     return record
 
 
-def review(folder, results, evidence_root):
+def review(folder, results, evidence_root, *, by_competition=False):
     index = json.loads((folder / 'receipts.json').read_bytes())
     reg = _read(folder, index['registration'])
     plan = reg['payload']
@@ -100,12 +100,22 @@ def review(folder, results, evidence_root):
         actual = _actual(result_by_id[mid], f, evidence_root, datetime.now(timezone.utc)) if mid in result_by_id else None
         rows.append(dict(id=mid, date=aware(f['kickoff_at']).astimezone(ZoneInfo('Asia/Shanghai')).date().isoformat(),
                          cohort=f['cohort'], actual=actual, line=payload['line'], forecast=payload['forecasts']))
-    reports = {pair: compare(rows, baseline=names[0], candidate=names[1])
-               for pair, names in plan['identity']['pairs'].items()}
-    for report in reports.values():
-        report['evidence'].update(mode='VERIFIED_FIRST_ISSUE_RESEARCH', registration_sha256=reg['record_sha256'],
-                                  first_issue_integrity_verified=True, matchday_basis='Asia/Shanghai')
-    return reports
+    def summarize(group):
+        reports = {pair: compare(group, baseline=names[0], candidate=names[1])
+                   for pair, names in plan['identity']['pairs'].items()}
+        for report in reports.values():
+            report['evidence'].update(mode='VERIFIED_FIRST_ISSUE_RESEARCH', registration_sha256=reg['record_sha256'],
+                                      first_issue_integrity_verified=True, matchday_basis='Asia/Shanghai')
+        return reports
+
+    if by_competition:
+        codes = plan['identity'].get('competitions', sorted({r['cohort'] for r in rows}))
+        grouped = {c: [] for c in codes}
+        for row in rows:
+            grouped[row['cohort']].append(row)
+        return {c: dict(registered=len(g), settled=sum(v['actual'] is not None for v in g),
+                        comparisons=summarize(g) if g else {}) for c, g in grouped.items()}
+    return summarize(rows)
 
 
 if __name__ == '__main__':
@@ -114,5 +124,6 @@ if __name__ == '__main__':
     p.add_argument('--results', type=Path, required=True, help='JSON array in kpi_validation._actual evidence format')
     p.add_argument('--evidence-root', type=Path, required=True)
     p.add_argument('--out', type=Path, required=True)
+    p.add_argument('--by-competition', action='store_true', help='Keep each registered competition and empty schedule separate.')
     args = p.parse_args()
-    write_new(args.out, review(args.issued, json.loads(args.results.read_bytes()), args.evidence_root))
+    write_new(args.out, review(args.issued, json.loads(args.results.read_bytes()), args.evidence_root, by_competition=args.by_competition))
