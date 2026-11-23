@@ -169,5 +169,16 @@
       "next_prospective_capture",
       "repository_sync"
     ]
+  },
+  "first_release_acceptance_20261123": {
+    "confirmed_at": "2026-11-23",
+    "first_exact_score": 0.2,
+    "three_exact_scores": 0.4,
+    "wdl": 0.65,
+    "actual_line_full_win_nonpush": 0.7,
+    "status": "PROSPECTIVE_NOT_YET_VERIFIED",
+    "population": "按比赛身份事前锁定完整队列。缺有效盘口公开覆盖，不删除未预测或待完赛样本。大小球同时列实盘合格分母与完整验收分母。",
+    "benchmark": "同一赛前信息时点的独立盘口基线及现用对照，各自冻结",
+    "protocol": "docs/kpi-optimization-20261123.md"
   }
 }
