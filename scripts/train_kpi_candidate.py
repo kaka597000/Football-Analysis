@@ -102,7 +102,7 @@ def score_arrays(matrices, actual, lines):
     true_total=actual.sum(axis=1)
     truth_wdl=np.where(actual[:,0]>actual[:,1],0,np.where(actual[:,0]==actual[:,1],1,2))
     dirp=np.stack([matrices[:,mask].sum(axis=1) for mask in (home>away,home==away,home<away)],axis=1)
-    wdl=dirp.argmax(axis=1)
+    wdl=(dirp>=dirp.max(axis=1,keepdims=True)-1e-12).argmax(axis=1)
     total=home+away
     sides=np.empty(len(actual),int)
     settlements=np.empty(len(actual),int)
