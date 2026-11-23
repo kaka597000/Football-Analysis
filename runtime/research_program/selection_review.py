@@ -93,21 +93,6 @@ def compare(entries,results):
                     'issued_primary':issued_primary,
                     'issued_primary_hit':None if issued_primary is None or score is None else issued_primary==score,
                     'pair_evaluation_slot':pair['evaluation_slot']}
-        form_audit=(comp.get('selection_audit') or {}).get('score_form_comparison')
-        if form_audit and pair is not None:
-            from research_program.score_form import rerank_issued, select_scores
-            source=pair['payload']['score_form_candidate']
-            choice=select_scores(source,primary)
-            issued=[primary,*(comp['payload'].get('alternates') or [])]
-            ordered=rerank_issued(issued,choice['primary'])
-            if (source.get('scope')!='PREMATCH_RESEARCH' or form_audit['snapshot_sha256']!=source['snapshot_sha256'] or
-                    form_audit['primary']!=choice['primary'] or form_audit['within_issued_three']!=ordered):
-                raise ValueError('score-form choices differ from the frozen pair')
-            row['score_form']={'research_primary':choice['primary'],'within_issued_three':ordered,
-                'rerank_primary_hit':ordered[0]==score if score is not None and ordered else None,
-                'rerank_three_hit':score in ordered if score is not None and ordered else None,
-                'research_primary_hit':choice['primary']==score if score is not None else None,
-                'research_three_hit':score in [choice['primary'],*choice['alternates']] if score is not None else None}
         if result is None:pending.append(mid);pending_rows.append(row)
         else:rows.append(row)
     for group in groups.values():
@@ -115,13 +100,8 @@ def compare(entries,results):
         group['model_coverage']=group['model_available']/group['population']
         group['comprehensive_coverage']=group['comprehensive_selected']/group['population']
         group['settled_pair_coverage']=group['paired_n']/group['settled'] if group['settled'] else None
-    reranks=[r for r in rows if r.get('score_form',{}).get('rerank_primary_hit') is not None]
-    gains=sum(not r['comprehensive_hit'] and r['score_form']['rerank_primary_hit'] for r in reranks)
-    losses=sum(r['comprehensive_hit'] and not r['score_form']['rerank_primary_hit'] for r in reranks)
-    form_summary={'rerank_settled':len(reranks),'first_gained':gains,'first_lost':losses,
-                  'three_hits':sum(r['score_form']['rerank_three_hit'] for r in reranks)}
     return {'schema':'WCPP-FROZEN-PRIMARY-NET-REVIEW-1','population':len(entries),'settled':len(rows),
-            'score_form_review':form_summary,'pending':pending,'pending_rows':pending_rows,'missing_pair_population':missing_pairs,
+            'pending':pending,'pending_rows':pending_rows,'missing_pair_population':missing_pairs,
             'comprehensive_selected':selected,'primary_coverage':selected/len(entries) if entries else 0.,
             'comprehensive_settled_n':sum(r['comprehensive_hit'] is not None for r in rows),
             'comprehensive_hits':sum(r['comprehensive_hit'] is True for r in rows),'by_model_version':groups,'rows':rows,
