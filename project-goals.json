@@ -172,12 +172,13 @@
   },
   "first_release_acceptance_20261123": {
     "confirmed_at": "2026-11-23",
+    "registration_schema": "WCPP-KPI-REGISTRATION-2",
     "first_exact_score": 0.2,
     "three_exact_scores": 0.4,
-    "wdl": 0.65,
+    "wdl": 0.60,
     "actual_line_full_win_nonpush": 0.7,
     "status": "PROSPECTIVE_NOT_YET_VERIFIED",
-    "population": "按比赛身份事前锁定完整队列。缺有效盘口公开覆盖，不删除未预测或待完赛样本。大小球同时列实盘合格分母与完整验收分母。",
+    "population": "按比赛身份事前锁定完整队列。正式比分取赛前实际首次展示的首选及两个互异备选。研究首版独立报告。缺盘口、弃权和待结算保留覆盖。大小球同时列实盘非走盘分母与完整验收分母。",
     "benchmark": "同一赛前信息时点的独立盘口基线及现用对照，各自冻结",
     "protocol": "docs/kpi-optimization-20261123.md"
   }

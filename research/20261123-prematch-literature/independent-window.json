@@ -1,0 +1,7 @@
+{
+  "purpose": "Additional disjoint historical check after source inventory showed the six leagues' 2013/14 games were used for fitting in the R6 early study. No R7 outcome metric was opened.",
+  "training": ["2006/07","2007/08"], "calibration": "2008/09", "test": "2009/10",
+  "competitions": ["eng.1","esp.1","ger.1","ita.1","fra.1","ned.1"],
+  "same_algorithm_and_parameters": true,
+  "reference": "Refit R6 from the same available past fixtures. This window precedes both R5 and R6 source panels used in this comparison. Historical reconstruction; future first issues separate."
+}

@@ -174,7 +174,7 @@ def _paired(rows, baseline, candidate, metric, draws, seed, confidence):
             'fixed_population_date_cluster_ci': _bootstrap(fixed_days, draws, seed, confidence)}
 
 
-def _compare(normalized, baseline, candidate, draws, seed, confidence, evidence):
+def _compare(normalized, baseline, candidate, draws, seed, confidence, evidence, targets):
     if baseline == candidate or not baseline or not candidate:
         raise ValueError('two distinct track names are required')
     if (type(draws) is not int or draws < 1 or type(seed) is not int or seed < 0
@@ -188,7 +188,7 @@ def _compare(normalized, baseline, candidate, draws, seed, confidence, evidence)
     tracks = {}
     for arm in (baseline, candidate):
         metrics = {}
-        for k, target in TARGETS.items():
+        for k, target in targets.items():
             eligible = [r['outcomes'][arm][k] for r in settled if r['outcomes'][arm][k] is not None]
             hits, n = sum(eligible), len(eligible)
             denominator = len(settled) - (pushes if k == TOTAL_METRIC else 0)
@@ -216,7 +216,7 @@ def compare(rows, *, baseline, candidate, draws=5000, seed=20261123, confidence=
     """
     return _compare(_normalized_rows(rows, (baseline, candidate)), baseline, candidate, draws, seed, confidence,
                     {'mode': 'REPLAY_COMPARISON', 'matchday_basis': 'supplied date',
-                     'prospective_certified': False})
+                     'prospective_certified': False}, TARGETS)
 
 
 def compare_audited(plan_record, captures, results, *, evidence_root, timezone='Asia/Shanghai',
@@ -241,7 +241,8 @@ def compare_audited(plan_record, captures, results, *, evidence_root, timezone='
                      'outcomes': r['outcomes'], 'settlements': r['settlements']})
     return _compare(rows, *arms, draws, seed, confidence,
                     {'mode': 'PROSPECTIVE_DUAL_FREEZE_REVIEW', 'matchday_basis': timezone,
-                     'prospective_certified': True, 'plan_sha256': audited['plan_sha256']})
+                     'prospective_certified': True, 'plan_sha256': audited['plan_sha256']},
+                    plan_record['payload']['targets'])
 
 
 def main():
