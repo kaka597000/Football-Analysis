@@ -160,7 +160,10 @@ def run(study,fixtures,markets,aliases,out,freeze_root=DEFAULT_ROOT):
     codes=sorted({r['competition'] for r in schedule})
     models={c:load_run(study/c) for c in codes}
     input_hashes={c:{name:sha(study/c/name) for name in ('artifact.json','history-state.json','refresh.json','lock.json','neighbor-lock.json','neighbor-history.json')} for c in codes}
-    ident=dict(model=model.VERSION,study_sha256=input_hashes,schedule_sha256=sha(fixtures),
+    all_codes=sorted(p.parent.name for p in study.glob('*/lock.json'))
+    if not set(codes).issubset(all_codes):
+        raise ValueError('unregistered future competition')
+    ident=dict(model=model.VERSION,competitions=all_codes,study_sha256=input_hashes,schedule_sha256=sha(fixtures),
                market_status_sha256=sha(markets),team_aliases_sha256=digest(aliases),
                pairs={'locked_vs_market':['market','candidate'],'refreshed_vs_locked':['candidate','refreshed'],
                       'locked_vs_team':['team','candidate'],'neighbor_vs_locked':['candidate','neighbor'],'neighbor_vs_market':['market','neighbor']})
