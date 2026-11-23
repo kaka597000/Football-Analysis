@@ -16,9 +16,12 @@ from .goal_state_study import read_lines, sha, write_new
 
 
 def index(rows):
-    result = {r['id']:r for r in rows}
-    if len(result)!=len(rows):
-        raise ValueError('duplicate fixture identity')
+    result = {}
+    for row in rows:
+        key = row['id']
+        if key in result:
+            raise ValueError('duplicate fixture identity: '+key)
+        result[key] = row
     return result
 
 
