@@ -134,9 +134,13 @@ def run(panel,code,out,*,bounds,mode,control=None,totals=None,observations=None)
     out.mkdir(parents=True,exist_ok=True)
     put(out/'forecasts.jsonl.gz',records)
     metadata=dict(version=model.VERSION,competition=code,bounds=bounds,training_games=idx0,
-                  training_through=rows[idx0-1]['date'] if idx0 else None,selection=policy,source_panel_sha256=sha(panel),
-                  r6_process_matches=sum(g['id'] in (observations or {}) and
-                      r6.process_proxy(observations[g['id']]) is not None for g in rows),training=fitted)
+                  training_through=rows[idx0-1]['date'] if idx0 else None,selection=policy,source_panel_sha256=sha(panel))
+    if mode in ('additional','pre2010'):
+        metadata['r6_process_matches']=sum(g['id'] in (observations or {}) and
+            r6.process_proxy(observations[g['id']]) is not None for g in rows)
+    else:
+        metadata['refit_without_process']=False
+    metadata['training']=fitted
     write_new(out/'fit.json',metadata)
     if mode=='main':
         final=model.fit(model.hazard_inputs(matrices,features),scores)
