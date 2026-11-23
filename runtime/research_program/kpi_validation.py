@@ -198,7 +198,11 @@ def _actual(result, fixture, evidence_root, now):
     if (not path.is_relative_to(root) or evidence.get('identity_verified') is not True
             or aware(evidence['query_time']) != observed or sha(path) != evidence['sha256']):
         raise ValueError('retained result evidence checksum, identity or timestamp mismatch')
-    _finished_espn_label(result, evidence, path)
+    if fixture['match_id'].startswith('kleague:'):
+        from research_program.kleague_result import regulation
+        regulation(result, evidence, path)
+    else:
+        _finished_espn_label(result, evidence, path)
     return result['home_goals'], result['away_goals']
 
 
