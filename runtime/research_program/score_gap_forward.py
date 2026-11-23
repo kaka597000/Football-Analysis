@@ -16,6 +16,20 @@ def read(path):
     return json.loads(path.read_bytes())
 
 
+def predict_fixture(fixture, archived, recipe):
+    mid,code = fixture['match_id'],fixture['cohort']
+    day = aware(fixture['kickoff_at']).date()
+    g = dict(id=mid,competition=code,date=day.isoformat(),stage=archived['model_stage'],
+             home=archived['model_teams'][0],away=archived['model_teams'][1],neutral=archived['neutral'],
+             paired_market=archived['market_mode']=='paired',**archived['prices'])
+    state = model.load(recipe['state'])
+    hl = study.half_life(code)
+    model.advance(state,[g],day.toordinal(),hl)
+    p = model.components(state,g,day.toordinal(),hl)
+    picks,quality = model.forecast(g,p,recipe['coefficients'])
+    return picks, quality, p
+
+
 def issue_all(models, previous, price_priority, scope, protocol, output, *, freeze_root=DEFAULT_ROOT):
     original = read(previous/'receipts.json')
     price = read(price_priority/'receipts.json')
@@ -41,26 +55,18 @@ def issue_all(models, previous, price_priority, scope, protocol, output, *, free
             raise ValueError('price comparator fixture mismatch: '+mid)
         archived = r['payload']
         recipe = models_by_code[code]
-        day = aware(f['kickoff_at']).date()
         f['cutoff_at'] = ledger._now()
         if (recipe['version']!=model.VERSION or recipe['competition']!=code or
                 date.fromisoformat(recipe['through']) >= aware(f['cutoff_at']).date() or
                 aware(r['recorded_at'])>aware(f['cutoff_at']) or aware(control['recorded_at'])>aware(f['cutoff_at'])):
             raise ValueError('invalid historical or frozen input cutoff')
-        g = dict(id=mid,competition=code,date=day.isoformat(),stage=archived['model_stage'],
-                 home=archived['model_teams'][0],away=archived['model_teams'][1],neutral=archived['neutral'],
-                 paired_market=archived['market_mode']=='paired',**archived['prices'])
-        state = model.load(recipe['state'])
-        hl = study.half_life(code)
-        model.advance(state,[g],day.toordinal(),hl)
-        p = model.components(state,g,day.toordinal(),hl)
-        picks,quality = model.forecast(g,p,recipe['coefficients'])
+        picks,quality,p = predict_fixture(f,archived,recipe)
         picks['r5'] = archived['forecasts']['neighbor']
         picks['market_priority'] = control['payload']['forecasts']['market_priority']
         if picks['market'] != archived['forecasts']['market'] or archived['line']!=picks['conditional']['total_line']:
             raise ValueError('market input changed since initial freeze: '+mid)
         payload = dict(forecasts=picks,quality=quality,line=archived['line'],model_sha256=hashes[code],
-            model_teams=archived['model_teams'],model_stage=g['stage'],training_through=recipe['through'],
+            model_teams=archived['model_teams'],model_stage=archived['model_stage'],training_through=recipe['through'],
             previous_sha256=r['record_sha256'],price_control_sha256=control['record_sha256'],
             price_source=control['payload']['score_source'],market_basis=p['market']['kind'],
             prices=archived['prices'],market_evidence=archived['market_evidence'],

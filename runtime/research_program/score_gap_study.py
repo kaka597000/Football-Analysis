@@ -26,7 +26,9 @@ def index(rows):
 
 
 def early_bounds(code):
-    if code in study.CALENDAR:
+    if code=='fifa.world':
+        return ('2010-01-01','2014-01-01','2015-01-01')
+    if code in study.CALENDAR or code=='afc.champions':
         return ('2016-01-01','2017-01-01','2018-01-01')
     return ('2014-07-01','2016-07-01','2017-07-01')
 
