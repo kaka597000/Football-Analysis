@@ -79,6 +79,23 @@ class ThreeArmReviewTests(unittest.TestCase):
             out.write(json.dumps(r) + '\n')
         return r
 
+    def test_certify_relative_root_matches_absolute_root(self):
+        row = self.add_result()
+        now = datetime(2020, 2, 11, tzinfo=timezone.utc)
+        expected = reviewer._certify(row, self.fixture, self.state, now)
+        with patch('os.getcwd', return_value=str(self.state)):
+            self.assertEqual(reviewer._certify(row, self.fixture, Path('.'), now), expected)
+
+    def test_certify_still_rejects_paths_outside_either_root_form(self):
+        row = self.add_result()
+        now = datetime(2020, 2, 11, tzinfo=timezone.utc)
+        for evidence_path in ('../outside.json.gz', str(self.state.parent / 'outside.json.gz')):
+            changed = dict(row, raw_reference=dict(row['raw_reference'], path=evidence_path))
+            for root in (self.state, Path('.')):
+                with self.subTest(root=root, evidence_path=evidence_path), patch('os.getcwd', return_value=str(self.state)):
+                    with self.assertRaisesRegex(ValueError, 'outside retained state'):
+                        reviewer._certify(changed, self.fixture, root, now)
+
     def review(self):
         return reviewer.review(self.batch, self.state, datetime(2020, 2, 11, tzinfo=timezone.utc))
 

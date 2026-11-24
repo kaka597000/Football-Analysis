@@ -9,6 +9,85 @@ from collector import collect,regulation_row,phase_for,ASIAN
 
 
 class CollectorTests(unittest.TestCase):
+    def test_australian_regular_stage_is_explicit_and_config_preserved(self):
+        scope={'competition':'aus.1','cohort':'aus.1','stages':['regular']}
+        for season in ({'slug':'regular-season'},{'name':'2024-25 Australian A-League Men, Regular Season'}):
+            self.assertEqual(phase_for(scope,{'season':season}),'regular')
+            self.assertEqual(phase_for(dict(scope,stages=['regular-season']),{'season':season}),'regular-season')
+        for slug in ('elimination-finals','semifinals','grand-final','unknown','regular'):
+            self.assertIsNone(phase_for(scope,{'season':{'slug':slug,'name':'Regular Season'}}))
+        self.assertIsNone(phase_for(scope,{'season':{}}))
+        self.assertIsNone(phase_for(scope,{'season':{'slug':'regular-season','name':'Grand Final'}}))
+
+    def test_australian_paired_final_cannot_be_overwritten(self):
+        scope={'competition':'aus.1','cohort':'aus.1','stages':['regular']}
+        event=copy.deepcopy(self.event);summary=copy.deepcopy(self.summary)
+        event['season']={'year':2024,'type':12851,'slug':'regular-season'}
+        summary['header']['season']={'year':2024,'type':12851,'name':'Australian A-League Men, Regular Season'}
+        self.assertEqual(regulation_row(scope,event,summary,self.now.isoformat(),{})['stage'],'regular')
+        for slug in ('elimination-finals','semifinals','grand-final'):
+            broken=copy.deepcopy(event);broken['season']['slug']=slug
+            with self.assertRaises(ValueError):regulation_row(scope,broken,summary,self.now.isoformat(),{})
+        for change in ({'name':'Australian A-League Men, Grand Final'},{'year':2025},{'type':12848}):
+            broken=copy.deepcopy(summary);broken['header']['season'].update(change)
+            with self.assertRaises(ValueError):regulation_row(scope,event,broken,self.now.isoformat(),{})
+
+    def test_elite_league_stage_alias_preserves_route_across_seasons(self):
+        scope={'competition':'afc.champions','cohort':'afc.champions:ELITE:league_phase','stages':['league_phase']}
+        for year,typ in ((2024,12868),(2025,13662)):
+            event=copy.deepcopy(self.event);summary=copy.deepcopy(self.summary)
+            event['season']={'year':year,'type':typ,'slug':'league-stage'}
+            summary['header']['season']={'year':year,'type':typ,'name':'AFC Champions League Elite, League Stage'}
+            summary['header']['league']={'slug':'afc.champions'}
+            row=regulation_row(scope,event,summary,self.now.isoformat(),{})
+            self.assertEqual((row['cohort'],row['stage']),(scope['cohort'],'league_phase'))
+            for change in ({'year':2023},{'type':999},{'slug':'round-of-16'},
+                           {'name':'AFC Champions League, Group Stage'}):
+                broken=copy.deepcopy(summary);broken['header']['season'].update(change)
+                with self.subTest(change=change),self.assertRaises(ValueError):
+                    regulation_row(scope,event,broken,self.now.isoformat(),{})
+            broken=copy.deepcopy(summary);broken['header']['league']['slug']='afc.cup'
+            with self.assertRaises(ValueError):regulation_row(scope,event,broken,self.now.isoformat(),{})
+
+    def test_elite_old_qualifying_knockout_and_unknown_routes_rejected(self):
+        scope={'competition':'afc.champions','cohort':'afc.champions:ELITE:league_phase','stages':['league_phase']}
+        for season in ({'year':2023,'slug':'league-stage'},
+                       {'year':2024,'slug':'group-stage'},
+                       {'year':2024,'slug':'qualifying'},
+                       {'year':2024,'slug':'round-of-16','name':'League Stage'}):
+            self.assertIsNone(phase_for(scope,{'season':season}))
+        event={'season':{'year':2025,'slug':'league-stage'}}
+        self.assertIsNone(phase_for(dict(scope,cohort='afc.champions:OLD:league_phase'),event))
+        self.assertIsNone(phase_for(dict(scope,stages=['UNKNOWN:league_phase']),event))
+
+    def test_ucl_era_phase_alias_is_explicit_and_preserves_config(self):
+        scope={'competition':'uefa.champions','cohort':'uefa.champions:NEW_FORMAT:league_phase','stages':['NEW_FORMAT:league_phase']}
+        event={'season':{'year':2026,'slug':'league-phase'}}
+        self.assertEqual(phase_for(scope,event),'NEW_FORMAT:league_phase')
+        self.assertEqual(phase_for(dict(scope,stages=['league_phase']),event),'league_phase')
+        for change in ({'year':2023},{'slug':'group-stage'},{'slug':'round-of-16'},
+                       {'name':'UEFA Champions League, Final'},{'year':True}):
+            with self.subTest(change=change):
+                self.assertIsNone(phase_for(scope,{'season':dict(event['season'],**change)}))
+        for stages in (['OLD_FORMAT:league_phase'],['UNKNOWN:league_phase'],['group-stage']):
+            self.assertIsNone(phase_for(dict(scope,stages=stages),event))
+        self.assertIsNone(phase_for(dict(scope,cohort='uefa.champions:OLD_FORMAT:group_stage'),event))
+
+    def test_ucl_paired_native_phase_and_season_conflicts_rejected(self):
+        scope={'competition':'uefa.champions','cohort':'uefa.champions:NEW_FORMAT:league_phase','stages':['NEW_FORMAT:league_phase']}
+        event=copy.deepcopy(self.event);summary=copy.deepcopy(self.summary)
+        event['season']={'year':2026,'type':14534,'slug':'league-phase'}
+        summary['header']['season']={'year':2026,'type':14534,'name':'2026-27 UEFA Champions League, League Phase'}
+        row=regulation_row(scope,event,summary,self.now.isoformat(),{})
+        self.assertEqual(row['cohort'],scope['cohort'])
+        self.assertEqual(row['stage'],'NEW_FORMAT:league_phase')
+        for change in ({'year':2025},{'type':999},{'slug':'round-of-16'}, {'name':'UEFA Champions League, Group Stage'}):
+            broken=copy.deepcopy(summary);broken['header']['season'].update(change)
+            with self.subTest(change=change),self.assertRaises(ValueError):
+                regulation_row(scope,event,broken,self.now.isoformat(),{})
+        broken=copy.deepcopy(event);broken['season']['slug']='group-stage'
+        with self.assertRaises(ValueError):regulation_row(scope,broken,summary,self.now.isoformat(),{})
+
     def setUp(self):
         self.scope={'cohort':'eng.league_cup:single_leg','competition':'eng.league_cup','stages':['fourth-round']}
         self.event={'id':'123','date':'2026-10-28T19:45Z','season':{'year':2026,'name':'2026 Carabao Cup, Fourth Round'},'competitions':[{'status':{'type':{'completed':True}},'competitors':[{'homeAway':'home','team':{'id':'1'}},{'homeAway':'away','team':{'id':'2'}}]}]}

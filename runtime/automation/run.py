@@ -11,9 +11,10 @@ import sys
 REPO=Path(__file__).resolve().parents[2]
 
 
-def execute(state_dir, mode, *, max_collection_seconds=300):
+def execute(state_dir, mode, *, max_collection_seconds=300, results_only=False):
     if type(max_collection_seconds) is not int or not 30 <= max_collection_seconds <= 300:
         raise ValueError('collection budget must be an integer from 30 to 300 seconds')
+    if results_only and mode!='collect':raise ValueError('results-only requires collect')
     root=Path(state_dir).resolve()
     if root==REPO or root.is_relative_to(REPO/'runtime'):
         raise ValueError('separate private data checkout required')
@@ -22,7 +23,7 @@ def execute(state_dir, mode, *, max_collection_seconds=300):
     scopes=[s for s in original_scopes if permitted(s)]
     policy={'max_cohorts':len(scopes),'historical_only_scopes_skipped':len(original_scopes)-len(scopes),'max_requests':100,'lookback_days':2,'promotion':'NEVER',
             'max_collection_seconds':max_collection_seconds,
-            'data_sources':'existing public JSON endpoints only','paid_api_calls':False}
+            'data_sources':'existing public JSON endpoints only','paid_api_calls':False,'results_only':results_only}
     stamp=datetime.now(timezone.utc);rid=stamp.strftime('%Y%m%dT%H%M%S')+'-'+mode
     status={'run_id':rid,'started_at':stamp.isoformat(),'mode':mode,'policy':policy,
             'github_run_id':os.environ.get('GITHUB_RUN_ID'),
@@ -37,7 +38,7 @@ def execute(state_dir, mode, *, max_collection_seconds=300):
     try:
         if mode=='collect':
             from .collector import collect
-            status['result']=collect(root,scopes,lookback_days=2,max_seconds=max_collection_seconds)
+            status['result']=collect(root,scopes,lookback_days=2,max_seconds=max_collection_seconds,include_market=not results_only)
         elif mode=='train':
             from .trainer import train
             status['result']=train(root,max_cohorts=len(scopes))
@@ -64,5 +65,8 @@ def execute(state_dir, mode, *, max_collection_seconds=300):
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('mode',choices=('collect','train'));p.add_argument('--state-dir',required=True)
     p.add_argument('--max-collection-seconds',type=int,default=300)
-    a=p.parse_args();r=execute(a.state_dir,a.mode,max_collection_seconds=a.max_collection_seconds)
+    p.add_argument('--results-only',action='store_true',help='Collect results without requesting market snapshots')
+    a=p.parse_args()
+    if a.results_only and a.mode!='collect':p.error('--results-only requires collect')
+    r=execute(a.state_dir,a.mode,max_collection_seconds=a.max_collection_seconds,results_only=a.results_only)
     sys.exit(0 if r['status']=='COMPLETED' else 1)
