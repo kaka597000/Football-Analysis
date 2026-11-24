@@ -16,6 +16,10 @@ jobs:
       - run: python -m pip install -r requirements.txt -r requirements-test.txt
       - run: python scripts/check_repository.py
       - run: python scripts/run_tests.py
+      - name: Check the isolated club-rest replay
+        run: python -m unittest discover -s research/20261124-cross-competition-rest
+        env:
+          PYTHONPATH: runtime
 
   portable:
     strategy:

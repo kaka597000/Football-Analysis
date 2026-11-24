@@ -1,0 +1,727 @@
+{
+  "competitions": {
+    "bra.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 1,
+        "FULL_WIN": 2
+      },
+      "candidate_score_logloss": 2.8736722794615077,
+      "control_ou_settlement": {
+        "FULL_LOSS": 1,
+        "FULL_WIN": 2
+      },
+      "control_score_logloss": 2.8736722794615077,
+      "n": 3,
+      "ou": {
+        "candidate": 2,
+        "control": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 3
+      },
+      "top1": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 3
+      },
+      "top3": {
+        "candidate": 2,
+        "control": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 3
+      },
+      "wdl": {
+        "candidate": 3,
+        "control": 3,
+        "gained": 0,
+        "lost": 0,
+        "n": 3
+      }
+    },
+    "eng.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 6,
+        "FULL_WIN": 5,
+        "HALF_LOSS": 1
+      },
+      "candidate_score_logloss": 3.0876573434970123,
+      "control_ou_settlement": {
+        "FULL_LOSS": 6,
+        "FULL_WIN": 5,
+        "HALF_LOSS": 1
+      },
+      "control_score_logloss": 3.0877147055379655,
+      "n": 12,
+      "ou": {
+        "candidate": 5,
+        "control": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 12
+      },
+      "top1": {
+        "candidate": 2,
+        "control": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 12
+      },
+      "top3": {
+        "candidate": 4,
+        "control": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 12
+      },
+      "wdl": {
+        "candidate": 8,
+        "control": 8,
+        "gained": 0,
+        "lost": 0,
+        "n": 12
+      }
+    },
+    "esp.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 4,
+        "FULL_WIN": 6,
+        "HALF_LOSS": 2,
+        "HALF_WIN": 1
+      },
+      "candidate_score_logloss": 2.6558854312251894,
+      "control_ou_settlement": {
+        "FULL_LOSS": 4,
+        "FULL_WIN": 6,
+        "HALF_LOSS": 2,
+        "HALF_WIN": 1
+      },
+      "control_score_logloss": 2.6559606627355015,
+      "n": 13,
+      "ou": {
+        "candidate": 6,
+        "control": 6,
+        "gained": 0,
+        "lost": 0,
+        "n": 13
+      },
+      "top1": {
+        "candidate": 1,
+        "control": 1,
+        "gained": 0,
+        "lost": 0,
+        "n": 13
+      },
+      "top3": {
+        "candidate": 5,
+        "control": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 13
+      },
+      "wdl": {
+        "candidate": 9,
+        "control": 9,
+        "gained": 0,
+        "lost": 0,
+        "n": 13
+      }
+    },
+    "fra.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 3,
+        "FULL_WIN": 2,
+        "HALF_LOSS": 2,
+        "HALF_WIN": 1
+      },
+      "candidate_score_logloss": 2.7140688588698043,
+      "control_ou_settlement": {
+        "FULL_LOSS": 3,
+        "FULL_WIN": 2,
+        "HALF_LOSS": 2,
+        "HALF_WIN": 1
+      },
+      "control_score_logloss": 2.7152870475271165,
+      "n": 8,
+      "ou": {
+        "candidate": 2,
+        "control": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 8
+      },
+      "top1": {
+        "candidate": 1,
+        "control": 1,
+        "gained": 0,
+        "lost": 0,
+        "n": 8
+      },
+      "top3": {
+        "candidate": 3,
+        "control": 3,
+        "gained": 0,
+        "lost": 0,
+        "n": 8
+      },
+      "wdl": {
+        "candidate": 4,
+        "control": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 8
+      }
+    },
+    "ger.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 6,
+        "FULL_WIN": 3,
+        "PUSH": 2
+      },
+      "candidate_score_logloss": 2.90978552801929,
+      "control_ou_settlement": {
+        "FULL_LOSS": 6,
+        "FULL_WIN": 3,
+        "PUSH": 2
+      },
+      "control_score_logloss": 2.90978552801929,
+      "n": 11,
+      "ou": {
+        "candidate": 3,
+        "control": 3,
+        "gained": 0,
+        "lost": 0,
+        "n": 9
+      },
+      "top1": {
+        "candidate": 2,
+        "control": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 11
+      },
+      "top3": {
+        "candidate": 5,
+        "control": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 11
+      },
+      "wdl": {
+        "candidate": 10,
+        "control": 10,
+        "gained": 0,
+        "lost": 0,
+        "n": 11
+      }
+    },
+    "ita.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 2,
+        "FULL_WIN": 8
+      },
+      "candidate_score_logloss": 2.48245306106633,
+      "control_ou_settlement": {
+        "FULL_LOSS": 2,
+        "FULL_WIN": 8
+      },
+      "control_score_logloss": 2.4839211096446983,
+      "n": 10,
+      "ou": {
+        "candidate": 8,
+        "control": 8,
+        "gained": 0,
+        "lost": 0,
+        "n": 10
+      },
+      "top1": {
+        "candidate": 1,
+        "control": 1,
+        "gained": 0,
+        "lost": 0,
+        "n": 10
+      },
+      "top3": {
+        "candidate": 4,
+        "control": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 10
+      },
+      "wdl": {
+        "candidate": 5,
+        "control": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 10
+      }
+    },
+    "ned.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 6,
+        "FULL_WIN": 3
+      },
+      "candidate_score_logloss": 3.508177660244082,
+      "control_ou_settlement": {
+        "FULL_LOSS": 5,
+        "FULL_WIN": 4
+      },
+      "control_score_logloss": 3.47765922781093,
+      "n": 9,
+      "ou": {
+        "candidate": 3,
+        "control": 4,
+        "gained": 0,
+        "lost": 1,
+        "n": 9
+      },
+      "top1": {
+        "candidate": 1,
+        "control": 1,
+        "gained": 0,
+        "lost": 0,
+        "n": 9
+      },
+      "top3": {
+        "candidate": 1,
+        "control": 1,
+        "gained": 0,
+        "lost": 0,
+        "n": 9
+      },
+      "wdl": {
+        "candidate": 4,
+        "control": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 9
+      }
+    },
+    "nor.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 5,
+        "FULL_WIN": 3,
+        "PUSH": 1
+      },
+      "candidate_score_logloss": 3.5910171027581654,
+      "control_ou_settlement": {
+        "FULL_LOSS": 6,
+        "FULL_WIN": 2,
+        "PUSH": 1
+      },
+      "control_score_logloss": 3.5687666713765274,
+      "n": 9,
+      "ou": {
+        "candidate": 3,
+        "control": 2,
+        "gained": 1,
+        "lost": 0,
+        "n": 8
+      },
+      "top1": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 9
+      },
+      "top3": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 9
+      },
+      "wdl": {
+        "candidate": 4,
+        "control": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 9
+      }
+    },
+    "swe.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 3,
+        "FULL_WIN": 2,
+        "HALF_LOSS": 2,
+        "PUSH": 1
+      },
+      "candidate_score_logloss": 3.179919922990726,
+      "control_ou_settlement": {
+        "FULL_LOSS": 3,
+        "FULL_WIN": 2,
+        "HALF_LOSS": 2,
+        "PUSH": 1
+      },
+      "control_score_logloss": 3.1813527973655815,
+      "n": 8,
+      "ou": {
+        "candidate": 2,
+        "control": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 7
+      },
+      "top1": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 8
+      },
+      "top3": {
+        "candidate": 1,
+        "control": 1,
+        "gained": 0,
+        "lost": 0,
+        "n": 8
+      },
+      "wdl": {
+        "candidate": 2,
+        "control": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 8
+      }
+    },
+    "usa.1": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 5,
+        "FULL_WIN": 8,
+        "HALF_WIN": 1,
+        "PUSH": 1
+      },
+      "candidate_score_logloss": 3.0718504755021896,
+      "control_ou_settlement": {
+        "FULL_LOSS": 5,
+        "FULL_WIN": 8,
+        "HALF_WIN": 1,
+        "PUSH": 1
+      },
+      "control_score_logloss": 3.0718504755021896,
+      "n": 15,
+      "ou": {
+        "candidate": 8,
+        "control": 8,
+        "gained": 0,
+        "lost": 0,
+        "n": 14
+      },
+      "top1": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 15
+      },
+      "top3": {
+        "candidate": 3,
+        "control": 3,
+        "gained": 0,
+        "lost": 0,
+        "n": 15
+      },
+      "wdl": {
+        "candidate": 8,
+        "control": 8,
+        "gained": 0,
+        "lost": 0,
+        "n": 15
+      }
+    }
+  },
+  "delivered_candidate_triples": 0,
+  "groups": {
+    "all": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 41,
+        "FULL_WIN": 42,
+        "HALF_LOSS": 7,
+        "HALF_WIN": 3,
+        "PUSH": 5
+      },
+      "candidate_score_logloss": 3.0015715024447855,
+      "control_ou_settlement": {
+        "FULL_LOSS": 41,
+        "FULL_WIN": 42,
+        "HALF_LOSS": 7,
+        "HALF_WIN": 3,
+        "PUSH": 5
+      },
+      "control_score_logloss": 2.9971086000961464,
+      "n": 98,
+      "ou": {
+        "candidate": 42,
+        "control": 42,
+        "gained": 1,
+        "lost": 1,
+        "n": 93
+      },
+      "top1": {
+        "candidate": 8,
+        "control": 8,
+        "gained": 0,
+        "lost": 0,
+        "n": 98
+      },
+      "top3": {
+        "candidate": 28,
+        "control": 28,
+        "gained": 0,
+        "lost": 0,
+        "n": 98
+      },
+      "wdl": {
+        "candidate": 57,
+        "control": 57,
+        "gained": 0,
+        "lost": 0,
+        "n": 98
+      }
+    },
+    "corrected": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 17,
+        "FULL_WIN": 18,
+        "HALF_LOSS": 3,
+        "HALF_WIN": 1,
+        "PUSH": 2
+      },
+      "candidate_score_logloss": 2.939954705482543,
+      "control_ou_settlement": {
+        "FULL_LOSS": 17,
+        "FULL_WIN": 18,
+        "HALF_LOSS": 3,
+        "HALF_WIN": 1,
+        "PUSH": 2
+      },
+      "control_score_logloss": 2.929287280356528,
+      "n": 41,
+      "ou": {
+        "candidate": 18,
+        "control": 18,
+        "gained": 1,
+        "lost": 1,
+        "n": 39
+      },
+      "top1": {
+        "candidate": 4,
+        "control": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 41
+      },
+      "top3": {
+        "candidate": 15,
+        "control": 15,
+        "gained": 0,
+        "lost": 0,
+        "n": 41
+      },
+      "wdl": {
+        "candidate": 29,
+        "control": 29,
+        "gained": 0,
+        "lost": 0,
+        "n": 41
+      }
+    },
+    "early": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 32,
+        "FULL_WIN": 36,
+        "HALF_LOSS": 6,
+        "HALF_WIN": 3,
+        "PUSH": 4
+      },
+      "candidate_score_logloss": 2.9743472050553796,
+      "control_ou_settlement": {
+        "FULL_LOSS": 32,
+        "FULL_WIN": 36,
+        "HALF_LOSS": 6,
+        "HALF_WIN": 3,
+        "PUSH": 4
+      },
+      "control_score_logloss": 2.9689476441891256,
+      "n": 81,
+      "ou": {
+        "candidate": 36,
+        "control": 36,
+        "gained": 1,
+        "lost": 1,
+        "n": 77
+      },
+      "top1": {
+        "candidate": 8,
+        "control": 8,
+        "gained": 0,
+        "lost": 0,
+        "n": 81
+      },
+      "top3": {
+        "candidate": 24,
+        "control": 24,
+        "gained": 0,
+        "lost": 0,
+        "n": 81
+      },
+      "wdl": {
+        "candidate": 46,
+        "control": 46,
+        "gained": 0,
+        "lost": 0,
+        "n": 81
+      }
+    },
+    "early_corrected": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 17,
+        "FULL_WIN": 18,
+        "HALF_LOSS": 3,
+        "HALF_WIN": 1,
+        "PUSH": 2
+      },
+      "candidate_score_logloss": 2.939954705482543,
+      "control_ou_settlement": {
+        "FULL_LOSS": 17,
+        "FULL_WIN": 18,
+        "HALF_LOSS": 3,
+        "HALF_WIN": 1,
+        "PUSH": 2
+      },
+      "control_score_logloss": 2.929287280356528,
+      "n": 41,
+      "ou": {
+        "candidate": 18,
+        "control": 18,
+        "gained": 1,
+        "lost": 1,
+        "n": 39
+      },
+      "top1": {
+        "candidate": 4,
+        "control": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 41
+      },
+      "top3": {
+        "candidate": 15,
+        "control": 15,
+        "gained": 0,
+        "lost": 0,
+        "n": 41
+      },
+      "wdl": {
+        "candidate": 29,
+        "control": 29,
+        "gained": 0,
+        "lost": 0,
+        "n": 41
+      }
+    },
+    "late": {
+      "candidate_ou_settlement": {
+        "FULL_LOSS": 9,
+        "FULL_WIN": 6,
+        "HALF_LOSS": 1,
+        "PUSH": 1
+      },
+      "candidate_score_logloss": 3.13128727235901,
+      "control_ou_settlement": {
+        "FULL_LOSS": 9,
+        "FULL_WIN": 6,
+        "HALF_LOSS": 1,
+        "PUSH": 1
+      },
+      "control_score_logloss": 3.13128727235901,
+      "n": 17,
+      "ou": {
+        "candidate": 6,
+        "control": 6,
+        "gained": 0,
+        "lost": 0,
+        "n": 16
+      },
+      "top1": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 17
+      },
+      "top3": {
+        "candidate": 4,
+        "control": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 17
+      },
+      "wdl": {
+        "candidate": 11,
+        "control": 11,
+        "gained": 0,
+        "lost": 0,
+        "n": 17
+      }
+    },
+    "late_corrected": {
+      "candidate_ou_settlement": {},
+      "candidate_score_logloss": null,
+      "control_ou_settlement": {},
+      "control_score_logloss": null,
+      "n": 0,
+      "ou": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 0
+      },
+      "top1": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 0
+      },
+      "top3": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 0
+      },
+      "wdl": {
+        "candidate": 0,
+        "control": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 0
+      }
+    }
+  },
+  "packets": {
+    "nov22": 33,
+    "nov6": 9,
+    "nov7": 55,
+    "nov8": 46
+  },
+  "pending": {
+    "espn:401843488": {
+      "distinct_certified_scores": 0,
+      "normalized target mismatch": 1
+    }
+  },
+  "prospective_pairs": 0,
+  "roster_sha256": "3d5acec1f43f252ccb6268e238e0e2c567b3bd9491eb2d810638a7528010331a",
+  "status": {
+    "INCOMPLETE_BILATERAL_CALENDAR": 12,
+    "LOCKED_PAIR": 99,
+    "ORIGINAL_TEAM_IDENTITY_MISSING": 6,
+    "OUTSIDE_STUDY_SCOPE": 26
+  }
+}

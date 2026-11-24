@@ -1,6 +1,7 @@
 """Settle the previously sealed matrices using archived full-time evidence."""
 
 import argparse
+import csv
 import gzip
 import json
 import math
@@ -14,7 +15,7 @@ from urllib.parse import parse_qs, urlsplit
 import numpy as np
 from archives import output, sha, utc
 from optimization.evaluate import settle_ou
-from prepare import PROTOCOL_SHA
+from prepare import DOMESTIC, PROTOCOL_SHA
 from research_program.replay import _finished_espn_label
 from research_program.three_arm_model import score_picks, top_three_scores
 
@@ -110,7 +111,16 @@ def archived_refs(early, weekend, later):
                 v["query_time_utc"],
                 v["sha256"],
             )
-    for f in sorted(weekend.glob("*.json.meta.json")):
+    sidecars = sorted(weekend.glob("*.json.meta.json"))
+    inventory = {f.name: sha(f.read_bytes()) for f in sidecars}
+    if (
+        sha(json.dumps(inventory, sort_keys=True, separators=(",", ":")).encode())
+        != "05f732075843a4604f8c46edd28eac0400d9540b4a8fcdf7ecdf99b8c65fe687"
+    ):
+        raise ValueError(
+            "November 8 scoreboard receipt set differs from the pinned review archive"
+        )
+    for f in sidecars:
         v = json.loads(f.read_text())
         if v["http_status"] == 200:
             add(
@@ -229,6 +239,64 @@ def metrics(rows):
     return result
 
 
+def write_coverage(path, roster, settled):
+    scope = json.loads(
+        (
+            Path(__file__).resolve().parents[2] / "configs/analysis-scope.json"
+        ).read_text()
+    )["competitions"]
+    with path.open("w", newline="", encoding="utf-8-sig") as out:
+        writer = csv.writer(out, lineterminator="\n")
+        writer.writerow(
+            [
+                "赛事",
+                "competition",
+                "目标赛事类型",
+                "包内登记",
+                "研究范围常规赛",
+                "双臂锁定",
+                "已结算",
+                "休息修正",
+                "首选基线",
+                "首选候选",
+                "矩阵前三基线",
+                "矩阵前三候选",
+                "胜平负基线",
+                "胜平负候选",
+                "实盘非走盘分母",
+                "实盘全赢基线",
+                "实盘全赢候选",
+            ]
+        )
+        for entry in scope:
+            co = entry["code"]
+            pool = [r for r in roster if r["competition"] == co]
+            scoped = [r for r in pool if r["status"] != "OUTSIDE_STUDY_SCOPE"]
+            rows = [r for r in settled if r["competition"] == co]
+            m = metrics(rows)
+            hits = [
+                m[k][arm]
+                for k in ("top1", "top3", "wdl")
+                for arm in ("control", "candidate")
+            ]
+            writer.writerow(
+                [
+                    entry["name"],
+                    co,
+                    "职业联赛" if co in DOMESTIC else "本研究只以国内联赛为目标",
+                    len(pool),
+                    len(scoped),
+                    sum(r["status"] == "LOCKED_PAIR" for r in scoped),
+                    len(rows),
+                    sum(r["changed"] for r in rows),
+                    *(hits if rows else [""] * 6),
+                    m["ou"]["n"] if rows else "",
+                    m["ou"]["control"] if m["ou"]["n"] else "",
+                    m["ou"]["candidate"] if m["ou"]["n"] else "",
+                ]
+            )
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     for k in ("lock", "data", "early", "weekend", "later", "out"):
@@ -300,6 +368,7 @@ def main():
         )
     }
     args.out.mkdir(parents=True, exist_ok=False)
+    write_coverage(args.out / "coverage.csv", roster, rows)
     output(args.out / "event-scores.json", rows)
     output(
         args.out / "metrics.json",
