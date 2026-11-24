@@ -1,0 +1,10 @@
+{
+  "protocol_commit": "7fd9b9958a82f59ce9946428d6315f1c2fa40934",
+  "scope": "all nine Nov 4 European Cup league-phase original numerical cutoffs",
+  "source_archive_sha256": "806770392ad20248af02bce6a64c91e8bb3bf206a752bff7503fe56f551ae9aa",
+  "source_index_sha256": "0545bd1cf8686229f1cc6e2f40f0db308c44b98f31c1d69e37acbef5f42f1db1",
+  "outcome_free_matrix_bytes_sha256": "56dea278a12241f5477247438e7515ed074d52d6ad9cda7f9f5276be3350f92e",
+  "candidate_available": 4,
+  "fixture_denominator": 9,
+  "missing_behavior": "keep original team matrix, keep all nine in coverage; report active subset separately"
+}
