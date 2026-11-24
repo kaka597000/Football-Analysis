@@ -2,6 +2,7 @@
 from collections import Counter
 from math import log
 import numpy as np
+from scipy.stats import binomtest
 
 from archive_inputs import Bundle, frozen_nations_roster, merge_original_markets, same_fixture
 from labels import ANCHOR, certified
@@ -230,6 +231,11 @@ def oracle(rows, roles, *, complete=False):
                     entry['exclusive_among_available'] += 1
                 else:
                     entry['shared_hits'] += 1
+    for counts in by_role.values():
+        if counts['scored'] == 0:
+            counts['hits'] = None
+        if counts['scored_against_other'] == 0:
+            counts['exclusive_among_available'] = None
     result = dict(registered=sum(support_counts.values()), scored=scored, two_or_more=supported,
                   all_available_primaries_equal=equal, disagreement=different, covered_by_any_first=union,
                   all_available_missed=all_missed, shared_winning_matches=shared,
@@ -282,6 +288,11 @@ def direction_metrics(rows):
             f['changed'] += int(choices['team'][metric]!=choices['selector'][metric])
             f['gained'] += int(chosen and not orig)
             f['lost'] += int(orig and not chosen)
+    gains, losses = flips['top1']['gained'], flips['top1']['lost']
+    if gains+losses:
+        flips['top1']['two_sided_exact_p'] = float(binomtest(gains,gains+losses,.5).pvalue)
+    else:
+        flips['top1']['two_sided_exact_p'] = None
     return dict(registered=registered,labelled=labelled,market_switches=switches,
                 arms={a:{k:dict(hits=h if n else None,n=n) for k,(h,n) in m.items()} for a,m in arms.items()},
                 flips=flips,asian_five_states={a:{k:c[k] for k in STATES} for a,c in states.items()})

@@ -1,0 +1,2388 @@
+{
+  "study": "ORIGINAL-FIRST-SCORE-COMPLEMENT-AUDIT-1",
+  "grade_evidence_digest": "023918e2192e4fc551916b4f0398d38a91f2b82ea1c19a2320e125fb20e72ec8",
+  "late_label_issues": {},
+  "panels": {
+    "main": {
+      "registered": 52,
+      "certified": 52,
+      "covered_signed_record": 50,
+      "visible_author_first": 0,
+      "available_family_union": {
+        "registered": 52,
+        "scored": 52,
+        "two_or_more": 48,
+        "all_available_primaries_equal": 19,
+        "disagreement": 29,
+        "covered_by_any_first": 10,
+        "all_available_missed": 42,
+        "shared_winning_matches": 3,
+        "all_missed_inside_one_matrix_three": 12,
+        "all_missed_outside_every_matrix_three": 30,
+        "all_missed_incomplete_matrix_threes": 0,
+        "hits_with_only_one_available": 0,
+        "coverage_patterns": {
+          "team": 4,
+          "team+market": 40,
+          "team+xg": 8
+        },
+        "by_role": {
+          "team": {
+            "available": 52,
+            "scored": 52,
+            "hits": 6,
+            "scored_against_other": 48,
+            "exclusive_among_available": 3,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "market": {
+            "available": 40,
+            "scored": 40,
+            "hits": 4,
+            "scored_against_other": 40,
+            "exclusive_among_available": 3,
+            "shared_hits": 1,
+            "unopposed_hits": 0
+          },
+          "xg": {
+            "available": 8,
+            "scored": 8,
+            "hits": 3,
+            "scored_against_other": 8,
+            "exclusive_among_available": 1,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          }
+        },
+        "oracle_rate": 0.19230769230769232
+      },
+      "same_source_inclusive_union": {
+        "registered": 52,
+        "scored": 52,
+        "two_or_more": 52,
+        "all_available_primaries_equal": 16,
+        "disagreement": 36,
+        "covered_by_any_first": 12,
+        "all_available_missed": 40,
+        "shared_winning_matches": 5,
+        "all_missed_inside_one_matrix_three": 11,
+        "all_missed_outside_every_matrix_three": 29,
+        "all_missed_incomplete_matrix_threes": 0,
+        "hits_with_only_one_available": 0,
+        "coverage_patterns": {
+          "team+market+original_current": 30,
+          "team+market+original_current+refreshed_goals+repair": 10,
+          "team+original_current": 4,
+          "team+xg+original_current+refreshed_goals+repair+xg_goals": 8
+        },
+        "by_role": {
+          "team": {
+            "available": 52,
+            "scored": 52,
+            "hits": 6,
+            "scored_against_other": 52,
+            "exclusive_among_available": 3,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "market": {
+            "available": 40,
+            "scored": 40,
+            "hits": 4,
+            "scored_against_other": 40,
+            "exclusive_among_available": 2,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          },
+          "xg": {
+            "available": 8,
+            "scored": 8,
+            "hits": 3,
+            "scored_against_other": 8,
+            "exclusive_among_available": 0,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "original_current": {
+            "available": 52,
+            "scored": 52,
+            "hits": 5,
+            "scored_against_other": 52,
+            "exclusive_among_available": 2,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "refreshed_goals": {
+            "available": 18,
+            "scored": 18,
+            "hits": 3,
+            "scored_against_other": 18,
+            "exclusive_among_available": 0,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "repair": {
+            "available": 18,
+            "scored": 18,
+            "hits": 2,
+            "scored_against_other": 18,
+            "exclusive_among_available": 0,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          },
+          "xg_goals": {
+            "available": 8,
+            "scored": 8,
+            "hits": 3,
+            "scored_against_other": 8,
+            "exclusive_among_available": 0,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          }
+        },
+        "oracle_rate": 0.23076923076923078
+      },
+      "signed_author_primary_without_delivery": 45,
+      "fixed_common_panels": {
+        "team_market": {
+          "registered": 40,
+          "scored": 40,
+          "two_or_more": 40,
+          "all_available_primaries_equal": 14,
+          "disagreement": 26,
+          "covered_by_any_first": 7,
+          "all_available_missed": 33,
+          "shared_winning_matches": 1,
+          "all_missed_inside_one_matrix_three": 9,
+          "all_missed_outside_every_matrix_three": 24,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 40
+          },
+          "by_role": {
+            "team": {
+              "available": 40,
+              "scored": 40,
+              "hits": 4,
+              "scored_against_other": 40,
+              "exclusive_among_available": 3,
+              "shared_hits": 1,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 40,
+              "scored": 40,
+              "hits": 4,
+              "scored_against_other": 40,
+              "exclusive_among_available": 3,
+              "shared_hits": 1,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.175,
+          "additional_vs_best_single": 3
+        },
+        "team_xg": {
+          "registered": 8,
+          "scored": 8,
+          "two_or_more": 8,
+          "all_available_primaries_equal": 5,
+          "disagreement": 3,
+          "covered_by_any_first": 3,
+          "all_available_missed": 5,
+          "shared_winning_matches": 2,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 3,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+xg": 8
+          },
+          "by_role": {
+            "team": {
+              "available": 8,
+              "scored": 8,
+              "hits": 2,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.375,
+          "additional_vs_best_single": 0
+        },
+        "market_xg": {
+          "registered": 0,
+          "scored": 0,
+          "two_or_more": 0,
+          "all_available_primaries_equal": 0,
+          "disagreement": 0,
+          "covered_by_any_first": 0,
+          "all_available_missed": 0,
+          "shared_winning_matches": 0,
+          "all_missed_inside_one_matrix_three": 0,
+          "all_missed_outside_every_matrix_three": 0,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {},
+          "by_role": {
+            "market": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": null
+        },
+        "three_families": {
+          "registered": 0,
+          "scored": 0,
+          "two_or_more": 0,
+          "all_available_primaries_equal": 0,
+          "disagreement": 0,
+          "covered_by_any_first": 0,
+          "all_available_missed": 0,
+          "shared_winning_matches": 0,
+          "all_missed_inside_one_matrix_three": 0,
+          "all_missed_outside_every_matrix_three": 0,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {},
+          "by_role": {
+            "team": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": null
+        },
+        "original_current_vs_team": {
+          "registered": 52,
+          "scored": 52,
+          "two_or_more": 52,
+          "all_available_primaries_equal": 29,
+          "disagreement": 23,
+          "covered_by_any_first": 8,
+          "all_available_missed": 44,
+          "shared_winning_matches": 3,
+          "all_missed_inside_one_matrix_three": 11,
+          "all_missed_outside_every_matrix_three": 33,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "original_current+team": 52
+          },
+          "by_role": {
+            "original_current": {
+              "available": 52,
+              "scored": 52,
+              "hits": 5,
+              "scored_against_other": 52,
+              "exclusive_among_available": 2,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            },
+            "team": {
+              "available": 52,
+              "scored": 52,
+              "hits": 6,
+              "scored_against_other": 52,
+              "exclusive_among_available": 3,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.15384615384615385,
+          "additional_vs_best_single": 2
+        },
+        "repair_vs_refreshed_goals": {
+          "registered": 18,
+          "scored": 18,
+          "two_or_more": 18,
+          "all_available_primaries_equal": 10,
+          "disagreement": 8,
+          "covered_by_any_first": 4,
+          "all_available_missed": 14,
+          "shared_winning_matches": 1,
+          "all_missed_inside_one_matrix_three": 3,
+          "all_missed_outside_every_matrix_three": 11,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "refreshed_goals+repair": 18
+          },
+          "by_role": {
+            "refreshed_goals": {
+              "available": 18,
+              "scored": 18,
+              "hits": 3,
+              "scored_against_other": 18,
+              "exclusive_among_available": 2,
+              "shared_hits": 1,
+              "unopposed_hits": 0
+            },
+            "repair": {
+              "available": 18,
+              "scored": 18,
+              "hits": 2,
+              "scored_against_other": 18,
+              "exclusive_among_available": 1,
+              "shared_hits": 1,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.2222222222222222,
+          "additional_vs_best_single": 1
+        },
+        "xg_vs_its_goals": {
+          "registered": 8,
+          "scored": 8,
+          "two_or_more": 8,
+          "all_available_primaries_equal": 7,
+          "disagreement": 1,
+          "covered_by_any_first": 3,
+          "all_available_missed": 5,
+          "shared_winning_matches": 3,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 3,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "xg_goals+xg": 8
+          },
+          "by_role": {
+            "xg_goals": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.375,
+          "additional_vs_best_single": 0
+        }
+      },
+      "by_window": {
+        "earlier": {
+          "registered": 26,
+          "certified": 26,
+          "covered_signed_record": 26,
+          "visible_author_first": 0,
+          "available_family_union": {
+            "registered": 26,
+            "scored": 26,
+            "two_or_more": 24,
+            "all_available_primaries_equal": 7,
+            "disagreement": 17,
+            "covered_by_any_first": 6,
+            "all_available_missed": 20,
+            "shared_winning_matches": 1,
+            "all_missed_inside_one_matrix_three": 6,
+            "all_missed_outside_every_matrix_three": 14,
+            "all_missed_incomplete_matrix_threes": 0,
+            "hits_with_only_one_available": 0,
+            "coverage_patterns": {
+              "team": 2,
+              "team+market": 24
+            },
+            "by_role": {
+              "team": {
+                "available": 26,
+                "scored": 26,
+                "hits": 4,
+                "scored_against_other": 24,
+                "exclusive_among_available": 3,
+                "shared_hits": 1,
+                "unopposed_hits": 0
+              },
+              "market": {
+                "available": 24,
+                "scored": 24,
+                "hits": 3,
+                "scored_against_other": 24,
+                "exclusive_among_available": 2,
+                "shared_hits": 1,
+                "unopposed_hits": 0
+              },
+              "xg": {
+                "available": 0,
+                "scored": 0,
+                "hits": null,
+                "scored_against_other": 0,
+                "exclusive_among_available": null,
+                "shared_hits": 0,
+                "unopposed_hits": 0
+              }
+            },
+            "oracle_rate": 0.23076923076923078
+          },
+          "same_source_inclusive_union": {
+            "registered": 26,
+            "scored": 26,
+            "two_or_more": 26,
+            "all_available_primaries_equal": 9,
+            "disagreement": 17,
+            "covered_by_any_first": 6,
+            "all_available_missed": 20,
+            "shared_winning_matches": 1,
+            "all_missed_inside_one_matrix_three": 6,
+            "all_missed_outside_every_matrix_three": 14,
+            "all_missed_incomplete_matrix_threes": 0,
+            "hits_with_only_one_available": 0,
+            "coverage_patterns": {
+              "team+market+original_current": 24,
+              "team+original_current": 2
+            },
+            "by_role": {
+              "team": {
+                "available": 26,
+                "scored": 26,
+                "hits": 4,
+                "scored_against_other": 26,
+                "exclusive_among_available": 3,
+                "shared_hits": 1,
+                "unopposed_hits": 0
+              },
+              "market": {
+                "available": 24,
+                "scored": 24,
+                "hits": 3,
+                "scored_against_other": 24,
+                "exclusive_among_available": 2,
+                "shared_hits": 1,
+                "unopposed_hits": 0
+              },
+              "xg": {
+                "available": 0,
+                "scored": 0,
+                "hits": null,
+                "scored_against_other": 0,
+                "exclusive_among_available": null,
+                "shared_hits": 0,
+                "unopposed_hits": 0
+              },
+              "original_current": {
+                "available": 26,
+                "scored": 26,
+                "hits": 1,
+                "scored_against_other": 26,
+                "exclusive_among_available": 0,
+                "shared_hits": 1,
+                "unopposed_hits": 0
+              },
+              "refreshed_goals": {
+                "available": 0,
+                "scored": 0,
+                "hits": null,
+                "scored_against_other": 0,
+                "exclusive_among_available": null,
+                "shared_hits": 0,
+                "unopposed_hits": 0
+              },
+              "repair": {
+                "available": 0,
+                "scored": 0,
+                "hits": null,
+                "scored_against_other": 0,
+                "exclusive_among_available": null,
+                "shared_hits": 0,
+                "unopposed_hits": 0
+              },
+              "xg_goals": {
+                "available": 0,
+                "scored": 0,
+                "hits": null,
+                "scored_against_other": 0,
+                "exclusive_among_available": null,
+                "shared_hits": 0,
+                "unopposed_hits": 0
+              }
+            },
+            "oracle_rate": 0.23076923076923078
+          },
+          "signed_author_primary_without_delivery": 24,
+          "fixed_common_panels": {
+            "team_market": {
+              "registered": 24,
+              "scored": 24,
+              "two_or_more": 24,
+              "all_available_primaries_equal": 7,
+              "disagreement": 17,
+              "covered_by_any_first": 6,
+              "all_available_missed": 18,
+              "shared_winning_matches": 1,
+              "all_missed_inside_one_matrix_three": 5,
+              "all_missed_outside_every_matrix_three": 13,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {
+                "team+market": 24
+              },
+              "by_role": {
+                "team": {
+                  "available": 24,
+                  "scored": 24,
+                  "hits": 4,
+                  "scored_against_other": 24,
+                  "exclusive_among_available": 3,
+                  "shared_hits": 1,
+                  "unopposed_hits": 0
+                },
+                "market": {
+                  "available": 24,
+                  "scored": 24,
+                  "hits": 3,
+                  "scored_against_other": 24,
+                  "exclusive_among_available": 2,
+                  "shared_hits": 1,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": 0.25,
+              "additional_vs_best_single": 2
+            },
+            "team_xg": {
+              "registered": 0,
+              "scored": 0,
+              "two_or_more": 0,
+              "all_available_primaries_equal": 0,
+              "disagreement": 0,
+              "covered_by_any_first": 0,
+              "all_available_missed": 0,
+              "shared_winning_matches": 0,
+              "all_missed_inside_one_matrix_three": 0,
+              "all_missed_outside_every_matrix_three": 0,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {},
+              "by_role": {
+                "team": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "xg": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": null
+            },
+            "market_xg": {
+              "registered": 0,
+              "scored": 0,
+              "two_or_more": 0,
+              "all_available_primaries_equal": 0,
+              "disagreement": 0,
+              "covered_by_any_first": 0,
+              "all_available_missed": 0,
+              "shared_winning_matches": 0,
+              "all_missed_inside_one_matrix_three": 0,
+              "all_missed_outside_every_matrix_three": 0,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {},
+              "by_role": {
+                "market": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "xg": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": null
+            },
+            "three_families": {
+              "registered": 0,
+              "scored": 0,
+              "two_or_more": 0,
+              "all_available_primaries_equal": 0,
+              "disagreement": 0,
+              "covered_by_any_first": 0,
+              "all_available_missed": 0,
+              "shared_winning_matches": 0,
+              "all_missed_inside_one_matrix_three": 0,
+              "all_missed_outside_every_matrix_three": 0,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {},
+              "by_role": {
+                "team": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "market": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "xg": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": null
+            },
+            "original_current_vs_team": {
+              "registered": 26,
+              "scored": 26,
+              "two_or_more": 26,
+              "all_available_primaries_equal": 15,
+              "disagreement": 11,
+              "covered_by_any_first": 4,
+              "all_available_missed": 22,
+              "shared_winning_matches": 1,
+              "all_missed_inside_one_matrix_three": 6,
+              "all_missed_outside_every_matrix_three": 16,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {
+                "original_current+team": 26
+              },
+              "by_role": {
+                "original_current": {
+                  "available": 26,
+                  "scored": 26,
+                  "hits": 1,
+                  "scored_against_other": 26,
+                  "exclusive_among_available": 0,
+                  "shared_hits": 1,
+                  "unopposed_hits": 0
+                },
+                "team": {
+                  "available": 26,
+                  "scored": 26,
+                  "hits": 4,
+                  "scored_against_other": 26,
+                  "exclusive_among_available": 3,
+                  "shared_hits": 1,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": 0.15384615384615385,
+              "additional_vs_best_single": 0
+            },
+            "repair_vs_refreshed_goals": {
+              "registered": 0,
+              "scored": 0,
+              "two_or_more": 0,
+              "all_available_primaries_equal": 0,
+              "disagreement": 0,
+              "covered_by_any_first": 0,
+              "all_available_missed": 0,
+              "shared_winning_matches": 0,
+              "all_missed_inside_one_matrix_three": 0,
+              "all_missed_outside_every_matrix_three": 0,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {},
+              "by_role": {
+                "refreshed_goals": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "repair": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": null
+            },
+            "xg_vs_its_goals": {
+              "registered": 0,
+              "scored": 0,
+              "two_or_more": 0,
+              "all_available_primaries_equal": 0,
+              "disagreement": 0,
+              "covered_by_any_first": 0,
+              "all_available_missed": 0,
+              "shared_winning_matches": 0,
+              "all_missed_inside_one_matrix_three": 0,
+              "all_missed_outside_every_matrix_three": 0,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {},
+              "by_role": {
+                "xg_goals": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "xg": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": null
+            }
+          }
+        },
+        "later": {
+          "registered": 26,
+          "certified": 26,
+          "covered_signed_record": 24,
+          "visible_author_first": 0,
+          "available_family_union": {
+            "registered": 26,
+            "scored": 26,
+            "two_or_more": 24,
+            "all_available_primaries_equal": 12,
+            "disagreement": 12,
+            "covered_by_any_first": 4,
+            "all_available_missed": 22,
+            "shared_winning_matches": 2,
+            "all_missed_inside_one_matrix_three": 6,
+            "all_missed_outside_every_matrix_three": 16,
+            "all_missed_incomplete_matrix_threes": 0,
+            "hits_with_only_one_available": 0,
+            "coverage_patterns": {
+              "team": 2,
+              "team+market": 16,
+              "team+xg": 8
+            },
+            "by_role": {
+              "team": {
+                "available": 26,
+                "scored": 26,
+                "hits": 2,
+                "scored_against_other": 24,
+                "exclusive_among_available": 0,
+                "shared_hits": 2,
+                "unopposed_hits": 0
+              },
+              "market": {
+                "available": 16,
+                "scored": 16,
+                "hits": 1,
+                "scored_against_other": 16,
+                "exclusive_among_available": 1,
+                "shared_hits": 0,
+                "unopposed_hits": 0
+              },
+              "xg": {
+                "available": 8,
+                "scored": 8,
+                "hits": 3,
+                "scored_against_other": 8,
+                "exclusive_among_available": 1,
+                "shared_hits": 2,
+                "unopposed_hits": 0
+              }
+            },
+            "oracle_rate": 0.15384615384615385
+          },
+          "same_source_inclusive_union": {
+            "registered": 26,
+            "scored": 26,
+            "two_or_more": 26,
+            "all_available_primaries_equal": 7,
+            "disagreement": 19,
+            "covered_by_any_first": 6,
+            "all_available_missed": 20,
+            "shared_winning_matches": 4,
+            "all_missed_inside_one_matrix_three": 5,
+            "all_missed_outside_every_matrix_three": 15,
+            "all_missed_incomplete_matrix_threes": 0,
+            "hits_with_only_one_available": 0,
+            "coverage_patterns": {
+              "team+market+original_current": 6,
+              "team+market+original_current+refreshed_goals+repair": 10,
+              "team+original_current": 2,
+              "team+xg+original_current+refreshed_goals+repair+xg_goals": 8
+            },
+            "by_role": {
+              "team": {
+                "available": 26,
+                "scored": 26,
+                "hits": 2,
+                "scored_against_other": 26,
+                "exclusive_among_available": 0,
+                "shared_hits": 2,
+                "unopposed_hits": 0
+              },
+              "market": {
+                "available": 16,
+                "scored": 16,
+                "hits": 1,
+                "scored_against_other": 16,
+                "exclusive_among_available": 0,
+                "shared_hits": 1,
+                "unopposed_hits": 0
+              },
+              "xg": {
+                "available": 8,
+                "scored": 8,
+                "hits": 3,
+                "scored_against_other": 8,
+                "exclusive_among_available": 0,
+                "shared_hits": 3,
+                "unopposed_hits": 0
+              },
+              "original_current": {
+                "available": 26,
+                "scored": 26,
+                "hits": 4,
+                "scored_against_other": 26,
+                "exclusive_among_available": 2,
+                "shared_hits": 2,
+                "unopposed_hits": 0
+              },
+              "refreshed_goals": {
+                "available": 18,
+                "scored": 18,
+                "hits": 3,
+                "scored_against_other": 18,
+                "exclusive_among_available": 0,
+                "shared_hits": 3,
+                "unopposed_hits": 0
+              },
+              "repair": {
+                "available": 18,
+                "scored": 18,
+                "hits": 2,
+                "scored_against_other": 18,
+                "exclusive_among_available": 0,
+                "shared_hits": 2,
+                "unopposed_hits": 0
+              },
+              "xg_goals": {
+                "available": 8,
+                "scored": 8,
+                "hits": 3,
+                "scored_against_other": 8,
+                "exclusive_among_available": 0,
+                "shared_hits": 3,
+                "unopposed_hits": 0
+              }
+            },
+            "oracle_rate": 0.23076923076923078
+          },
+          "signed_author_primary_without_delivery": 21,
+          "fixed_common_panels": {
+            "team_market": {
+              "registered": 16,
+              "scored": 16,
+              "two_or_more": 16,
+              "all_available_primaries_equal": 7,
+              "disagreement": 9,
+              "covered_by_any_first": 1,
+              "all_available_missed": 15,
+              "shared_winning_matches": 0,
+              "all_missed_inside_one_matrix_three": 4,
+              "all_missed_outside_every_matrix_three": 11,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {
+                "team+market": 16
+              },
+              "by_role": {
+                "team": {
+                  "available": 16,
+                  "scored": 16,
+                  "hits": 0,
+                  "scored_against_other": 16,
+                  "exclusive_among_available": 0,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "market": {
+                  "available": 16,
+                  "scored": 16,
+                  "hits": 1,
+                  "scored_against_other": 16,
+                  "exclusive_among_available": 1,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": 0.0625,
+              "additional_vs_best_single": 0
+            },
+            "team_xg": {
+              "registered": 8,
+              "scored": 8,
+              "two_or_more": 8,
+              "all_available_primaries_equal": 5,
+              "disagreement": 3,
+              "covered_by_any_first": 3,
+              "all_available_missed": 5,
+              "shared_winning_matches": 2,
+              "all_missed_inside_one_matrix_three": 2,
+              "all_missed_outside_every_matrix_three": 3,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {
+                "team+xg": 8
+              },
+              "by_role": {
+                "team": {
+                  "available": 8,
+                  "scored": 8,
+                  "hits": 2,
+                  "scored_against_other": 8,
+                  "exclusive_among_available": 0,
+                  "shared_hits": 2,
+                  "unopposed_hits": 0
+                },
+                "xg": {
+                  "available": 8,
+                  "scored": 8,
+                  "hits": 3,
+                  "scored_against_other": 8,
+                  "exclusive_among_available": 1,
+                  "shared_hits": 2,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": 0.375,
+              "additional_vs_best_single": 0
+            },
+            "market_xg": {
+              "registered": 0,
+              "scored": 0,
+              "two_or_more": 0,
+              "all_available_primaries_equal": 0,
+              "disagreement": 0,
+              "covered_by_any_first": 0,
+              "all_available_missed": 0,
+              "shared_winning_matches": 0,
+              "all_missed_inside_one_matrix_three": 0,
+              "all_missed_outside_every_matrix_three": 0,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {},
+              "by_role": {
+                "market": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "xg": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": null
+            },
+            "three_families": {
+              "registered": 0,
+              "scored": 0,
+              "two_or_more": 0,
+              "all_available_primaries_equal": 0,
+              "disagreement": 0,
+              "covered_by_any_first": 0,
+              "all_available_missed": 0,
+              "shared_winning_matches": 0,
+              "all_missed_inside_one_matrix_three": 0,
+              "all_missed_outside_every_matrix_three": 0,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {},
+              "by_role": {
+                "team": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "market": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                },
+                "xg": {
+                  "available": 0,
+                  "scored": 0,
+                  "hits": null,
+                  "scored_against_other": 0,
+                  "exclusive_among_available": null,
+                  "shared_hits": 0,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": null
+            },
+            "original_current_vs_team": {
+              "registered": 26,
+              "scored": 26,
+              "two_or_more": 26,
+              "all_available_primaries_equal": 14,
+              "disagreement": 12,
+              "covered_by_any_first": 4,
+              "all_available_missed": 22,
+              "shared_winning_matches": 2,
+              "all_missed_inside_one_matrix_three": 5,
+              "all_missed_outside_every_matrix_three": 17,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {
+                "original_current+team": 26
+              },
+              "by_role": {
+                "original_current": {
+                  "available": 26,
+                  "scored": 26,
+                  "hits": 4,
+                  "scored_against_other": 26,
+                  "exclusive_among_available": 2,
+                  "shared_hits": 2,
+                  "unopposed_hits": 0
+                },
+                "team": {
+                  "available": 26,
+                  "scored": 26,
+                  "hits": 2,
+                  "scored_against_other": 26,
+                  "exclusive_among_available": 0,
+                  "shared_hits": 2,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": 0.15384615384615385,
+              "additional_vs_best_single": 0
+            },
+            "repair_vs_refreshed_goals": {
+              "registered": 18,
+              "scored": 18,
+              "two_or_more": 18,
+              "all_available_primaries_equal": 10,
+              "disagreement": 8,
+              "covered_by_any_first": 4,
+              "all_available_missed": 14,
+              "shared_winning_matches": 1,
+              "all_missed_inside_one_matrix_three": 3,
+              "all_missed_outside_every_matrix_three": 11,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {
+                "refreshed_goals+repair": 18
+              },
+              "by_role": {
+                "refreshed_goals": {
+                  "available": 18,
+                  "scored": 18,
+                  "hits": 3,
+                  "scored_against_other": 18,
+                  "exclusive_among_available": 2,
+                  "shared_hits": 1,
+                  "unopposed_hits": 0
+                },
+                "repair": {
+                  "available": 18,
+                  "scored": 18,
+                  "hits": 2,
+                  "scored_against_other": 18,
+                  "exclusive_among_available": 1,
+                  "shared_hits": 1,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": 0.2222222222222222,
+              "additional_vs_best_single": 1
+            },
+            "xg_vs_its_goals": {
+              "registered": 8,
+              "scored": 8,
+              "two_or_more": 8,
+              "all_available_primaries_equal": 7,
+              "disagreement": 1,
+              "covered_by_any_first": 3,
+              "all_available_missed": 5,
+              "shared_winning_matches": 3,
+              "all_missed_inside_one_matrix_three": 2,
+              "all_missed_outside_every_matrix_three": 3,
+              "all_missed_incomplete_matrix_threes": 0,
+              "hits_with_only_one_available": 0,
+              "coverage_patterns": {
+                "xg_goals+xg": 8
+              },
+              "by_role": {
+                "xg_goals": {
+                  "available": 8,
+                  "scored": 8,
+                  "hits": 3,
+                  "scored_against_other": 8,
+                  "exclusive_among_available": 0,
+                  "shared_hits": 3,
+                  "unopposed_hits": 0
+                },
+                "xg": {
+                  "available": 8,
+                  "scored": 8,
+                  "hits": 3,
+                  "scored_against_other": 8,
+                  "exclusive_among_available": 0,
+                  "shared_hits": 3,
+                  "unopposed_hits": 0
+                }
+              },
+              "oracle_rate": 0.375,
+              "additional_vs_best_single": 0
+            }
+          }
+        }
+      },
+      "selector_later": {
+        "registered": 26,
+        "labelled": 26,
+        "market_switches": 3,
+        "arms": {
+          "team": {
+            "top1": {
+              "hits": 2,
+              "n": 26
+            },
+            "matrix_top3": {
+              "hits": 7,
+              "n": 26
+            },
+            "wdl": {
+              "hits": 16,
+              "n": 26
+            },
+            "actual_line_full_win": {
+              "hits": 8,
+              "n": 19
+            }
+          },
+          "selector": {
+            "top1": {
+              "hits": 3,
+              "n": 26
+            },
+            "matrix_top3": {
+              "hits": 7,
+              "n": 26
+            },
+            "wdl": {
+              "hits": 16,
+              "n": 26
+            },
+            "actual_line_full_win": {
+              "hits": 10,
+              "n": 19
+            }
+          }
+        },
+        "flips": {
+          "top1": {
+            "n": 26,
+            "changed": 3,
+            "gained": 1,
+            "lost": 0,
+            "two_sided_exact_p": 1.0
+          },
+          "matrix_top3": {
+            "n": 26,
+            "changed": 3,
+            "gained": 0,
+            "lost": 0
+          },
+          "wdl": {
+            "n": 26,
+            "changed": 0,
+            "gained": 0,
+            "lost": 0
+          },
+          "actual_line_full_win": {
+            "n": 19,
+            "changed": 2,
+            "gained": 2,
+            "lost": 0
+          }
+        },
+        "asian_five_states": {
+          "team": {
+            "FULL_WIN": 8,
+            "HALF_WIN": 1,
+            "PUSH": 2,
+            "HALF_LOSS": 1,
+            "FULL_LOSS": 9
+          },
+          "selector": {
+            "FULL_WIN": 10,
+            "HALF_WIN": 1,
+            "PUSH": 2,
+            "HALF_LOSS": 1,
+            "FULL_LOSS": 7
+          }
+        }
+      },
+      "by_tier": {
+        "A": {
+          "registered": 16,
+          "scored": 16,
+          "two_or_more": 16,
+          "all_available_primaries_equal": 8,
+          "disagreement": 8,
+          "covered_by_any_first": 2,
+          "all_available_missed": 14,
+          "shared_winning_matches": 0,
+          "all_missed_inside_one_matrix_three": 3,
+          "all_missed_outside_every_matrix_three": 11,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 14,
+            "team+xg": 2
+          },
+          "by_role": {
+            "team": {
+              "available": 16,
+              "scored": 16,
+              "hits": 1,
+              "scored_against_other": 16,
+              "exclusive_among_available": 1,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 14,
+              "scored": 14,
+              "hits": 1,
+              "scored_against_other": 14,
+              "exclusive_among_available": 1,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 2,
+              "scored": 2,
+              "hits": 0,
+              "scored_against_other": 2,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.125
+        },
+        "B": {
+          "registered": 16,
+          "scored": 16,
+          "two_or_more": 14,
+          "all_available_primaries_equal": 5,
+          "disagreement": 9,
+          "covered_by_any_first": 4,
+          "all_available_missed": 12,
+          "shared_winning_matches": 2,
+          "all_missed_inside_one_matrix_three": 5,
+          "all_missed_outside_every_matrix_three": 7,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team": 2,
+            "team+market": 8,
+            "team+xg": 6
+          },
+          "by_role": {
+            "team": {
+              "available": 16,
+              "scored": 16,
+              "hits": 3,
+              "scored_against_other": 14,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 8,
+              "scored": 8,
+              "hits": 0,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 6,
+              "scored": 6,
+              "hits": 3,
+              "scored_against_other": 6,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.25
+        },
+        "C": {
+          "registered": 16,
+          "scored": 16,
+          "two_or_more": 14,
+          "all_available_primaries_equal": 5,
+          "disagreement": 9,
+          "covered_by_any_first": 3,
+          "all_available_missed": 13,
+          "shared_winning_matches": 1,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 11,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team": 2,
+            "team+market": 14
+          },
+          "by_role": {
+            "team": {
+              "available": 16,
+              "scored": 16,
+              "hits": 1,
+              "scored_against_other": 14,
+              "exclusive_among_available": 0,
+              "shared_hits": 1,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 14,
+              "scored": 14,
+              "hits": 3,
+              "scored_against_other": 14,
+              "exclusive_among_available": 2,
+              "shared_hits": 1,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.1875
+        },
+        "D": {
+          "registered": 4,
+          "scored": 4,
+          "two_or_more": 4,
+          "all_available_primaries_equal": 1,
+          "disagreement": 3,
+          "covered_by_any_first": 1,
+          "all_available_missed": 3,
+          "shared_winning_matches": 0,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 1,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 4
+          },
+          "by_role": {
+            "team": {
+              "available": 4,
+              "scored": 4,
+              "hits": 1,
+              "scored_against_other": 4,
+              "exclusive_among_available": 1,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 4,
+              "scored": 4,
+              "hits": 0,
+              "scored_against_other": 4,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.25
+        }
+      }
+    },
+    "repair": {
+      "registered": 18,
+      "certified": 18,
+      "covered_signed_record": 18,
+      "visible_author_first": 0,
+      "available_family_union": {
+        "registered": 18,
+        "scored": 18,
+        "two_or_more": 18,
+        "all_available_primaries_equal": 7,
+        "disagreement": 11,
+        "covered_by_any_first": 4,
+        "all_available_missed": 14,
+        "shared_winning_matches": 2,
+        "all_missed_inside_one_matrix_three": 4,
+        "all_missed_outside_every_matrix_three": 10,
+        "all_missed_incomplete_matrix_threes": 0,
+        "hits_with_only_one_available": 0,
+        "coverage_patterns": {
+          "team+market": 18
+        },
+        "by_role": {
+          "team": {
+            "available": 18,
+            "scored": 18,
+            "hits": 3,
+            "scored_against_other": 18,
+            "exclusive_among_available": 1,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          },
+          "market": {
+            "available": 18,
+            "scored": 18,
+            "hits": 3,
+            "scored_against_other": 18,
+            "exclusive_among_available": 1,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          }
+        },
+        "oracle_rate": 0.2222222222222222
+      },
+      "same_source_inclusive_union": {
+        "registered": 18,
+        "scored": 18,
+        "two_or_more": 18,
+        "all_available_primaries_equal": 3,
+        "disagreement": 15,
+        "covered_by_any_first": 4,
+        "all_available_missed": 14,
+        "shared_winning_matches": 3,
+        "all_missed_inside_one_matrix_three": 5,
+        "all_missed_outside_every_matrix_three": 9,
+        "all_missed_incomplete_matrix_threes": 0,
+        "hits_with_only_one_available": 0,
+        "coverage_patterns": {
+          "team+market+repair": 18
+        },
+        "by_role": {
+          "team": {
+            "available": 18,
+            "scored": 18,
+            "hits": 3,
+            "scored_against_other": 18,
+            "exclusive_among_available": 1,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          },
+          "market": {
+            "available": 18,
+            "scored": 18,
+            "hits": 3,
+            "scored_against_other": 18,
+            "exclusive_among_available": 0,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "original_current": {
+            "available": 0,
+            "scored": 0,
+            "hits": null,
+            "scored_against_other": 0,
+            "exclusive_among_available": null,
+            "shared_hits": 0,
+            "unopposed_hits": 0
+          },
+          "refreshed_goals": {
+            "available": 0,
+            "scored": 0,
+            "hits": null,
+            "scored_against_other": 0,
+            "exclusive_among_available": null,
+            "shared_hits": 0,
+            "unopposed_hits": 0
+          },
+          "repair": {
+            "available": 18,
+            "scored": 18,
+            "hits": 2,
+            "scored_against_other": 18,
+            "exclusive_among_available": 0,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          },
+          "xg_goals": {
+            "available": 0,
+            "scored": 0,
+            "hits": null,
+            "scored_against_other": 0,
+            "exclusive_among_available": null,
+            "shared_hits": 0,
+            "unopposed_hits": 0
+          }
+        },
+        "oracle_rate": 0.2222222222222222
+      },
+      "fixed_common_panels": {
+        "team_market": {
+          "registered": 18,
+          "scored": 18,
+          "two_or_more": 18,
+          "all_available_primaries_equal": 7,
+          "disagreement": 11,
+          "covered_by_any_first": 4,
+          "all_available_missed": 14,
+          "shared_winning_matches": 2,
+          "all_missed_inside_one_matrix_three": 4,
+          "all_missed_outside_every_matrix_three": 10,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 18
+          },
+          "by_role": {
+            "team": {
+              "available": 18,
+              "scored": 18,
+              "hits": 3,
+              "scored_against_other": 18,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 18,
+              "scored": 18,
+              "hits": 3,
+              "scored_against_other": 18,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.2222222222222222,
+          "additional_vs_best_single": 1
+        },
+        "goals_vs_challenger": {
+          "registered": 18,
+          "scored": 18,
+          "two_or_more": 18,
+          "all_available_primaries_equal": 10,
+          "disagreement": 8,
+          "covered_by_any_first": 4,
+          "all_available_missed": 14,
+          "shared_winning_matches": 1,
+          "all_missed_inside_one_matrix_three": 3,
+          "all_missed_outside_every_matrix_three": 11,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+repair": 18
+          },
+          "by_role": {
+            "team": {
+              "available": 18,
+              "scored": 18,
+              "hits": 3,
+              "scored_against_other": 18,
+              "exclusive_among_available": 2,
+              "shared_hits": 1,
+              "unopposed_hits": 0
+            },
+            "repair": {
+              "available": 18,
+              "scored": 18,
+              "hits": 2,
+              "scored_against_other": 18,
+              "exclusive_among_available": 1,
+              "shared_hits": 1,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.2222222222222222,
+          "additional_vs_best_single": 1
+        },
+        "all_including_same_source": {
+          "registered": 18,
+          "scored": 18,
+          "two_or_more": 18,
+          "all_available_primaries_equal": 3,
+          "disagreement": 15,
+          "covered_by_any_first": 4,
+          "all_available_missed": 14,
+          "shared_winning_matches": 3,
+          "all_missed_inside_one_matrix_three": 5,
+          "all_missed_outside_every_matrix_three": 9,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+repair+market": 18
+          },
+          "by_role": {
+            "team": {
+              "available": 18,
+              "scored": 18,
+              "hits": 3,
+              "scored_against_other": 18,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "repair": {
+              "available": 18,
+              "scored": 18,
+              "hits": 2,
+              "scored_against_other": 18,
+              "exclusive_among_available": 0,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 18,
+              "scored": 18,
+              "hits": 3,
+              "scored_against_other": 18,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.2222222222222222,
+          "additional_vs_best_single": 1
+        }
+      },
+      "by_tier": {
+        "A": {
+          "registered": 4,
+          "scored": 4,
+          "two_or_more": 4,
+          "all_available_primaries_equal": 1,
+          "disagreement": 3,
+          "covered_by_any_first": 0,
+          "all_available_missed": 4,
+          "shared_winning_matches": 0,
+          "all_missed_inside_one_matrix_three": 1,
+          "all_missed_outside_every_matrix_three": 3,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 4
+          },
+          "by_role": {
+            "team": {
+              "available": 4,
+              "scored": 4,
+              "hits": 0,
+              "scored_against_other": 4,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 4,
+              "scored": 4,
+              "hits": 0,
+              "scored_against_other": 4,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.0
+        },
+        "B": {
+          "registered": 8,
+          "scored": 8,
+          "two_or_more": 8,
+          "all_available_primaries_equal": 5,
+          "disagreement": 3,
+          "covered_by_any_first": 3,
+          "all_available_missed": 5,
+          "shared_winning_matches": 2,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 3,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 8
+          },
+          "by_role": {
+            "team": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 8,
+              "scored": 8,
+              "hits": 2,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.375
+        },
+        "C": {
+          "registered": 4,
+          "scored": 4,
+          "two_or_more": 4,
+          "all_available_primaries_equal": 1,
+          "disagreement": 3,
+          "covered_by_any_first": 1,
+          "all_available_missed": 3,
+          "shared_winning_matches": 0,
+          "all_missed_inside_one_matrix_three": 1,
+          "all_missed_outside_every_matrix_three": 2,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 4
+          },
+          "by_role": {
+            "team": {
+              "available": 4,
+              "scored": 4,
+              "hits": 0,
+              "scored_against_other": 4,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 4,
+              "scored": 4,
+              "hits": 1,
+              "scored_against_other": 4,
+              "exclusive_among_available": 1,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.25
+        },
+        "D": {
+          "registered": 2,
+          "scored": 2,
+          "two_or_more": 2,
+          "all_available_primaries_equal": 0,
+          "disagreement": 2,
+          "covered_by_any_first": 0,
+          "all_available_missed": 2,
+          "shared_winning_matches": 0,
+          "all_missed_inside_one_matrix_three": 0,
+          "all_missed_outside_every_matrix_three": 2,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 2
+          },
+          "by_role": {
+            "team": {
+              "available": 2,
+              "scored": 2,
+              "hits": 0,
+              "scored_against_other": 2,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 2,
+              "scored": 2,
+              "hits": 0,
+              "scored_against_other": 2,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 0,
+              "scored": 0,
+              "hits": null,
+              "scored_against_other": 0,
+              "exclusive_among_available": null,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.0
+        }
+      }
+    },
+    "xg": {
+      "registered": 8,
+      "certified": 8,
+      "covered_signed_record": 8,
+      "visible_author_first": 0,
+      "available_family_union": {
+        "registered": 8,
+        "scored": 8,
+        "two_or_more": 8,
+        "all_available_primaries_equal": 4,
+        "disagreement": 4,
+        "covered_by_any_first": 3,
+        "all_available_missed": 5,
+        "shared_winning_matches": 3,
+        "all_missed_inside_one_matrix_three": 2,
+        "all_missed_outside_every_matrix_three": 3,
+        "all_missed_incomplete_matrix_threes": 0,
+        "hits_with_only_one_available": 0,
+        "coverage_patterns": {
+          "team+market+xg": 8
+        },
+        "by_role": {
+          "team": {
+            "available": 8,
+            "scored": 8,
+            "hits": 3,
+            "scored_against_other": 8,
+            "exclusive_among_available": 0,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "market": {
+            "available": 8,
+            "scored": 8,
+            "hits": 2,
+            "scored_against_other": 8,
+            "exclusive_among_available": 0,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          },
+          "xg": {
+            "available": 8,
+            "scored": 8,
+            "hits": 3,
+            "scored_against_other": 8,
+            "exclusive_among_available": 0,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          }
+        },
+        "oracle_rate": 0.375
+      },
+      "same_source_inclusive_union": {
+        "registered": 8,
+        "scored": 8,
+        "two_or_more": 8,
+        "all_available_primaries_equal": 4,
+        "disagreement": 4,
+        "covered_by_any_first": 3,
+        "all_available_missed": 5,
+        "shared_winning_matches": 3,
+        "all_missed_inside_one_matrix_three": 2,
+        "all_missed_outside_every_matrix_three": 3,
+        "all_missed_incomplete_matrix_threes": 0,
+        "hits_with_only_one_available": 0,
+        "coverage_patterns": {
+          "team+market+xg": 8
+        },
+        "by_role": {
+          "team": {
+            "available": 8,
+            "scored": 8,
+            "hits": 3,
+            "scored_against_other": 8,
+            "exclusive_among_available": 0,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "market": {
+            "available": 8,
+            "scored": 8,
+            "hits": 2,
+            "scored_against_other": 8,
+            "exclusive_among_available": 0,
+            "shared_hits": 2,
+            "unopposed_hits": 0
+          },
+          "xg": {
+            "available": 8,
+            "scored": 8,
+            "hits": 3,
+            "scored_against_other": 8,
+            "exclusive_among_available": 0,
+            "shared_hits": 3,
+            "unopposed_hits": 0
+          },
+          "original_current": {
+            "available": 0,
+            "scored": 0,
+            "hits": null,
+            "scored_against_other": 0,
+            "exclusive_among_available": null,
+            "shared_hits": 0,
+            "unopposed_hits": 0
+          },
+          "refreshed_goals": {
+            "available": 0,
+            "scored": 0,
+            "hits": null,
+            "scored_against_other": 0,
+            "exclusive_among_available": null,
+            "shared_hits": 0,
+            "unopposed_hits": 0
+          },
+          "repair": {
+            "available": 0,
+            "scored": 0,
+            "hits": null,
+            "scored_against_other": 0,
+            "exclusive_among_available": null,
+            "shared_hits": 0,
+            "unopposed_hits": 0
+          },
+          "xg_goals": {
+            "available": 0,
+            "scored": 0,
+            "hits": null,
+            "scored_against_other": 0,
+            "exclusive_among_available": null,
+            "shared_hits": 0,
+            "unopposed_hits": 0
+          }
+        },
+        "oracle_rate": 0.375
+      },
+      "fixed_common_panels": {
+        "team_market": {
+          "registered": 8,
+          "scored": 8,
+          "two_or_more": 8,
+          "all_available_primaries_equal": 4,
+          "disagreement": 4,
+          "covered_by_any_first": 3,
+          "all_available_missed": 5,
+          "shared_winning_matches": 2,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 3,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market": 8
+          },
+          "by_role": {
+            "team": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 8,
+              "scored": 8,
+              "hits": 2,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.375,
+          "additional_vs_best_single": 0
+        },
+        "team_xg": {
+          "registered": 8,
+          "scored": 8,
+          "two_or_more": 8,
+          "all_available_primaries_equal": 7,
+          "disagreement": 1,
+          "covered_by_any_first": 3,
+          "all_available_missed": 5,
+          "shared_winning_matches": 3,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 3,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+xg": 8
+          },
+          "by_role": {
+            "team": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.375,
+          "additional_vs_best_single": 0
+        },
+        "market_xg": {
+          "registered": 8,
+          "scored": 8,
+          "two_or_more": 8,
+          "all_available_primaries_equal": 5,
+          "disagreement": 3,
+          "covered_by_any_first": 3,
+          "all_available_missed": 5,
+          "shared_winning_matches": 2,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 3,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "market+xg": 8
+          },
+          "by_role": {
+            "market": {
+              "available": 8,
+              "scored": 8,
+              "hits": 2,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 1,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.375,
+          "additional_vs_best_single": 0
+        },
+        "three_families": {
+          "registered": 8,
+          "scored": 8,
+          "two_or_more": 8,
+          "all_available_primaries_equal": 4,
+          "disagreement": 4,
+          "covered_by_any_first": 3,
+          "all_available_missed": 5,
+          "shared_winning_matches": 3,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 3,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market+xg": 8
+          },
+          "by_role": {
+            "team": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 8,
+              "scored": 8,
+              "hits": 2,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 8,
+              "scored": 8,
+              "hits": 3,
+              "scored_against_other": 8,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.375,
+          "additional_vs_best_single": 0
+        }
+      },
+      "by_tier": {
+        "A": {
+          "registered": 2,
+          "scored": 2,
+          "two_or_more": 2,
+          "all_available_primaries_equal": 1,
+          "disagreement": 1,
+          "covered_by_any_first": 0,
+          "all_available_missed": 2,
+          "shared_winning_matches": 0,
+          "all_missed_inside_one_matrix_three": 0,
+          "all_missed_outside_every_matrix_three": 2,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market+xg": 2
+          },
+          "by_role": {
+            "team": {
+              "available": 2,
+              "scored": 2,
+              "hits": 0,
+              "scored_against_other": 2,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 2,
+              "scored": 2,
+              "hits": 0,
+              "scored_against_other": 2,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 2,
+              "scored": 2,
+              "hits": 0,
+              "scored_against_other": 2,
+              "exclusive_among_available": 0,
+              "shared_hits": 0,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.0
+        },
+        "B": {
+          "registered": 6,
+          "scored": 6,
+          "two_or_more": 6,
+          "all_available_primaries_equal": 3,
+          "disagreement": 3,
+          "covered_by_any_first": 3,
+          "all_available_missed": 3,
+          "shared_winning_matches": 3,
+          "all_missed_inside_one_matrix_three": 2,
+          "all_missed_outside_every_matrix_three": 1,
+          "all_missed_incomplete_matrix_threes": 0,
+          "hits_with_only_one_available": 0,
+          "coverage_patterns": {
+            "team+market+xg": 6
+          },
+          "by_role": {
+            "team": {
+              "available": 6,
+              "scored": 6,
+              "hits": 3,
+              "scored_against_other": 6,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            },
+            "market": {
+              "available": 6,
+              "scored": 6,
+              "hits": 2,
+              "scored_against_other": 6,
+              "exclusive_among_available": 0,
+              "shared_hits": 2,
+              "unopposed_hits": 0
+            },
+            "xg": {
+              "available": 6,
+              "scored": 6,
+              "hits": 3,
+              "scored_against_other": 6,
+              "exclusive_among_available": 0,
+              "shared_hits": 3,
+              "unopposed_hits": 0
+            }
+          },
+          "oracle_rate": 0.5
+        }
+      }
+    }
+  },
+  "unique_fixtures_in_nations_panels": 52,
+  "real_displayed_metrics": {
+    "first": {
+      "n": 0,
+      "hits": null
+    },
+    "three": {
+      "n": 0,
+      "hits": null
+    },
+    "selected_three_batches": {
+      "n": 0,
+      "hits": null
+    }
+  },
+  "panels_lock_commit": "3a2803d3136ae025136b2fe3ddd869e32fc9920b"
+}

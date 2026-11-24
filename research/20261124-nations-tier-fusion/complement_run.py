@@ -18,6 +18,7 @@ from study import selection
 DIR = 'research/20261124-nations-tier-fusion/'
 ID = 'ORIGINAL-FIRST-SCORE-COMPLEMENT-AUDIT-1'
 PROTOCOL_COMMIT = 'b4f0523f3ead6971c4345e323f83755ca53ac48f'
+PANELS_COMMIT = '3a2803d3136ae025136b2fe3ddd869e32fc9920b'
 
 
 def original_selector_lock(repo, roster):
@@ -148,8 +149,8 @@ def main():
     p.add_argument('--out',type=Path,required=True)
     p.add_argument('--seal-commit')
     args=p.parse_args()
-    if args.operation=='grade' and (not args.seal_commit or len(args.seal_commit)!=40):
-        p.error('grade requires the published 40-character pre-grading seal commit')
+    if args.operation=='grade' and args.seal_commit != PANELS_COMMIT:
+        p.error('grade requires the published pre-grading seal ' + PANELS_COMMIT)
     roster=original_roster(args.data)
     if args.operation=='selector':
         write_json(args.out,original_selector_lock(args.data,roster))

@@ -1,10 +1,14 @@
 from copy import deepcopy
+from contextlib import redirect_stderr
+from io import StringIO
+import sys
 import unittest
 from unittest.mock import patch
 
 import numpy as np
 
 import complement
+import complement_run
 from complement import (BINS, direction_metrics, fit_selector, margin_bin, oracle, original_roster,
                         select_source)
 
@@ -72,6 +76,23 @@ class SourceChoice(unittest.TestCase):
                 patch.object(complement,'merge_original_markets',side_effect=lambda repo,x:x):
             with self.assertRaisesRegex(ValueError,'outside preregistered'):
                 original_roster('repo')
+
+    def test_selector_lock_requests_only_early_labels(self):
+        rows = {str(i):dict(fixture(date='2026-11-'+d), pair_sha=str(i), issue_sha=None, line=None)
+                for i,d in enumerate(('12','13','15','17'))}
+        early = {'0':label([0,1]), '1':label([0,0])}
+        with patch.object(complement_run,'certified',return_value=(early,{})) as cert:
+            locked = complement_run.original_selector_lock('repo',rows)
+        self.assertTrue(cert.call_args.kwargs['training'])
+        self.assertEqual(set(cert.call_args.args[1]),set(early))
+        self.assertEqual([r['id'] for r in locked['late']], ['2','3'])
+
+    def test_grade_rejects_mutable_ref_before_any_archive_is_opened(self):
+        args = ['prog','grade','--data','missing','--out','unused','--seal-commit','main']
+        with patch.object(sys,'argv',args), patch.object(complement_run,'original_roster') as read, redirect_stderr(StringIO()):
+            with self.assertRaises(SystemExit):
+                complement_run.main()
+        read.assert_not_called()
 
 
 class ComplementCounts(unittest.TestCase):
