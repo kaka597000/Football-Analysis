@@ -110,25 +110,29 @@ def assess(repo, roster, panels, earlier):
                               for k in sorted({r['tier'] for r,s in rows})}
         report['panels'][p] = section
         for row,actual in rows:
-            cases.append(ledger_row(p,row,actual,labels.get(row['id'])))
+            cases.append(ledger_row(p,row,actual,labels.get(row['id']),roster[row['id']]['f']))
     report['unique_fixtures_in_nations_panels'] = len(set.union(*(set(v) for v in panels.values())))
     report['real_displayed_metrics'] = dict(first=dict(n=0,hits=None),three=dict(n=0,hits=None),
                                             selected_three_batches=dict(n=0,hits=None))
     return report,cases
 
 
-def ledger_row(panel,row,actual,label):
+def ledger_row(panel,row,actual,label,fixture):
     choices = row['choices']
     sources = {k:v['primary'] for k,v in choices.items()}
     comparable = [k for k in FAMILIES if k in sources]
     winners = [k for k in comparable if actual == sources[k]] if actual is not None else []
-    out = dict(panel=panel,id=row['id'],tier=row['tier'],kickoff=row['kickoff'],cutoff=row['cutoff'],
+    out = dict(panel=panel,id=row['id'],tier=row['tier'],home=fixture['home_name'],away=fixture['away_name'],
+               home_id=fixture['home'],away_id=fixture['away'],regulation_score=actual,
+               kickoff=row['kickoff'],cutoff=row['cutoff'],actual_total_line=row['line'],
                registered_source_record=row['original_issue_sha'],author_visible_first=row['authored_first'],
                signed_author_primary_present=row['signed_primary_present'],
                result_certified=label is not None,result_source_sha=label['raw_sha'] if label else None)
     for role in FAMILIES+SENSITIVITY+('selector',):
         out[role+'_first'] = sources.get(role)
         out[role+'_hit'] = (int(sources[role]==actual) if actual is not None and role in sources else None)
+        if role in FAMILIES or role == 'selector':
+            out[role+'_matrix_top3'] = '|'.join(choices[role]['top3']) if role in choices else None
     out.update(family_count=len(comparable),distinct_family_firsts=len({sources[k] for k in comparable}),
                family_winners='|'.join(winners) if actual is not None else None,
                family_oracle_hit=int(bool(winners)) if actual is not None and comparable else None,
