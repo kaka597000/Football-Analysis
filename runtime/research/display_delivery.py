@@ -60,8 +60,55 @@ def prepare_authored_row(payload, fixture):
     return attach_display(body, first, alternatives)[0]
 
 
+def _require_authored_stage(fixture, scope):
+    """Use the author's independently approved scope row; competition membership alone is insufficient."""
+    from competition_scope import require
+
+    require(fixture)
+    identities = (fixture.get(k) for k in ('match_id', 'competition', 'cohort', 'stage', 'home', 'away'))
+    if (fixture.get('identity_verified') is not True
+            or fixture.get('stage_verified') is False
+            or not all(isinstance(value, str) and value.strip() for value in identities)
+            or fixture['home'] == fixture['away'] or fixture.get('score_basis') != 'regulation_90'):
+        raise ValueError('verified regulation-time fixture identity required')
+    if fixture.get('phase') is not None and str(fixture['phase']).casefold() != 'prematch':
+        raise ValueError('authored handoff requires a prematch fixture')
+    if (not isinstance(scope, dict) or not isinstance(scope.get('stages'), list)
+            or (scope.get('cohort'), scope.get('competition')) != (fixture['cohort'], fixture['competition'])):
+        raise ValueError('approved stages for the same competition and cohort required')
+    require(scope)
+    # Some approved rows bind an era as part of BOTH the full cohort and the stage.
+    # Accept that exact binding only, keeping other eras and phases separate.
+    qualified = fixture['cohort'].removeprefix(fixture['competition'] + ':')
+    if not (fixture['stage'] in scope['stages']
+            or (qualified in scope['stages'] and ':' in qualified
+                and qualified.rsplit(':', 1)[1] == fixture['stage'])):
+        raise ValueError('fixture stage outside the approved cohort stages')
+
+
+def bind_authored_row(payload, fixture, scope):
+    """Keep the score list consumed by the normal batch packager in the signed payload."""
+    _require_authored_stage(fixture, scope)
+    if not isinstance(payload.get('displayed_scores'), list):
+        raise ValueError('an explicit analyst score list is required')
+    display = prepare_authored_row(payload, fixture)['displayed_scores']
+    if (('authored_display' in payload and payload['authored_display'] != display)
+            or ('authored_stage_scope' in payload and payload['authored_stage_scope'] != scope)):
+        raise ValueError('previously bound author display differs')
+    return dict(payload, authored_display=display, authored_stage_scope=deepcopy(scope))
+
+
 def validate_display(payload):
     display = payload.get('displayed_scores')
+    if isinstance(display, list):
+        bound = payload.get('authored_display')
+        if not isinstance(bound, dict) or payload.get('selection_scope') != 'active_reference':
+            raise ValueError('explicit comprehensive display required')
+        alternatives = bound.get('alternatives')
+        if (not isinstance(alternatives, list) or display != [bound.get('first'), *alternatives]
+                or payload.get('alternates') != alternatives):
+            raise ValueError('bound display differs from the retained table scores')
+        display = bound
     if not isinstance(display, dict) or display.get('schema') != SCHEMA:
         raise ValueError('explicit comprehensive display required')
     if payload.get('selection_scope', 'active_reference') != 'active_reference':
@@ -87,7 +134,16 @@ def display_slot(match_id):
 def delivery_request(record):
     """Build the exact message and binding from the verified frozen record."""
     fixture = record['fixture']
-    display = validate_display(record['payload'])
+    payload = record['payload']
+    display = validate_display(payload)
+    if isinstance(payload['displayed_scores'], list):
+        if (record['stage'] != 'prematch' or record['track'] != DISPLAY_TRACK
+                or record['match_id'] != fixture['match_id']):
+            raise ValueError('authored display requires the same comprehensive prematch fixture')
+        _require_authored_stage(fixture, payload.get('authored_stage_scope'))
+        # Recheck the signed row, its kickoff, and its order when reading the request.
+        if prepare_authored_row(payload, fixture)['displayed_scores'] != display:
+            raise ValueError('bound author row differs from the frozen fixture')
     stamp = aware(record['recorded_at']).astimezone(timezone(timedelta(hours=8)))
     text = (f"赛事 {record['match_id']}\n{display['text']}\n"
             f"冻结 {record['freeze_id']}（北京时间 {stamp:%Y-%m-%d %H:%M:%S}）")
