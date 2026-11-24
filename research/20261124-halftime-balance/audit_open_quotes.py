@@ -4,7 +4,7 @@ from collections import Counter
 from decimal import Decimal
 import hashlib
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 from urllib.parse import parse_qs, urlsplit
 
@@ -32,51 +32,80 @@ def markets(quote, key):
     return prices, tuple(lines), tuple(totals)
 
 
+def inside(root, relative):
+    path = (root / relative).resolve()
+    if not path.is_relative_to(root):
+        raise ValueError('evidence outside restored archive root')
+    return path
+
+
+def bound_capture(report, raw_file):
+    # The freeze records the original machine's path. Restore only its suffix
+    # inside this exact WCPP report; never open the original absolute location.
+    parts = PurePosixPath(raw_file).parts
+    prefix = ('WCPP', 'reports', report.name)
+    anchors = [i for i in range(len(parts) - 2) if parts[i:i + 3] == prefix]
+    if (len(anchors) != 1 or '..' in parts
+            or parts[-2] != 'raw' or not parts[-1].endswith('.json')):
+        raise ValueError('frozen source outside the expected report raw directory')
+    suffix = Path(*parts[anchors[0] + len(prefix):])
+    root = report.resolve()
+    return inside(root, suffix), inside(root, suffix.with_suffix('.json.meta.json'))
+
+
 def archived_quote(report, fixture, event_id):
     sources = []
     for source in fixture['sources']:
         url = urlsplit(source['source_url'])
-        if (url.hostname == 'site.api.espn.com' and url.path.endswith('/summary')
+        if (url.scheme == 'https' and url.hostname == 'site.api.espn.com' and url.path.endswith('/summary')
                 and parse_qs(url.query).get('event') == [event_id]
                 and aware(source['query_time']) < aware(fixture['cutoff_at'])):
             sources.append(source)
     if len(sources) != 1:
         return 'missing_bound_source', None
     source = sources[0]
-    for path in report.glob(f'*/raw/espn-summary-{event_id}.json'):
-        raw = path.read_bytes()
-        if hashlib.sha256(raw).hexdigest() != source['response_sha256']:
-            continue
-        meta = json.loads(path.with_suffix('.json.meta.json').read_bytes())
-        if (meta['sha256'] != source['response_sha256'] or meta['url'] != source['source_url']
-                or aware(meta['query_time']) != aware(source['query_time'])):
-            raise ValueError('raw capture metadata conflicts with original freeze')
-        summary = json.loads(raw)
-        if str(summary['header']['id']) != event_id:
-            raise ValueError('raw ESPN event conflicts with original freeze')
-        quotes = [item for item in summary.get('odds', []) if item['provider']['name'] == 'DraftKings']
-        if len(quotes) != 1:
-            return 'missing_unique_book', None
-        return 'paired', quotes[0]
-    return 'missing_bound_body', None
+    if not source.get('raw_file'):
+        return 'missing_bound_body', None
+    path, sidecar = bound_capture(report, source['raw_file'])
+    if not path.is_file():
+        return 'missing_bound_body', None
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != source['response_sha256']:
+        raise ValueError('raw capture checksum conflicts with original freeze')
+    if not sidecar.is_file():
+        return 'missing_capture_metadata', None
+    meta = json.loads(sidecar.read_bytes())
+    if (meta['sha256'] != source['response_sha256'] or meta['url'] != source['source_url']
+            or aware(meta['query_time']) != aware(source['query_time'])):
+        raise ValueError('raw capture metadata conflicts with original freeze')
+    summary = json.loads(raw)
+    if str(summary['header']['id']) != event_id:
+        raise ValueError('raw ESPN event conflicts with original freeze')
+    quotes = [item for item in summary.get('odds', []) if item['provider']['name'] == 'DraftKings']
+    if len(quotes) != 1:
+        return 'missing_unique_book', None
+    return 'paired', quotes[0]
 
 
 def audit(report, issued):
     counts, seen = Counter(), set()
-    for match in json.loads((report / 'analysis-records.json').read_bytes())['matches']:
+    report = report.resolve()
+    issued = issued.resolve()
+    for match in json.loads(inside(report, 'analysis-records.json').read_bytes())['matches']:
         ref = match['comprehensive_reference']
         directory, name = Path(ref['path']).parts[-2:]
         if not re.fullmatch('[0-9a-f]{64}', directory) or name != '000001.json':
             raise ValueError('invalid first-freeze reference')
-        record = verify(json.loads((issued / directory / name).read_bytes()))
+        record = verify(json.loads(inside(issued, Path(directory, name)).read_bytes()))
+        fixture = record['fixture']
         if (record['record_sha256'] != ref['sha256'] or record['freeze_id'] != ref['freeze_id']
                 or record['evaluation_slot'] != 'FIRST_PREMATCH'
                 or (record['stage'], record['track']) != ('prematch', 'comprehensive')
-                or record['match_id'] in seen):
+                or record['match_id'] != fixture['match_id'] or record['match_id'] in seen
+                or not aware(fixture['cutoff_at']) <= aware(record['recorded_at']) < aware(fixture['kickoff_at'])):
             raise ValueError('expected a unique original comprehensive freeze')
         seen.add(record['match_id'])
         counts['roster'] += 1
-        fixture = record['fixture']
         event_id = str(fixture.get('source_ids', {}).get('espn', ''))
         if not event_id.isdecimal():
             counts['no_espn_identity'] += 1
