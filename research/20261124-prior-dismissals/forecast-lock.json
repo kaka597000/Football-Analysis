@@ -1,0 +1,9 @@
+{
+  "forecasts_sha256": "d5e13be9bf3901a547d44d48090f1e327e2bc54c117f9ade709e92bb9dbdf0e2",
+  "training_sha256": "17e8e920d308be7ce5033ceca29db36fc42b5b02796ce1b79ee299a5016edecc",
+  "rows": 3773,
+  "paired": 3755,
+  "clocked_population": 33,
+  "r7_checked": 192,
+  "r7_excluded": 0
+}
