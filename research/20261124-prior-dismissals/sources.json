@@ -1,0 +1,338 @@
+[
+  {
+    "member": "raw/8f5d37651aca8498d8041088835e3a734b79e2fcc34f66ca8516c650970810ce",
+    "sha256": "8f5d37651aca8498d8041088835e3a734b79e2fcc34f66ca8516c650970810ce",
+    "season_code": "1011",
+    "competition": "eng.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1011/E0.csv"
+  },
+  {
+    "member": "raw/6cdb9963c311ca2e7d07eb429df721a2593cbd9c9fec55b9af82bca1a457b987",
+    "sha256": "6cdb9963c311ca2e7d07eb429df721a2593cbd9c9fec55b9af82bca1a457b987",
+    "season_code": "1112",
+    "competition": "eng.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1112/E0.csv"
+  },
+  {
+    "member": "raw/1df561d34a9b79ff8cb1fccd4fd279d183e74cd871063a307ecf18f01e0d622f",
+    "sha256": "1df561d34a9b79ff8cb1fccd4fd279d183e74cd871063a307ecf18f01e0d622f",
+    "season_code": "1213",
+    "competition": "eng.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1213/E0.csv"
+  },
+  {
+    "member": "raw/3cf16078fde2e0e6c6cb07ebdb20ca98d1a755c9508a18bbeb4ad6837fad2b42",
+    "sha256": "3cf16078fde2e0e6c6cb07ebdb20ca98d1a755c9508a18bbeb4ad6837fad2b42",
+    "season_code": "1314",
+    "competition": "eng.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1314/E0.csv"
+  },
+  {
+    "member": "raw/76b7858051ff6b17f46f49f26fdc70c1f29537270492606f5cc63d67fad5d149",
+    "sha256": "76b7858051ff6b17f46f49f26fdc70c1f29537270492606f5cc63d67fad5d149",
+    "season_code": "1415",
+    "competition": "eng.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1415/E0.csv"
+  },
+  {
+    "member": "raw/bd3502a18c38a1597fd9af62e2366b4015006d3528dd4d18b311bd6237bbc085",
+    "sha256": "bd3502a18c38a1597fd9af62e2366b4015006d3528dd4d18b311bd6237bbc085",
+    "season_code": "1516",
+    "competition": "eng.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1516/E0.csv"
+  },
+  {
+    "member": "raw/9625a7652b5f98fbd3e2e4d378c851fc246693f3343e34a72428d5b6e864d3e0",
+    "sha256": "9625a7652b5f98fbd3e2e4d378c851fc246693f3343e34a72428d5b6e864d3e0",
+    "season_code": "1617",
+    "competition": "eng.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1617/E0.csv"
+  },
+  {
+    "member": "raw/4f3389365ef3f7ac966764ed8ba67cf3b79f5aebed18dd224099c4b2c98bc67b",
+    "sha256": "4f3389365ef3f7ac966764ed8ba67cf3b79f5aebed18dd224099c4b2c98bc67b",
+    "season_code": "1718",
+    "competition": "eng.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1718/E0.csv"
+  },
+  {
+    "member": "raw/5b62bf130a0a851502b424a79a77900bc3ef3977ca4b9a1e261ca25b79d92454",
+    "sha256": "5b62bf130a0a851502b424a79a77900bc3ef3977ca4b9a1e261ca25b79d92454",
+    "season_code": "1011",
+    "competition": "esp.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1011/SP1.csv"
+  },
+  {
+    "member": "raw/283709eca574d8d22a7f4ed915dbe0b4c7566b698e6c45562c6c2dc0a3ef01fe",
+    "sha256": "283709eca574d8d22a7f4ed915dbe0b4c7566b698e6c45562c6c2dc0a3ef01fe",
+    "season_code": "1112",
+    "competition": "esp.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1112/SP1.csv"
+  },
+  {
+    "member": "raw/d06f76e576cde8d6f4dfa51fc70a1fb6bf01e700e5bb2808838cf685a644d1d7",
+    "sha256": "d06f76e576cde8d6f4dfa51fc70a1fb6bf01e700e5bb2808838cf685a644d1d7",
+    "season_code": "1213",
+    "competition": "esp.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1213/SP1.csv"
+  },
+  {
+    "member": "raw/d7a71640628bced0fef0d38c4ccf20cb96f6b9cc433df01a1b613b644ca9dc19",
+    "sha256": "d7a71640628bced0fef0d38c4ccf20cb96f6b9cc433df01a1b613b644ca9dc19",
+    "season_code": "1314",
+    "competition": "esp.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1314/SP1.csv"
+  },
+  {
+    "member": "raw/28c64013605cde831af022c4192616464550afd0ed9ca96cc59afe67ca5a9009",
+    "sha256": "28c64013605cde831af022c4192616464550afd0ed9ca96cc59afe67ca5a9009",
+    "season_code": "1415",
+    "competition": "esp.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1415/SP1.csv"
+  },
+  {
+    "member": "raw/f8e59217c158bd1bac302bcfc8555b88661dfe065571809bf51c1df69753d977",
+    "sha256": "f8e59217c158bd1bac302bcfc8555b88661dfe065571809bf51c1df69753d977",
+    "season_code": "1516",
+    "competition": "esp.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1516/SP1.csv"
+  },
+  {
+    "member": "raw/6f5794a69decfb863ecb6a0b865ffd3241eb5028035d9f19c48a299c5baa8f9a",
+    "sha256": "6f5794a69decfb863ecb6a0b865ffd3241eb5028035d9f19c48a299c5baa8f9a",
+    "season_code": "1617",
+    "competition": "esp.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1617/SP1.csv"
+  },
+  {
+    "member": "raw/5786719e06d1a5387cb90fac71597c890f496df19e8e1aa868bbc852f7e730fd",
+    "sha256": "5786719e06d1a5387cb90fac71597c890f496df19e8e1aa868bbc852f7e730fd",
+    "season_code": "1718",
+    "competition": "esp.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1718/SP1.csv"
+  },
+  {
+    "member": "raw/6204aeea389e0328f1322b547d35ba5fba71f8e75ddb72859f4462a4dafd85da",
+    "sha256": "6204aeea389e0328f1322b547d35ba5fba71f8e75ddb72859f4462a4dafd85da",
+    "season_code": "1011",
+    "competition": "fra.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1011/F1.csv"
+  },
+  {
+    "member": "raw/44694ed0ab21a382536575723a9254a260259b23b78bb41a2d0e22e9c4d5b93e",
+    "sha256": "44694ed0ab21a382536575723a9254a260259b23b78bb41a2d0e22e9c4d5b93e",
+    "season_code": "1112",
+    "competition": "fra.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1112/F1.csv"
+  },
+  {
+    "member": "raw/ad0b860861f6f6c98fad129b1ec2d8a6cd342a107180030fdf863ec3c250ceaf",
+    "sha256": "ad0b860861f6f6c98fad129b1ec2d8a6cd342a107180030fdf863ec3c250ceaf",
+    "season_code": "1213",
+    "competition": "fra.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1213/F1.csv"
+  },
+  {
+    "member": "raw/5463359066969333dcf00a415325f65190ca79a52076d6bf297f303014ee9ace",
+    "sha256": "5463359066969333dcf00a415325f65190ca79a52076d6bf297f303014ee9ace",
+    "season_code": "1314",
+    "competition": "fra.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1314/F1.csv"
+  },
+  {
+    "member": "raw/af3e0896d952066bd52567824993bc05b8b1faa2021b5de06265f76e6ef2e17b",
+    "sha256": "af3e0896d952066bd52567824993bc05b8b1faa2021b5de06265f76e6ef2e17b",
+    "season_code": "1415",
+    "competition": "fra.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1415/F1.csv"
+  },
+  {
+    "member": "raw/a5470505e6691d94b044eeed59eb3f6447aa41c51dcafb4d0abd92ad1fa6be80",
+    "sha256": "a5470505e6691d94b044eeed59eb3f6447aa41c51dcafb4d0abd92ad1fa6be80",
+    "season_code": "1516",
+    "competition": "fra.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1516/F1.csv"
+  },
+  {
+    "member": "raw/3039aecaf3de6e6ef95450b3349bf0337a118b6ed47fc234509953aaee23b4c5",
+    "sha256": "3039aecaf3de6e6ef95450b3349bf0337a118b6ed47fc234509953aaee23b4c5",
+    "season_code": "1617",
+    "competition": "fra.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1617/F1.csv"
+  },
+  {
+    "member": "raw/95997fd3c3e13be3101b216fe9b26a9ce6715ac6b76b115e44926c12b90977e6",
+    "sha256": "95997fd3c3e13be3101b216fe9b26a9ce6715ac6b76b115e44926c12b90977e6",
+    "season_code": "1718",
+    "competition": "fra.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1718/F1.csv"
+  },
+  {
+    "member": "raw/c7bce1d15ac317919bf2dda199159f1851594d9ba60eb5a9ad67c81ecf784545",
+    "sha256": "c7bce1d15ac317919bf2dda199159f1851594d9ba60eb5a9ad67c81ecf784545",
+    "season_code": "1011",
+    "competition": "ger.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1011/D1.csv"
+  },
+  {
+    "member": "raw/0db0353831457728f0131bab24e7844a5492c5fec13bda30fbcaca701ac13f62",
+    "sha256": "0db0353831457728f0131bab24e7844a5492c5fec13bda30fbcaca701ac13f62",
+    "season_code": "1112",
+    "competition": "ger.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1112/D1.csv"
+  },
+  {
+    "member": "raw/4b721cb2f866132c05699c737066d3fef975075d331c42a3e84ab7c3f3b428cc",
+    "sha256": "4b721cb2f866132c05699c737066d3fef975075d331c42a3e84ab7c3f3b428cc",
+    "season_code": "1213",
+    "competition": "ger.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1213/D1.csv"
+  },
+  {
+    "member": "raw/3563a6ce007a17f6a27545c9b6ec32664ef176c5ef98e0cc7076658fd539b133",
+    "sha256": "3563a6ce007a17f6a27545c9b6ec32664ef176c5ef98e0cc7076658fd539b133",
+    "season_code": "1314",
+    "competition": "ger.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1314/D1.csv"
+  },
+  {
+    "member": "raw/b1804b37586c92d3148084c9eb9759b2d834a210917819d3c8999f2e6a2ad723",
+    "sha256": "b1804b37586c92d3148084c9eb9759b2d834a210917819d3c8999f2e6a2ad723",
+    "season_code": "1415",
+    "competition": "ger.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1415/D1.csv"
+  },
+  {
+    "member": "raw/a9d8689660cf7fe0290ab3de3e00d6fc5ec5fcf90683ee5b84fc229c0923d168",
+    "sha256": "a9d8689660cf7fe0290ab3de3e00d6fc5ec5fcf90683ee5b84fc229c0923d168",
+    "season_code": "1516",
+    "competition": "ger.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1516/D1.csv"
+  },
+  {
+    "member": "raw/15b7a41eacde5fcd130d1cd0954c8fe8371fbbfc815c1ce2dd329cf3b27c2d5c",
+    "sha256": "15b7a41eacde5fcd130d1cd0954c8fe8371fbbfc815c1ce2dd329cf3b27c2d5c",
+    "season_code": "1617",
+    "competition": "ger.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1617/D1.csv"
+  },
+  {
+    "member": "raw/033227408247769568111af49de2a50f6951c87e6d43f9e1a01e73d647bced3e",
+    "sha256": "033227408247769568111af49de2a50f6951c87e6d43f9e1a01e73d647bced3e",
+    "season_code": "1718",
+    "competition": "ger.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1718/D1.csv"
+  },
+  {
+    "member": "raw/1a43e865b9a6aa205bbece872ab7c2badb760ccddedacd27a628f14f07c8ab69",
+    "sha256": "1a43e865b9a6aa205bbece872ab7c2badb760ccddedacd27a628f14f07c8ab69",
+    "season_code": "1011",
+    "competition": "ita.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1011/I1.csv"
+  },
+  {
+    "member": "raw/ed14582a9bb622c0e41720a5e6032693a26580d7d57f66111500183d113e2b75",
+    "sha256": "ed14582a9bb622c0e41720a5e6032693a26580d7d57f66111500183d113e2b75",
+    "season_code": "1112",
+    "competition": "ita.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1112/I1.csv"
+  },
+  {
+    "member": "raw/83eb3f73f43f58aa0b6c23619198912a16bbbc37ebee10adf2e6ba7d8f903365",
+    "sha256": "83eb3f73f43f58aa0b6c23619198912a16bbbc37ebee10adf2e6ba7d8f903365",
+    "season_code": "1213",
+    "competition": "ita.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1213/I1.csv"
+  },
+  {
+    "member": "raw/ef27733c3875aaf7f6627d571c99e1751e180d678469325ca54028597bc2d450",
+    "sha256": "ef27733c3875aaf7f6627d571c99e1751e180d678469325ca54028597bc2d450",
+    "season_code": "1314",
+    "competition": "ita.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1314/I1.csv"
+  },
+  {
+    "member": "raw/6fc7f4f4f9da99f15d60487ca64ebddcda98e4b86edd1a1f134cf89b48720f06",
+    "sha256": "6fc7f4f4f9da99f15d60487ca64ebddcda98e4b86edd1a1f134cf89b48720f06",
+    "season_code": "1415",
+    "competition": "ita.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1415/I1.csv"
+  },
+  {
+    "member": "raw/438649d651be61b4acfbe8feee90256cc5493df431e219ce411086dfad554a81",
+    "sha256": "438649d651be61b4acfbe8feee90256cc5493df431e219ce411086dfad554a81",
+    "season_code": "1516",
+    "competition": "ita.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1516/I1.csv"
+  },
+  {
+    "member": "raw/39eb2bc1812897e01c280b711b3b8f5c15d3dee111aa09fbdf2e4abd7404bca3",
+    "sha256": "39eb2bc1812897e01c280b711b3b8f5c15d3dee111aa09fbdf2e4abd7404bca3",
+    "season_code": "1617",
+    "competition": "ita.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1617/I1.csv"
+  },
+  {
+    "member": "raw/664a8874d3a33923036120c4162e72f13887e0897b51effe27f89969c79c335d",
+    "sha256": "664a8874d3a33923036120c4162e72f13887e0897b51effe27f89969c79c335d",
+    "season_code": "1718",
+    "competition": "ita.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1718/I1.csv"
+  },
+  {
+    "member": "raw/2257c9a3eebbf1083e8cf6f8e6a4b3df0d23ec238dc92056690f0fab1990b1d5",
+    "sha256": "2257c9a3eebbf1083e8cf6f8e6a4b3df0d23ec238dc92056690f0fab1990b1d5",
+    "season_code": "1011",
+    "competition": "ned.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1011/N1.csv"
+  },
+  {
+    "member": "raw/9c1da8f053e67433801af5473e6e2ce12bae339863de6853138f7b49b89cb189",
+    "sha256": "9c1da8f053e67433801af5473e6e2ce12bae339863de6853138f7b49b89cb189",
+    "season_code": "1112",
+    "competition": "ned.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1112/N1.csv"
+  },
+  {
+    "member": "raw/677a4d24d1233682e4e16dda2dc77335519e0eae67ea277bcb729653b445f780",
+    "sha256": "677a4d24d1233682e4e16dda2dc77335519e0eae67ea277bcb729653b445f780",
+    "season_code": "1213",
+    "competition": "ned.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1213/N1.csv"
+  },
+  {
+    "member": "raw/1a3b9df5753285183a55e720e53a7d3a3b05ade034d188b9dfa20f359357c57c",
+    "sha256": "1a3b9df5753285183a55e720e53a7d3a3b05ade034d188b9dfa20f359357c57c",
+    "season_code": "1314",
+    "competition": "ned.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1314/N1.csv"
+  },
+  {
+    "member": "raw/0c029d1df82666b92f70e091916620212d32589e880285f188381d23cd152053",
+    "sha256": "0c029d1df82666b92f70e091916620212d32589e880285f188381d23cd152053",
+    "season_code": "1415",
+    "competition": "ned.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1415/N1.csv"
+  },
+  {
+    "member": "raw/65080d88937ffdb37b8c8e8feaf0dc79de5b4e2d89eca81ae59d0530b3283012",
+    "sha256": "65080d88937ffdb37b8c8e8feaf0dc79de5b4e2d89eca81ae59d0530b3283012",
+    "season_code": "1516",
+    "competition": "ned.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1516/N1.csv"
+  },
+  {
+    "member": "raw/2f1dcafe2be29a0119f9d509bd928eee09e8c3a049e86a176fcf85dc3554d04b",
+    "sha256": "2f1dcafe2be29a0119f9d509bd928eee09e8c3a049e86a176fcf85dc3554d04b",
+    "season_code": "1617",
+    "competition": "ned.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1617/N1.csv"
+  },
+  {
+    "member": "raw/2cb6dd2f12b3c4493fbeb73ca8c14a3be0c528e1e9d3fb774fd109ff1624613b",
+    "sha256": "2cb6dd2f12b3c4493fbeb73ca8c14a3be0c528e1e9d3fb774fd109ff1624613b",
+    "season_code": "1718",
+    "competition": "ned.1",
+    "source_url": "https://www.football-data.co.uk/mmz4281/1718/N1.csv"
+  }
+]

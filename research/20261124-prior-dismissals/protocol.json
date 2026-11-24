@@ -1,0 +1,49 @@
+{
+  "study": "Prior unequal dismissals, single ablation v1",
+  "status": "pre-grading research protocol, no live or user delivery",
+  "source_baseline": "899ce01542d90fafb7f734d08cf13c37d553505a",
+  "history_snapshot": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+  "captured_training_snapshot": "a5ecf0d0f1148a7acdb5675d45c347c0d5fb9d12",
+  "input_sources": {
+    "earlier_archive_sha256": "7853b710872b39b14018b782a4d2871a8678fa0e50a07c42961299d6eb003bed",
+    "later_and_freezes_sha256": "7c106ee66a816da84dbbfbf254633b55b7c25e610e7d0f31bf168d68f61d9659",
+    "r7_exclusion_sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d"
+  },
+  "competitions": [
+    "eng.1",
+    "esp.1",
+    "ger.1",
+    "ita.1",
+    "fra.1",
+    "ned.1"
+  ],
+  "season_start_years": {
+    "early_development": [
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017
+    ],
+    "later_archival_check": [
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "clocked_reconstruction": [
+      2026
+    ]
+  },
+  "training": "Domestic regular-time league only. From July 1 to November 8 inclusive each season. Freeze coefficients using only these matches, decay to the target calendar day. Never update with evaluation labels. No cross-season borrowing.",
+  "targets": "November 20 to December 31 inclusive in each historical season. For 2026 only, certified first-issue fixtures kicking off on Nov 20–21 Beijing inclusive. Exclude R7 by fixture/source identity and Nov 22 onwards. Require verified historical training capture before original cutoff and paired fixture identity and regulation-90 result. Both stamped forecasts are reconstructed today.",
+  "control": "Existing prior_team_strength.LeagueStrength prior_goals column, 120-day half-life, team ridge 3, venue ridge 20, venue prior 1.50/1.20, independent Poisson 31 by 31. No market mix. Unchanged hyperparameters for both arms.",
+  "candidate": "The single change omits a previous training fixture only when both HR and AR are valid nonnegative integers and differ. Keep equal, unknown or invalid pairs. No dismissal timing assumption, target cards, betting input or target results.",
+  "coverage": "Baseline requires at least 60 eligible earlier matches and two identified teams. If filtering takes the candidate below 60 matches or removes a target team from its history, copy baseline for that fixture and report fallback. Retain missing card observations in both arms.",
+  "selections": "Existing three_arm_model score_picks and top_three_scores; matrix picks only. WDL by country-neutral argmax of summed probabilities. OU only with actual two-sided line. Historical Bet365 2.5 named two sides when available (archive labels only, no original quote clock); 2026 accept original audited two-sided quote at cutoff; full wins, pushes and other settlements separate. No synthetic line.",
+  "decision": "Later archival check: require positive paired Top1 net, nonnegative matrix Top3 net and no worse mean joint score log loss. Otherwise retire this exact recipe; no refit or grid search. Even a pass only warrants consideration of a separately approved fresh, prospective, actually issued evaluation. No registration or promotion from this study.",
+  "outputs": "Pairwise Top1, matrix Top3, WDL, actual-line full wins, gains/losses, abstentions, changed choices, joint log loss and paired matchday-block uncertainty; historical coverage per competition. Actual first/three and batch 3-of-3 have no delivered arm pair."
+}
