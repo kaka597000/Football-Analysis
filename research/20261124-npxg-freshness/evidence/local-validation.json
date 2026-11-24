@@ -1,0 +1,23 @@
+{
+  "isolated_synthetic": {
+    "fail_reports": 0,
+    "skipped": 0,
+    "tests": 16
+  },
+  "local_runtime_tree": "6903c8b6b0b7eb7c7cbef1af54eb2908e292e2c9",
+  "paired_kpi_three_arm_native_scale": {
+    "fail_reports": 0,
+    "skipped": 0,
+    "tests": 16
+  },
+  "protected_r7_bundle_sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d",
+  "repeat_output_files_with_identical_sha256": 14,
+  "strict_asset_integration": {
+    "fail_reports": 0,
+    "finish_utc": "2026-11-24T07:37:23Z",
+    "skipped": 0,
+    "start_utc": "2026-11-24T07:36:01Z",
+    "tests": 1136
+  },
+  "user_delivered_pairs": 0
+}

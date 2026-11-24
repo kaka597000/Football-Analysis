@@ -1,0 +1,16 @@
+{
+  "calendars.json": "6add703efecc93c133332c4572ab461487d5591ae313ebc9f80bbbadd46af45d",
+  "coverage.json": "4b9fd2ec239484078a96e3623bce11b1d892ce12582faa7ce9775234df011d30",
+  "deferred-fixtures.csv": "2a9085b1e5fa4a427ed7451fd42b2b94cdf172292d7b82e1ddfbdf11397a24d7",
+  "diagnostic.json": "463d05aa6b3d17021ad4302e7419d7fd03898237a86f647460b3016764946487",
+  "fotmob-coverage.json": "d95b21390f175b1c6dcbc263181c90a024fadd9db50ef85899e18124c22f4647",
+  "fotmob-identities.csv": "80a174d1982f924077dcfbe3a8fe934e0e07a3d5adfbfd583cdfd2135dbac18a",
+  "fotmob-slots.csv": "01d2d0e84c9180292ab18913bc6231b5830dd9375085b8eb24dab1714259fc0c",
+  "identity.csv": "2c409c9872b1e4c93134b93c40aedc5a36184ab962766d1fcdf48426fda237e3",
+  "paired-results.csv": "59ac355fcd7913c8fd8d82ef6ff78a63b07b30f3b9bae3b662f69b57a0ff2d81",
+  "research-fit.json": "fcd58a00168be2cdd7d36315bf20ddb199f26e4681459fd7e51f865286c521a7",
+  "settled-rows.json": "489e42a205df67da486d35e335b3d369b3e3a2bdfde519991d12f39dfd4b0f72",
+  "slot-coverage.csv": "152b8ec254272035b374ed30df6dce681a9d894706ed4a3408b82130d3f25f28",
+  "ungraded-estimates.json": "a80377d141a2c647ed5ee2c847a5e8aa46d1fb106aafd91d5b02ecf24fcaffb9",
+  "windows.json": "0a81054a52f79d51370bcaa89e1542941f55ec2bb8739d6a11fd2b6afbb28e86"
+}

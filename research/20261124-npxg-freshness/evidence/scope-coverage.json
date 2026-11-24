@@ -1,0 +1,162 @@
+[
+  {
+    "code": "eng.1",
+    "competition": "英超",
+    "november_fotmob_both_six": 0,
+    "november_fotmob_bound_only": 4,
+    "november_fotmob_exact": 0,
+    "november_fotmob_verified": 4,
+    "november_slots": 96,
+    "november_targets": 8,
+    "november_understat_all": 50,
+    "november_understat_both_six": 0,
+    "november_understat_oct15": 36,
+    "october_both_six": 10,
+    "october_targets": 10,
+    "status": "历史同场覆盖已核",
+    "training_matches": 1900
+  },
+  {
+    "code": "esp.1",
+    "competition": "西甲",
+    "november_fotmob_both_six": 0,
+    "november_fotmob_bound_only": 0,
+    "november_fotmob_exact": 2,
+    "november_fotmob_verified": 2,
+    "november_slots": 12,
+    "november_targets": 1,
+    "november_understat_all": 8,
+    "november_understat_both_six": 0,
+    "november_understat_oct15": 6,
+    "october_both_six": 11,
+    "october_targets": 11,
+    "status": "历史同场覆盖已核",
+    "training_matches": 1900
+  },
+  {
+    "code": "ger.1",
+    "competition": "德甲",
+    "november_fotmob_both_six": 0,
+    "november_fotmob_bound_only": 13,
+    "november_fotmob_exact": 24,
+    "november_fotmob_verified": 37,
+    "november_slots": 96,
+    "november_targets": 8,
+    "november_understat_all": 34,
+    "november_understat_both_six": 0,
+    "november_understat_oct15": 34,
+    "october_both_six": 0,
+    "october_targets": 9,
+    "status": "历史同场覆盖已核",
+    "training_matches": 1530
+  },
+  {
+    "code": "ita.1",
+    "competition": "意甲",
+    "november_fotmob_both_six": 0,
+    "november_fotmob_bound_only": 0,
+    "november_fotmob_exact": 1,
+    "november_fotmob_verified": 1,
+    "november_slots": 12,
+    "november_targets": 1,
+    "november_understat_all": 6,
+    "november_understat_both_six": 0,
+    "november_understat_oct15": 4,
+    "october_both_six": 10,
+    "october_targets": 10,
+    "status": "历史同场覆盖已核",
+    "training_matches": 1900
+  },
+  {
+    "code": "fra.1",
+    "competition": "法甲",
+    "november_fotmob_both_six": 0,
+    "november_fotmob_bound_only": 8,
+    "november_fotmob_exact": 13,
+    "november_fotmob_verified": 21,
+    "november_slots": 84,
+    "november_targets": 7,
+    "november_understat_all": 30,
+    "november_understat_both_six": 0,
+    "november_understat_oct15": 30,
+    "october_both_six": 7,
+    "october_targets": 9,
+    "status": "历史同场覆盖已核",
+    "training_matches": 1752
+  },
+  {
+    "code": "jpn.1",
+    "competition": "日职J1",
+    "status": "FotMob 有 6 场原生值与精确采集回执，阶段待核"
+  },
+  {
+    "code": "kor.1",
+    "competition": "韩K1",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "aus.1",
+    "competition": "澳超",
+    "status": "FotMob 有 4 场原生值与精确采集回执，阶段待核"
+  },
+  {
+    "code": "usa.1",
+    "competition": "美职联MLS",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "nor.1",
+    "competition": "挪超",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "swe.1",
+    "competition": "瑞典超",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "ned.1",
+    "competition": "荷甲",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "uefa.champions",
+    "competition": "欧冠",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "uefa.europa",
+    "competition": "欧联杯",
+    "status": "FotMob 有 17 场原生值仅能从 Git 确定保存上界，缺本窗完整名单和阶段审定"
+  },
+  {
+    "code": "uefa.europa.conf",
+    "competition": "欧协联",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "afc.champions",
+    "competition": "亚冠精英",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "fifa.world",
+    "competition": "世界杯正赛",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "uefa.nations",
+    "competition": "欧国联",
+    "status": "29 场去重射门档，25 场可重建非点球值，45 队各最多两场"
+  },
+  {
+    "code": "jpn.league_cup",
+    "competition": "日本联赛杯（日联杯）",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  },
+  {
+    "code": "bra.1",
+    "competition": "巴西甲",
+    "status": "本轮留存源未建立完整球队历史与固定目标分母"
+  }
+]

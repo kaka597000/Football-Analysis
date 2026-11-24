@@ -1,0 +1,113 @@
+{
+  "activated_only_log_loss": {
+    "base": 3.1577723706131784,
+    "candidate": 3.168832066881107
+  },
+  "five_league_fit": {
+    "eng.1": 1900,
+    "esp.1": 1900,
+    "fra.1": 1752,
+    "ger.1": 1530,
+    "ita.1": 1900
+  },
+  "known_by_bound_october": 0,
+  "log_loss_october": {
+    "base": 3.2041527359042026,
+    "candidate": 3.2127296432140247
+  },
+  "new_live_forward_protocols": 0,
+  "new_official_picked_three_batches": 0,
+  "new_paired_real_display_receipts": 0,
+  "november": {
+    "actual_prior_slots": 300,
+    "complete_fixtures": 0,
+    "complete_sides": 0,
+    "distinct_covered_games": 83,
+    "distinct_prior_games": 190,
+    "fixtures": 25,
+    "histogram": {
+      "0": 0,
+      "1": 0,
+      "2": 28,
+      "3": 18,
+      "4": 2,
+      "5": 2,
+      "6": 0
+    },
+    "latest_actual_game_days": 13.0,
+    "latest_native_days": 40.5,
+    "oct15_only_native_days": 41.5,
+    "scored_slots": 128,
+    "six_slots_capacity": 300,
+    "source_bound_before_cutoff": 25,
+    "teams": 50
+  },
+  "november_fotmob": {
+    "age_observed_sides": 32,
+    "complete_fixtures": 0,
+    "complete_sides": 0,
+    "count_by_observed_history": {
+      "0": 18,
+      "1": 13,
+      "2": 10,
+      "3": 5,
+      "4": 3,
+      "5": 1
+    },
+    "distinct_verified_matches": 37,
+    "fixtures": 25,
+    "latest_observed_median_days_only_on_sides_with_one_or_more": 21.0,
+    "needed_slots": 300,
+    "states": {
+      "AFTER_CUTOFF": 1,
+      "CAPTURE_AND_GIT": 40,
+      "GIT_BOUND_ONLY": 25,
+      "NO_VERIFIED_NATIVE_PAIR": 234
+    },
+    "teams": 50,
+    "verified_slots": 65
+  },
+  "oct15_only_slots_in_november": 110,
+  "october": {
+    "actual_prior_slots": 570,
+    "complete_fixtures": 38,
+    "complete_sides": 78,
+    "distinct_covered_games": 282,
+    "distinct_prior_games": 283,
+    "fixtures": 49,
+    "histogram": {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 20,
+      "6": 78
+    },
+    "latest_actual_game_days": 7.0,
+    "latest_native_days": 7.0,
+    "oct15_only_native_days": 7.0,
+    "scored_slots": 568,
+    "six_slots_capacity": 588,
+    "source_bound_before_cutoff": 0,
+    "teams": 98
+  },
+  "real_line_settlements": {
+    "base": {
+      "FULL_LOSS": 10,
+      "FULL_WIN": 11,
+      "HALF_LOSS": 2,
+      "HALF_WIN": 0,
+      "PUSH": 2
+    },
+    "candidate": {
+      "FULL_LOSS": 10,
+      "FULL_WIN": 11,
+      "HALF_LOSS": 2,
+      "HALF_WIN": 0,
+      "PUSH": 2
+    }
+  },
+  "retained_R7_count": 192,
+  "two_clocks_real_lines": 0
+}

@@ -1,0 +1,17 @@
+{
+  "registered_utc": "2026-11-24T07:08:38.880926+00:00",
+  "scope": "20 formal competitions; identify native or separately verified per-shot nonpenalty xG sources, preserving missing cohorts",
+  "audit_population": "All 77 pre-existing October schedule identities from #64, with a paired 25-fixture age comparison fixed by its original eligibility ledger. No new predictions or retrospective model selection from #64 results. Other dated sources inventory separately. Current captures may inform only cutoffs after actual receipt, with no new research issue.",
+  "source_commit": "8de6fe91629cca642a3c90513aee7bf53134f6b5",
+  "data_commit": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+  "hashes": {
+    "old_roster": "fe0a485eefda0e841bde5c04d3d32a4ca3a4e9af2b21ed27c638de96b3d2c963",
+    "old_bridges": "9e3f262466e2c263787e0e84881dee462aded5af6338515381c9b050762bbab8",
+    "old_input_manifest": "f2af195e142fc4cabc90793a684a5d7147d165c91e2bd36038ccc7aed8aeaebc",
+    "r7": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d"
+  },
+  "cutoff": "actual kickoff minus 60 minutes for both arms / teams. Include only same competition 2026/27 senior male regular league, strictly prior completed fixtures in order. Provider-specific per-team/event IDs and reliable two-sided proof. Exclude future collection, unknown date, mismatched opponent and incomplete penalty attribution. Use a complete fixture calendar as an independent denominator; calendar observed after cutoff may audit expected slots but cannot be used as a past model input. Confirm capture no later than cutoff; a whole-vintage hash confirmed by an already-existing prior independent receipt is distinguished from a newly generated local capture.",
+  "coverage_metrics": "Show original fixture slots, identity-admitted and comparison populations, exact six completed prior fixture ids per team, count 0..6, both 6/6, missing slots and distinct target team latest observed age benchmark. No arbitrary trailing-day threshold: the most recent actual six count, even when there is an international break. No mixing different provider xG within one window or substituting total xG for nonpenalty xG.",
+  "one_change_if_ready": "Within historical source-timed fixtures where a real paired recent six exists, compare same existing six-match goals/xG regression and otherwise identical regression replacing prior xGF/xGA with native nonpenalty xGF/xGA (unchanged alpha=0.01; same training seasons 2020/21..2024/25, one fit per league, no outcome-based choices). Shared cutoff, unchanged model, exact fallback when incomplete, report coverage on whole roster. If recent evidence covers too few to infer anything, report available diagnostic/cases only. If no eligible pair, measure time coverage and provide a reusable private local ingestion + audit path instead. No new forward queue, R7 or #64 fitting.",
+  "outputs": "no GitHub publishing, no official route, freeze, queue, live policy, production weights or scheduled task changes"
+}

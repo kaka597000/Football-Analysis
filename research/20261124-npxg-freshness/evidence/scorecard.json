@@ -1,0 +1,419 @@
+[
+  {
+    "base_hits": 11,
+    "candidate_hits": 11,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "all_49",
+    "lost": 0,
+    "metric": "actual_ou",
+    "paired_eligible": 23,
+    "retained_population": 49,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 6,
+    "candidate_hits": 6,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "all_49",
+    "lost": 0,
+    "metric": "score_top1",
+    "paired_eligible": 49,
+    "retained_population": 49,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 11,
+    "candidate_hits": 11,
+    "ci95_paired_rate_delta": [
+      -0.04225352112676056,
+      0.04620967741935479
+    ],
+    "gained": 2,
+    "group": "all_49",
+    "lost": 2,
+    "metric": "score_top3",
+    "paired_eligible": 49,
+    "retained_population": 49,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 28,
+    "candidate_hits": 29,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.04620967741935479
+    ],
+    "gained": 1,
+    "group": "all_49",
+    "lost": 0,
+    "metric": "wdl",
+    "paired_eligible": 49,
+    "retained_population": 49,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 11,
+    "candidate_hits": 11,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "activated_38",
+    "lost": 0,
+    "metric": "actual_ou",
+    "paired_eligible": 20,
+    "retained_population": 38,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 5,
+    "candidate_hits": 5,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "activated_38",
+    "lost": 0,
+    "metric": "score_top1",
+    "paired_eligible": 38,
+    "retained_population": 38,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 9,
+    "candidate_hits": 9,
+    "ci95_paired_rate_delta": [
+      -0.061256377551020376,
+      0.05558176100628928
+    ],
+    "gained": 2,
+    "group": "activated_38",
+    "lost": 2,
+    "metric": "score_top3",
+    "paired_eligible": 38,
+    "retained_population": 38,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 21,
+    "candidate_hits": 22,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.05558176100628928
+    ],
+    "gained": 1,
+    "group": "activated_38",
+    "lost": 0,
+    "metric": "wdl",
+    "paired_eligible": 38,
+    "retained_population": 38,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 1,
+    "candidate_hits": 1,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "eng.1",
+    "lost": 0,
+    "metric": "actual_ou",
+    "paired_eligible": 4,
+    "retained_population": 10,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 1,
+    "candidate_hits": 1,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "eng.1",
+    "lost": 0,
+    "metric": "score_top1",
+    "paired_eligible": 10,
+    "retained_population": 10,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 2,
+    "candidate_hits": 2,
+    "ci95_paired_rate_delta": [
+      -0.2,
+      0.25
+    ],
+    "gained": 1,
+    "group": "eng.1",
+    "lost": 1,
+    "metric": "score_top3",
+    "paired_eligible": 10,
+    "retained_population": 10,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 5,
+    "candidate_hits": 6,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.25
+    ],
+    "gained": 1,
+    "group": "eng.1",
+    "lost": 0,
+    "metric": "wdl",
+    "paired_eligible": 10,
+    "retained_population": 10,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 4,
+    "candidate_hits": 4,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "esp.1",
+    "lost": 0,
+    "metric": "actual_ou",
+    "paired_eligible": 8,
+    "retained_population": 11,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 2,
+    "candidate_hits": 2,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "esp.1",
+    "lost": 0,
+    "metric": "score_top1",
+    "paired_eligible": 11,
+    "retained_population": 11,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 4,
+    "candidate_hits": 3,
+    "ci95_paired_rate_delta": [
+      -0.21428571428571427,
+      0.0
+    ],
+    "gained": 0,
+    "group": "esp.1",
+    "lost": 1,
+    "metric": "score_top3",
+    "paired_eligible": 11,
+    "retained_population": 11,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 7,
+    "candidate_hits": 7,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "esp.1",
+    "lost": 0,
+    "metric": "wdl",
+    "paired_eligible": 11,
+    "retained_population": 11,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 1,
+    "candidate_hits": 1,
+    "ci95_paired_rate_delta": null,
+    "gained": 0,
+    "group": "fra.1",
+    "lost": 0,
+    "metric": "actual_ou",
+    "paired_eligible": 2,
+    "retained_population": 9,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 1,
+    "candidate_hits": 1,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "fra.1",
+    "lost": 0,
+    "metric": "score_top1",
+    "paired_eligible": 9,
+    "retained_population": 9,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 2,
+    "candidate_hits": 3,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.2
+    ],
+    "gained": 1,
+    "group": "fra.1",
+    "lost": 0,
+    "metric": "score_top3",
+    "paired_eligible": 9,
+    "retained_population": 9,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 5,
+    "candidate_hits": 5,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "fra.1",
+    "lost": 0,
+    "metric": "wdl",
+    "paired_eligible": 9,
+    "retained_population": 9,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 0,
+    "candidate_hits": 0,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "ger.1",
+    "lost": 0,
+    "metric": "actual_ou",
+    "paired_eligible": 3,
+    "retained_population": 9,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 1,
+    "candidate_hits": 1,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "ger.1",
+    "lost": 0,
+    "metric": "score_top1",
+    "paired_eligible": 9,
+    "retained_population": 9,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 2,
+    "candidate_hits": 2,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "ger.1",
+    "lost": 0,
+    "metric": "score_top3",
+    "paired_eligible": 9,
+    "retained_population": 9,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 5,
+    "candidate_hits": 5,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "ger.1",
+    "lost": 0,
+    "metric": "wdl",
+    "paired_eligible": 9,
+    "retained_population": 9,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 5,
+    "candidate_hits": 5,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "ita.1",
+    "lost": 0,
+    "metric": "actual_ou",
+    "paired_eligible": 6,
+    "retained_population": 10,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 1,
+    "candidate_hits": 1,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "ita.1",
+    "lost": 0,
+    "metric": "score_top1",
+    "paired_eligible": 10,
+    "retained_population": 10,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 1,
+    "candidate_hits": 1,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "ita.1",
+    "lost": 0,
+    "metric": "score_top3",
+    "paired_eligible": 10,
+    "retained_population": 10,
+    "unit": "research matrix / WDL / capture-only real total line"
+  },
+  {
+    "base_hits": 6,
+    "candidate_hits": 6,
+    "ci95_paired_rate_delta": [
+      0.0,
+      0.0
+    ],
+    "gained": 0,
+    "group": "ita.1",
+    "lost": 0,
+    "metric": "wdl",
+    "paired_eligible": 10,
+    "retained_population": 10,
+    "unit": "research matrix / WDL / capture-only real total line"
+  }
+]
