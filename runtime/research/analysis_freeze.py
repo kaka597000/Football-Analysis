@@ -138,16 +138,71 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=N
             'evaluation_slot': record['evaluation_slot']}
 
 
+def save_authored_row(payload, fixture, *, scope, idempotency_key, root=DEFAULT_ROOT, out=None):
+    """Freeze a signed-off analyst table once and return the normal batch envelope."""
+    from research.display_delivery import bind_authored_row, delivery_request
+
+    if not isinstance(idempotency_key, str) or not idempotency_key.strip():
+        raise ValueError('stable authored issuance key required')
+    deadline = aware(fixture['kickoff_at'])
+
+    def before_handoff():
+        if datetime.now(deadline.tzinfo) >= deadline:
+            raise ValueError('authored handoff deadline passed')
+
+    before_handoff()
+    prepared = bind_authored_row(payload, fixture, scope)
+    receipt = save(prepared, fixture, stage='prematch', track='comprehensive',
+                   root=root, idempotency_key=idempotency_key)
+    record = verify(json.loads(Path(receipt['path']).read_bytes()))
+    if record['record_sha256'] != receipt['sha256']:
+        raise ValueError('authored freeze receipt mismatch')
+    issued = {'fixture': record['fixture'], 'payload': record['payload'], 'receipt': receipt,
+              'display_block': delivery_request(record)['text']}
+    before_handoff()
+    if out is not None:
+        from publication import deliver
+        path = Path(out)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with exclusive_lock(str(path) + '.lock'):
+            before_handoff()
+            deliver(path, encoded(issued), before_commit=before_handoff)
+    return issued
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('input', help='JSON containing fixture and payload')
     parser.add_argument('--stage', required=True, choices=['prematch', 'live', 'review'])
     parser.add_argument('--track', required=True)
     parser.add_argument('--root', default=DEFAULT_ROOT)
+    parser.add_argument('--authored-table-key', help='freeze an explicitly signed-off analyst row '
+                        'under its stable issue key and print the batch envelope')
+    parser.add_argument('--authored-scopes', type=Path, help='existing approved cohort/stages rows for the batch')
+    parser.add_argument('--authored-out', type=Path, help='atomically save the normal batch envelope locally')
     args = parser.parse_args()
     data = json.loads(Path(args.input).read_text(encoding='utf-8'))
-    print(json.dumps(save(data['payload'], data['fixture'], stage=args.stage,
-                          track=args.track, root=args.root), ensure_ascii=False))
+    if (args.authored_table_key is None) != (args.authored_scopes is None):
+        parser.error('--authored-table-key and --authored-scopes must be supplied together')
+    if args.authored_table_key is None:
+        if args.authored_out is not None:
+            parser.error('--authored-out requires the authored-table options')
+        result = save(data['payload'], data['fixture'], stage=args.stage,
+                      track=args.track, root=args.root)
+    else:
+        if (args.stage, args.track) != ('prematch', 'comprehensive'):
+            parser.error('--authored-table-key requires --stage prematch --track comprehensive')
+        scopes = json.loads(args.authored_scopes.read_bytes())
+        if not isinstance(scopes, list) or not all(isinstance(s, dict) for s in scopes):
+            parser.error('approved stages must be an array of scope records')
+        matches = [s for s in scopes if s.get('cohort') == data['fixture']['cohort']]
+        if len(matches) != 1:
+            parser.error('a unique approved stage scope for the fixture cohort is required')
+        result = save_authored_row(data['payload'], data['fixture'], root=args.root, scope=matches[0],
+                                   idempotency_key=args.authored_table_key, out=args.authored_out)
+        if args.authored_out is not None:
+            result = result['receipt']
+    print(json.dumps(result, ensure_ascii=False))
 
 
 if __name__ == '__main__':
