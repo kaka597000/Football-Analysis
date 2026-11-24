@@ -10,9 +10,11 @@ import tarfile
 import tempfile
 from contextlib import contextmanager
 
+import numpy as np
+
 from research.analysis_freeze import aware, digest, verify
 from research_program.market_baseline import quote_only_matrices
-from research_program.three_arm_model import score_picks
+from research_program.three_arm_model import score_picks, top_three_scores
 
 HERE = Path(__file__).resolve().parent
 PACKS = {'nov07-55': '20261107-night19-55matches', 'nov08-46': '20261108-night19-46matches'}
@@ -92,7 +94,7 @@ def verify_capture(archive, member, quote):
         raise ValueError('original quote acquisition index does not bind the signed snapshot')
 
 
-def market_score(raw, fixture, quote):
+def verified_market_matrix(raw, fixture, quote):
     if hashlib.sha256(raw).hexdigest() != quote['raw_sha256']:
         raise ValueError('Pinnacle source digest mismatch')
     mid = fixture['source_ids']['the_odds']
@@ -111,11 +113,14 @@ def market_score(raw, fixture, quote):
         if (len(sides)!=len(expected) or {v['name']:v['price'] for v in sides}!=expected
                 or ts!=aware(quote['market_last_update_utc'][name]) or not ts<=captured<=aware(fixture['cutoff_at'])):
             raise ValueError('signed prices, market side or clock mismatch')
-    _, matrix = quote_only_matrices(quote['h2h'],quote['total'])
-    return score_picks(matrix,line=quote['total']['line'])['primary']
+    return quote_only_matrices(quote['h2h'],quote['total'])[1]
 
 
-def build(repo, stage):
+def market_score(raw, fixture, quote):
+    return score_picks(verified_market_matrix(raw, fixture, quote), line=quote['total']['line'])['primary']
+
+
+def build(repo, stage, *, include_ranks=False):
     inventory = json.loads((HERE/'complement-evidence/club-inventory-inputs.json').read_bytes())
     rows = []
     for panel in inventory['panels']:
@@ -145,10 +150,22 @@ def build(repo, stage):
                 quote = p['quote']
                 name = stage.member(archive,quote.get('raw_path') or quote['source_file'])
                 verify_capture(archive,name,quote)
-                market = market_score(archive.extractfile(name).read(),f,quote)
+                matrix = verified_market_matrix(archive.extractfile(name).read(),f,quote)
+                market = score_picks(matrix,line=quote['total']['line'])['primary']
                 if market != saved['market'] or quote['raw_sha256'] != saved['quote_sha256']:
                     raise ValueError('dual-market reply differs from original inventory lock')
-                pair = pair_choices(members_first(archive,mid,'current-test-pair'),f)
+                pair_record = members_first(archive,mid,'current-test-pair')
+                pair = pair_choices(pair_record,f)
+                if include_ranks:
+                    pair['market_ranks'] = top_three_scores(matrix)
+                    for model_key, role in [('current_model','current'), ('test_model','test_model')]:
+                        ranks = None
+                        if pair['pair_status'] == 'VERIFIED_EARLIER_FIRST':
+                            model = pair_record['payload'][model_key]
+                            ranks = top_three_scores(np.asarray(model['matrix'], dtype=float))
+                            if ranks != [item['score'] for item in model['top3']] or ranks[0] != pair[role]:
+                                raise ValueError('ranked matrix differs from the signed first three')
+                        pair[role + '_ranks'] = ranks
                 rows.append(dict(id=mid,batch=panel['name'],competition=f['competition'],stage=f['stage'],
                                  home=f['home_name'],away=f['away_name'],home_id=f['home'],away_id=f['away'],
                                  kickoff=f['kickoff_at'],cutoff=f['cutoff_at'],frozen_comprehensive=p['primary'],
@@ -159,18 +176,22 @@ def build(repo, stage):
     return dict(purpose='Earlier club-source inventory. Frozen comprehensive is a mixed-source choice with no delivery proof. Current and Test share team inputs. No source selector is trained or tested on this population.',rows=rows)
 
 
+def load_stage(path):
+    if hashlib.sha256(path.read_bytes()).hexdigest()!=STAGE_ADAPTER_SHA:
+        raise ValueError('unexpected archived prematch stage adapter')
+    spec = importlib.util.spec_from_file_location('club_native_stage',path)
+    stage = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(stage)
+    return stage
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--stage-adapter',type=Path,required=True)
     parser.add_argument('--data',type=Path,required=True)
     parser.add_argument('--out',type=Path,required=True)
     args = parser.parse_args()
-    if hashlib.sha256(args.stage_adapter.read_bytes()).hexdigest()!=STAGE_ADAPTER_SHA:
-        raise ValueError('unexpected archived prematch stage adapter')
-    spec = importlib.util.spec_from_file_location('club_native_stage',args.stage_adapter)
-    stage = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(stage)
-    panel = build(args.data,stage)
+    panel = build(args.data,load_stage(args.stage_adapter))
     with args.out.open('x',encoding='utf8') as stream:
         stream.write(json.dumps(panel,indent=2,ensure_ascii=False,allow_nan=False)+'\n')
 

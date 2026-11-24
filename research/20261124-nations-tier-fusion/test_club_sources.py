@@ -4,10 +4,33 @@ import unittest
 from unittest.mock import Mock
 
 from club_first_sources import pair_choices, verify_capture
+from club_matrix_recall import recall
 from club_score_review import partition
 
 
 class ClubSourceReviewTest(unittest.TestCase):
+    def test_recall_keeps_second_and_third_distinct_from_first_and_display(self):
+        ranks = dict(current_ranks=['1-0', '1-1', '2-0'], market_ranks=['0-1', '2-0', '1-2'],
+                     test_model_ranks=['2-2', '1-2', '3-0'])
+        rows = [dict(ranks, regulation_score=s) for s in ['1-0', '2-0', '1-2', '2-2']]
+        result = recall(rows)
+        counts = result['counts']
+        self.assertEqual([1, 1, 1, 1], [counts[k] for k in
+                         ('best_rank_1', 'best_rank_2', 'best_rank_3', 'best_rank_outside_three')])
+        self.assertEqual({'current': 1, 'market': 1, 'current+market': 1, 'neither': 1},
+                         result['matrix_three_overlap'])
+        self.assertEqual(1, result['same_team_input_test']['additional_outside_both_families'])
+        self.assertEqual({'0-2': 0, '3': 0, '4+': 1}, result['missed_by_regulation_total'])
+
+    def test_recall_keeps_missing_input_and_missing_result_in_separate_denominators(self):
+        scores = ['1-0', '2-0', '1-1']
+        rows = [dict(current_ranks=None, market_ranks=scores, regulation_score='1-0'),
+                dict(current_ranks=scores, market_ranks=scores, regulation_score=None),
+                dict(current_ranks=scores, market_ranks=scores, regulation_score='1-0')]
+        counts = recall(rows)['counts']
+        self.assertEqual((3, 2, 1, 1), tuple(counts[k] for k in
+                         ('registered', 'paired_matrices', 'paired_graded', 'best_rank_1')))
+
     def test_coverage_and_exclusive_hits_only_use_graded_common_rows(self):
         rows = [dict(current='1-0',market='0-0',regulation_score='1-0'),
                 dict(current='1-1',market='1-1',regulation_score='1-1'),

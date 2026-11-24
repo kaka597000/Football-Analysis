@@ -56,9 +56,23 @@
 
 这组 11 月 7–8 日的旧档只做逐场互补清点，从未用于欧国联择源规则的拟合或测试。先锁定综合首冻和同截点的 Pinnacle 两个市场，再逐场追溯 `current-test-pair` 自己的第一次冻结、来源时间、主客、矩阵哈希与两臂明示首选。65/65 场双模型首冻都已在综合判断前签发。65 场 Current 均标记盘口数值调整关闭。实际可见作者首发的有效分母为 0。综合冻结综合了球队及市场输入，占单独一列。[输入与代码先行锁](https://github.com/kaka597000/Football-Analysis/commit/1b8e7df2e3152503b6a6e6b3fecf9056e17a6a68) · [逐场原选择、球队和认证赛果](complement-evidence/club-fixtures.csv)
 
-- 两份原始名册分别登记 55 和 46 场。能核到正式范围、综合首选、原生赛前阶段、同机构同截点双盘的分别为 27、38 场；两份原名册有一场相同，65 场有效配对间没有重叠。五大联赛后续包的 20 条有效记录全部重复。所有 65 场的原 Git 包均在开球前提交，所有常规赛果均有归档 ESPN 原件和认证记录。英超 8、西甲 7、德甲 8、意甲 7、法甲 7、荷甲 7、美职联 10、挪超 6、瑞典超 5。其余赛事本清点未覆盖。
+- 两份原始名册分别登记 55 和 46 场。能核到正式范围、综合首选、赛前身份与常规赛阶段、同机构同截点双盘的分别为 27、38 场；两份原名册有一场相同，65 场有效配对间没有重叠。五大联赛后续包的 20 条有效记录全部重复。各场的原盘口、来源指纹与采集时间已绑定综合首冻，包含完整报价的 Git 包在原截点之后、最早合格场次开球之前提交。65 个常规时间比分均由留存的 ESPN 完场原文、双方身份与两半场比分合计交叉核对。标准化记录的事件覆盖字段为 `NOT_CERTIFIED`，此项复核仅用于历史诊断。英超 8、西甲 7、德甲 8、意甲 7、法甲 7、荷甲 7、美职联 10、挪超 6、瑞典超 5。其余赛事本清点未覆盖。
 - 65 场里，球队 Current 中 7、纯盘口中 4，球队独中 5、盘口独中 2、共同中 2、共同漏 56；事后逐场择优上界 **9/65**。7 日为 6/27，8 日为 3/38。两个旧模型共用球队输入，Test 中 6 场，6 场均被 Current 同时命中，Test 独中 0。
 - 原综合冻结中 8/65，其中 3 场是与 Current、Test、盘口一起比较时只有综合冻结选中的。四者全算，事后上界为 **12/65**，仍有 53 场全错。本名单达到首选 20% 至少要 13 场。综合冻结首选是可追溯的研究信息，实际向用户首发的正文和顺序仍需服务回执确认。[按批次、联赛和来源统计](complement-evidence/club-results.json)
+
+### 56 场共同漏判的比分排在哪里
+
+在同一份 65 场首次选分和来源锁上，从原球队矩阵与同截点的 Pinnacle 报价分别还原前三。全部比赛排完后，才由原赛果读取器评分。下表按两方中更靠前的名次计数，每场只计一次。这些历史赛果在上面的首选研究中已经看过。
+
+| 原批次 | 比赛 | 至少一方排第一 | 最靠前为第二 | 最靠前为第三 | 两方前三均未收录 |
+|---|---:|---:|---:|---:|---:|
+| 11 月 7 日 | 27 | 6 | 2 | 6 | 13 |
+| 11 月 8 日 | 38 | 3 | 6 | 4 | 25 |
+| 合计 | 65 | 9 | 8 | 10 | 38 |
+
+球队与盘口各自的矩阵前三均中 21/65，各独占 6 场，另有 15 场重合。两份前三合在一起每场最多有六个比分，事后可找到 27/65 场的赛果。这批实际展示三比分的可评分分母仍为零。独立来源都错的 56 个首选里，18 场的正确比分在第二或第三位，另 38 场即使选对来源也无法从它的前三找回。同源球队 Test 的矩阵前三中 20/65，在这 38 场里额外覆盖 0 场。
+
+38 场里有 21 场至少进四球、5 场恰好三球、12 场最多两球。该批停止尝试原首选间的重新加权。后续优先留下可在同一未见决策时点与球队、盘口配对的独立攻防过程证据。此次没有拟合新规则。[逐场名次](complement-evidence/club-rank-fixtures.csv) · [两批完整计数](complement-evidence/club-rank-recall.json)
 
 ## 下一项数据缺口
 
@@ -89,6 +103,9 @@ cmp "$S/complement-evidence/club-first-source-lock.json" "$OUT/club-lock.json"
 python "$S/club_score_review.py" --data "$DATA" --lock-commit 1b8e7df2e3152503b6a6e6b3fecf9056e17a6a68 --out "$OUT/club-grade"
 cmp "$S/complement-evidence/club-fixtures.csv" "$OUT/club-grade/club-fixtures.csv"
 cmp "$S/complement-evidence/club-results.json" "$OUT/club-grade/club-results.json"
+python "$S/club_matrix_recall.py" --data "$DATA" --stage-adapter "$OUT/club-stage.py" --out "$OUT/club-recall"
+cmp "$S/complement-evidence/club-rank-recall.json" "$OUT/club-recall/club-rank-recall.json"
+cmp "$S/complement-evidence/club-rank-fixtures.csv" "$OUT/club-recall/club-rank-fixtures.csv"
 python -m unittest discover -v -s "$S"
 python scripts/run_tests.py --layer integration
 ```
