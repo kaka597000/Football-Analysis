@@ -1,0 +1,253 @@
+{
+  "recipe": "WCPP-NATIONS-TIER-SUPPORTED-POOL-1",
+  "protocol_sha256": "619f673d89f63640c371eb38eab3bcc3e5eb444ad4cf1417d4f9731c47f4ebbe",
+  "sources_sha256": "d65f6179fde82079bf9ada8e7c6a305c920a8d48de84a6303fb6246094abd918",
+  "training": {
+    "registered": 26,
+    "certified_results": 26,
+    "pairs": 24,
+    "days": [
+      "2026-11-12",
+      "2026-11-13",
+      "2026-11-14"
+    ],
+    "by_tier": {
+      "A": 8,
+      "B": 6,
+      "C": 8,
+      "D": 2
+    },
+    "global_weight": 0.5,
+    "weights": {
+      "A": 0.3333333333333333,
+      "B": 0.3,
+      "C": 0.3333333333333333,
+      "D": 0.0
+    }
+  },
+  "train_label_evidence_hash": "4806dd477661fda00bec81f4312d0a4486e92ae2ebf85f13a1c23806a5bdbec5",
+  "train_validation_issues": {},
+  "earlier_input_gaps": {
+    "MATCHED": 24,
+    "OTHER_ORIGINAL_BOOK": 1,
+    "NO_ORIGINAL_QUOTE": 1
+  },
+  "later_input_gaps": {
+    "MATCHED": 16,
+    "OTHER_ORIGINAL_BOOK": 5,
+    "ORIGINAL_NOVA_IDENTITY_CONFLICT": 3,
+    "NO_ORIGINAL_COMPREHENSIVE_CUTOFF": 2
+  },
+  "heldout_seals": [
+    {
+      "id": "espn:401861171",
+      "tier": "C",
+      "date": "2026-11-15",
+      "fixture_pair_sha": "f6a6712d82aa6b6c490cb9d9a1b50ec88682aa2094a17823de313cebf19951d8",
+      "original_issue_sha": null,
+      "forecast_sha256": "e4d3aa8ff822d54e2b12dddab0d7ba5f4c4e2239f5c63447cadb858e3a0945e5"
+    },
+    {
+      "id": "espn:401861172",
+      "tier": "C",
+      "date": "2026-11-15",
+      "fixture_pair_sha": "d4a9c1796e371f50d660773465d7df413470bf2c9c91a12187feb275eb18dc5d",
+      "original_issue_sha": null,
+      "forecast_sha256": "7a9ee7dac2d4c3d74f654e43ab239709f925dfd743e270bab3ffe53189d4e84a"
+    },
+    {
+      "id": "espn:401861173",
+      "tier": "C",
+      "date": "2026-11-15",
+      "fixture_pair_sha": "86f9009b25610216def211f39114c048c8ca1de3795dbc171621f9936549f72a",
+      "original_issue_sha": "f024a7e50c4e05e3ce5002671a6469dc0801da6d1ef68fc50ce1c2e98cb3eb33",
+      "forecast_sha256": "1e5475b959479159d3f6d7bc8b6edb4bfa3df3068f94a685856b0515e150ddda"
+    },
+    {
+      "id": "espn:401861174",
+      "tier": "C",
+      "date": "2026-11-15",
+      "fixture_pair_sha": "2b81c21b8b920327849f3435b766a56aa4bf860988139e6137b6088f1af36846",
+      "original_issue_sha": "7d7647c5307a533d663bbdd1d04c923f222c8b1d57521fc9ba5ee2ee77ebd518",
+      "forecast_sha256": "1ada57e1e7fe77ada042c2a88a1cc226c461dd574936023269a2729a0fa9628c"
+    },
+    {
+      "id": "espn:401861175",
+      "tier": "A",
+      "date": "2026-11-15",
+      "fixture_pair_sha": "d6f4c82c90c099ba6289f74284e01b1f61bc742a3bf387d6b45161344393b5bb",
+      "original_issue_sha": "11e66ef0e11e54f78d8c0e0d40dfab17832c57a2448346ae3112b95b1dd5af84",
+      "forecast_sha256": "886a292311ad49afe31d6622caafacfccad8c76073ab8807ce3acbf8facb0552"
+    },
+    {
+      "id": "espn:401861176",
+      "tier": "A",
+      "date": "2026-11-15",
+      "fixture_pair_sha": "c1cfa108365cc0b0a3e9fc8e81d1ceea926ff0e17c4fc3b86e4c69d32b042df3",
+      "original_issue_sha": "b6baaa06d1eab80ca1b60ae71b45cd917f22de455a5d8768ffb485ebc1bb70a1",
+      "forecast_sha256": "68d405d56f220beb775323926ed3fedfcf5f6628003b6d961de82121330aa88c"
+    },
+    {
+      "id": "espn:401861177",
+      "tier": "A",
+      "date": "2026-11-15",
+      "fixture_pair_sha": "82ca0422374f72b8a59910ff4151706939be84539a3be35c0a2656eff4da6e9d",
+      "original_issue_sha": "20e1cbe26651ca1ccc99d406bf00444d74dd59887117216b9267850ed0ebbc1b",
+      "forecast_sha256": "2e7e7bbd8d425afb7e75b6352376825f7616f802bbbac45c529d78cb91dd185d"
+    },
+    {
+      "id": "espn:401861178",
+      "tier": "A",
+      "date": "2026-11-15",
+      "fixture_pair_sha": "4d82bd45926907a465db9e49846a50f50c0c2403f50bce2c2e11d3e263f18dc4",
+      "original_issue_sha": "2fe5e12d85f4f7e3565053ab756a705d825cd6bb496385c4a7c47ac125c2b310",
+      "forecast_sha256": "6ed542993f7c6710304d9d5487d5863c7ff2cea0adaa73214611d3cb2cb9304b"
+    },
+    {
+      "id": "espn:401861179",
+      "tier": "D",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "94049fd41e52110c747dc4fb12d1b701c2a6fe5caa9ef7fda2c5e66657620aff",
+      "original_issue_sha": "84fb7d01b0c8772682bda8e66748995385c27990a15201a9d2c1bb7d12819586",
+      "forecast_sha256": "50617cba260296d2ba2f351e31e18312dd7f838826a3ce2f3beaf568c7d7fa82"
+    },
+    {
+      "id": "espn:401861180",
+      "tier": "C",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "504f2469c9fafa6e82fe029e81335acdba80763250b4a29dbd325cfee714b5ba",
+      "original_issue_sha": "5d0c0849ab4dd5b974698a57f91ec5729c8b4611067d5faaed72a1597d2a05eb",
+      "forecast_sha256": "7d403c08fe40dfb82b79746efa838da91c933d8ffc4dcd169088a3c1928185d8"
+    },
+    {
+      "id": "espn:401861181",
+      "tier": "C",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "5e30ba31e384d1c8bae09b6ff95f786a5345b37fe0fd8d0bae5dba49ed1616c1",
+      "original_issue_sha": "a390b88ca358a0782be09820fd86c25121299aa31cbfb81f5c64f3843012f08f",
+      "forecast_sha256": "e2eeca681a39faafc55d005bdbabcb73f8f52bacccd917b079a92388a5283e25"
+    },
+    {
+      "id": "espn:401861182",
+      "tier": "C",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "75613ff36e123870e87ebdf58478562975dcb55d15f3fe8e227c7cdecf46a0ee",
+      "original_issue_sha": "7387b8952d0c1dbd0efe7134c60c67950485b4c8c4b327dfebbea421bf1eb436",
+      "forecast_sha256": "1f8e4680b3c378804b04780a9d7bcb5433abc60d41881ea646dc9c2b37f475d4"
+    },
+    {
+      "id": "espn:401861183",
+      "tier": "C",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "7fabc027a0092c001350790c2736ca877e0b4a02cab2534136dd9dcff6dcea43",
+      "original_issue_sha": "023f658489d4973950a7ca524e863d4d6053335f49757caa8650f7510c044969",
+      "forecast_sha256": "eac3fdacb1dec87facac9d2d7dc2eda498a1dcc2454af4429176ee489cf03995"
+    },
+    {
+      "id": "espn:401861184",
+      "tier": "D",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "ccedb63eee717c5a74e1e3eea7022c9efa240154f072a856cf76175306dc1d16",
+      "original_issue_sha": "b5da649b44e3222828850c8a5351f92ec4480ecfc33c50b9aa12ff62e310a403",
+      "forecast_sha256": "c771b98e634d67e664b3c6d834504450b9cd4ad0e5b0296c8c61ad83a0beb03f"
+    },
+    {
+      "id": "espn:401861185",
+      "tier": "A",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "c95b402f8efcb99c27da4859c70a80313e5c988610cbec223c6e0bd92b711b48",
+      "original_issue_sha": "2f3c853cbe2eb2181d0be60d027401e8c03376b06c36a26683e4df4c91602b53",
+      "forecast_sha256": "1c9f3e6308087e33d0924f45a3c64433554468890883049ab2b402896ad78387"
+    },
+    {
+      "id": "espn:401861186",
+      "tier": "B",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "62e2c78822b1dc362a2b913abd3efcbf2a4470a8494fb788584d289ea825e0f2",
+      "original_issue_sha": "d4b4ebbfa98df5dbab8fe54b06a87ddcba4cfe1f340c3b176a62678580b21126",
+      "forecast_sha256": "f50d06367f6b4f9d04d232c4c9e7239cd0f206388097efb39dc8e033917bf5e9"
+    },
+    {
+      "id": "espn:401861187",
+      "tier": "B",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "dee9ede4628d0101c8cd20694643741aafcac989f3d3321e11e6e2ca1ade3e7d",
+      "original_issue_sha": "0e5ad1a18231c0be530cb8ce4bacf11b8bcc2d0fad2980d7172b7f6f32f31912",
+      "forecast_sha256": "d7065b3a6e4092633ce7a5fc76f22f995f0c2ca377785c6f0f7f3535e11b33a5"
+    },
+    {
+      "id": "espn:401861188",
+      "tier": "A",
+      "date": "2026-11-16",
+      "fixture_pair_sha": "6b2f88bccd06003d9f95c509079d47da7a57c839633d91376d74af2582509d96",
+      "original_issue_sha": "94bc540937c036c920201a4f520ad87c57127938c0521c1323cbad000655e0e7",
+      "forecast_sha256": "29e6b6b366f6b79571f73e4f0bc66ecc37bf3e846f35d53a8fcaf60b62b0b4e8"
+    },
+    {
+      "id": "espn:401861189",
+      "tier": "A",
+      "date": "2026-11-17",
+      "fixture_pair_sha": "08a01b9c6e8997cdc4c10f7c4d7ba246d5f909e59fa45a3f0173deb866751e69",
+      "original_issue_sha": "d986a67745500ec71b977ff7f2c0c1ae9c2ba1f03bda309879995398a635294b",
+      "forecast_sha256": "e9aeb0194c4e8cbf5cb44c496b62a84421bddd7e35e8969df018230f5218e394"
+    },
+    {
+      "id": "espn:401861190",
+      "tier": "B",
+      "date": "2026-11-17",
+      "fixture_pair_sha": "26d1759b83c26dd86345cfbeb356f97851f4a78e7b6e0299c7360eb349c76b7e",
+      "original_issue_sha": "a25281938fbb0d6f1e231844f87b237ffdee975566c6529d59a70522bea1501f",
+      "forecast_sha256": "875f2a9794be60153673445fa3d227b25c8d32a20297af9fb7e1fefe047d608b"
+    },
+    {
+      "id": "espn:401861191",
+      "tier": "B",
+      "date": "2026-11-17",
+      "fixture_pair_sha": "5df565150d0b8bb11a22721dcf82a3dfaa5837f73556bbad0c8a9e95fc1ebf41",
+      "original_issue_sha": "feffd6379745db03fb1f90d167bc161dc8e47d37b9186ecd6e4893047f19bdef",
+      "forecast_sha256": "9aef61891f80152a86b7a8dd7c376180332e7e16ed75667106c61c777a0e6c6c"
+    },
+    {
+      "id": "espn:401861192",
+      "tier": "B",
+      "date": "2026-11-17",
+      "fixture_pair_sha": "80146da53d3626f384be2a2dbbfb6461ec346ce28cc7ec150eacfd5e451b60e2",
+      "original_issue_sha": "f8fd9760039e9827c599ee3ced3985ac502bbd62d96363635777814bca022e1f",
+      "forecast_sha256": "0420baccd2e716b6697319e1def6cc164bef20d0030af556a70f6d87de992a98"
+    },
+    {
+      "id": "espn:401861193",
+      "tier": "B",
+      "date": "2026-11-17",
+      "fixture_pair_sha": "479467995ad5121adab4661512d2b8fc6b725bad321a5a00094d0615b4e96e9e",
+      "original_issue_sha": "a9833fe44e7fd8657dd863652593033d31facc1bb353277de8ccbf796a30b82b",
+      "forecast_sha256": "baee29f98f10be09722fd9907fc3855cf17b71d7c255fd3ec6cde6ebec0b263f"
+    },
+    {
+      "id": "espn:401861194",
+      "tier": "A",
+      "date": "2026-11-17",
+      "fixture_pair_sha": "547f8338a6b856a452431af89c34fac323253690a6d2581f535daeb12e3f53c3",
+      "original_issue_sha": "e70e5c99b493cf646c3f3347104c5e970341f38c46e6892bab0ace7ac041b6a5",
+      "forecast_sha256": "90542de22c225e6f4fac650904b5142d7ba2520e891d6643fac1a31cf18fe803"
+    },
+    {
+      "id": "espn:401861195",
+      "tier": "B",
+      "date": "2026-11-17",
+      "fixture_pair_sha": "5d146097b2730dd8e3c8aaeb3d635d6c9205f36dc27f721cb2f648f632497852",
+      "original_issue_sha": "faf915fdb7d626348100812ec3f017da820931533ad78a38fbb4da2276af1f1d",
+      "forecast_sha256": "d532686ea865d2f4b4254460a4194840be302423e7e08ad73e81d4c9f119400e"
+    },
+    {
+      "id": "espn:401861196",
+      "tier": "B",
+      "date": "2026-11-17",
+      "fixture_pair_sha": "e20dbcd76461015e8f3dcb23c804997bf049233f90a3b95a7a7fda9e196179c8",
+      "original_issue_sha": "aacb70727622d2f06555ce6416c4c537614b8e9d9cde5ded4db68368aa0859c1",
+      "forecast_sha256": "a4a522842413cc8d4994b649a03c5d2cef9fa22aeb41bd8585e24eb7fe32f5ac"
+    }
+  ],
+  "heldout_sha256": "aa920ffa49b668fd0fca51d899610b9884b0a73e08b413ee3aec80d2740d07f4",
+  "r7_independent_ids": 192
+}
