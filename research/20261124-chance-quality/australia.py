@@ -7,7 +7,14 @@ import json
 from pathlib import Path
 import tempfile
 
-from opportunities import clock, matrix, native_pair, require, shot_profile
+from opportunities import (
+    clock,
+    matrix,
+    native_pair,
+    recent_three,
+    require,
+    shot_profile,
+)
 from replay import evidence, market, packed_value
 from research.analysis_freeze import digest, verify
 
@@ -96,11 +103,17 @@ def blind(repo):
             "provider_crosswalk",
         )
         histories = []
-        for team, listed in zip(
+        for team, listed, calendar_name in zip(
             native_pair(target),
             target["content"]["matchFacts"]["teamForm"],
+            ("team_sydney_fc", "team_central_coast_mariners"),
             strict=True,
         ):
+            cal, _ = native(
+                calendar_name,
+                f"https://www.fotmob.com/api/data/teams?id={team}&ccode3=INT",
+            )
+            schedule = recent_three(cal, team, NATIVE, native_pair(target), ko, cut)
             prior3 = sorted(
                 listed, key=lambda r: clock(r["date"]["utcTime"]), reverse=True
             )[:3]
@@ -109,7 +122,7 @@ def blind(repo):
                 "incomplete_prior_schedule",
             )
             profile = []
-            for slot in prior3:
+            for slot, prior in zip(prior3, schedule, strict=True):
                 fid = slot["linkToMatch"].split("#")[-1]
                 raw, received = detail("match_" + fid, fid)
                 tip = slot["tooltipText"]
@@ -119,11 +132,11 @@ def blind(repo):
                     and raw["general"]["parentLeagueId"] == 113,
                     "senior_recent_fixture",
                 )
-                prior = dict(
-                    id=fid,
-                    home={"id": tip["homeTeamId"]},
-                    away={"id": tip["awayTeamId"]},
-                    status={"utcTime": tip["utcTime"], "reason": {"short": "FT"}},
+                require(
+                    str(prior["id"]) == fid
+                    and int(prior["home"]["id"]) == tip["homeTeamId"]
+                    and int(prior["away"]["id"]) == tip["awayTeamId"],
+                    "calendar_form_conflict",
                 )
                 probs = shot_profile(raw, prior, received)
                 require(team in probs, "prior_team")

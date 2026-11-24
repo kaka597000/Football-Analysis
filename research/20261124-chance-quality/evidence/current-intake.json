@@ -1,0 +1,39 @@
+{
+  "by_field": {
+    "ShotsOnTarget": {
+      "complete_fixtures": 6,
+      "complete_teams": 15,
+      "slots": 51,
+      "unique_priors": 47
+    },
+    "big_chance": {
+      "complete_fixtures": 0,
+      "complete_teams": 0,
+      "slots": 0,
+      "unique_priors": 0
+    },
+    "expected_goals_non_penalty": {
+      "complete_fixtures": 5,
+      "complete_teams": 14,
+      "slots": 49,
+      "unique_priors": 45
+    },
+    "shots_inside_box": {
+      "complete_fixtures": 0,
+      "complete_teams": 0,
+      "slots": 0,
+      "unique_priors": 0
+    },
+    "total_shots": {
+      "complete_fixtures": 6,
+      "complete_teams": 15,
+      "slots": 51,
+      "unique_priors": 47
+    }
+  },
+  "fixtures": 9,
+  "planned_slots": 54,
+  "slots_with_native_vector_field": 0,
+  "teams": 18,
+  "verified_content_addressed_originals": 0
+}

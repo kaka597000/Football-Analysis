@@ -1,0 +1,14 @@
+{
+  "canonical_match_history": 758,
+  "level": "upper bound before exact calendar order and source-family matching",
+  "max_priors_per_team": 1,
+  "nonestimated_count_matched": 25,
+  "potential_both_three": 0,
+  "provider_opportunity_inventory": 148,
+  "source_captures": 29,
+  "target_teams": 16,
+  "targets": 8,
+  "teams_at_least_one": 14,
+  "teams_at_least_three": 0,
+  "unique_priors": 7
+}

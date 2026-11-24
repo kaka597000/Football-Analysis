@@ -1,0 +1,250 @@
+{
+  "actual_display_paired": 0,
+  "all_with_team_fallback": {
+    "arms": {
+      "candidate": {
+        "hits": {
+          "fullwin": 0,
+          "top1": 0,
+          "top3": 2,
+          "wdl": 7
+        },
+        "mean_log_loss": 4.345684746736206,
+        "n": 10,
+        "totals": {
+          "FULL_LOSS": 8,
+          "HALF_WIN": 2
+        }
+      },
+      "market": {
+        "hits": {
+          "fullwin": 3,
+          "top1": 0,
+          "top3": 1,
+          "wdl": 8
+        },
+        "mean_log_loss": 3.7929441188047077,
+        "n": 10,
+        "totals": {
+          "FULL_LOSS": 5,
+          "FULL_WIN": 3,
+          "HALF_LOSS": 2
+        }
+      },
+      "same_xg_poisson": {
+        "hits": {
+          "fullwin": 0,
+          "top1": 0,
+          "top3": 2,
+          "wdl": 6
+        },
+        "mean_log_loss": 3.84115667371213,
+        "n": 10,
+        "totals": {
+          "FULL_LOSS": 8,
+          "HALF_WIN": 2
+        }
+      },
+      "team": {
+        "hits": {
+          "fullwin": 2,
+          "top1": 1,
+          "top3": 2,
+          "wdl": 6
+        },
+        "mean_log_loss": 4.031721635361746,
+        "n": 10,
+        "totals": {
+          "FULL_LOSS": 6,
+          "FULL_WIN": 2,
+          "HALF_LOSS": 1,
+          "HALF_WIN": 1
+        }
+      }
+    },
+    "candidate_vs": {
+      "market": {
+        "fullwin": {
+          "gained": 0,
+          "lost": 3
+        },
+        "top1": {
+          "gained": 0,
+          "lost": 0
+        },
+        "top3": {
+          "gained": 2,
+          "lost": 1
+        },
+        "wdl": {
+          "gained": 2,
+          "lost": 3
+        }
+      },
+      "same_xg_poisson": {
+        "fullwin": {
+          "gained": 0,
+          "lost": 0
+        },
+        "top1": {
+          "gained": 0,
+          "lost": 0
+        },
+        "top3": {
+          "gained": 0,
+          "lost": 0
+        },
+        "wdl": {
+          "gained": 1,
+          "lost": 0
+        }
+      },
+      "team": {
+        "fullwin": {
+          "gained": 0,
+          "lost": 2
+        },
+        "top1": {
+          "gained": 0,
+          "lost": 1
+        },
+        "top3": {
+          "gained": 1,
+          "lost": 1
+        },
+        "wdl": {
+          "gained": 2,
+          "lost": 1
+        }
+      }
+    },
+    "double_miss": 8,
+    "fixtures_add_outside_both": 5,
+    "rank1_changed": 5,
+    "rescued": 1
+  },
+  "main_line_confirmed": 0,
+  "original_n": 10,
+  "prelocked_top_three_paired_batches": 0,
+  "with_opportunities": {
+    "arms": {
+      "candidate": {
+        "hits": {
+          "fullwin": 0,
+          "top1": 0,
+          "top3": 1,
+          "wdl": 4
+        },
+        "mean_log_loss": 5.56666506972619,
+        "n": 5,
+        "totals": {
+          "FULL_LOSS": 4,
+          "HALF_WIN": 1
+        }
+      },
+      "market": {
+        "hits": {
+          "fullwin": 0,
+          "top1": 0,
+          "top3": 1,
+          "wdl": 4
+        },
+        "mean_log_loss": 4.475977864143738,
+        "n": 5,
+        "totals": {
+          "FULL_LOSS": 4,
+          "HALF_LOSS": 1
+        }
+      },
+      "same_xg_poisson": {
+        "hits": {
+          "fullwin": 0,
+          "top1": 0,
+          "top3": 1,
+          "wdl": 3
+        },
+        "mean_log_loss": 4.557608923678037,
+        "n": 5,
+        "totals": {
+          "FULL_LOSS": 4,
+          "HALF_WIN": 1
+        }
+      },
+      "team": {
+        "hits": {
+          "fullwin": 2,
+          "top1": 1,
+          "top3": 1,
+          "wdl": 3
+        },
+        "mean_log_loss": 4.938738846977271,
+        "n": 5,
+        "totals": {
+          "FULL_LOSS": 2,
+          "FULL_WIN": 2,
+          "HALF_LOSS": 1
+        }
+      }
+    },
+    "candidate_vs": {
+      "market": {
+        "fullwin": {
+          "gained": 0,
+          "lost": 0
+        },
+        "top1": {
+          "gained": 0,
+          "lost": 0
+        },
+        "top3": {
+          "gained": 1,
+          "lost": 1
+        },
+        "wdl": {
+          "gained": 1,
+          "lost": 1
+        }
+      },
+      "same_xg_poisson": {
+        "fullwin": {
+          "gained": 0,
+          "lost": 0
+        },
+        "top1": {
+          "gained": 0,
+          "lost": 0
+        },
+        "top3": {
+          "gained": 0,
+          "lost": 0
+        },
+        "wdl": {
+          "gained": 1,
+          "lost": 0
+        }
+      },
+      "team": {
+        "fullwin": {
+          "gained": 0,
+          "lost": 2
+        },
+        "top1": {
+          "gained": 0,
+          "lost": 1
+        },
+        "top3": {
+          "gained": 1,
+          "lost": 1
+        },
+        "wdl": {
+          "gained": 2,
+          "lost": 1
+        }
+      }
+    },
+    "double_miss": 4,
+    "fixtures_add_outside_both": 5,
+    "rank1_changed": 5,
+    "rescued": 1
+  }
+}

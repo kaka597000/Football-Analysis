@@ -1,0 +1,18 @@
+{
+  "both_complete": 4,
+  "complete_team_targets": 12,
+  "fixtures": 9,
+  "native_both_sides": {
+    "big_chance": 48,
+    "expected_goals_non_penalty": 45,
+    "shots_inside_box": 48
+  },
+  "slot_status": {
+    "complete": 45,
+    "no_completed_regulation": 3,
+    "no_native_shotmap": 6
+  },
+  "slot_target": 54,
+  "team_targets": 18,
+  "unique_prior_fixtures": 52
+}
