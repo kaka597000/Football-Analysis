@@ -1,0 +1,51 @@
+{
+  "purpose": "single retrospective upstream test on original first Current matrices",
+  "status": "DEVELOPMENT_PROTOCOL_BEFORE_CANDIDATE_SCORING",
+  "baseline_source": "6903c8b6b0b7eb7c7cbef1af54eb2908e292e2c9",
+  "baseline_version": "WCPP-MAIN-1.2",
+  "role": "current_model",
+  "stage": "regular",
+  "cohorts": ["eng.1", "esp.1", "ger.1", "ita.1", "fra.1", "nor.1", "swe.1", "bra.1"],
+  "training": {
+    "inventory_commit": "affe345d2f06e911fc9cd6a5ca9176ade70296f0",
+    "inventory_archive": "workspace-updates/20261112-metric-optimization/optimization-evidence.tar.gz",
+    "member": "baseline/first-pair-rows.json",
+    "kickoff_before": "2026-11-01T00:00:00Z",
+    "result_and_forecast_snapshot": "466fd626a47481e70b176a9a69c58224d7d1bf63",
+    "snapshot_at": "2026-11-02T03:09:28Z",
+    "files_manifest_sha256": "b1a80f06cdd236ffaf17e57aa3533d6a52b358b64278f17104075a659796e445",
+    "fit_as_of": "2026-11-03T16:00:00Z",
+    "eligibility": "Inventory first prematch, matching authenticated current matrix and at least one retained finished regulation source. Both the original freeze bytes and result bytes must occur in the November 2 immutable inventory. Report missing evidence in the October population."
+  },
+  "evaluation": {
+    "commit": "a4b8b272ee5beda5fc532b846b7b2ca58dbe1dcb",
+    "archive": "workspace-updates/20261123-kpi-optimization/source-assets.tar.gz",
+    "archive_sha256": "7c106ee66a816da84dbbfbf254633b55b7c25e610e7d0f31bf168d68f61d9659",
+    "rows": "retained/actual_current.jsonl.gz",
+    "source_index": "retained/actual_current_sources.json",
+    "kickoff_from": "2026-11-06T00:00:00Z",
+    "kickoff_until_exclusive": "2026-11-15T00:00:00Z",
+    "eligibility": "Complete retained panel within these dates. Forecast cutoff must follow fit_as_of. Same original matrix and original input cutoff in both arms. Check first-issue identity, regulation source and raw scores. Retain any unsupported case and abstention in coverage.",
+    "evidence_class": "previously reviewed source-timed forecasts, held out from this fit and this rule choice, retrospective development only"
+  },
+  "change": {
+    "formula": "Q(h,a) = P(h,a) * exp(beta_c * (h+a)) / Z. One coefficient per cohort, either sign. Keep the relative probabilities of exact scores within every total unchanged.",
+    "fit_objective": "sum(log(Z_i) - beta_c * T_observed_i) + ridge * beta_c^2 / 2",
+    "ridge": 50.0,
+    "max_abs_beta": 0.35,
+    "origins": "ridge from research_program/conditional_scores.py, bound from research_program/sequence_models.py. No grid, pooled fit, match filtering by errors, late labels, or tuning on either November cohort.",
+    "empty_training_cohort": "identity (beta=0); keep the league in the denominator",
+    "ranking": "the same stable descending cell-probability order for each arm, row-major ties; top cell and first three distinct cells"
+  },
+  "report": ["complete eligible, covered, missing and abstaining", "top1 and matrix top3 hits, corrected and spoiled IDs", "observed and expected total >=4 count and Brier", "exact-score natural log loss", "individual leagues and pooled match counts", "paired resampling of whole UTC kickoff dates, 2000 draws, seed 20261124"],
+  "decision": "No change to production. Only consider a fresh prospective study when development Top1 net >0, Top3 net >=0, mean score log loss and four-plus Brier nonworse at the same coverage. Never relabel development as forward evidence; no automatic promotion.",
+  "future_plan": {
+    "status": "DRAFT_ONLY_NO_FIXTURES_REGISTERED_NO_FORECASTS_ISSUED",
+    "window_1_bjt": ["2026-12-12T00:00:00+08:00", "2027-01-12T00:00:00+08:00"],
+    "window_2_bjt": ["2027-01-12T00:00:00+08:00", "2027-02-12T00:00:00+08:00"],
+    "bounds": "left inclusive, right exclusive; scheduled in-scope regular fixtures known before each window, with every omission, identity change, postponed game, and missing baseline carried in coverage",
+    "exclusions": "Before first kickoff lock full roster, ordered teams, fixture IDs and kickoff, excluding already registered or reviewed identities across studies including the 192-fixture slate, its 36-fixture subset, and rescheduled aliases. Prior RSI registrations remain independent and are excluded. No substitution. Freeze both study outputs at one original input cutoff. Identical baseline artifact versions required or defer and label the change.",
+    "preconditions": "Human review before any registration; attach the approved code, weights, model IDs, market/reference policy, complete existing-registration exclusion set and immutable fixture/forecast receipts. Require at least 50 paired outcomes in each window, at least 90 percent paired coverage of the registered fixtures, and report unfilled seats.",
+    "decision": "Both windows must separately pass the development directional conditions, with the pooled paired Top1 gain interval excluding zero before proposing review. Incomplete coverage is inconclusive. Otherwise retire this recipe. This model study only grades matrix scores; formal displayed KPIs require actual delivery evidence."
+  }
+}
