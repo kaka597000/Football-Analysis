@@ -40,6 +40,26 @@ def attach_display(payload, first=None, alternatives=(), *, abstain=False):
     return out, text
 
 
+def prepare_authored_row(payload, fixture):
+    """Convert an explicitly ranked analyst table row for a new future publication."""
+    row = payload.get('user_facing_row')
+    first, alternatives = payload.get('primary'), payload.get('alternates')
+    if (payload.get('selection_scope') != 'active_reference' or not isinstance(row, dict)
+            or row.get('match_id') != fixture['match_id'] or not isinstance(alternatives, list)):
+        raise ValueError('verified formal analyst row for the same match required')
+    scores = [first, *alternatives]
+    if (scores != payload['displayed_scores'] or row.get('primary') != first
+            or row.get('alternates') != alternatives or row.get('ordered_scores', scores) != scores):
+        raise ValueError('authored table row and three-score ranking differ')
+    kickoff = aware(fixture['kickoff_at'])
+    shown = row.get('kickoff_bjt')
+    if shown is not None and shown != kickoff.astimezone(timezone(timedelta(hours=8))).strftime('%m-%d %H:%M'):
+        if aware(shown) != kickoff:
+            raise ValueError('authored table row kickoff differs')
+    body = {key: value for key, value in payload.items() if key != 'displayed_scores'}
+    return attach_display(body, first, alternatives)[0]
+
+
 def validate_display(payload):
     display = payload.get('displayed_scores')
     if not isinstance(display, dict) or display.get('schema') != SCHEMA:

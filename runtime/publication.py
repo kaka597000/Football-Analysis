@@ -8,7 +8,7 @@ import tempfile
 import uuid
 from research.analysis_freeze import save, reject_credentials, verify, digest, aware, encoded
 from research.display_delivery import (
-    DISPLAY_TRACK, delivery_request, display_slot, validate_display, verify_delivery,
+    DISPLAY_TRACK, delivery_request, display_slot, prepare_authored_row, validate_display, verify_delivery,
 )
 from storage_lock import exclusive_lock
 
@@ -200,11 +200,14 @@ def publish(output, fixture, *, out, freeze_root, stage='prematch', report=None,
                 require(fixture)
                 if not all(fixture.get(k) for k in ('match_id', 'cohort', 'stage', 'home', 'away')):
                     raise ValueError('complete fixture identity required for display')
-                validate_display(output)
                 if delivery_path.exists() or state['report'] == str(delivery_path):
                     raise FileExistsError(delivery_path)
                 if datetime.now(timezone.utc) >= aware(fixture['kickoff_at']):
                     raise ValueError('prematch display deadline passed')
+                if isinstance(output.get('displayed_scores'), list):
+                    output = prepare_authored_row(output, fixture)
+                    state['output'] = output
+                validate_display(output)
                 if publisher is not None and publisher.lookup_first(display_slot(fixture['match_id'])) is not None:
                     raise FileExistsError('first comprehensive display is already confirmed')
                 state['track'] = track

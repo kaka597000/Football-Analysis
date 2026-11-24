@@ -113,6 +113,81 @@ class SharedDisplayTests(unittest.TestCase):
                 summary = d.summarize([review])
                 self.assertEqual((summary['top1']['settled_n'], summary['top3']['settled_n']), (1, 1))
 
+    def authored(self, fixture):
+        first, alternatives = "1-0", ["1-1", "2-0"]
+        row = dict(match_id=fixture["match_id"], primary=first, alternates=alternatives,
+                   ordered_scores=[first, *alternatives])
+        return dict(primary=first, alternates=alternatives, displayed_scores=[first, *alternatives],
+                    user_facing_row=row, selection_scope="active_reference", synthetic_test_only=True)
+
+    def test_authored_table_reaches_confirmed_first_and_settlement(self):
+        for league in ("eng.1", "swe.1"):
+            with self.subTest(league=league), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                fixture = self.fixture(league)
+                payload = self.authored(fixture)
+                payload["user_facing_row"].pop("ordered_scores")
+                payload["user_facing_row"]["kickoff_bjt"] = "01-02 20:00"
+                previous = copy.deepcopy(payload)
+                sender = OfflinePublisher(root / "channel")
+                rec = self.record(self.release(root, fixture, sender, payload=payload))
+                self.assertEqual(payload, previous)
+                self.assertEqual(rec["payload"]["displayed_scores"]["alternatives"], ["1-1", "2-0"])
+                msg = sender.lookup_first(d.display_slot(fixture["match_id"]))
+                self.assertEqual(msg["text"], d.delivery_request(rec)["text"])
+                meta = self.meta(root, fixture, self.raw(fixture, 1, 1))
+                row = self.settle(rec, fixture, sender, "espn", meta, root)
+                self.assertEqual((row["top1_hit"], row["top3_hit"]), (False, True))
+
+    def test_misaligned_authored_row_is_rejected_before_freeze_or_send(self):
+        f = self.fixture()
+        for change in ({"match_id":"espn:102"}, {"primary":"2-0"}, {"alternates":["2-0","1-1"]},
+                       {"ordered_scores":["1-1","1-0","2-0"]}, {"kickoff_bjt":"01-02 20:01"}):
+            with self.subTest(change=change), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp);sender = OfflinePublisher(root / "channel")
+                pay = self.authored(f);pay["user_facing_row"].update(change)
+                with self.assertRaises(ValueError):
+                    self.release(root, f, sender, payload=pay)
+                self.assertEqual(sender.sends, 0)
+                self.assertFalse((root / "freezes").exists())
+
+    def test_authored_route_never_takes_compared_scores_or_accepts_duplicate_scores(self):
+        f = self.fixture()
+        for duplicate in (True, False):
+            with self.subTest(duplicate=duplicate), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                sender = OfflinePublisher(root / "channel")
+                pay = self.authored(f)
+                if duplicate:
+                    pay["alternates"] = [pay["primary"], "1-1"]
+                    pay["displayed_scores"] = [pay["primary"], *pay["alternates"]]
+                    pay["user_facing_row"].update(alternates=pay["alternates"], ordered_scores=pay["displayed_scores"])
+                else:
+                    pay["compared_scores"] = pay.pop("displayed_scores")
+                with self.assertRaises(ValueError):
+                    self.release(root, f, sender, payload=pay)
+                self.assertEqual(sender.sends, 0)
+                self.assertFalse((root / "freezes").exists())
+
+    def test_authored_rows_require_formal_scope_and_receiver_confirmation(self):
+        f = self.fixture()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp);pay = self.authored(f)
+            del pay["selection_scope"]
+            with self.assertRaises(ValueError):
+                self.release(root, f, None, payload=pay)
+            pay["selection_scope"] = "research_only"
+            with self.assertRaises(ValueError):
+                self.release(root, f, None, payload=pay)
+            pay["selection_scope"] = "active_reference"
+            prepared = self.release(root, f, None, payload=pay)
+            self.assertEqual(prepared["publication_status"], "UNCONFIRMED")
+            frozen = self.record(prepared)
+            self.assertFalse(self.settle(frozen, f)["top3_issued"])
+            with patch.object(FrozenClock, "current", datetime(2026, 1, 3, tzinfo=timezone.utc)):
+                with self.assertRaises(ValueError):
+                    self.release(root, f, OfflinePublisher(root / "channel"), payload=pay, name="late")
+
     def test_empty_incomplete_duplicate_and_abstention(self):
         for first,alts in [(None,()),('1-0',('1-1',)),('1-0',('1-0','2-0')),('1-0',('x','2-0'))]:
             with self.assertRaises(ValueError):d.attach_display({},first,alts)
