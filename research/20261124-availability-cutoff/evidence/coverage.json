@@ -1,0 +1,679 @@
+{
+  "brazil_existing": {
+    "first_issue": 0,
+    "n": 6,
+    "sha256": "ce736b5f991a97e68d0eda815f075583dc4c9534e073bc8fc2dbad42c39e13e4",
+    "window_states": {
+      "window_not_sampled": 6
+    }
+  },
+  "collector": {
+    "accepted_raw": 657,
+    "identity_failures": 0,
+    "receipts": 657,
+    "request_ledger_sha256": "c2d1fd7f2d0fc853ee3420bea771c8dfe3a866c30bc134c40be6982718c11778",
+    "states": {
+      "LIVE_OR_POSTMATCH/PROVIDER_BOTH_XI": 657
+    },
+    "unique_source_events": 493
+  },
+  "jcup_acquired": {
+    "T-15": 4,
+    "T-60": 4,
+    "original": 0
+  },
+  "jcup_acquisition_manifest_sha256": "a3329e71c51abc244bb2e8b89c065b00e49e71401e9c33ee1be527149babec28",
+  "jcup_first_comprehensive_version_with_XI": {
+    "T-15": 4,
+    "T-60": 1,
+    "original": 0
+  },
+  "jcup_sources": 4,
+  "monthly": [
+    {
+      "competition": "afc.champions",
+      "eligible_firsts": 6,
+      "month": "2026-10"
+    },
+    {
+      "competition": "afc.champions",
+      "eligible_firsts": 7,
+      "month": "2026-11"
+    },
+    {
+      "competition": "aus.1",
+      "eligible_firsts": 3,
+      "month": "2026-10"
+    },
+    {
+      "competition": "bra.1",
+      "eligible_firsts": 7,
+      "month": "2026-10"
+    },
+    {
+      "competition": "bra.1",
+      "eligible_firsts": 5,
+      "month": "2026-11"
+    },
+    {
+      "competition": "eng.1",
+      "eligible_firsts": 21,
+      "month": "2026-10"
+    },
+    {
+      "competition": "eng.1",
+      "eligible_firsts": 1,
+      "month": "2026-11"
+    },
+    {
+      "competition": "esp.1",
+      "eligible_firsts": 21,
+      "month": "2026-10"
+    },
+    {
+      "competition": "esp.1",
+      "eligible_firsts": 1,
+      "month": "2026-11"
+    },
+    {
+      "competition": "fra.1",
+      "eligible_firsts": 8,
+      "month": "2026-10"
+    },
+    {
+      "competition": "ger.1",
+      "eligible_firsts": 22,
+      "month": "2026-10"
+    },
+    {
+      "competition": "ita.1",
+      "eligible_firsts": 27,
+      "month": "2026-10"
+    },
+    {
+      "competition": "ita.1",
+      "eligible_firsts": 1,
+      "month": "2026-11"
+    },
+    {
+      "competition": "jpn.1",
+      "eligible_firsts": 5,
+      "month": "2026-10"
+    },
+    {
+      "competition": "jpn.1",
+      "eligible_firsts": 2,
+      "month": "2026-11"
+    },
+    {
+      "competition": "jpn.league_cup",
+      "eligible_firsts": 5,
+      "month": "2026-11"
+    },
+    {
+      "competition": "ned.1",
+      "eligible_firsts": 6,
+      "month": "2026-10"
+    },
+    {
+      "competition": "nor.1",
+      "eligible_firsts": 5,
+      "month": "2026-10"
+    },
+    {
+      "competition": "swe.1",
+      "eligible_firsts": 5,
+      "month": "2026-10"
+    },
+    {
+      "competition": "swe.1",
+      "eligible_firsts": 2,
+      "month": "2026-11"
+    },
+    {
+      "competition": "uefa.champions",
+      "eligible_firsts": 17,
+      "month": "2026-10"
+    },
+    {
+      "competition": "uefa.champions",
+      "eligible_firsts": 18,
+      "month": "2026-11"
+    },
+    {
+      "competition": "uefa.europa",
+      "eligible_firsts": 1,
+      "month": "2026-11"
+    },
+    {
+      "competition": "uefa.nations",
+      "eligible_firsts": 32,
+      "month": "2026-11"
+    },
+    {
+      "competition": "usa.1",
+      "eligible_firsts": 6,
+      "month": "2026-10"
+    },
+    {
+      "competition": "usa.1",
+      "eligible_firsts": 2,
+      "month": "2026-11"
+    }
+  ],
+  "original_ledger": {
+    "admission": {
+      "INCLUDED": 236,
+      "OTHER_OR_UNRESOLVED_COMPETITION": 48,
+      "PHASE_OR_EDITION_NOT_BOUND_FOR_AUDIT": 4,
+      "UNRESOLVED_ORDERED_CLUB_IDS": 1
+    },
+    "all": 289,
+    "all_first_freeze_hashes": "8f26f1f183061ae64e017b531b0a2de29cd56035d49c8e05a0b27169a5fe0f04",
+    "eligible_first_freeze_hashes": "9d5da6afd05b28eeee0a78e6ed755b8769742d9ec18868d31023a1f7d666aea8",
+    "included": 236,
+    "structured_personnel_field_present": 193
+  },
+  "scope": [
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "eng.1",
+      "eligible_targets": 22,
+      "first_date": "2026-10-17",
+      "has_personnel_fields": 22,
+      "last_date": "2026-11-23",
+      "retained_named_first_freezes": 22
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "esp.1",
+      "eligible_targets": 22,
+      "first_date": "2026-10-16",
+      "has_personnel_fields": 21,
+      "last_date": "2026-11-23",
+      "retained_named_first_freezes": 23
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 22,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "ger.1",
+      "eligible_targets": 22,
+      "first_date": "2026-10-16",
+      "has_personnel_fields": 21,
+      "last_date": "2026-10-31",
+      "retained_named_first_freezes": 22
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 28,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 28,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 28,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "ita.1",
+      "eligible_targets": 28,
+      "first_date": "2026-10-16",
+      "has_personnel_fields": 26,
+      "last_date": "2026-11-23",
+      "retained_named_first_freezes": 28
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 8,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 8,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 8,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "fra.1",
+      "eligible_targets": 8,
+      "first_date": "2026-10-16",
+      "has_personnel_fields": 8,
+      "last_date": "2026-10-30",
+      "retained_named_first_freezes": 8
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 7,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 7,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 7,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "jpn.1",
+      "eligible_targets": 7,
+      "first_date": "2026-10-17",
+      "has_personnel_fields": 3,
+      "last_date": "2026-11-20",
+      "retained_named_first_freezes": 7
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "kor.1",
+      "eligible_targets": 0,
+      "first_date": null,
+      "has_personnel_fields": 0,
+      "last_date": null,
+      "retained_named_first_freezes": 1
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 3,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 3,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 3,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "aus.1",
+      "eligible_targets": 3,
+      "first_date": "2026-10-16",
+      "has_personnel_fields": 1,
+      "last_date": "2026-10-30",
+      "retained_named_first_freezes": 3
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 8,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 8,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 8,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "usa.1",
+      "eligible_targets": 8,
+      "first_date": "2026-10-17",
+      "has_personnel_fields": 8,
+      "last_date": "2026-11-02",
+      "retained_named_first_freezes": 9
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 5,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 5,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 5,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "nor.1",
+      "eligible_targets": 5,
+      "first_date": "2026-10-17",
+      "has_personnel_fields": 5,
+      "last_date": "2026-10-31",
+      "retained_named_first_freezes": 5
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 7,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 7,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 7,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "swe.1",
+      "eligible_targets": 7,
+      "first_date": "2026-10-19",
+      "has_personnel_fields": 6,
+      "last_date": "2026-11-23",
+      "retained_named_first_freezes": 8
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 6,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 6,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 6,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "ned.1",
+      "eligible_targets": 6,
+      "first_date": "2026-10-16",
+      "has_personnel_fields": 5,
+      "last_date": "2026-10-31",
+      "retained_named_first_freezes": 6
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 35,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 35,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 35,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "uefa.champions",
+      "eligible_targets": 35,
+      "first_date": "2026-10-20",
+      "has_personnel_fields": 9,
+      "last_date": "2026-11-04",
+      "retained_named_first_freezes": 35
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 1,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 1,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 1,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "uefa.europa",
+      "eligible_targets": 1,
+      "first_date": "2026-11-04",
+      "has_personnel_fields": 0,
+      "last_date": "2026-11-04",
+      "retained_named_first_freezes": 1
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "uefa.europa.conf",
+      "eligible_targets": 0,
+      "first_date": null,
+      "has_personnel_fields": 0,
+      "last_date": null,
+      "retained_named_first_freezes": 0
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 13,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 13,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 13,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "afc.champions",
+      "eligible_targets": 13,
+      "first_date": "2026-10-27",
+      "has_personnel_fields": 11,
+      "last_date": "2026-11-23",
+      "retained_named_first_freezes": 13
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 0,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "fifa.world",
+      "eligible_targets": 0,
+      "first_date": null,
+      "has_personnel_fields": 0,
+      "last_date": null,
+      "retained_named_first_freezes": 0
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 32,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 32,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 32,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "uefa.nations",
+      "eligible_targets": 32,
+      "first_date": "2026-11-12",
+      "has_personnel_fields": 32,
+      "last_date": "2026-11-15",
+      "retained_named_first_freezes": 32
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 5,
+          "espn_provider_both": 0,
+          "jleague_official_both": 4
+        },
+        "T-60": {
+          "denominator": 5,
+          "espn_provider_both": 0,
+          "jleague_official_both": 4
+        },
+        "original": {
+          "denominator": 5,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "jpn.league_cup",
+      "eligible_targets": 5,
+      "first_date": "2026-11-11",
+      "has_personnel_fields": 4,
+      "last_date": "2026-11-15",
+      "retained_named_first_freezes": 6
+    },
+    {
+      "clocks": {
+        "T-15": {
+          "denominator": 12,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "T-60": {
+          "denominator": 12,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        },
+        "original": {
+          "denominator": 12,
+          "espn_provider_both": 0,
+          "jleague_official_both": 0
+        }
+      },
+      "competition": "bra.1",
+      "eligible_targets": 12,
+      "first_date": "2026-10-16",
+      "has_personnel_fields": 11,
+      "last_date": "2026-11-24",
+      "retained_named_first_freezes": 12
+    }
+  ]
+}

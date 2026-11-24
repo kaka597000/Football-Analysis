@@ -1,0 +1,26 @@
+{
+  "registered_at": "2026-11-24T07:50:04.243659+00:00",
+  "purpose": "Archive-only coverage study. Probe first-party starting XIs, official absence or suspension, and existing provider reports for incremental player information.",
+  "source_main": "6903c8b6b0b7eb7c7cbef1af54eb2908e292e2c9",
+  "data_main": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+  "cohorts": [
+    "Every first-version prematch comprehensive record in the retained central issued-analysis ledger, within the configured senior male regulation competition and supported stage. Record all exclusions and any identity collisions. Prefer the original prediction cutoff.",
+    "Audit recent Nov22 and Nov23 fixed slates separately, plus specific independently traceable official and supplier case files. Do not add populations without a stable same-fixture join.",
+    "Inspect every successful ESPN match-summary receipt in the pinned Data request ledger. This collector population may contain archived postmatch rosters and is not an issued-prediction denominator."
+  ],
+  "clocks": [
+    "original first comprehensive prediction cutoff; actual receipt no later than cutoff; cutoff strictly before actual kickoff",
+    "kickoff minus 60 minutes across both arms (primary fixed clock)",
+    "kickoff minus 15 minutes across both arms (separate near-game evidence coverage, never replace the first freeze)"
+  ],
+  "identity": "Competition and permitted phase, stable ordered home/away IDs, same event and kickoff; explicit original provider bytes or documented first-party page and an acquisition receipt with matching hash. Distinguish original recorded capture from independent bound and from known official publication. Distinguish provider, projected, later revisions and after-kickoff sheets. Verify both different teams and eleven unique starters per team. No inference about health from empty fields or omission.",
+  "hypothesis_if_evaluable": "One feature only: pre-cutoff first-party replacement of the usual starting goalkeeper. The usual keeper must have started at least four of the previous six consecutive same-competition fixtures already completed at the cutoff; record both regular and actual keeper IDs from the same identity namespace, home/away, and account for all six. An official reason for absence can explain a change, never infer injury from absence. Already-used identical channel in a comparator is not independent.",
+  "gate": "Require timely, genuinely incremental role history and two-sided official XI or explicit official goalkeeper unavailability; a matched baseline forecast with reproducible source cutoff; change and no-change examples in a strictly earlier fit block and a disjoint later evaluation block with more than one match date. Size and uncertainty must support any inference. With no admissible change events or empty time split do not evaluate outcomes. No coefficient chosen by the target scores.",
+  "metrics_if_evaluable": [
+    "paired first model score and ordered three, tagged as matrix unless immutable user delivery exists",
+    "90-minute WDL",
+    "actual two-sided total line and capture, full wins with pushes reported",
+    "gains, losses, coverage and score probability quality"
+  ],
+  "bounds": "No foreground provider requests, historical forecast edits, R7 content evaluation, extra standing arm, production changes or actual training on production artifacts. No target results used for coverage."
+}

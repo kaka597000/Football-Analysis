@@ -1,0 +1,38 @@
+{
+  "review_type": "Fixed human content classification of archived first-party files; exact bytes are checked on replay. No source text, athlete names or health details.",
+  "index": "B/form/context-supplement.json",
+  "index_sha256": "54a9eee6cbf6e31868a776e497f80765dad1bd75060b58092772ece848788f18",
+  "received_at": "2026-11-22T09:27:58.042411Z",
+  "files": [
+    {
+      "path": "B/form/raw/allsvenskan-official-table-2026.html",
+      "sha256": "034d75465819467d23a60bb52f290e516c75cc1fad1ea516a443f1acbbac050d",
+      "http_status": 200,
+      "classification": "STANDINGS"
+    },
+    {
+      "path": "B/form/raw/allsvenskan-official-standings-2026.json",
+      "sha256": "636569ee9a7b02bceca57242cd8726d7245ea6ade27880e06806dd84e179b3dc",
+      "http_status": 200,
+      "classification": "STANDINGS"
+    },
+    {
+      "path": "B/form/raw/eliteserien-official-table-2026.html",
+      "sha256": "17514074ff4cd20c4b97425dc0f75e1d9769a17603dd1c890b00d6d49b5a3015",
+      "http_status": 200,
+      "classification": "STANDINGS"
+    },
+    {
+      "path": "B/form/raw/fctwente-official-fixtures-2026-11-22.html",
+      "sha256": "dd64475e67ad3d7774badbefad16e8ebedcc47dbcefb9091cc808e2c562cfa5e",
+      "http_status": 200,
+      "classification": "FIXTURE_LIST"
+    },
+    {
+      "path": "B/form/raw/juventus-official-fixtures-at-query-time.html",
+      "sha256": "e18be63e70cc1fc70104448bf6aa86795092f1c7efd527519cf15f442bb226c4",
+      "http_status": 403,
+      "classification": "ACCESS_DENIED"
+    }
+  ]
+}

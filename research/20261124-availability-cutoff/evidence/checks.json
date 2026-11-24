@@ -1,0 +1,46 @@
+{
+  "source_base": "6903c8b6b0b7eb7c7cbef1af54eb2908e292e2c9",
+  "study_protocol_sha256": "7342803346f95602e74d0c98b29023e0736340fcad5094077ba7883a05d65e3a",
+  "new_synthetic": {
+    "command": "PYTHONPATH=runtime python -m unittest discover -s research/20261124-availability-cutoff -v",
+    "tests": 19,
+    "failed": 0,
+    "skipped": 0
+  },
+  "local_asset_integration": {
+    "command": "python scripts/run_tests.py --layer integration",
+    "tests": 1136,
+    "suites": 25,
+    "failed": 0,
+    "skipped": 0,
+    "research_tests_counted_here": false
+  },
+  "real_single_fixture_preview": {
+    "match_id": "jleague:111101",
+    "source_kind": "jleague",
+    "source_sha256": "5b22262d641f81a91798fa46bc23096d8f55c13369968bb09df3a216c4203533",
+    "received_at": "2026-11-11T08:51:01.266885+00:00",
+    "published_at": null,
+    "comparison": {
+      "original": {
+        "clock": "2026-11-11T01:00:41.679219+00:00",
+        "reached": true,
+        "status": "AFTER_CUTOFF"
+      },
+      "T-60": {
+        "clock": "2026-11-11T09:00:00+00:00",
+        "reached": true,
+        "status": "OFFICIAL_BOTH_XI"
+      },
+      "T-15": {
+        "clock": "2026-11-11T09:45:00+00:00",
+        "reached": true,
+        "status": "OFFICIAL_BOTH_XI"
+      }
+    },
+    "official_keeper_ids_available": true,
+    "provider_availability_counts": null,
+    "prediction_issued": false
+  },
+  "future_issues": 0
+}

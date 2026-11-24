@@ -1,0 +1,86 @@
+{
+  "panels_are_separate": true,
+  "central_ledger_and_nov22_common_fixtures": {
+    "stable_event_id": 0,
+    "same_ordered_team_ids_competition_and_UTC_kickoff": 0
+  },
+  "hypothesis": {
+    "target": "first-party replacement of the usual starting goalkeeper",
+    "nov22_scoped_targets": 30,
+    "eligible_change_events": 0,
+    "model_fitted": false,
+    "paired_baseline_and_candidate_predictions": 0,
+    "paired_outcomes_scored": 0,
+    "first_score": null,
+    "displayed_three_scores": null,
+    "wdl90": null,
+    "actual_total_full_win": null,
+    "selected_three_first_scores": null
+  },
+  "active_snapshot": {
+    "registry_sha256": "923e34fc44cda33fe965498a24a2435abb37a01a80c539108d8ec20d490bf013",
+    "current_entries_hash_checked": 19,
+    "test_entries_hash_checked": 19,
+    "with_populated_context_coefficients": 0,
+    "scope": "Exact local current/test archive only; this is not an inventory of all numerical features or a count of the formal competitions."
+  },
+  "japan_quarterfinals": {
+    "source_archive_first_commit": "5b20914c1f608d926ca39b964a6d8cc3572e5408",
+    "commit_time_UTC": "2026-11-11T09:04:30Z",
+    "dated_commit_observable_by_T_minus_60": 1,
+    "dated_commit_observable_by_T_minus_15": 4,
+    "supplier_release_clock_retained": false,
+    "versions_with_matrix_changed_false": 4,
+    "expanded_history_sqlite_sha256": "de7fe2701a6f93d51c0255787ad216b574293ff172d47b610ad7e2753c181474",
+    "expanded_history_match_rows": 233,
+    "quarterfinal_context_sha256": "da8c3d376f6a5b5b411ec8fcfdcd7479f25a478744863bb435f6fdbb0d0cea46",
+    "context_match_rows": 32,
+    "historical_starter_ids_in_these_tables": false
+  },
+  "australia": {
+    "fixtures_reviewed_nov_6_8": 5,
+    "archived_both_first_party_XIs": 0,
+    "verified_one_sided_club_squad_example": {
+      "event": "espn:401892144",
+      "competition": "aus.1",
+      "official_body_sha256": "afe61b8b99108571e6d25d941bc04c259b1f1320936754a1490851f29cd7135b",
+      "captured_utc": "2026-11-06T08:07:00.492574Z",
+      "original_comprehensive_cutoff_utc": "2026-11-06T08:13:36.948800Z",
+      "kickoff_utc": "2026-11-06T08:40:00Z",
+      "original_freeze_sha256": "f1e899ccee39d5489fc18598752752ec13b439ac140f45ab8d3c0b46fe794c2c",
+      "club_sections": [
+        "Ins",
+        "Outs",
+        "Unavailable"
+      ],
+      "both_official_XI": false,
+      "bound_usual_keeper_change": false
+    }
+  },
+  "nations_league": {
+    "slate_dates": [
+      "2026-11-12",
+      "2026-11-13",
+      "2026-11-14"
+    ],
+    "slate_sizes": [
+      8,
+      10,
+      8
+    ],
+    "fixtures_with_retained_match_specific_first_party_absence_or_suspension_proof": 0
+  },
+  "nov23_evening": {
+    "archive_sha256": "446f929fc17484de087f389f4b1617d1792e26d8af4574fcc12ac9bec27f942a",
+    "raw_fixtures": 15,
+    "includes_one_MLS_round_one_playoff": true,
+    "reports_naming_or_disputing_absence_all": 8,
+    "reports_naming_or_disputing_absence_excluding_that_playoff": 7,
+    "club_domain_links_all": 2,
+    "original_body_and_acquisition_receipt_for_those_reports": 0
+  },
+  "R7": {
+    "registered_in_existing_study": 192,
+    "first_issues_archive_sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d"
+  }
+}

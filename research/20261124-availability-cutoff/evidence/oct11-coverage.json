@@ -1,0 +1,36 @@
+{
+  "by_competition": {
+    "eng.1": {
+      "official_at": {
+        "T-15": 1,
+        "T-60": 0,
+        "original": 1
+      },
+      "total": 2
+    },
+    "fra.1": {
+      "official_at": {
+        "T-15": 1,
+        "T-60": 0,
+        "original": 1
+      },
+      "total": 1
+    },
+    "ita.1": {
+      "official_at": {
+        "T-15": 2,
+        "T-60": 0,
+        "original": 2
+      },
+      "total": 2
+    }
+  },
+  "club_page_already_bound_to_original_fixture": 4,
+  "fixtures": 5,
+  "official_at": {
+    "T-15": 4,
+    "T-60": 0,
+    "original": 4
+  },
+  "packet_manifest_sha256": "e61a01208f2ea57f545f76a8d61c6bfc209cb2520213d602b3cb92431314a2f2"
+}

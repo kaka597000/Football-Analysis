@@ -1,0 +1,313 @@
+{
+  "all_registered": {
+    "both_history_verified": 29,
+    "both_usual_keepers": 25,
+    "calendar_checks": {
+      "INCOMPLETE_TEAM_CALENDAR": 6,
+      "NO_BOUND_TEAM_CALENDAR": 24,
+      "SIX_MATCH_CALENDAR_CONFIRMED": 36
+    },
+    "calendar_confirmed_flagged_sides": 3,
+    "calendar_confirmed_usual_sides": 33,
+    "first_party_xi_from_supplier": 0,
+    "fixtures": 33,
+    "fixtures_with_both_provider_indications": 3,
+    "fixtures_with_listed_role": 3,
+    "fixtures_with_projected_change": 4,
+    "fixtures_with_reported_items": 32,
+    "goalkeeper_slots": 390,
+    "projected_different_keeper_sides": 4,
+    "provider_listed_items": 212,
+    "provider_listed_usual_keeper_sides": 3,
+    "providers": {
+      "PREVIOUS_XI": 4,
+      "PROJECTED_XI": 19,
+      "PROVIDER_WITHOUT_CONFIRMED_BOTH_XI": 10
+    },
+    "registered_team_slots": 396,
+    "usual_keeper_sides": 57
+  },
+  "by_competition": {
+    "bra.1": {
+      "both_history_verified": 3,
+      "both_usual_keepers": 3,
+      "calendar_checks": {
+        "SIX_MATCH_CALENDAR_CONFIRMED": 6
+      },
+      "calendar_confirmed_flagged_sides": 0,
+      "calendar_confirmed_usual_sides": 6,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 3,
+      "fixtures_with_both_provider_indications": 0,
+      "fixtures_with_listed_role": 0,
+      "fixtures_with_projected_change": 0,
+      "fixtures_with_reported_items": 3,
+      "goalkeeper_slots": 36,
+      "projected_different_keeper_sides": 0,
+      "provider_listed_items": 18,
+      "provider_listed_usual_keeper_sides": 0,
+      "providers": {
+        "PREVIOUS_XI": 3
+      },
+      "registered_team_slots": 36,
+      "usual_keeper_sides": 6
+    },
+    "eng.1": {
+      "both_history_verified": 2,
+      "both_usual_keepers": 2,
+      "calendar_checks": {
+        "SIX_MATCH_CALENDAR_CONFIRMED": 4
+      },
+      "calendar_confirmed_flagged_sides": 0,
+      "calendar_confirmed_usual_sides": 4,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 2,
+      "fixtures_with_both_provider_indications": 0,
+      "fixtures_with_listed_role": 0,
+      "fixtures_with_projected_change": 0,
+      "fixtures_with_reported_items": 2,
+      "goalkeeper_slots": 24,
+      "projected_different_keeper_sides": 0,
+      "provider_listed_items": 19,
+      "provider_listed_usual_keeper_sides": 0,
+      "providers": {
+        "PROJECTED_XI": 2
+      },
+      "registered_team_slots": 24,
+      "usual_keeper_sides": 4
+    },
+    "esp.1": {
+      "both_history_verified": 4,
+      "both_usual_keepers": 4,
+      "calendar_checks": {
+        "SIX_MATCH_CALENDAR_CONFIRMED": 8
+      },
+      "calendar_confirmed_flagged_sides": 1,
+      "calendar_confirmed_usual_sides": 8,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 4,
+      "fixtures_with_both_provider_indications": 1,
+      "fixtures_with_listed_role": 1,
+      "fixtures_with_projected_change": 1,
+      "fixtures_with_reported_items": 4,
+      "goalkeeper_slots": 48,
+      "projected_different_keeper_sides": 1,
+      "provider_listed_items": 31,
+      "provider_listed_usual_keeper_sides": 1,
+      "providers": {
+        "PROJECTED_XI": 4
+      },
+      "registered_team_slots": 48,
+      "usual_keeper_sides": 8
+    },
+    "fra.1": {
+      "both_history_verified": 3,
+      "both_usual_keepers": 3,
+      "calendar_checks": {
+        "NO_BOUND_TEAM_CALENDAR": 6
+      },
+      "calendar_confirmed_flagged_sides": 0,
+      "calendar_confirmed_usual_sides": 0,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 3,
+      "fixtures_with_both_provider_indications": 0,
+      "fixtures_with_listed_role": 0,
+      "fixtures_with_projected_change": 0,
+      "fixtures_with_reported_items": 3,
+      "goalkeeper_slots": 36,
+      "projected_different_keeper_sides": 0,
+      "provider_listed_items": 18,
+      "provider_listed_usual_keeper_sides": 0,
+      "providers": {
+        "PROVIDER_WITHOUT_CONFIRMED_BOTH_XI": 3
+      },
+      "registered_team_slots": 36,
+      "usual_keeper_sides": 6
+    },
+    "ger.1": {
+      "both_history_verified": 2,
+      "both_usual_keepers": 2,
+      "calendar_checks": {
+        "SIX_MATCH_CALENDAR_CONFIRMED": 4
+      },
+      "calendar_confirmed_flagged_sides": 0,
+      "calendar_confirmed_usual_sides": 4,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 2,
+      "fixtures_with_both_provider_indications": 0,
+      "fixtures_with_listed_role": 0,
+      "fixtures_with_projected_change": 0,
+      "fixtures_with_reported_items": 2,
+      "goalkeeper_slots": 24,
+      "projected_different_keeper_sides": 0,
+      "provider_listed_items": 23,
+      "provider_listed_usual_keeper_sides": 0,
+      "providers": {
+        "PROVIDER_WITHOUT_CONFIRMED_BOTH_XI": 2
+      },
+      "registered_team_slots": 24,
+      "usual_keeper_sides": 4
+    },
+    "ita.1": {
+      "both_history_verified": 5,
+      "both_usual_keepers": 4,
+      "calendar_checks": {
+        "NO_BOUND_TEAM_CALENDAR": 10
+      },
+      "calendar_confirmed_flagged_sides": 0,
+      "calendar_confirmed_usual_sides": 0,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 5,
+      "fixtures_with_both_provider_indications": 0,
+      "fixtures_with_listed_role": 0,
+      "fixtures_with_projected_change": 0,
+      "fixtures_with_reported_items": 5,
+      "goalkeeper_slots": 60,
+      "projected_different_keeper_sides": 0,
+      "provider_listed_items": 36,
+      "provider_listed_usual_keeper_sides": 0,
+      "providers": {
+        "PROJECTED_XI": 5
+      },
+      "registered_team_slots": 60,
+      "usual_keeper_sides": 9
+    },
+    "ned.1": {
+      "both_history_verified": 3,
+      "both_usual_keepers": 3,
+      "calendar_checks": {
+        "NO_BOUND_TEAM_CALENDAR": 8
+      },
+      "calendar_confirmed_flagged_sides": 0,
+      "calendar_confirmed_usual_sides": 0,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 4,
+      "fixtures_with_both_provider_indications": 1,
+      "fixtures_with_listed_role": 1,
+      "fixtures_with_projected_change": 1,
+      "fixtures_with_reported_items": 4,
+      "goalkeeper_slots": 47,
+      "projected_different_keeper_sides": 1,
+      "provider_listed_items": 21,
+      "provider_listed_usual_keeper_sides": 1,
+      "providers": {
+        "PROJECTED_XI": 4
+      },
+      "registered_team_slots": 48,
+      "usual_keeper_sides": 7
+    },
+    "nor.1": {
+      "both_history_verified": 4,
+      "both_usual_keepers": 3,
+      "calendar_checks": {
+        "SIX_MATCH_CALENDAR_CONFIRMED": 8
+      },
+      "calendar_confirmed_flagged_sides": 2,
+      "calendar_confirmed_usual_sides": 7,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 4,
+      "fixtures_with_both_provider_indications": 1,
+      "fixtures_with_listed_role": 1,
+      "fixtures_with_projected_change": 2,
+      "fixtures_with_reported_items": 4,
+      "goalkeeper_slots": 48,
+      "projected_different_keeper_sides": 2,
+      "provider_listed_items": 26,
+      "provider_listed_usual_keeper_sides": 1,
+      "providers": {
+        "PROJECTED_XI": 4
+      },
+      "registered_team_slots": 48,
+      "usual_keeper_sides": 7
+    },
+    "swe.1": {
+      "both_history_verified": 3,
+      "both_usual_keepers": 1,
+      "calendar_checks": {
+        "SIX_MATCH_CALENDAR_CONFIRMED": 6
+      },
+      "calendar_confirmed_flagged_sides": 0,
+      "calendar_confirmed_usual_sides": 4,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 3,
+      "fixtures_with_both_provider_indications": 0,
+      "fixtures_with_listed_role": 0,
+      "fixtures_with_projected_change": 0,
+      "fixtures_with_reported_items": 2,
+      "goalkeeper_slots": 36,
+      "projected_different_keeper_sides": 0,
+      "provider_listed_items": 6,
+      "provider_listed_usual_keeper_sides": 0,
+      "providers": {
+        "PREVIOUS_XI": 1,
+        "PROVIDER_WITHOUT_CONFIRMED_BOTH_XI": 2
+      },
+      "registered_team_slots": 36,
+      "usual_keeper_sides": 4
+    },
+    "usa.1": {
+      "both_history_verified": 0,
+      "both_usual_keepers": 0,
+      "calendar_checks": {
+        "INCOMPLETE_TEAM_CALENDAR": 6
+      },
+      "calendar_confirmed_flagged_sides": 0,
+      "calendar_confirmed_usual_sides": 0,
+      "first_party_xi_from_supplier": 0,
+      "fixtures": 3,
+      "fixtures_with_both_provider_indications": 0,
+      "fixtures_with_listed_role": 0,
+      "fixtures_with_projected_change": 0,
+      "fixtures_with_reported_items": 3,
+      "goalkeeper_slots": 31,
+      "projected_different_keeper_sides": 0,
+      "provider_listed_items": 14,
+      "provider_listed_usual_keeper_sides": 0,
+      "providers": {
+        "PROVIDER_WITHOUT_CONFIRMED_BOTH_XI": 3
+      },
+      "registered_team_slots": 36,
+      "usual_keeper_sides": 2
+    }
+  },
+  "first_party_files_reviewed": {
+    "ACCESS_DENIED": 1,
+    "FIXTURE_LIST": 1,
+    "STANDINGS": 3
+  },
+  "past_slot_status_in_scope": {
+    "BOUND_PRIOR_GK": 359,
+    "NON_LEAGUE_FT90_OR_NO_ACTUAL_ROSTER": 1
+  },
+  "raw_edition_hash": "df67e4209ff042fba2473b770084e84d1401e085f25c8d629616aeaa5b3c72c2",
+  "scope_exclusions": {
+    "usa.1/round-one-playoffs-game-1": 3
+  },
+  "within_regular_scope": {
+    "both_history_verified": 29,
+    "both_usual_keepers": 25,
+    "calendar_checks": {
+      "NO_BOUND_TEAM_CALENDAR": 24,
+      "SIX_MATCH_CALENDAR_CONFIRMED": 36
+    },
+    "calendar_confirmed_flagged_sides": 3,
+    "calendar_confirmed_usual_sides": 33,
+    "first_party_xi_from_supplier": 0,
+    "fixtures": 30,
+    "fixtures_with_both_provider_indications": 3,
+    "fixtures_with_listed_role": 3,
+    "fixtures_with_projected_change": 4,
+    "fixtures_with_reported_items": 29,
+    "goalkeeper_slots": 359,
+    "projected_different_keeper_sides": 4,
+    "provider_listed_items": 198,
+    "provider_listed_usual_keeper_sides": 3,
+    "providers": {
+      "PREVIOUS_XI": 4,
+      "PROJECTED_XI": 19,
+      "PROVIDER_WITHOUT_CONFIRMED_BOTH_XI": 7
+    },
+    "registered_team_slots": 360,
+    "usual_keeper_sides": 55
+  }
+}
