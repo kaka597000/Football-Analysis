@@ -10,20 +10,32 @@
     "additional_entire_certified_rosters": 0,
     "verified_disjoint_by_original_id_from_prior61_R7_and_november_target_rosters": 122,
     "evidence_files_index_commit": "466fd626a47481e70b176a9a69c58224d7d1bf63",
-    "evidence_files_index_blob":"7f7e9ed63a734cc50e9d0a81e8d83dc0d20ee7f0",
-    "earliest_retained_recovery_commit":"8d2103f7b069b4d44c3a91d8fc97e4c51203e7f8",
-    "recovery_index_blob":"7b6eddfc59e569b3302a6f9e12e5d9f2fbaf4c8c",
-    "scope_note":"Discovery includes out-of-current-scope categories. None of these fixture counts represents an official performance denominator.",
-    "result":"coverage_only"
+    "evidence_files_index_blob": "7f7e9ed63a734cc50e9d0a81e8d83dc0d20ee7f0",
+    "earliest_retained_recovery_commit": "8d2103f7b069b4d44c3a91d8fc97e4c51203e7f8",
+    "recovery_index_blob": "7b6eddfc59e569b3302a6f9e12e5d9f2fbaf4c8c",
+    "scope_note": "Discovery includes out-of-current-scope categories. None of these fixture counts represents an official performance denominator.",
+    "result": "coverage_only",
+    "matrix_records_with_a_competition_code_in_formal_scope": 106
   },
   "january": {
-    "formal_scope_count":20,
-    "represented": ["eng.1","esp.1","ger.1","ita.1","fra.1","ned.1"],
-    "complete_two_sided_Bet365_2_5":612,
-    "original_quote_ingest_clock_verified":0,
-    "previous_study_68_identity_overlap":{"earlier_fit":234,"historical_evaluation":378,"neither":0},
-    "paired_user_displayed_first":0,
-    "paired_user_displayed_ordered_three":0,
-    "paired_actually_preselected_batch":0
+    "formal_scope_count": 20,
+    "represented": [
+      "eng.1",
+      "esp.1",
+      "ger.1",
+      "ita.1",
+      "fra.1",
+      "ned.1"
+    ],
+    "complete_two_sided_Bet365_2_5": 612,
+    "original_quote_ingest_clock_verified": 0,
+    "previous_study_68_identity_overlap": {
+      "earlier_fit": 234,
+      "historical_evaluation": 378,
+      "neither": 0
+    },
+    "paired_user_displayed_first": 0,
+    "paired_user_displayed_ordered_three": 0,
+    "paired_actually_preselected_batch": 0
   }
 }

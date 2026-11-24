@@ -1,0 +1,75 @@
+{
+  "all_handicap_settlement_max_error": 1.2316367278015739e-16,
+  "all_margin_max_error": 5.551115123125783e-17,
+  "ci95": [
+    -1.8832472331862857,
+    1.2821691176470582
+  ],
+  "days": 73,
+  "grid_fingerprint_matches": {
+    "base_hashes_matching": 612,
+    "candidate_hashes_matching": 612
+  },
+  "handicap_quarter_lines_tested": 245,
+  "metrics": {
+    "first": {
+      "base": 84,
+      "candidate": 82,
+      "changed": 96,
+      "gained": 10,
+      "lost": 12,
+      "n": 612
+    },
+    "matrix_three": {
+      "base": 201,
+      "candidate": 196,
+      "changed": 349,
+      "gained": 15,
+      "lost": 20,
+      "n": 612
+    },
+    "total_full_win": {
+      "base": 352,
+      "candidate": 344,
+      "changed": 32,
+      "gained": 12,
+      "lost": 20,
+      "n": 612
+    },
+    "wdl": {
+      "base": 292,
+      "candidate": 292,
+      "changed": 0,
+      "gained": 0,
+      "lost": 0,
+      "n": 612
+    }
+  },
+  "quality": {
+    "base": {
+      "conditional_score_log_loss": 1.0281970405219745,
+      "score_log_loss": 2.940158728521631
+    },
+    "candidate": {
+      "conditional_score_log_loss": 1.025924434681185,
+      "score_log_loss": 2.9378861226808417
+    }
+  },
+  "ranks": {
+    "base": {
+      "1": 84,
+      "3": 201,
+      "5": 310,
+      "10": 477,
+      "20": 583
+    },
+    "candidate": {
+      "1": 82,
+      "3": 196,
+      "5": 306,
+      "10": 478,
+      "20": 583
+    }
+  },
+  "rows": 612
+}
