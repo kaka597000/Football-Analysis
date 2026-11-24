@@ -1,0 +1,36 @@
+{
+  "clocked": {
+    "lambda_fitted": 0.2725335364525884,
+    "matrices_sha256": "0255579dc9abe465f150bdf2509015360df9cb7ca65c49041d8d95ae3978ae27",
+    "paired": 55,
+    "protocol_sha256": "45bc47858729b473ab33a4be481a1428be1fa5f9ed72cc32029eec22f1af9705",
+    "registered": 109,
+    "roster_sha256": "652722f6ddcf278239d3a0ce08f4d7c746c5c15d66581168adff441033726c7e"
+  },
+  "fit": {
+    "by_competition": {
+      "eng.1": 1519,
+      "esp.1": 1520,
+      "fra.1": 1414,
+      "ger.1": 1224,
+      "ita.1": 1516,
+      "ned.1": 1148
+    },
+    "development_first": "2023-08-11",
+    "development_last": "2026-05-24",
+    "included": 8341,
+    "max_date": "2023-06-04",
+    "min_date": "2019-08-02",
+    "raw": 8353,
+    "source_sha256": "7c106ee66a816da84dbbfbf254633b55b7c25e610e7d0f31bf168d68f61d9659",
+    "weight": 0.2725335364525884
+  },
+  "history": {
+    "lambda_fitted": 0.2725335364525884,
+    "matrices_sha256": "55a625722f01735a6d02e57cc18d4e0bd6e0eb62ba76f9986cb6a362bbe4b308",
+    "paired": 6174,
+    "protocol_sha256": "45bc47858729b473ab33a4be481a1428be1fa5f9ed72cc32029eec22f1af9705",
+    "registered": 6174,
+    "roster_sha256": "8741b5688507e02543a262510bfae5578803d6e54404ce1ffe0a816699683c23"
+  }
+}
