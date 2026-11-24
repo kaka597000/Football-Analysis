@@ -1,0 +1,3182 @@
+{
+  "protocol_sha256": "3624c10fd36455ab46fd5b7e3b81b6b2095d2fd911a4cf1a40b9813184e46a3d",
+  "development_only": true,
+  "training": {
+    "roster": 118,
+    "used": [
+      {
+        "match_id": "espn:401884769",
+        "cohort": "ger.1",
+        "freeze_sha256": "371c7be6910f5a7e1b58a52efe86f983b6f7a421ae0b2a659f3d75fba341bd63",
+        "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+        "result_sha256": [
+          "739fe813be2359c2fcefc1ee98d95651a082030c803c88c724cb263337e22613"
+        ]
+      },
+      {
+        "match_id": "espn:401882844",
+        "cohort": "esp.1",
+        "freeze_sha256": "44a2180ef1148edda4c90e9cc42e3a497353b0260efac8cfb96afe5b2c67aa0b",
+        "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+        "result_sha256": [
+          "0a4bac5db4a7678b916f3450055f5c4cd97baefd32567625e1472823015f31a5"
+        ]
+      },
+      {
+        "match_id": "espn:401884764",
+        "cohort": "ger.1",
+        "freeze_sha256": "4680dfd2b5e44775fd4c1dcd75b8a2c45e75438f4f0bf17cfdbc4a7fbe1a8ac0",
+        "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+        "result_sha256": [
+          "5b28b73cfc9640b67ab47763b15923bc286e3dbb067607ed7003ba9b62735022"
+        ]
+      },
+      {
+        "match_id": "espn:401882837",
+        "cohort": "esp.1",
+        "freeze_sha256": "c957c3ce64d5653074f0709b23d374cd5dadbec2e0ce034b4e854a3e750cf0a5",
+        "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+        "result_sha256": [
+          "91112befed187a0ddcb2ac2f8922fbd0f92ced12c00887377ba4716eb601b007"
+        ]
+      },
+      {
+        "match_id": "espn:401874784",
+        "cohort": "ita.1",
+        "freeze_sha256": "a0b290bd3e922c35ed136343e5ff3b58eb3d73d14a746fbe9b27889413366229",
+        "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+        "result_sha256": [
+          "02737e2086d7d4b3ca94a6d51bfb5a73a9ed27632f7e2a19a941ee9703a38c56"
+        ]
+      },
+      {
+        "match_id": "espn:401874959",
+        "cohort": "ita.1",
+        "freeze_sha256": "163bc437c4dadcfae7c40b6ed3e689601657a39e5b2393b9078e43cb12f0fc98",
+        "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+        "result_sha256": [
+          "e42dc238147040e7982519e083cbfd4a1309f200ddf74d2929129375360aecc5"
+        ]
+      },
+      {
+        "match_id": "espn:401882828",
+        "cohort": "esp.1",
+        "freeze_sha256": "b1282f9abbbae768868806ba03c443d72573b6661c6c3a3f9013d7bbf34fa28d",
+        "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+        "result_sha256": [
+          "be97adc993c4871b1ad9da49a356307898f565ad7e78ac14e61f1eb3327523d8"
+        ]
+      },
+      {
+        "match_id": "espn:401874762",
+        "cohort": "ita.1",
+        "freeze_sha256": "b9213954bcc6366c546a423fc7b4754e85f4dab22358e8c41674ba707df6ddff",
+        "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+        "result_sha256": [
+          "c1bd637f6d648821b7f6bb8a51e029438900c94b77c4bef76b8e267240b35b9a"
+        ]
+      },
+      {
+        "match_id": "espn:401882846",
+        "cohort": "esp.1",
+        "freeze_sha256": "969506e0c45e50d51c6d5e92b154fdd11815b265fa900f9bf16f6ce8da869650",
+        "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+        "result_sha256": [
+          "ff0d43380db271fa989aa70f9a53037662f24ceca39aa8f51bf705a206a34b64",
+          "7387297b58e8a62d9e51ba7358ff2ece182bc615244d3aa86b60417b196e9c82"
+        ]
+      },
+      {
+        "match_id": "espn:401876432",
+        "cohort": "fra.1",
+        "freeze_sha256": "59182d52b18411809b4b4354634b2cc33b03ca81cc19e9977a256a56b1a14a38",
+        "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+        "result_sha256": [
+          "d58f5dc02e7670c4e1f50e669a93e635287e4b0e918e3db008b04fe810d2aa33"
+        ]
+      },
+      {
+        "match_id": "espn:401884767",
+        "cohort": "ger.1",
+        "freeze_sha256": "dc14fa98a1b16494091e4e6ad9aba42e8afaa9934642c090cf8512db719f6b43",
+        "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+        "result_sha256": [
+          "b0302b43d7b0956dd423b048cf35c24e7d578caf88ef3a6656e8fb58a7cd3ad7"
+        ]
+      },
+      {
+        "match_id": "espn:401842851",
+        "cohort": "swe.1",
+        "freeze_sha256": "200c15272cc2c21a14790aa9a6d1bf2717e9c772c9e792c4811035ad81f7e746",
+        "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+        "result_sha256": [
+          "92ad1fe54918594c2a013793636557042dc5f671565bc88308d8cf6415011823"
+        ]
+      },
+      {
+        "match_id": "espn:401842846",
+        "cohort": "swe.1",
+        "freeze_sha256": "ea3614aec46eae5805549067d0c58c33cb095256a0c4cc89dd42be3874bd3ec8",
+        "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+        "result_sha256": [
+          "15f45f574b867a1425e6751d23710d77fcd5753c2ce69a4f4ad92b70fa41210f"
+        ]
+      },
+      {
+        "match_id": "espn:401879258",
+        "cohort": "eng.1",
+        "freeze_sha256": "fa895d687bcd1a79d5096eb9c640cb5be07e1ddbcd77ccc39b7584cb2956e23c",
+        "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+        "result_sha256": [
+          "7d034cfbbe799cc64553be67d39ea3052f66824fb9f31ae03a5dda8ffe7742b4"
+        ]
+      },
+      {
+        "match_id": "espn:401874953",
+        "cohort": "ita.1",
+        "freeze_sha256": "62b7312a9426d15531d7f7fc82cac7e5d5ab99e8ecbb44702a31a106c4fce8b3",
+        "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+        "result_sha256": [
+          "aef17ad276c269150adcff950f3003b5f5e01b5f88af74eccced82153d6daf20"
+        ]
+      },
+      {
+        "match_id": "espn:401841286",
+        "cohort": "bra.1",
+        "freeze_sha256": "11bdf013d987cb6b6fa777133615dd2e868ab2816dba1b10654adf7672ca01b3",
+        "model_sha256": "87a77636f918138710f0d7b090d65bb00a30de539e9c2de665f81dedadb8b69b",
+        "result_sha256": [
+          "55d86e5618b070a0d7ec8fc4335a13e68f0710dc02e8a85ea7c38b05a8e7b54f"
+        ]
+      },
+      {
+        "match_id": "espn:401882870",
+        "cohort": "esp.1",
+        "freeze_sha256": "02a0f7d1e0ddc50222bf1f40887d01d08fa55c4017e52a4b0bf55397b9b9d036",
+        "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+        "result_sha256": [
+          "0619a0cff5e42a794e1f61819a8a6697443e6be32c87181faee0c646222c3865"
+        ]
+      },
+      {
+        "match_id": "espn:401884766",
+        "cohort": "ger.1",
+        "freeze_sha256": "51859f37ca653bb25a14ff3b07e61c44b6a6555741d453370ad4dbaf45fb20e7",
+        "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+        "result_sha256": [
+          "83f61a86685cc61dacf2839870b39d7e6dee329ac2946f2451495d66c9441050"
+        ]
+      },
+      {
+        "match_id": "espn:401884772",
+        "cohort": "ger.1",
+        "freeze_sha256": "1f56a201992a8307eadb5ea8c6d9cc548c2ae0576f0ffe52313127707e618a0b",
+        "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+        "result_sha256": [
+          "d1f5d17513e14960b381297c3f9453588d1571640ec7d00db609de810038d9b5"
+        ]
+      },
+      {
+        "match_id": "espn:401876437",
+        "cohort": "fra.1",
+        "freeze_sha256": "c0a938819a14bed04e4e5962236db48fbe964fcf135c74e64a3b7f3367da1cc9",
+        "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+        "result_sha256": [
+          "085ec57fd08be4a903a458c34cc175e61e4c8563d9164c7a92bdd929910864fe"
+        ]
+      },
+      {
+        "match_id": "espn:401882842",
+        "cohort": "esp.1",
+        "freeze_sha256": "d32b368807601332ff6232ac81e0a6320d910e85994e9b14666d9a25d625da35",
+        "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+        "result_sha256": [
+          "2d6461d18484f7d7ee3e71f8a071d1257c94f74833cb82a8d0d5661411a7e68c"
+        ]
+      },
+      {
+        "match_id": "espn:401884770",
+        "cohort": "ger.1",
+        "freeze_sha256": "dcc33606920e091f4c5f1f1a7e7eaf63edd10e9bfd8a496d779d9b4e52f39093",
+        "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+        "result_sha256": [
+          "75d628e57dc90a2d09b44846270a73beaacbd6bc5b138fd2f18ca0883253ecc0"
+        ]
+      },
+      {
+        "match_id": "espn:401879262",
+        "cohort": "eng.1",
+        "freeze_sha256": "7deb7d01079ceb6afb4be4af51b827108d86284fffe5aff23ea199074ada3695",
+        "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+        "result_sha256": [
+          "20b1c8cd48376aa5d86d1902b8a13076822cf6dcbf8bb5e09cb56f34ec032248"
+        ]
+      },
+      {
+        "match_id": "espn:401879257",
+        "cohort": "eng.1",
+        "freeze_sha256": "0f38a220f0ac7b8fc581df654a29e4a80e6279c3dc1961298bc12202f349e1bc",
+        "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+        "result_sha256": [
+          "c493905418e6bf024f31c717c519a98f427887184693481c736d59d5c8ebea04"
+        ]
+      },
+      {
+        "match_id": "espn:401884765",
+        "cohort": "ger.1",
+        "freeze_sha256": "e139ca10b417004b3318881ccc62c53d4d3666e3bcf2756d5569ce81a4b44c51",
+        "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+        "result_sha256": [
+          "7b97cfd2553008a5101e118a2a880df11c53c5080c3505e4c68145e469f0d204"
+        ]
+      },
+      {
+        "match_id": "espn:401879259",
+        "cohort": "eng.1",
+        "freeze_sha256": "5e0f8fbe1cce2465583d8f2adad4e85d567376730059a1c9375b4c2f836706b3",
+        "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+        "result_sha256": [
+          "cdc4fc7c05fb9e339648217df88a21eba043e5cb0706594a7d6ffaee70179250"
+        ]
+      },
+      {
+        "match_id": "espn:401841275",
+        "cohort": "bra.1",
+        "freeze_sha256": "3ad9bc17502817a625966dc3c06963ae0c01564d360f44207a50985a3b0216aa",
+        "model_sha256": "87a77636f918138710f0d7b090d65bb00a30de539e9c2de665f81dedadb8b69b",
+        "result_sha256": [
+          "b0c1bb448f3454f690c82719e0c1be98262c2f7bd8cefcc4a8f1ac15e810c292"
+        ]
+      }
+    ],
+    "missing": {
+      "espn:401879247": "result_bytes_absent_from_early_snapshot",
+      "espn:401882827": "no_verified_result_in_inventory",
+      "espn:401843373": "no_verified_result_in_inventory",
+      "espn:401843468": "no_verified_result_in_inventory",
+      "espn:401874969": "no_verified_result_in_inventory",
+      "espn:401884747": "no_verified_result_in_inventory",
+      "espn:401874780": "result_bytes_absent_from_early_snapshot",
+      "espn:401841282": "no_verified_result_in_inventory",
+      "espn:401876420": "no_verified_result_in_inventory",
+      "espn:401879252": "no_verified_result_in_inventory",
+      "espn:401843465": "no_verified_result_in_inventory",
+      "espn:401842858": "result_bytes_absent_from_early_snapshot",
+      "espn:401874988": "no_verified_result_in_inventory",
+      "espn:401884751": "no_verified_result_in_inventory",
+      "espn:401884755": "no_verified_result_in_inventory",
+      "espn:401874798": "result_bytes_absent_from_early_snapshot",
+      "espn:401882830": "no_verified_result_in_inventory",
+      "espn:401884756": "no_verified_result_in_inventory",
+      "espn:401874980": "result_bytes_absent_from_early_snapshot",
+      "espn:401884749": "no_verified_result_in_inventory",
+      "espn:401841272": "no_verified_result_in_inventory",
+      "espn:401843473": "no_verified_result_in_inventory",
+      "espn:401874976": "no_verified_result_in_inventory",
+      "espn:401842864": "no_verified_result_in_inventory",
+      "espn:401882843": "no_verified_result_in_inventory",
+      "espn:401879250": "no_verified_result_in_inventory",
+      "espn:401879248": "result_bytes_absent_from_early_snapshot",
+      "espn:401882820": "no_verified_result_in_inventory",
+      "espn:401843372": "no_verified_result_in_inventory",
+      "espn:401882832": "no_verified_result_in_inventory",
+      "espn:401879254": "no_verified_result_in_inventory",
+      "espn:401874952": "result_bytes_absent_from_early_snapshot",
+      "espn:401882829": "no_verified_result_in_inventory",
+      "espn:401874772": "result_bytes_absent_from_early_snapshot",
+      "espn:401884760": "no_verified_result_in_inventory",
+      "espn:401842861": "no_verified_result_in_inventory",
+      "espn:401842857": "result_bytes_absent_from_early_snapshot",
+      "okooo:1335550": "regular_stage_unconfirmed",
+      "espn:401841289": "no_verified_result_in_inventory",
+      "espn:401884759": "no_verified_result_in_inventory",
+      "espn:401878768": "no_verified_result_in_inventory",
+      "espn:401882833": "no_verified_result_in_inventory",
+      "espn:401878767": "no_verified_result_in_inventory",
+      "espn:401874955": "result_bytes_absent_from_early_snapshot",
+      "espn:401878770": "no_verified_result_in_inventory",
+      "espn:401879256": "no_verified_result_in_inventory",
+      "espn:401884757": "no_verified_result_in_inventory",
+      "espn:401882831": "no_verified_result_in_inventory",
+      "espn:401874779": "result_bytes_absent_from_early_snapshot",
+      "espn:401874961": "result_bytes_absent_from_early_snapshot",
+      "espn:401882838": "no_verified_result_in_inventory",
+      "espn:401882818": "no_verified_result_in_inventory",
+      "espn:401882822": "no_verified_result_in_inventory",
+      "espn:401878766": "no_verified_result_in_inventory",
+      "espn:401874799": "no_verified_result_in_inventory",
+      "espn:401874993": "no_verified_result_in_inventory",
+      "espn:401884754": "no_verified_result_in_inventory",
+      "espn:401882817": "no_verified_result_in_inventory",
+      "espn:401884746": "no_verified_result_in_inventory",
+      "espn:401876427": "no_verified_result_in_inventory",
+      "espn:401879249": "result_bytes_absent_from_early_snapshot",
+      "espn:401874773": "no_verified_result_in_inventory",
+      "espn:401874760": "result_bytes_absent_from_early_snapshot",
+      "espn:401874786": "result_bytes_absent_from_early_snapshot",
+      "espn:401874948": "result_bytes_absent_from_early_snapshot",
+      "espn:401874990": "no_verified_result_in_inventory",
+      "espn:401884753": "no_verified_result_in_inventory",
+      "espn:401874972": "result_bytes_absent_from_early_snapshot",
+      "espn:401876421": "no_verified_result_in_inventory",
+      "espn:401876425": "no_verified_result_in_inventory",
+      "espn:401874935": "result_bytes_absent_from_early_snapshot",
+      "espn:401882835": "no_verified_result_in_inventory",
+      "espn:401884763": "no_verified_result_in_inventory",
+      "espn:401876416": "no_verified_result_in_inventory",
+      "espn:401874965": "no_verified_result_in_inventory",
+      "espn:401874795": "no_verified_result_in_inventory",
+      "espn:401876424": "no_verified_result_in_inventory",
+      "espn:401882834": "no_verified_result_in_inventory",
+      "espn:401841290": "no_verified_result_in_inventory",
+      "espn:401884758": "no_verified_result_in_inventory",
+      "espn:401884762": "no_verified_result_in_inventory",
+      "espn:401878764": "no_verified_result_in_inventory",
+      "espn:401878763": "result_bytes_absent_from_early_snapshot",
+      "espn:401878771": "no_verified_result_in_inventory",
+      "espn:401879251": "result_bytes_absent_from_early_snapshot",
+      "espn:401878761": "no_verified_result_in_inventory",
+      "espn:401841295": "no_verified_result_in_inventory",
+      "espn:401882825": "no_verified_result_in_inventory",
+      "espn:401884748": "no_verified_result_in_inventory",
+      "espn:401879255": "no_verified_result_in_inventory",
+      "espn:401874958": "result_bytes_absent_from_early_snapshot"
+    }
+  },
+  "baseline_models": {
+    "eng.1": {
+      "hash": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "train_end": "2026-09-20",
+      "version": "WCPP-MAIN-1.2"
+    },
+    "esp.1": {
+      "hash": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "train_end": "2026-10-09",
+      "version": "WCPP-MAIN-1.2"
+    },
+    "ger.1": {
+      "hash": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "train_end": "2026-10-09",
+      "version": "WCPP-MAIN-1.2"
+    },
+    "ita.1": {
+      "hash": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "train_end": "2026-09-20",
+      "version": "WCPP-MAIN-1.2"
+    },
+    "fra.1": {
+      "hash": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "train_end": "2026-10-09",
+      "version": "WCPP-MAIN-1.2"
+    },
+    "nor.1": {
+      "hash": "84a17fffa0687383beffd8d0f07273332bab58378daaeff7cccf5fde0e261b33",
+      "train_end": "2026-10-09",
+      "version": "WCPP-MAIN-1.2"
+    },
+    "swe.1": {
+      "hash": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "train_end": "2026-09-20",
+      "version": "WCPP-MAIN-1.2"
+    },
+    "bra.1": {
+      "hash": "87a77636f918138710f0d7b090d65bb00a30de539e9c2de665f81dedadb8b69b",
+      "train_end": "2026-10-09",
+      "version": "WCPP-MAIN-1.2"
+    }
+  },
+  "coefficients": {
+    "eng.1": 0.0193988372678586,
+    "esp.1": -0.0004149435104609447,
+    "ger.1": -0.032215088801934695,
+    "ita.1": 0.09854603618293942,
+    "fra.1": 0.008712183276330892,
+    "nor.1": 0.0,
+    "swe.1": -0.0353969926895695,
+    "bra.1": 0.030415885461079067
+  },
+  "coverage": {
+    "retained_panel": 68,
+    "in_window": 61,
+    "evaluated": 61,
+    "missing": {}
+  },
+  "overall": {
+    "n": 61,
+    "observed_four_plus": 15,
+    "baseline": {
+      "top1": 8,
+      "top3": 19,
+      "p_four_plus": 20.041230987012174,
+      "four_plus_brier": 0.18289888739144072,
+      "score_log_loss": 2.887322770251916
+    },
+    "candidate": {
+      "top1": 9,
+      "top3": 18,
+      "p_four_plus": 20.39949100042489,
+      "four_plus_brier": 0.18769490836368896,
+      "score_log_loss": 2.8935821966282647
+    },
+    "top1_changes": {
+      "corrected": [
+        "espn:401874810"
+      ],
+      "spoiled": []
+    },
+    "top3_changes": {
+      "corrected": [
+        "espn:401875018"
+      ],
+      "spoiled": [
+        "espn:401874791",
+        "espn:401874800"
+      ]
+    }
+  },
+  "by_cohort": {
+    "eng.1": {
+      "n": 10,
+      "observed_four_plus": 4,
+      "baseline": {
+        "top1": 3,
+        "top3": 4,
+        "p_four_plus": 3.0394396132111683,
+        "four_plus_brier": 0.253557346726171,
+        "score_log_loss": 2.934301020343161
+      },
+      "candidate": {
+        "top1": 3,
+        "top3": 4,
+        "p_four_plus": 3.1591645289409693,
+        "four_plus_brier": 0.25159427395725154,
+        "score_log_loss": 2.930529933083741
+      },
+      "top1_changes": {
+        "corrected": [],
+        "spoiled": []
+      },
+      "top3_changes": {
+        "corrected": [],
+        "spoiled": []
+      }
+    },
+    "esp.1": {
+      "n": 9,
+      "observed_four_plus": 0,
+      "baseline": {
+        "top1": 1,
+        "top3": 3,
+        "p_four_plus": 2.677327127851498,
+        "four_plus_brier": 0.09168996521985995,
+        "score_log_loss": 2.568789598714717
+      },
+      "candidate": {
+        "top1": 1,
+        "top3": 3,
+        "p_four_plus": 2.675076658749383,
+        "four_plus_brier": 0.09153797857637855,
+        "score_log_loss": 2.56824837319163
+      },
+      "top1_changes": {
+        "corrected": [],
+        "spoiled": []
+      },
+      "top3_changes": {
+        "corrected": [],
+        "spoiled": []
+      }
+    },
+    "ger.1": {
+      "n": 8,
+      "observed_four_plus": 3,
+      "baseline": {
+        "top1": 2,
+        "top3": 4,
+        "p_four_plus": 3.564590446323385,
+        "four_plus_brier": 0.2721936725940726,
+        "score_log_loss": 2.823450547416204
+      },
+      "candidate": {
+        "top1": 2,
+        "top3": 4,
+        "p_four_plus": 3.3754761905993234,
+        "four_plus_brier": 0.26866158681031294,
+        "score_log_loss": 2.8237402414028954
+      },
+      "top1_changes": {
+        "corrected": [],
+        "spoiled": []
+      },
+      "top3_changes": {
+        "corrected": [],
+        "spoiled": []
+      }
+    },
+    "ita.1": {
+      "n": 9,
+      "observed_four_plus": 0,
+      "baseline": {
+        "top1": 1,
+        "top3": 4,
+        "p_four_plus": 2.4115847118154607,
+        "four_plus_brier": 0.07812121796121928,
+        "score_log_loss": 2.443944476006538
+      },
+      "candidate": {
+        "top1": 2,
+        "top3": 3,
+        "p_four_plus": 2.936495524110719,
+        "four_plus_brier": 0.11452954732032389,
+        "score_log_loss": 2.495039744898083
+      },
+      "top1_changes": {
+        "corrected": [
+          "espn:401874810"
+        ],
+        "spoiled": []
+      },
+      "top3_changes": {
+        "corrected": [
+          "espn:401875018"
+        ],
+        "spoiled": [
+          "espn:401874791",
+          "espn:401874800"
+        ]
+      }
+    },
+    "fra.1": {
+      "n": 8,
+      "observed_four_plus": 1,
+      "baseline": {
+        "top1": 1,
+        "top3": 4,
+        "p_four_plus": 2.483115853364447,
+        "four_plus_brier": 0.12421415547894088,
+        "score_log_loss": 2.6582345540307077
+      },
+      "candidate": {
+        "top1": 1,
+        "top3": 4,
+        "p_four_plus": 2.5257686384875884,
+        "four_plus_brier": 0.126118081791055,
+        "score_log_loss": 2.664259698876324
+      },
+      "top1_changes": {
+        "corrected": [],
+        "spoiled": []
+      },
+      "top3_changes": {
+        "corrected": [],
+        "spoiled": []
+      }
+    },
+    "nor.1": {
+      "n": 7,
+      "observed_four_plus": 5,
+      "baseline": {
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 2.703685945467081,
+        "four_plus_brier": 0.3090466799238006,
+        "score_log_loss": 3.9276320064048376
+      },
+      "candidate": {
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 2.703685945467081,
+        "four_plus_brier": 0.3090466799238006,
+        "score_log_loss": 3.9276320064048376
+      },
+      "top1_changes": {
+        "corrected": [],
+        "spoiled": []
+      },
+      "top3_changes": {
+        "corrected": [],
+        "spoiled": []
+      }
+    },
+    "swe.1": {
+      "n": 8,
+      "observed_four_plus": 2,
+      "baseline": {
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 2.577041047128695,
+        "four_plus_brier": 0.19794377525300338,
+        "score_log_loss": 3.124030322984308
+      },
+      "candidate": {
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 2.402262087765407,
+        "four_plus_brier": 0.19497032672476297,
+        "score_log_loss": 3.0998373200627536
+      },
+      "top1_changes": {
+        "corrected": [],
+        "spoiled": []
+      },
+      "top3_changes": {
+        "corrected": [],
+        "spoiled": []
+      }
+    },
+    "bra.1": {
+      "n": 2,
+      "observed_four_plus": 0,
+      "baseline": {
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.5844462418504379,
+        "four_plus_brier": 0.08740921445586111,
+        "score_log_loss": 2.6649623345801885
+      },
+      "candidate": {
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.6215614263044218,
+        "four_plus_brier": 0.09875610773326987,
+        "score_log_loss": 2.718749736554863
+      },
+      "top1_changes": {
+        "corrected": [],
+        "spoiled": []
+      },
+      "top3_changes": {
+        "corrected": [],
+        "spoiled": []
+      }
+    }
+  },
+  "utc_matchdays": 4,
+  "paired_date_intervals": {
+    "top1": [
+      0.0,
+      0.030303030303030304
+    ],
+    "top3": [
+      -0.041666666666666664,
+      0.0
+    ],
+    "p_four_plus": [
+      0.005268241897477631,
+      0.009880399105800797
+    ],
+    "four_plus_brier": [
+      0.0031229942465033377,
+      0.01378261079672927
+    ],
+    "score_log_loss": [
+      0.0016449669819941382,
+      0.024368972482216644
+    ]
+  },
+  "decision": "RETAIN_BASELINE",
+  "prospective_n": 0,
+  "rows": [
+    {
+      "match_id": "espn:401842876",
+      "cohort": "swe.1",
+      "kickoff_at": "2026-11-06T18:00Z",
+      "cutoff_at": "2026-11-05T05:50:24.404264+00:00",
+      "date": "2026-11-06",
+      "actual": [
+        4,
+        1
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "4a88ae1d940294398b485de3777e9342faf9893451cabd2212e05215e7f5e194",
+      "matrix_sha256": "5b182837c81ac4bb25b204dccc31e667261e59b78d2c04ca65bf1797ed6b25b2",
+      "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "result_sha256": "24a17b7d9732eb401eccd0b3657f63b8a24f8856aeeb1992094b5642174d0cf5",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.29342685918627054,
+        "four_plus_brier": 0.49924560331937834,
+        "score_log_loss": 3.623027204977548
+      },
+      "candidate": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.27249925641311096,
+        "four_plus_brier": 0.5292573319194764,
+        "score_log_loss": 3.7049280366055255
+      }
+    },
+    {
+      "match_id": "espn:401884739",
+      "cohort": "ger.1",
+      "kickoff_at": "2026-11-06T19:30Z",
+      "cutoff_at": "2026-11-05T00:50:14.635389+00:00",
+      "date": "2026-11-06",
+      "actual": [
+        3,
+        1
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "19e825cd09be273c54a8b85ca10d27a263558914b0ac9e1a6182ed8345b058c2",
+      "matrix_sha256": "224c4abfff8deb8d76fae090bacc1014ac05e4d41b41255e2a743ba559ec9a24",
+      "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "result_sha256": "9bcfdb359b34e85df684727e30a975701f245259d329065fe33d2fd1040f0561",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3797372432767018,
+        "four_plus_brier": 0.38472588737798546,
+        "score_log_loss": 2.982539286650136
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3575952704344519,
+        "four_plus_brier": 0.4126838365681851,
+        "score_log_loss": 3.0124753862743217
+      }
+    },
+    {
+      "match_id": "espn:401874815",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-06T19:45Z",
+      "cutoff_at": "2026-11-05T00:50:17.031260+00:00",
+      "date": "2026-11-06",
+      "actual": [
+        2,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "193493187e8db8a9ce11b73d07038cb52ac746137e3cf25689eea891038b5000",
+      "matrix_sha256": "d8338ecfe6d78fdf0917f41d0973003fb7eaefe398e414a0077a57f607f4ff47",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "ed39dae79eb1c825477a6d0b52c39109a7075e9427525e1a6754b7f7a992afde",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3475533966164102,
+        "four_plus_brier": 0.12079336349960375,
+        "score_log_loss": 2.7015964960170336
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.41634781796411763,
+        "four_plus_brier": 0.17334550552348202,
+        "score_log_loss": 2.714243390474592
+      }
+    },
+    {
+      "match_id": "espn:401876405",
+      "cohort": "fra.1",
+      "kickoff_at": "2026-11-06T19:45Z",
+      "cutoff_at": "2026-11-05T00:50:16.000957+00:00",
+      "date": "2026-11-06",
+      "actual": [
+        3,
+        1
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "a2ddbf5fa8c7f47f76edf29c4a937c49ad048362dae1b10db0152285e63a7604",
+      "matrix_sha256": "13742b1864255315ff4c6b58e7223fe09a2aaa30d9688d6a300eda52bf6d30b2",
+      "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "result_sha256": "9d5fab74da3ee22b5af322fd07f564a12cd20ab556b6e80951bd8b2678f784e0",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.41807871396210283,
+        "four_plus_brier": 0.3386323831440001,
+        "score_log_loss": 3.048922432033094
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.4244395767547413,
+        "four_plus_brier": 0.33126980080626134,
+        "score_log_loss": 3.0428868213845637
+      }
+    },
+    {
+      "match_id": "espn:401879242",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-06T20:00Z",
+      "cutoff_at": "2026-11-04T06:04:21.434025+00:00",
+      "date": "2026-11-06",
+      "actual": [
+        3,
+        1
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "51dd089cac20251d2b913debcfbb0fadf0096df6d4fce55cec2c2cfc2ed597c1",
+      "matrix_sha256": "2f586851b0a853a66ba66f9666792bf458b45f2a54de425ed29c19636b569309",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "479c555dd98787e027603c552494b2bc1c7ca34fdc2bdd875aed8b6f17bf0718",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-0",
+          "2-0",
+          "1-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.22765754918471082,
+        "four_plus_brier": 0.5965128613313674,
+        "score_log_loss": 2.9777144108075944
+      },
+      "candidate": {
+        "scores": [
+          "1-0",
+          "2-0",
+          "1-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.2377359422140617,
+        "four_plus_brier": 0.5810464937922843,
+        "score_log_loss": 2.947726519290492
+      }
+    },
+    {
+      "match_id": "espn:401882809",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-06T20:00Z",
+      "cutoff_at": "2026-11-05T00:50:18.039973+00:00",
+      "date": "2026-11-06",
+      "actual": [
+        0,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "f123afcb7e56f6e04d423e353863c4c62f1504313219907493abf7b7562cfa2f",
+      "matrix_sha256": "f9f57228471967207347a8dac99d049972fbf80a6700be047e67f4e9a0305e75",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "6d799ac7e335905c2be42d2aab9f376b39b7a6eebba73cf2e56890e941ab7eb0",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.26647501631303,
+        "four_plus_brier": 0.0710089343190296,
+        "score_log_loss": 2.611373326649394
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.26623892315116526,
+        "four_plus_brier": 0.07088316420069209,
+        "score_log_loss": 2.6102899790136895
+      }
+    },
+    {
+      "match_id": "espn:401878758",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-07T12:30Z",
+      "cutoff_at": "2026-11-05T00:50:19.122172+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "1f2c5ac4c976f4ed1d98b1730ccd7b585c83b881ddfc5f6f6fe9fbe15ba2fc77",
+      "matrix_sha256": "a74f350f4d47790bbb9bcc4b99b15e7a6ad47955efb095a475410e5be3bfb6f8",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "dedf32e98678d8751c8297185e38e44d0f4232e541f7c3cec398db8f297efb56",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.2495953010729015,
+        "four_plus_brier": 0.06229781431767235,
+        "score_log_loss": 2.0154424960903303
+      },
+      "candidate": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.2603186478086165,
+        "four_plus_brier": 0.06776579839690652,
+        "score_log_loss": 2.0456692211860505
+      }
+    },
+    {
+      "match_id": "espn:401882812",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-07T13:00Z",
+      "cutoff_at": "2026-11-05T00:50:20.161414+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "f2d4beb54ff24c47d5df40e8014216f340ec4a8b03009b94da37ccd7d916f8f9",
+      "matrix_sha256": "1a19aa0a88f0501c6e675a168436ef91fee36ff5e0c63f02e5ddaeb7dbe6d668",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "2457748baf0e9e506e910231a69b4201f5b83d33f7ddb101812fb87646b3cbe7",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3624956149100518,
+        "four_plus_brier": 0.13140307082901656,
+        "score_log_loss": 2.6156733291097867
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3622128282445866,
+        "four_plus_brier": 0.1311981329449424,
+        "score_log_loss": 2.6156555730832904
+      }
+    },
+    {
+      "match_id": "espn:401874791",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-07T14:00Z",
+      "cutoff_at": "2026-11-05T00:50:21.209511+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "2dad8d679f5fb137c5a63d85f0b3ec2f8727b097ce51dc4fb8862dc350925132",
+      "matrix_sha256": "54a28153d9fc185d08d4f8ca7eb6daa6bc5b17928497308f791e7ba56e8480ab",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "6fb55c12726214e157d3e7734fab96088c0a3073b80f120e0c129ea3a114636d",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.20800432043895492,
+        "four_plus_brier": 0.04326579732127144,
+        "score_log_loss": 2.334955258625072
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.2591962595558423,
+        "four_plus_brier": 0.06718270096773957,
+        "score_log_loss": 2.4783339826325053
+      }
+    },
+    {
+      "match_id": "espn:401874811",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-07T14:00Z",
+      "cutoff_at": "2026-11-05T00:50:22.265782+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "c230804ddff4b69d8a0d912654a73d8ef93ee1e801cf75645828cec548bd6f08",
+      "matrix_sha256": "8325c950fa4ea07f2d1b5bc1446aa7e1b59ecc1fa358dbe663aa643b5a2b3e4f",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "73fdde39d8dcd917b9d61fcec5976b70eaa9888d7773f23e4996759a6f3d7da0",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.23236536035370858,
+        "four_plus_brier": 0.05399366069230885,
+        "score_log_loss": 2.059672009225693
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "2-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.2873921233906712,
+        "four_plus_brier": 0.08259423258699879,
+        "score_log_loss": 2.1165957864972835
+      }
+    },
+    {
+      "match_id": "espn:401884737",
+      "cohort": "ger.1",
+      "kickoff_at": "2026-11-07T14:30Z",
+      "cutoff_at": "2026-11-05T00:50:23.333055+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        2,
+        2
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "0d0e67f83c85365101985f524d701851f708cf1165c9243ccd3f73a3541ec958",
+      "matrix_sha256": "1c0dd76d4631951df9496b62189acbd6750413be33efe17a62ab3207d90d29f6",
+      "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "result_sha256": "ab51043cb37e75afcfaa25208c6cbbd6b57f5b7da44892c9dc3c41deb197c021",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.37988274443063097,
+        "four_plus_brier": 0.3845454106548861,
+        "score_log_loss": 2.7654490864087298
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3577364818595766,
+        "four_plus_brier": 0.41250242673411397,
+        "score_log_loss": 2.7953645489301526
+      }
+    },
+    {
+      "match_id": "espn:401884740",
+      "cohort": "ger.1",
+      "kickoff_at": "2026-11-07T14:30Z",
+      "cutoff_at": "2026-11-05T00:50:24.410134+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "be4c5fdf8638474a6deafd5cc7b45d2aa10dd15734bc0a28bbd85e0781dd5016",
+      "matrix_sha256": "eb2723f344825142a3b5f9859bb723d8d87ee95f18dc6e23548d571c4ec60f63",
+      "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "result_sha256": "02cddcc1c97ef84773e200d147a54904931990da44b93fe9ff03a9b5e93082ae",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-2",
+          "1-1",
+          "1-3"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.5119266420273132,
+        "four_plus_brier": 0.26206888681736085,
+        "score_log_loss": 2.408079093077355
+      },
+      "candidate": {
+        "scores": [
+          "1-2",
+          "1-1",
+          "1-3"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.4871164560407415,
+        "four_plus_brier": 0.23728244174569163,
+        "score_log_loss": 2.3865019972411488
+      }
+    },
+    {
+      "match_id": "espn:401884744",
+      "cohort": "ger.1",
+      "kickoff_at": "2026-11-07T14:30Z",
+      "cutoff_at": "2026-11-05T00:50:25.496668+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        5,
+        2
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "f39e52ab0504ab7f8e3e3bfae1580dc87ac4b9f11a568bbf1f17f574bfebeff5",
+      "matrix_sha256": "254b9a334eaac5dfd7c69007a063481ddde481b4f22f1db2f2d0662f3f1c7c0b",
+      "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "result_sha256": "039a3f2bd64d0560bd124a09f18d33364fb511c44cbf783165e9407ba1a066f1",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "2-1",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.4538022849609384,
+        "four_plus_brier": 0.2983319439138919,
+        "score_log_loss": 4.547434915959982
+      },
+      "candidate": {
+        "scores": [
+          "2-1",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.42985751574239406,
+        "four_plus_brier": 0.32506245235543446,
+        "score_log_loss": 4.663385463337619
+      }
+    },
+    {
+      "match_id": "espn:401884745",
+      "cohort": "ger.1",
+      "kickoff_at": "2026-11-07T14:30Z",
+      "cutoff_at": "2026-11-05T00:50:26.642812+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        2,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "491ccddc47bb3e608a874d49e420f086fb944ab8bc686b538d18fef074fb90c7",
+      "matrix_sha256": "07643280a325f69ca8c6c1d5a42bf523a58f414c0d957dc4d1a0c6b8caa43baa",
+      "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "result_sha256": "a136a2719208c64bd0b1eac49c26ca4fd3554a8d97a490d19cbb7838cdc04aff",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "2-1",
+          "2-0",
+          "1-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.43554083918345887,
+        "four_plus_brier": 0.1896958225966316,
+        "score_log_loss": 2.328321455181773
+      },
+      "candidate": {
+        "scores": [
+          "2-1",
+          "2-0",
+          "1-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.41196900826766425,
+        "four_plus_brier": 0.1697184637730428,
+        "score_log_loss": 2.318064353475598
+      }
+    },
+    {
+      "match_id": "espn:401878760",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-07T15:00Z",
+      "cutoff_at": "2026-11-05T00:50:27.746414+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "28a8d633d5322022c1a085c01c658341b6bd1171809342594dd05674f5545ba7",
+      "matrix_sha256": "e014cb2388569d8c1aa2ad185b4107bfdb494007001578bf2915ceb993f40236",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "44cde392f5c91bfb5162a9b263c8d5add7a8b800d57dcdb7e8aa2cfb63318a97",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.21226081176763462,
+        "four_plus_brier": 0.045054652212255214,
+        "score_log_loss": 1.9362794868207143
+      },
+      "candidate": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.22185906035812772,
+        "four_plus_brier": 0.04922144266299136,
+        "score_log_loss": 1.9630426613650656
+      }
+    },
+    {
+      "match_id": "espn:401879241",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-07T15:00Z",
+      "cutoff_at": "2026-11-05T00:50:28.865992+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "a41242508fa56030f28babde5e1eae50f8fa78e86c174259a4efb369a51d903e",
+      "matrix_sha256": "7521505086b9a9704a1ccf1e56caa6c3b399e6abbc431705148d931552fadf03",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "e056dd45cea0ffa5117c179213d92dc324d425886ac88edbae2c17239893e69b",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "2-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.3139282853020059,
+        "four_plus_brier": 0.09855096831265761,
+        "score_log_loss": 2.1383255490271806
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.32628587881989923,
+        "four_plus_brier": 0.10646247471727396,
+        "score_log_loss": 2.1548908575424335
+      }
+    },
+    {
+      "match_id": "espn:401882813",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-07T15:15Z",
+      "cutoff_at": "2026-11-05T00:50:31.187165+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        0,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "6ee2d131f1538cebee6d95576f4348f038f44a86dfa3ffe3198e9a60f27d1663",
+      "matrix_sha256": "3c81598c80c72178ea41a5699e6de5b41b0857b657c82bf8ea7865977ee23ca0",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "7164ca3875848cbc202e4cc2d3c9470f2f6cf7e4c4f3990ce49bdb93caf570f5",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.24865956184712293,
+        "four_plus_brier": 0.061831577698003154,
+        "score_log_loss": 2.529088254586263
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.24843403822801013,
+        "four_plus_brier": 0.0617194713502764,
+        "score_log_loss": 2.528039043524354
+      }
+    },
+    {
+      "match_id": "espn:401842878",
+      "cohort": "swe.1",
+      "kickoff_at": "2026-11-07T16:30Z",
+      "cutoff_at": "2026-11-05T00:50:32.334532+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "fc5dc12fbc40b935105036d333d91a8b19a37785de42725e2d061b8aef19f327",
+      "matrix_sha256": "c3f943df5e0871a207886004137a46798ce82040044f11abdc1a3e1971dd18c0",
+      "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "result_sha256": "0e4adb1b86868ea86c23659e97a8bcb76a6a3bbacb3cbd630374b87cc104b699",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "0-1",
+          "1-1",
+          "0-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.1733952473309362,
+        "four_plus_brier": 0.030065911796956536,
+        "score_log_loss": 2.4632899015115646
+      },
+      "candidate": {
+        "scores": [
+          "0-1",
+          "1-1",
+          "0-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.15902790984102688,
+        "four_plus_brier": 0.025289876108405773,
+        "score_log_loss": 2.494261142954728
+      }
+    },
+    {
+      "match_id": "espn:401842881",
+      "cohort": "swe.1",
+      "kickoff_at": "2026-11-07T16:30Z",
+      "cutoff_at": "2026-11-05T00:50:33.518203+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        0,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "bf76a3b7fa977888786a9f90d8247e385c48b4faca1b7900da4ecbb49fcb4ace",
+      "matrix_sha256": "42f13b3479e8ed79a3b1e8de046185438c02ec88071f343a9c3dfc87520af3b8",
+      "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "result_sha256": "02e881caaf03f65daaa6790286e4ca92c782bd7e8cf1dbe899f5c0134eac67a3",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.38206981334791046,
+        "four_plus_brier": 0.14597734227170714,
+        "score_log_loss": 3.130908641020111
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3577019131777789,
+        "four_plus_brier": 0.12795065869104327,
+        "score_log_loss": 3.0220223826113153
+      }
+    },
+    {
+      "match_id": "espn:401843478",
+      "cohort": "nor.1",
+      "kickoff_at": "2026-11-07T17:00Z",
+      "cutoff_at": "2026-11-05T00:50:35.882299+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        4,
+        1
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "5f5f20292a7d1444dc1c75d798c65c401bc7f66c3425fc98171d4d821a08ed7b",
+      "matrix_sha256": "1ded6ae2c91bb69c17f1f2c2368bd5a284e63004cf08663e79d9b44c2655ccb6",
+      "model_sha256": "84a17fffa0687383beffd8d0f07273332bab58378daaeff7cccf5fde0e261b33",
+      "result_sha256": "b95e140cb5e7641fc9a1b2e0fdcabee6b9bd7c4ca99c359e351cfb35678e178a",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "2-1",
+          "2-0",
+          "3-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.46686697639377117,
+        "four_plus_brier": 0.28423082085951973,
+        "score_log_loss": 3.009516085800098
+      },
+      "candidate": {
+        "scores": [
+          "2-1",
+          "2-0",
+          "3-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.46686697639377117,
+        "four_plus_brier": 0.28423082085951973,
+        "score_log_loss": 3.009516085800098
+      }
+    },
+    {
+      "match_id": "espn:401874974",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-07T17:00Z",
+      "cutoff_at": "2026-11-05T00:50:34.692873+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "bc6e81620f78dab691e02d70af577977ebc27858c0db17b4044091ca408d4c08",
+      "matrix_sha256": "b225d7a01b31520568c85493e111ac2aa311974366bd2b5624b9374cc3b9fe42",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "e2afab3ebd304bcad0c23ec67cc77949a134df6b699ef7b905b9a5a778112495",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "0-1",
+          "1-1",
+          "0-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.15311900686765534,
+        "four_plus_brier": 0.023445430264137083,
+        "score_log_loss": 2.61864411472596
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.19436487056021273,
+        "four_plus_brier": 0.03777770290788825,
+        "score_log_loss": 2.5359353015073145
+      }
+    },
+    {
+      "match_id": "espn:401878757",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-07T17:30Z",
+      "cutoff_at": "2026-11-05T00:50:37.095408+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        3,
+        1
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "ec687bcf01ab4d15184175d9b00c91ce7f844b3d8957fcd65899db4eca7003d8",
+      "matrix_sha256": "e61c42c471280501b5778a37421ba50cde4ec0f84bc877f0eda24385b916248a",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "37aa4f0dea17789a83ef0881c0af533aabb6a8490f6b9a43b6be7855ef624908",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.28121341751532125,
+        "four_plus_brier": 0.5166541511600039,
+        "score_log_loss": 3.6328513435272924
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.29278722163815385,
+        "four_plus_brier": 0.5001499138782818,
+        "score_log_loss": 3.6077265830661887
+      }
+    },
+    {
+      "match_id": "espn:401882811",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-07T17:30Z",
+      "cutoff_at": "2026-11-05T00:50:38.307639+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "317f59ec77f9ec92b2349bb48e805f1ce1f81712398105b676a6773521e1a75f",
+      "matrix_sha256": "249ebeee0fa45167d7feb88773418e642bbc6488c78c9e64a5e6e6c69dc3b292",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "4ce8f110a3d535cdd13bb75d5981fca8f2a46ad9473ad7141fdfc60452d7d1b1",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.2518490280403832,
+        "four_plus_brier": 0.06342793292488574,
+        "score_log_loss": 2.0742862129504758
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.2516215674467241,
+        "four_plus_brier": 0.06331341320434632,
+        "score_log_loss": 2.074060742047419
+      }
+    },
+    {
+      "match_id": "espn:401884743",
+      "cohort": "ger.1",
+      "kickoff_at": "2026-11-07T17:30Z",
+      "cutoff_at": "2026-11-05T00:50:39.627015+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "e785dfb58d28b28ac0c30cce4bde5ebd1fb651490ae7c4d54f235b7f3eb81908",
+      "matrix_sha256": "79d2df75ecff7a315b217e4d23ee1a75eebe7e7fb870683901a350f24c9ed527",
+      "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "result_sha256": "1df4c066e3b0d387d533c141aa4bf9373b39896cf1427aa0d90e38f21aa7cb41",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "2-1",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.4627814195443939,
+        "four_plus_brier": 0.21416664227552432,
+        "score_log_loss": 2.6778157964567066
+      },
+      "candidate": {
+        "scores": [
+          "2-1",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.43867075541984796,
+        "four_plus_brier": 0.19243203166062006,
+        "score_log_loss": 2.599160960280272
+      }
+    },
+    {
+      "match_id": "espn:401876411",
+      "cohort": "fra.1",
+      "kickoff_at": "2026-11-07T18:00Z",
+      "cutoff_at": "2026-11-05T00:50:40.857531+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        0,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "b1a23886d1888ed4fef3ed5efc44bf02876743b5439a4091a20cb651621cd166",
+      "matrix_sha256": "786851020c9e927de8d85ca2d60c1e810305fd8c586caa37f3d7a81562defda1",
+      "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "result_sha256": "545a704b28ca52badab6c8ec46ed8ac31f49e73c8e1cf1603e4d4c026260d6d4",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.26209421583566483,
+        "four_plus_brier": 0.06869337797451207,
+        "score_log_loss": 2.268312553963458
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.26702935218465973,
+        "four_plus_brier": 0.07130467492815903,
+        "score_log_loss": 2.28227437503181
+      }
+    },
+    {
+      "match_id": "espn:401874803",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-07T19:45Z",
+      "cutoff_at": "2026-11-05T00:50:42.094717+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        3,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "2b05c42451545b905bd0434512d7ffaa063b9491980c5b20a47b8561deb293d8",
+      "matrix_sha256": "4b4b5c8a47128972aad8df425dc43d0d67c0ff9d138bccb7b2a85b6846937add",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "e8b45bc11ded44e43099669108638a5ff2393cf3673be59e241f4949ee601d19",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "2-0",
+          "1-0",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3511503980448321,
+        "four_plus_brier": 0.12330660204704404,
+        "score_log_loss": 2.686642696176725
+      },
+      "candidate": {
+        "scores": [
+          "2-1",
+          "2-0",
+          "1-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.42026420047938107,
+        "four_plus_brier": 0.1766219982045734,
+        "score_log_loss": 2.700952405423368
+      }
+    },
+    {
+      "match_id": "espn:401882808",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-07T20:00Z",
+      "cutoff_at": "2026-11-05T00:50:43.340250+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        0,
+        3
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "15c783b0f94eff55fa451d1e743fc6d97912a5a15a98057ab2e5f32096624372",
+      "matrix_sha256": "07bcbe7f88468f9e937c8471c5881d8ac935fd1ee097b7cb4271e150a25078fe",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "6118301a40b89b57ae7ab43d1e2278cb6b3e5239221431a5cc486523161ac270",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3046556498513541,
+        "four_plus_brier": 0.09281506498635089,
+        "score_log_loss": 2.9473429648546734
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.30439893092354603,
+        "four_plus_brier": 0.09265870914739775,
+        "score_log_loss": 2.947432550901534
+      }
+    },
+    {
+      "match_id": "espn:401876407",
+      "cohort": "fra.1",
+      "kickoff_at": "2026-11-07T20:05Z",
+      "cutoff_at": "2026-11-05T00:50:44.619192+00:00",
+      "date": "2026-11-07",
+      "actual": [
+        1,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "aaa4850641f65ac38b93c4ad45bda9a5815eea898783fe7173d20a9b1a6e0527",
+      "matrix_sha256": "6772206df90191b6f0c033ae51b75980ea29206ff72818e066217a676a450808",
+      "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "result_sha256": "8bc49c46e7ff2c6379677ae5d4b91769bf0371297d85310d09d20fdc4162d003",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "2-0",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.41228235082488235,
+        "four_plus_brier": 0.16997673680169137,
+        "score_log_loss": 2.40693633449773
+      },
+      "candidate": {
+        "scores": [
+          "2-0",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.4186074546979114,
+        "four_plus_brier": 0.17523220112866394,
+        "score_log_loss": 2.4268080892241004
+      }
+    },
+    {
+      "match_id": "espn:401874810",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-08T11:30Z",
+      "cutoff_at": "2026-11-05T00:50:45.908783+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "63bd3a573cda590ae1f5afdceb793170cf0e5f5eeb523787d21681520a40677f",
+      "matrix_sha256": "b055ed126d25f5cc27b447c82e1e65a189d9374dea7f821f04aff8032f48e437",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "0a44e96abc0d2ed0de7a19cac7d9959b8b40691d2d216fea2259d65f00b5a3c0",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "0-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.18211697585097594,
+        "four_plus_brier": 0.03316659289310495,
+        "score_log_loss": 2.021032806199502
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.2288513278925866,
+        "four_plus_brier": 0.05237293027820019,
+        "score_log_loss": 2.0525570434053244
+      }
+    },
+    {
+      "match_id": "espn:401842875",
+      "cohort": "swe.1",
+      "kickoff_at": "2026-11-08T13:00Z",
+      "cutoff_at": "2026-11-05T00:50:48.545615+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        0,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "fdc0451bcfa78d788f922d6a20511325e59d9f53d51a0c7e1f4a4c5f54329488",
+      "matrix_sha256": "cbae2124bbc1fac81ec74e75ab38f1546e7a71d488d8df22b459007cc16188b1",
+      "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "result_sha256": "e93a93c2a8d1c800c4d693a2d09e90f682e22859833630846cadf59e12a1dc86",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.36322567804258227,
+        "four_plus_brier": 0.13193289318949364,
+        "score_log_loss": 3.046682462005687
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3394907422426094,
+        "four_plus_brier": 0.11525396406843785,
+        "score_log_loss": 2.9407254086758243
+      }
+    },
+    {
+      "match_id": "espn:401842877",
+      "cohort": "swe.1",
+      "kickoff_at": "2026-11-08T13:00Z",
+      "cutoff_at": "2026-11-05T00:50:49.880009+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        2,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "0742454536fc3abe32e1c749658ef902a4188a329ff51fc4ca81c2982c7dc9d0",
+      "matrix_sha256": "4867f8a55c86172b6c40fd40ccadd841bfb922876d245661087060e13a51a63c",
+      "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "result_sha256": "a48daa0c591ce8445ab51ed660b80363b345610ad9be4d966027a1005d20d3aa",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "0-1",
+          "0-2",
+          "1-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.2968755844369926,
+        "four_plus_brier": 0.0881351126348059,
+        "score_log_loss": 3.3106801850828065
+      },
+      "candidate": {
+        "scores": [
+          "0-1",
+          "0-2",
+          "1-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.2757921666915008,
+        "four_plus_brier": 0.07606131920839257,
+        "score_log_loss": 3.321245337035288
+      }
+    },
+    {
+      "match_id": "espn:401882814",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-08T13:00Z",
+      "cutoff_at": "2026-11-05T00:50:47.222844+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        0,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "6b8365cc2b08e3c8bee21289eb2274a39be8586301e364f81aa26a48e0d42d81",
+      "matrix_sha256": "67a264e95737d99c340cf01072b89b73a16954945e0ff624c8a22cc58a2d1a12",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "b4bfef64a26f504fece86e1df88f90ec92a65102eb8688c2808543f8964a5b66",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.33954409214226766,
+        "four_plus_brier": 0.11529019050871675,
+        "score_log_loss": 2.8480813863386993
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.33927090728916365,
+        "four_plus_brier": 0.11510474853281227,
+        "score_log_loss": 2.8476911927182873
+      }
+    },
+    {
+      "match_id": "espn:401843476",
+      "cohort": "nor.1",
+      "kickoff_at": "2026-11-08T13:30Z",
+      "cutoff_at": "2026-11-05T00:50:51.265591+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        0,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "182991114ad822ac38e65472521dab5c025908e7bf467a6020c775cfe8362e02",
+      "matrix_sha256": "4c3c98b397242ffb3372f7581ec70190cfc54cf765f154a73b2f397fb756393c",
+      "model_sha256": "84a17fffa0687383beffd8d0f07273332bab58378daaeff7cccf5fde0e261b33",
+      "result_sha256": "615482319667cbb91718b3cc167439138cc048aa6600cfa36da7de012a528ce2",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.4205768154374528,
+        "four_plus_brier": 0.17688485768350923,
+        "score_log_loss": 2.780102357547082
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.4205768154374528,
+        "four_plus_brier": 0.17688485768350923,
+        "score_log_loss": 2.780102357547082
+      }
+    },
+    {
+      "match_id": "espn:401874800",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-08T14:00Z",
+      "cutoff_at": "2026-11-05T00:50:58.085499+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        0,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "9500f8efb2dfcf0ea90839224b4ecef5287452730c5137c9088c4845fd363845",
+      "matrix_sha256": "aaff0933c573dfe3e60ab291e7c216e9da3b2e1d8018fc6a7a4456ecb003a477",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "236870ed5da43942ba248cbba2f5d7a37283eb2b2b138217829aaf4767809b6d",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.32077251310090116,
+        "four_plus_brier": 0.10289500516106781,
+        "score_log_loss": 2.418183320552345
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3869832506403036,
+        "four_plus_brier": 0.14975603627613604,
+        "score_log_loss": 2.6155254607779743
+      }
+    },
+    {
+      "match_id": "espn:401875018",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-08T14:00Z",
+      "cutoff_at": "2026-11-05T00:50:59.462081+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "bdaac5f5def3fd24e6f11b2c86c78311a504bcf91499e51636f719d51cc944d6",
+      "matrix_sha256": "25b964ef764506cf391468b972d15b94b4db290a95bee82ee86beb25295ec060",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "819d66f3aca0aaac76bbef0d93e55c997dd301b517ca95ab7f6050d53a476435",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "0-1",
+          "1-1",
+          "0-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.23019147267780596,
+        "four_plus_brier": 0.052988114093577086,
+        "score_log_loss": 2.3823611946559384
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.28488980471098646,
+        "four_plus_brier": 0.081162200828264,
+        "score_log_loss": 2.339673901320626
+      }
+    },
+    {
+      "match_id": "espn:401876406",
+      "cohort": "fra.1",
+      "kickoff_at": "2026-11-08T14:00Z",
+      "cutoff_at": "2026-11-05T00:50:56.706421+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "79984d9d907c49ad92737e413398e28c79638448fa25ddcfcd6787e815f9f352",
+      "matrix_sha256": "a72958e950bc3e7cc3fc607f4548a67f0b310ddbb1b6bb753277371c6f8f9e68",
+      "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "result_sha256": "407129bed8107f344d515d2a01d76e732a20f931452176f2f434dd41c9df229e",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.2959730206823063,
+        "four_plus_brier": 0.08760002897180891,
+        "score_log_loss": 2.449906578600336
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.30129992824132296,
+        "four_plus_brier": 0.09078164675822636,
+        "score_log_loss": 2.4477942183421595
+      }
+    },
+    {
+      "match_id": "espn:401878759",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-08T14:00Z",
+      "cutoff_at": "2026-11-05T00:50:52.604062+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "43645b75190691555be36e0bf328f19c17e0416119894f36cbf3bb09da9e937a",
+      "matrix_sha256": "a69a662d613be088471816189abd428f1b1069ab94a76d051b68882e8a34ee1f",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "385348ece4e3a7dd079dadf2450cdb6a6e4a7c6e9353b48ee86a9a6f94c45c8c",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.37078041031316744,
+        "four_plus_brier": 0.1374781126720008,
+        "score_log_loss": 2.4839151560582837
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.3842715982397758,
+        "four_plus_brier": 0.14766466121375166,
+        "score_log_loss": 2.4860586894358536
+      }
+    },
+    {
+      "match_id": "espn:401879239",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-08T14:00Z",
+      "cutoff_at": "2026-11-05T00:50:53.950646+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "a09b3ce9307c00cd11142746365ddd3f6f220d6504d419f10fc278c34d91caac",
+      "matrix_sha256": "ac92f26bca7d025266ebeb075ac6bda05f3b84e0fe260203ed0943839c42bb95",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "fddf38f5cff52c4fb70dc1a704912641730ad4cdbd5a925e9b4e5b0880b6b005",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.36333630895598085,
+        "four_plus_brier": 0.13201327340575597,
+        "score_log_loss": 2.5874848486483213
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3766954648755431,
+        "four_plus_brier": 0.14189947325780153,
+        "score_log_loss": 2.627774765626502
+      }
+    },
+    {
+      "match_id": "espn:401879243",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-08T14:00Z",
+      "cutoff_at": "2026-11-05T00:50:55.309250+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        3
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "cdc12c0d572da2dea3fa43435cd7411eac12d29af9b5a380a78265422286e078",
+      "matrix_sha256": "511d569ac9dc0467646b34d522c1009a81705686bffe323cc2d5bbb036ebf8eb",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "c1de6e50389d069bd3e9b8a261a70f7b2a0927e2031f33d032ef4e93d3a73868",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.30662649782419554,
+        "four_plus_brier": 0.48076681351954037,
+        "score_log_loss": 3.002792581607937
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.318817539487556,
+        "four_plus_brier": 0.4640095445097874,
+        "score_log_loss": 2.9799177751275256
+      }
+    },
+    {
+      "match_id": "espn:401879244",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-08T14:00Z",
+      "cutoff_at": "2026-11-04T06:04:21.435850+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        2,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "aef99e8920752184f8efb50c758ad41ec8acd624a44649479c519357afc871cb",
+      "matrix_sha256": "c3a9b8d0dfacc656d0fb885faa21c4f83697bd45e0211a5c2eb4b0dd9e075e80",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "3669bd3e9931beac56db593dd8081f68df7fa36970e93c2539a599e5e4c24935",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.318192150950008,
+        "four_plus_brier": 0.10124624492619269,
+        "score_log_loss": 2.5301403586305775
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.33064478542214143,
+        "four_plus_brier": 0.10932597412685395,
+        "score_log_loss": 2.547080204442171
+      }
+    },
+    {
+      "match_id": "espn:401884738",
+      "cohort": "ger.1",
+      "kickoff_at": "2026-11-08T14:30Z",
+      "cutoff_at": "2026-11-05T00:51:00.832420+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "dce57f6993a3198e21b00b59280d181490159952c24fa5be02eebb33a3b94d8e",
+      "matrix_sha256": "04df62669b8bad8db2bfd4bae9707e1b31ceedf74ba248c194bf7989f27225ee",
+      "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "result_sha256": "9d10dc4f6620ae1a21375368dfb40df5e5fc359c9252c5eefcf3259e6781b91c",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.4444764874970669,
+        "four_plus_brier": 0.19755934793773028,
+        "score_log_loss": 2.401755104878138
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.42071624287944065,
+        "four_plus_brier": 0.1770021570225925,
+        "score_log_loss": 2.3902033467151584
+      }
+    },
+    {
+      "match_id": "espn:401882810",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-08T15:15Z",
+      "cutoff_at": "2026-11-05T00:51:02.259178+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "e374c3f2bad25118e35e9371592ae793700bb898fda13c64ff7ae95600c2b7ed",
+      "matrix_sha256": "6afea19630bc3db5c5a45ee0b5859ac8ff58e45f082ded9e9803316ef4de47bb",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "c828c7486d564646ec3ae612ff3f78f2e7d22358fb92c3416bde05d2bffc4e1d",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.39140063997248403,
+        "four_plus_brier": 0.15319446097087006,
+        "score_log_loss": 2.5504465895972084
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.3911071491849864,
+        "four_plus_brier": 0.15296480214360722,
+        "score_log_loss": 2.549545309819699
+      }
+    },
+    {
+      "match_id": "espn:401842874",
+      "cohort": "swe.1",
+      "kickoff_at": "2026-11-08T15:30Z",
+      "cutoff_at": "2026-11-05T00:51:03.651654+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "771c2fe27f57208498abcc9d94ea8a6c41da85c7354c8433d03afb759be7bac5",
+      "matrix_sha256": "50fad87ea6faec29dec601b22139f5b109b63a6453d23c49e0aecc764b388957",
+      "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "result_sha256": "8bed9fe62c280a67606564416fadad17ef8fa4231d4b8d1b4e7b8c79b7a1bfd4",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-2",
+          "1-1",
+          "0-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.389896618396444,
+        "four_plus_brier": 0.1520193730369823,
+        "score_log_loss": 3.04059245905093
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.36528152673411196,
+        "four_plus_brier": 0.13343059377320377,
+        "score_log_loss": 2.965883897889018
+      }
+    },
+    {
+      "match_id": "espn:401842879",
+      "cohort": "swe.1",
+      "kickoff_at": "2026-11-08T15:30Z",
+      "cutoff_at": "2026-11-05T00:51:05.080086+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        0,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "a0e8747fba31d5cd1a7903e1aa0fc36461aaefa9831ce465a246afa7d1b9188b",
+      "matrix_sha256": "d995d4cdcad34a68df7e56144f246e1eb0013461548f33073971858e31b43b78",
+      "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "result_sha256": "67d2b9cfe4edcdc6e6a515949c0187d2d98f0287b7ea56865b63113799250848",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3312039883962752,
+        "four_plus_brier": 0.10969608192959998,
+        "score_log_loss": 2.9036991551419393
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.30866661416550056,
+        "four_plus_brier": 0.09527507870039399,
+        "score_log_loss": 2.8027147532319647
+      }
+    },
+    {
+      "match_id": "espn:401842880",
+      "cohort": "swe.1",
+      "kickoff_at": "2026-11-08T15:30Z",
+      "cutoff_at": "2026-11-05T00:51:06.517696+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        3,
+        2
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "e390b61a36e7c9f6aa3ba6687bb37cd7cb670fb5281d50de24385ce11ed6bf2f",
+      "matrix_sha256": "e6da58ab616eeaf6946a194846a1984407d22f678bb6db397493f6d440f6c4c1",
+      "model_sha256": "c116b9b225aafac22f0061884b2eba353df51437a79907c3fd63263c71f2e549",
+      "result_sha256": "4e66bfdb9367f67afe6bd45b3f14f2b749541ff8811edc346b6e09b4d9d7888f",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3469472579912836,
+        "four_plus_brier": 0.42647788384510316,
+        "score_log_loss": 3.473362575083881
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.32380195849976745,
+        "four_plus_brier": 0.4572437913287502,
+        "score_log_loss": 3.5469176014983645
+      }
+    },
+    {
+      "match_id": "espn:401843477",
+      "cohort": "nor.1",
+      "kickoff_at": "2026-11-08T16:00Z",
+      "cutoff_at": "2026-11-05T00:51:07.964128+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        5,
+        5
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "9976f61b867ff7a50ae2603ae3c0e24916c4250630cf85bc6044d934d2871f07",
+      "matrix_sha256": "c535b7d5b10c4531b9bd1a3b2c86e65c94453c101b028d68180a834031af0e9f",
+      "model_sha256": "84a17fffa0687383beffd8d0f07273332bab58378daaeff7cccf5fde0e261b33",
+      "result_sha256": "7c17afc23fdde7c3f123382ca39da9a3c5b498c516ef9297aa66cbec5ccc9442",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.34123038180704485,
+        "four_plus_brier": 0.433977409854092,
+        "score_log_loss": 8.64546202595977
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.34123038180704485,
+        "four_plus_brier": 0.433977409854092,
+        "score_log_loss": 8.64546202595977
+      }
+    },
+    {
+      "match_id": "espn:401843479",
+      "cohort": "nor.1",
+      "kickoff_at": "2026-11-08T16:00Z",
+      "cutoff_at": "2026-11-05T00:51:09.419150+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        3,
+        2
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "b1429248b34781f364483d6c96875ff5dc93c879e3add82465ada50b48831a6b",
+      "matrix_sha256": "038c8e8be9dc6064700647b96b5b0ab0aaf45885ed183fa915a73405eeb55721",
+      "model_sha256": "84a17fffa0687383beffd8d0f07273332bab58378daaeff7cccf5fde0e261b33",
+      "result_sha256": "156db0eb6e34b9d2c353b1aafc12e83c862e118c84d3586cce13147ba45e7690",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3988598661150914,
+        "four_plus_brier": 0.36136946056716585,
+        "score_log_loss": 3.230906392352953
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3988598661150914,
+        "four_plus_brier": 0.36136946056716585,
+        "score_log_loss": 3.230906392352953
+      }
+    },
+    {
+      "match_id": "espn:401843481",
+      "cohort": "nor.1",
+      "kickoff_at": "2026-11-08T16:00Z",
+      "cutoff_at": "2026-11-05T00:51:10.880542+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        3,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "cbdb9e9cac1a7e8c540d8d8ce7e2f04087c483ff065686876f7a9b3d90c91314",
+      "matrix_sha256": "1d6f19e44f1c0770679d04b24bc9487c1ec37bde9957b2906b9ffcbfb38b03d6",
+      "model_sha256": "84a17fffa0687383beffd8d0f07273332bab58378daaeff7cccf5fde0e261b33",
+      "result_sha256": "6fba1cc1e826c4052b6a179dc1069c3cea57b580cfc0a74f6181b4118d3682c8",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.33027346857478185,
+        "four_plus_brier": 0.10908056404441742,
+        "score_log_loss": 3.351120110857221
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.33027346857478185,
+        "four_plus_brier": 0.10908056404441742,
+        "score_log_loss": 3.351120110857221
+      }
+    },
+    {
+      "match_id": "espn:401843482",
+      "cohort": "nor.1",
+      "kickoff_at": "2026-11-08T16:00Z",
+      "cutoff_at": "2026-11-05T00:51:12.424596+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        5,
+        1
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "29bfb0b96beb3cc269e09cee4377d5c0a3b07604516ffcb078cdeee1043423a0",
+      "matrix_sha256": "c20ae163d4da47abfe6ad0a1cb75f2f93e002949baf9b8e27a9fb19761bbc416",
+      "model_sha256": "84a17fffa0687383beffd8d0f07273332bab58378daaeff7cccf5fde0e261b33",
+      "result_sha256": "b11546d00cea73396c2b37dc4e76d9eb5f5fd98a54fc6b99185b747e86724706",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "2-0",
+          "3-0",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.4483487645214402,
+        "four_plus_brier": 0.3043190856050215,
+        "score_log_loss": 3.603831480542962
+      },
+      "candidate": {
+        "scores": [
+          "2-0",
+          "3-0",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.4483487645214402,
+        "four_plus_brier": 0.3043190856050215,
+        "score_log_loss": 3.603831480542962
+      }
+    },
+    {
+      "match_id": "espn:401876408",
+      "cohort": "fra.1",
+      "kickoff_at": "2026-11-08T16:15Z",
+      "cutoff_at": "2026-11-05T00:51:13.908719+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        1,
+        1
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "355d20b9a9af31598ee84c342aaebbd758ea982a955571480d90e0e37da0b4f2",
+      "matrix_sha256": "248ebce86ec7654b3a8e0115cd55dac2b05c38ba6d3e8a7e5ace729b43749c8a",
+      "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "result_sha256": "3a568467b733a9d79376c057621f2ffb9727b97459c02baafd14d3eebccc5b34",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.3944909757840103,
+        "four_plus_brier": 0.15562312997502062,
+        "score_log_loss": 2.2550323546187245
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 1,
+        "top3": 1,
+        "p_four_plus": 0.4006979915989868,
+        "four_plus_brier": 0.1605588804714617,
+        "score_log_loss": 2.265491320887709
+      }
+    },
+    {
+      "match_id": "espn:401876409",
+      "cohort": "fra.1",
+      "kickoff_at": "2026-11-08T16:15Z",
+      "cutoff_at": "2026-11-05T00:51:15.386687+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        0,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "b995bd182c7a87cef64e6d0f089fabc0d31e90d69644fe9df02ef8d14c495c5c",
+      "matrix_sha256": "cb969d985a7c0ff6af758c04abe31d5da97a147bb21d4cdc5c85350eedc02fe7",
+      "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "result_sha256": "b2226e48c33503ee65fd5b7c3f611dcc8abab7abcd2c2df067d0159b98cccdd9",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.19859864721445397,
+        "four_plus_brier": 0.03944142267541115,
+        "score_log_loss": 2.6350557655185955
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.20267217797917514,
+        "four_plus_brier": 0.041076011726822445,
+        "score_log_loss": 2.6376684091981613
+      }
+    },
+    {
+      "match_id": "espn:401876410",
+      "cohort": "fra.1",
+      "kickoff_at": "2026-11-08T16:15Z",
+      "cutoff_at": "2026-11-05T00:51:16.893379+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        2,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "55b107cbb719dec9e928d8713b0a4ba52a02f95867343384ee7bc4f64626889b",
+      "matrix_sha256": "2ebc1935d8cd29a0d4bbad679b1ea21d2694f13a0466a087498b13b322985c74",
+      "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "result_sha256": "e3b6ae0094da5e220e6ef3bf8227247debbe93af714f44fbb3124a9a790f1937",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.31383039744270186,
+        "four_plus_brier": 0.09848951835904421,
+        "score_log_loss": 3.118952105685196
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.31934530139248496,
+        "four_plus_brier": 0.10198142152145706,
+        "score_log_loss": 3.126255072129811
+      }
+    },
+    {
+      "match_id": "espn:401876412",
+      "cohort": "fra.1",
+      "kickoff_at": "2026-11-08T16:15Z",
+      "cutoff_at": "2026-11-05T00:51:18.408652+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        0,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "d4a0cef0d89fc933525e9c5eb9a5fe4765621f28af10df674a7820aa1add2fdd",
+      "matrix_sha256": "7a5b9417c213cd5327772795f8b2f446c39104793c299c6a6b205b135c19f259",
+      "model_sha256": "86bfbe1482d1cb5ef521f92b88e7be534f3fdb9cd93ada1315c7435859328500",
+      "result_sha256": "91f98730cb48debb6fa134eedb6a8ffe58dc08ad87e904bac9ffc5926fc0ce6d",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "0-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.18776753161832455,
+        "four_plus_brier": 0.03525664593003851,
+        "score_log_loss": 3.0827583073285285
+      },
+      "candidate": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "0-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.1916768556383059,
+        "four_plus_brier": 0.036740016987387956,
+        "score_log_loss": 3.0848992848122747
+      }
+    },
+    {
+      "match_id": "espn:401879240",
+      "cohort": "eng.1",
+      "kickoff_at": "2026-11-08T16:30Z",
+      "cutoff_at": "2026-11-05T00:51:19.957366+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        4,
+        4
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "b1de42e5d51dff6f00e1e3e9e54c4392959ed41e3fe61ac1556410abfe61aeb5",
+      "matrix_sha256": "2a5ca27aa790938fd03f9cecad6cf56585a6ad6e2dfb5c79cd7e1a17819fdc28",
+      "model_sha256": "f33ad1457084cecd031755a8afe6032eda1dc37f0dff49c956f5dec20e4d61c7",
+      "result_sha256": "80afdb6659739529bc8737ed3be35106ed146de0c7508fafaf7338587c2cdbc0",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.39584888032524224,
+        "four_plus_brier": 0.3649985754042635,
+        "score_log_loss": 6.0380639722133775
+      },
+      "candidate": {
+        "scores": [
+          "2-1",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.40974839007709396,
+        "four_plus_brier": 0.3483969630165824,
+        "score_log_loss": 5.945412053755122
+      }
+    },
+    {
+      "match_id": "espn:401884741",
+      "cohort": "ger.1",
+      "kickoff_at": "2026-11-08T16:30Z",
+      "cutoff_at": "2026-11-05T00:51:21.490336+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        2,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "1d4eaa0897a3dd8c136571482c916db25e93e940fa5b302ff7a033b6631096a8",
+      "matrix_sha256": "eff1690a3a2123eb657a194ecf9381f207bbd253b53476dacc9131133e1a52a7",
+      "model_sha256": "79ac0a5c164d827d41e6a48327404a00c5b04b56a37a8719d9ffebfd0661cbe5",
+      "result_sha256": "65f6e1bccbb4ecafba8f85bc11ee3635af1b322410e66f84c2c950a2cda5446e",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "2-1",
+          "2-0",
+          "3-1"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.49644278540288067,
+        "four_plus_brier": 0.24645543917857063,
+        "score_log_loss": 2.476209640716814
+      },
+      "candidate": {
+        "scores": [
+          "2-1",
+          "2-0",
+          "3-1"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.4718144599552066,
+        "four_plus_brier": 0.22260888462282324,
+        "score_log_loss": 2.4247658749688914
+      }
+    },
+    {
+      "match_id": "espn:401874808",
+      "cohort": "ita.1",
+      "kickoff_at": "2026-11-08T17:00Z",
+      "cutoff_at": "2026-11-05T00:51:23.028178+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        2,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "dcf923ea9cbe4ceaf23172effe69f1e95da9237c2caa2f109d655a878c8d3026",
+      "matrix_sha256": "c346e651384e5dbc327a158601e07434e7f05522a98a340c22184e53a5b2db12",
+      "model_sha256": "c92d319aff32d96392a6df16d2891f3e3fd7674c6b61d5a64c80906f76fc0ac0",
+      "result_sha256": "d4a405088e28f4a937972d2f18a2c452ffaf0b344b5d1caa0b75f4594dfbe12c",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.38631126786421655,
+        "four_plus_brier": 0.14923639567885846,
+        "score_log_loss": 2.7724123878805718
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.45820586891661774,
+        "four_plus_brier": 0.2099526183096327,
+        "score_log_loss": 2.9015404320437557
+      }
+    },
+    {
+      "match_id": "espn:401882807",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-08T17:30Z",
+      "cutoff_at": "2026-11-05T00:51:24.568792+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        2,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "a87bb640e6138fc046e6ca72d35eec4261b43bdb6028abf170ea1c87cc31426a",
+      "matrix_sha256": "d2378e288cc41f1224c365ecbe02d87993f99ca71b8556b02c2d697e8bbd7dac",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "4a640a7539cf5f88bbcc64ba2a2a576b38c99c16088aebe189c47144b4b09ff5",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.20592569756957224,
+        "four_plus_brier": 0.04240539291951493,
+        "score_log_loss": 2.15064066502906
+      },
+      "candidate": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 1,
+        "p_four_plus": 0.20572804383803117,
+        "four_plus_brier": 0.04232402802142288,
+        "score_log_loss": 2.1505056622971623
+      }
+    },
+    {
+      "match_id": "espn:401882815",
+      "cohort": "esp.1",
+      "kickoff_at": "2026-11-08T17:30Z",
+      "cutoff_at": "2026-11-05T00:51:26.171390+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        0,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "56bcc2fd3d4edc10efd6194a14cd8d05e5657d3b540bd005a5b3fba2bfa6cf3c",
+      "matrix_sha256": "9adb2f8f689dc5ef0e0405e71cec8a0877205a82d92e90171911b72215fc4d91",
+      "model_sha256": "84fe0ee3e8932ab32d20d897781468f035eb698ddc9df81b2f0e6d96ecd7f199",
+      "result_sha256": "350cf03ebcf5858d411af6d04dd7cdc96bc73cef5b4bce4ee3e83f9accfbf2bf",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.30632182720523166,
+        "four_plus_brier": 0.09383306182235181,
+        "score_log_loss": 2.7921736593168895
+      },
+      "candidate": {
+        "scores": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3060642704431696,
+        "four_plus_brier": 0.09367533764190965,
+        "score_log_loss": 2.7910153053192337
+      }
+    },
+    {
+      "match_id": "espn:401843475",
+      "cohort": "nor.1",
+      "kickoff_at": "2026-11-08T18:15Z",
+      "cutoff_at": "2026-11-05T00:51:27.752961+00:00",
+      "date": "2026-11-08",
+      "actual": [
+        2,
+        2
+      ],
+      "four_plus": 1,
+      "freeze_sha256": "c318650acf2697eb30384c62b1ff17054e3d6a08a27e1ad1aece092fdfda5be4",
+      "matrix_sha256": "283a148890dcf2b8fa85857bd67cc2ccb26649beb9a725c422134dc961368f1f",
+      "model_sha256": "84a17fffa0687383beffd8d0f07273332bab58378daaeff7cccf5fde0e261b33",
+      "result_sha256": "9d2c24fbb1e3513f0c20680305feb5beddddf6a5b35f39d940d67efee37c3e66",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.2975296726174988,
+        "four_plus_brier": 0.4934645608528785,
+        "score_log_loss": 2.872485591773779
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.2975296726174988,
+        "four_plus_brier": 0.4934645608528785,
+        "score_log_loss": 2.872485591773779
+      }
+    },
+    {
+      "match_id": "espn:401841311",
+      "cohort": "bra.1",
+      "kickoff_at": "2026-11-14T21:30Z",
+      "cutoff_at": "2026-11-14T19:02:13.094204+00:00",
+      "date": "2026-11-14",
+      "actual": [
+        0,
+        0
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "30b7d433673e8ea95b24c10f303ad49af91f074a988591f4a9675dacbbe046d1",
+      "matrix_sha256": "7728f3e7123057fbe7d105ba46922ce7a12752ef59e80baf10dfb129b7112680",
+      "model_sha256": "87a77636f918138710f0d7b090d65bb00a30de539e9c2de665f81dedadb8b69b",
+      "result_sha256": "d0fbd4f3661e6789f790845a6312a95e27af931f74903ee025c32fcc3f445923",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.24733590612427642,
+        "four_plus_brier": 0.06117505045831688,
+        "score_log_loss": 2.522927218068175
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.2641818283385902,
+        "four_plus_brier": 0.06979203842432034,
+        "score_log_loss": 2.6008432186836044
+      }
+    },
+    {
+      "match_id": "espn:401841175",
+      "cohort": "bra.1",
+      "kickoff_at": "2026-11-14T23:30Z",
+      "cutoff_at": "2026-11-14T19:02:14.446261+00:00",
+      "date": "2026-11-14",
+      "actual": [
+        0,
+        2
+      ],
+      "four_plus": 0,
+      "freeze_sha256": "a23655a3a4f2f71083214c4a9101f04615cde855ca992026e3027263db808cc1",
+      "matrix_sha256": "f13b1aa1015520ff8fe1a66bd4f0b344feb6e1af06a62b981f5a739708e7a2cf",
+      "model_sha256": "87a77636f918138710f0d7b090d65bb00a30de539e9c2de665f81dedadb8b69b",
+      "result_sha256": "a204861019372df0fe4e3dd2119dba7719cfe79b7ad56a9a345d3ef4ad5e92ad",
+      "archived_order_matches": true,
+      "baseline": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.33711033572616156,
+        "four_plus_brier": 0.11364337845340536,
+        "score_log_loss": 2.806997451092202
+      },
+      "candidate": {
+        "scores": [
+          "1-1",
+          "1-2",
+          "2-1"
+        ],
+        "top1": 0,
+        "top3": 0,
+        "p_four_plus": 0.3573795979658316,
+        "four_plus_brier": 0.1277201770422194,
+        "score_log_loss": 2.8366562544261216
+      }
+    }
+  ]
+}
