@@ -2,6 +2,8 @@
 
 import argparse
 from collections import Counter, defaultdict
+import csv
+import io
 from datetime import date
 import hashlib
 import json
@@ -142,6 +144,23 @@ def summary(pairs, full=False):
     return out
 
 
+def coverage_csv(windows):
+    data = io.StringIO(newline='')
+    writer = csv.writer(data, lineterminator='\n')
+    writer.writerow(['window','competition','listed','paired','feature_available',
+                     'first_baseline','first_candidate','first_gained','first_lost',
+                     'matrix_top3_baseline','matrix_top3_candidate','wdl_baseline','wdl_candidate',
+                     'totals_nonpush','full_wins_baseline','full_wins_candidate'])
+    for window, summary in windows.items():
+        for league, group in summary['by_league'].items():
+            m = group['metrics']
+            fields = (m['first']['baseline'], m['first']['candidate'], m['first']['gained'], m['first']['lost'],
+                      m['top3']['baseline'], m['top3']['candidate'], m['wdl']['baseline'], m['wdl']['candidate'],
+                      m['total']['n'], m['total']['baseline'], m['total']['candidate']) if m else ['']*11
+            writer.writerow([window, league, group['listed'], group['graded'], group['eligible_signals'], *fields])
+    return data.getvalue().encode()
+
+
 def grade(archive, label_path, run, artifact_path, lockpath, out):
     artifact=json.loads(artifact_path.read_bytes())
     lock=json.loads(lockpath.read_bytes())
@@ -204,6 +223,7 @@ def grade(archive, label_path, run, artifact_path, lockpath, out):
                 decision='eligible_for_new_future_consideration' if all(gate.values()) else 'retire_recipe',
                 delivered_pairs={'first':0,'ordered_three':0,'selected_batch':0})
     jsonout(out/'results.json',output)
+    store(out/'coverage.csv',coverage_csv(windows))
     print(output['decision'],{w:v['graded'] for w,v in windows.items()},flush=True)
 
 

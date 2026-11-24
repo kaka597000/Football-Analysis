@@ -2,6 +2,7 @@ from datetime import date
 import unittest
 from unittest.mock import patch
 
+from clocked_evidence import retained_h2h
 from history import book, projected_games, scores
 
 
@@ -38,3 +39,22 @@ class TemporalProjectionTests(unittest.TestCase):
         self.assertEqual(row['feature_status'],'less_than_six')
         self.assertEqual(row['signal'],0.)
         self.assertIsNotNone(row['market'])
+
+    def test_native_1x2_binds_event_book_kickoff_source_time_and_both_teams(self):
+        kickoff = '2026-11-20T20:00:00Z'
+        stamp = '2026-11-20T19:30:00Z'
+        prices = {'home': 1.55, 'draw': 3.65, 'away': 5.5}
+        snap = {'provider_match_id': 'game-1', 'bookmaker': 'one',
+                'h2h': {'quoted_at': stamp, 'prices': prices}}
+        market = {'key': 'h2h', 'last_update': stamp, 'outcomes': [
+            {'name': 'Team A', 'price': 1.55}, {'name': 'Team B', 'price': 5.5},
+            {'name': 'Draw', 'price': 3.65}]}
+        event = {'id': 'game-1', 'commence_time': kickoff, 'home_team': 'Team A',
+                 'away_team': 'Team B', 'bookmakers': [{'key': 'one', 'markets': [market]}]}
+        self.assertEqual(retained_h2h([event], snap, kickoff), prices)
+        for change in ({'id': 'game-2'}, {'commence_time': stamp},
+                       {'home_team': 'Team B', 'away_team': 'Team A'},
+                       {'bookmakers': [{'key': 'two', 'markets': [market]}]},
+                       {'bookmakers': [{'key': 'one', 'markets': [dict(market, last_update=kickoff)]}]}):
+            self.assertIsNone(retained_h2h([dict(event, **change)], snap, kickoff))
+        self.assertIsNone(retained_h2h([event, event], snap, kickoff))

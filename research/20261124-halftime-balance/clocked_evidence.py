@@ -4,13 +4,11 @@ import argparse
 from collections import defaultdict
 from datetime import date
 import json
+from importlib.util import find_spec
 from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
 
-# Invoked in the isolated audit checkout's PYTHONPATH; only this research export needs that snapshot.
-import archive as audit
-import replay as evidence
 from research.analysis_freeze import aware
 from research_program.market_baseline import predict as market_baseline
 
@@ -19,9 +17,14 @@ LEAGUES=set(PROTOCOL['domestic_sources'].values())
 
 
 def verify_auditor():
-    source=Path(audit.__file__).resolve().parents[2]
-    module=source/'research/20261124-prior-dismissals'
-    if Path(evidence.__file__).resolve().parent!=module:
+    # Resolve the explicit research environment before loading the pinned prior auditor.
+    specs = [find_spec(name) for name in ('archive', 'replay')]
+    if any(spec is None or spec.origin is None for spec in specs):
+        raise ValueError('add the pinned audit checkout to the research PYTHONPATH')
+    a, r = [Path(spec.origin).resolve() for spec in specs]
+    source = a.parents[2]
+    module = source/'research/20261124-prior-dismissals'
+    if a.parent != module or r.parent != module:
         raise ValueError('wrong audit module loaded')
     sha=subprocess.check_output(['git','-C',str(source),'rev-parse','HEAD'],text=True).strip()
     if sha!=PROTOCOL['read_only_audit_source']:
@@ -29,7 +32,7 @@ def verify_auditor():
     subprocess.run(['git','-C',str(source),'diff','--quiet','HEAD','--','runtime',str(module)],check=True)
 
 
-def full_source_market(archives,f):
+def full_source_market(archives,f,audit):
     if archives.quote_line(f) is None:
         return None
     model=market_baseline(f)
@@ -38,7 +41,14 @@ def full_source_market(archives,f):
     snap=model['quote_snapshot']
     source=snap['source_sha256']
     raw=json.loads(audit.checked(archives.assets.extractfile(f'raw/open-pregame/{source}.json').read(),source))
-    games=[e for e in raw if e['id']==snap['provider_match_id'] and aware(e['commence_time'])==aware(f['kickoff_at'])]
+    prices = retained_h2h(raw,snap,f['kickoff_at'])
+    if prices is None:
+        return None
+    return dict(h2h=prices,total=dict(snap['total']['prices'],line=snap['total']['line']))
+
+
+def retained_h2h(raw,snap,kickoff):
+    games=[e for e in raw if e['id']==snap['provider_match_id'] and aware(e['commence_time'])==aware(kickoff)]
     if len(games)!=1:
         return None
     game=games[0]
@@ -56,10 +66,10 @@ def full_source_market(archives,f):
                 good.append(native)
     if len(good)!=1:
         return None
-    return dict(h2h=good[0],total=dict(snap['total']['prices'],line=snap['total']['line']))
+    return good[0]
 
 
-def six_games(rows, home, away, day):
+def six_games(rows, home, away, day, audit):
     prior=sorted((r for r in rows if r['day']<day),key=lambda r:r['day'])
     chosen={}
     for club in (home,away):
@@ -72,7 +82,7 @@ def six_games(rows, home, away, day):
     return [chosen[k] for k in sorted(chosen)]
 
 
-def inputs(archives,fixtures,directory):
+def inputs(archives,fixtures,directory,audit,evidence):
     aliases=evidence.prior_aliases(archives,min(aware(r['cutoff_at']) for r in fixtures),directory)
     records=[]
     for r in fixtures:
@@ -93,7 +103,7 @@ def inputs(archives,fixtures,directory):
         if f is None:
             item['feature_status']='missing_bound_original'
             continue
-        item['market']=full_source_market(archives,f)
+        item['market']=full_source_market(archives,f,audit)
         if item['market'] is None:
             continue
         if league not in LEAGUES:
@@ -109,11 +119,11 @@ def inputs(archives,fixtures,directory):
         if None in selected or selected[0]==selected[1]:
             item['feature_status']='unresolved_club'
             continue
-        item.update(feature_status='eligible_inputs',clubs=selected,prior_games=six_games(prior,*selected,day))
+        item.update(feature_status='eligible_inputs',clubs=selected,prior_games=six_games(prior,*selected,day,audit))
     return records
 
 
-def labels(archives,fixtures,directory):
+def labels(archives,fixtures,directory,audit,evidence):
     table=defaultdict(list)
     for r in map(json.loads,audit.blob(archives.repo,audit.PIN,'normalized-results.jsonl').splitlines()):
         table[r['match_id']].append(r)
@@ -145,10 +155,12 @@ if __name__=='__main__':
     p.add_argument('--out',type=Path,required=True)
     args=p.parse_args()
     verify_auditor()
+    import archive as audit
+    import replay as evidence
     archives=audit.Archives(args.data_repo)
     fixtures=archives.targets()
     with TemporaryDirectory() as tmp:
-        records=(inputs if args.mode=='inputs' else labels)(archives,fixtures,Path(tmp))
+        records=(inputs if args.mode=='inputs' else labels)(archives,fixtures,Path(tmp),audit,evidence)
     data=b''.join(evidence.packed(r) for r in sorted(records,key=lambda r:r['id']))
     args.out.parent.mkdir(parents=True,exist_ok=True)
     evidence.put(args.out,data)

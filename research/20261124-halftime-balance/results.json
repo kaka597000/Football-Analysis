@@ -1,0 +1,1251 @@
+{
+  "decision": "retire_recipe",
+  "delivered_pairs": {
+    "first": 0,
+    "ordered_three": 0,
+    "selected_batch": 0
+  },
+  "fit": {
+    "beta": -0.03692188445553407,
+    "by_league": {
+      "eng.1": 895,
+      "esp.1": 894,
+      "fra.1": 854,
+      "ger.1": 701,
+      "ita.1": 895
+    },
+    "counts": {
+      "feature_gap": 1132,
+      "listed": 5377,
+      "market_gap": 6
+    },
+    "eligible": 4239,
+    "first_fit_day": "2019-09-24",
+    "last_fit_day": "2022-05-22",
+    "protocol_sha256": "c478f93901a71e615b661161d28fb3d23de89d69db1fc1be138836aa4d3d0c25"
+  },
+  "gate": {
+    "at_least_500": true,
+    "first_lower_above_zero": false,
+    "log_loss_nonworse": true,
+    "top3_nonnegative": true
+  },
+  "protocol": "c478f93901a71e615b661161d28fb3d23de89d69db1fc1be138836aa4d3d0c25",
+  "windows": {
+    "clocked": {
+      "all": {
+        "first": {
+          "baseline": 2,
+          "candidate": 2,
+          "changed": 0,
+          "delta_95": null,
+          "gained": 0,
+          "lost": 0,
+          "n": 31
+        },
+        "log_loss": {
+          "baseline": 3.0086698665615343,
+          "candidate": 3.003491202430015,
+          "delta_95": null
+        },
+        "n": 31,
+        "top3": {
+          "baseline": 6,
+          "candidate": 6,
+          "changed": 1,
+          "delta_95": null,
+          "gained": 0,
+          "lost": 0,
+          "n": 31
+        },
+        "total": {
+          "baseline": 15,
+          "candidate": 15,
+          "changed": 0,
+          "delta_95": null,
+          "gained": 0,
+          "lost": 0,
+          "n": 29,
+          "settlements": {
+            "baseline": {
+              "FULL_LOSS": 12,
+              "FULL_WIN": 15,
+              "HALF_LOSS": 2,
+              "PUSH": 2
+            },
+            "candidate": {
+              "FULL_LOSS": 12,
+              "FULL_WIN": 15,
+              "HALF_LOSS": 2,
+              "PUSH": 2
+            }
+          }
+        },
+        "wdl": {
+          "baseline": 17,
+          "candidate": 17,
+          "changed": 0,
+          "delta_95": null,
+          "gained": 0,
+          "lost": 0,
+          "n": 31
+        }
+      },
+      "by_league": {
+        "afc.champions": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "aus.1": {
+          "eligible_signals": 0,
+          "graded": 3,
+          "listed": 3,
+          "metrics": {
+            "first": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            },
+            "log_loss": {
+              "baseline": 3.176481043106273,
+              "candidate": 3.176481043106273
+            },
+            "n": 3,
+            "top3": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            },
+            "total": {
+              "baseline": 2,
+              "candidate": 2,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 1,
+                  "FULL_WIN": 2
+                },
+                "candidate": {
+                  "FULL_LOSS": 1,
+                  "FULL_WIN": 2
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            }
+          }
+        },
+        "bra.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "eng.1": {
+          "eligible_signals": 6,
+          "graded": 6,
+          "listed": 6,
+          "metrics": {
+            "first": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 6
+            },
+            "log_loss": {
+              "baseline": 3.111918564712928,
+              "candidate": 3.110290112486813
+            },
+            "n": 6,
+            "top3": {
+              "baseline": 2,
+              "candidate": 2,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 6
+            },
+            "total": {
+              "baseline": 2,
+              "candidate": 2,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 6,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 4,
+                  "FULL_WIN": 2
+                },
+                "candidate": {
+                  "FULL_LOSS": 4,
+                  "FULL_WIN": 2
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 3,
+              "candidate": 3,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 6
+            }
+          }
+        },
+        "esp.1": {
+          "eligible_signals": 0,
+          "graded": 3,
+          "listed": 3,
+          "metrics": {
+            "first": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            },
+            "log_loss": {
+              "baseline": 3.00505712597382,
+              "candidate": 3.00505712597382
+            },
+            "n": 3,
+            "top3": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            },
+            "total": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 2,
+                  "FULL_WIN": 1
+                },
+                "candidate": {
+                  "FULL_LOSS": 2,
+                  "FULL_WIN": 1
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            }
+          }
+        },
+        "fifa.world": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "fra.1": {
+          "eligible_signals": 1,
+          "graded": 1,
+          "listed": 1,
+          "metrics": {
+            "first": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1
+            },
+            "log_loss": {
+              "baseline": 3.143233105831423,
+              "candidate": 3.15361855598229
+            },
+            "n": 1,
+            "top3": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1
+            },
+            "total": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 1
+                },
+                "candidate": {
+                  "FULL_WIN": 1
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1
+            }
+          }
+        },
+        "ger.1": {
+          "eligible_signals": 6,
+          "graded": 6,
+          "listed": 6,
+          "metrics": {
+            "first": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 6
+            },
+            "log_loss": {
+              "baseline": 3.130728367392709,
+              "candidate": 3.1072268715226206
+            },
+            "n": 6,
+            "top3": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 6
+            },
+            "total": {
+              "baseline": 2,
+              "candidate": 2,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 6,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 3,
+                  "FULL_WIN": 2,
+                  "HALF_LOSS": 1
+                },
+                "candidate": {
+                  "FULL_LOSS": 3,
+                  "FULL_WIN": 2,
+                  "HALF_LOSS": 1
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 5,
+              "candidate": 5,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 6
+            }
+          }
+        },
+        "ita.1": {
+          "eligible_signals": 2,
+          "graded": 2,
+          "listed": 2,
+          "metrics": {
+            "first": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 2
+            },
+            "log_loss": {
+              "baseline": 2.3513117277922584,
+              "candidate": 2.3412395529668846
+            },
+            "n": 2,
+            "top3": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 1,
+              "gained": 0,
+              "lost": 0,
+              "n": 2
+            },
+            "total": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 1,
+                  "PUSH": 1
+                },
+                "candidate": {
+                  "FULL_LOSS": 1,
+                  "PUSH": 1
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 2,
+              "candidate": 2,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 2
+            }
+          }
+        },
+        "jpn.1": {
+          "eligible_signals": 0,
+          "graded": 4,
+          "listed": 4,
+          "metrics": {
+            "first": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 4
+            },
+            "log_loss": {
+              "baseline": 2.802307618714698,
+              "candidate": 2.802307618714698
+            },
+            "n": 4,
+            "top3": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 4
+            },
+            "total": {
+              "baseline": 2,
+              "candidate": 2,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 2,
+                  "HALF_LOSS": 1,
+                  "PUSH": 1
+                },
+                "candidate": {
+                  "FULL_WIN": 2,
+                  "HALF_LOSS": 1,
+                  "PUSH": 1
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 2,
+              "candidate": 2,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 4
+            }
+          }
+        },
+        "jpn.league_cup": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "kor.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 2,
+          "metrics": null
+        },
+        "ned.1": {
+          "eligible_signals": 0,
+          "graded": 1,
+          "listed": 1,
+          "metrics": {
+            "first": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1
+            },
+            "log_loss": {
+              "baseline": 3.187690942646622,
+              "candidate": 3.187690942646622
+            },
+            "n": 1,
+            "top3": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1
+            },
+            "total": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 1
+                },
+                "candidate": {
+                  "FULL_LOSS": 1
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 1
+            }
+          }
+        },
+        "nor.1": {
+          "eligible_signals": 0,
+          "graded": 3,
+          "listed": 3,
+          "metrics": {
+            "first": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            },
+            "log_loss": {
+              "baseline": 3.240045749277609,
+              "candidate": 3.240045749277609
+            },
+            "n": 3,
+            "top3": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            },
+            "total": {
+              "baseline": 3,
+              "candidate": 3,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 3
+                },
+                "candidate": {
+                  "FULL_WIN": 3
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 3
+            }
+          }
+        },
+        "swe.1": {
+          "eligible_signals": 0,
+          "graded": 2,
+          "listed": 2,
+          "metrics": {
+            "first": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 2
+            },
+            "log_loss": {
+              "baseline": 2.6526772683896405,
+              "candidate": 2.6526772683896405
+            },
+            "n": 2,
+            "top3": {
+              "baseline": 1,
+              "candidate": 1,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 2
+            },
+            "total": {
+              "baseline": 2,
+              "candidate": 2,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 2,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 2
+                },
+                "candidate": {
+                  "FULL_WIN": 2
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 0,
+              "candidate": 0,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 2
+            }
+          }
+        },
+        "uefa.champions": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "uefa.europa": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "uefa.europa.conf": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "uefa.nations": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "usa.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        }
+      },
+      "feature_available": {
+        "first": {
+          "baseline": 1,
+          "candidate": 1,
+          "changed": 0,
+          "gained": 0,
+          "lost": 0,
+          "n": 15
+        },
+        "log_loss": {
+          "baseline": 3.0201158769366505,
+          "candidate": 3.0094133043981777
+        },
+        "n": 15,
+        "top3": {
+          "baseline": 4,
+          "candidate": 4,
+          "changed": 1,
+          "gained": 0,
+          "lost": 0,
+          "n": 15
+        },
+        "total": {
+          "baseline": 5,
+          "candidate": 5,
+          "changed": 0,
+          "gained": 0,
+          "lost": 0,
+          "n": 14,
+          "settlements": {
+            "baseline": {
+              "FULL_LOSS": 8,
+              "FULL_WIN": 5,
+              "HALF_LOSS": 1,
+              "PUSH": 1
+            },
+            "candidate": {
+              "FULL_LOSS": 8,
+              "FULL_WIN": 5,
+              "HALF_LOSS": 1,
+              "PUSH": 1
+            }
+          }
+        },
+        "wdl": {
+          "baseline": 11,
+          "candidate": 11,
+          "changed": 0,
+          "gained": 0,
+          "lost": 0,
+          "n": 15
+        }
+      },
+      "feature_status": {
+        "available": 15,
+        "no_trained_league_source": 13,
+        "outside_regular_phase": 2,
+        "unresolved_club": 3
+      },
+      "graded": 31,
+      "listed": 33,
+      "prediction_status": {
+        "outside_regular_phase": 2,
+        "paired": 31
+      }
+    },
+    "historical": {
+      "all": {
+        "first": {
+          "baseline": 215,
+          "candidate": 221,
+          "changed": 63,
+          "delta_95": [
+            -0.001194173105677372,
+            0.008079925722428589
+          ],
+          "gained": 11,
+          "lost": 5,
+          "n": 1764
+        },
+        "log_loss": {
+          "baseline": 2.885745372374871,
+          "candidate": 2.8854093402459746,
+          "delta_95": [
+            -0.001636337440388726,
+            0.0008397991584932307
+          ]
+        },
+        "n": 1764,
+        "top3": {
+          "baseline": 602,
+          "candidate": 604,
+          "changed": 249,
+          "delta_95": [
+            -0.004659318540141004,
+            0.0072216396328154174
+          ],
+          "gained": 14,
+          "lost": 12,
+          "n": 1764
+        },
+        "total": {
+          "baseline": 1028,
+          "candidate": 1028,
+          "changed": 0,
+          "delta_95": [
+            0.0,
+            0.0
+          ],
+          "gained": 0,
+          "lost": 0,
+          "n": 1764,
+          "settlements": {
+            "baseline": {
+              "FULL_LOSS": 736,
+              "FULL_WIN": 1028
+            },
+            "candidate": {
+              "FULL_LOSS": 736,
+              "FULL_WIN": 1028
+            }
+          }
+        },
+        "wdl": {
+          "baseline": 956,
+          "candidate": 958,
+          "changed": 23,
+          "delta_95": [
+            -0.0029855228362691047,
+            0.005438878932080833
+          ],
+          "gained": 8,
+          "lost": 6,
+          "n": 1764
+        }
+      },
+      "by_league": {
+        "afc.champions": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "aus.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "bra.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "eng.1": {
+          "eligible_signals": 373,
+          "graded": 373,
+          "listed": 373,
+          "metrics": {
+            "first": {
+              "baseline": 43,
+              "candidate": 42,
+              "changed": 9,
+              "gained": 1,
+              "lost": 2,
+              "n": 373
+            },
+            "log_loss": {
+              "baseline": 3.0240278930147904,
+              "candidate": 3.025510650385034
+            },
+            "n": 373,
+            "top3": {
+              "baseline": 117,
+              "candidate": 119,
+              "changed": 53,
+              "gained": 3,
+              "lost": 1,
+              "n": 373
+            },
+            "total": {
+              "baseline": 225,
+              "candidate": 225,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 373,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 148,
+                  "FULL_WIN": 225
+                },
+                "candidate": {
+                  "FULL_LOSS": 148,
+                  "FULL_WIN": 225
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 219,
+              "candidate": 218,
+              "changed": 4,
+              "gained": 1,
+              "lost": 2,
+              "n": 373
+            }
+          }
+        },
+        "esp.1": {
+          "eligible_signals": 360,
+          "graded": 360,
+          "listed": 360,
+          "metrics": {
+            "first": {
+              "baseline": 44,
+              "candidate": 43,
+              "changed": 12,
+              "gained": 1,
+              "lost": 2,
+              "n": 360
+            },
+            "log_loss": {
+              "baseline": 2.7894609395651693,
+              "candidate": 2.7881762858590586
+            },
+            "n": 360,
+            "top3": {
+              "baseline": 132,
+              "candidate": 133,
+              "changed": 48,
+              "gained": 3,
+              "lost": 2,
+              "n": 360
+            },
+            "total": {
+              "baseline": 204,
+              "candidate": 204,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 360,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 156,
+                  "FULL_WIN": 204
+                },
+                "candidate": {
+                  "FULL_LOSS": 156,
+                  "FULL_WIN": 204
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 198,
+              "candidate": 198,
+              "changed": 6,
+              "gained": 1,
+              "lost": 1,
+              "n": 360
+            }
+          }
+        },
+        "fifa.world": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "fra.1": {
+          "eligible_signals": 343,
+          "graded": 343,
+          "listed": 343,
+          "metrics": {
+            "first": {
+              "baseline": 24,
+              "candidate": 27,
+              "changed": 18,
+              "gained": 3,
+              "lost": 0,
+              "n": 343
+            },
+            "log_loss": {
+              "baseline": 2.9626863453335788,
+              "candidate": 2.9616721890388087
+            },
+            "n": 343,
+            "top3": {
+              "baseline": 96,
+              "candidate": 94,
+              "changed": 59,
+              "gained": 2,
+              "lost": 4,
+              "n": 343
+            },
+            "total": {
+              "baseline": 189,
+              "candidate": 189,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 343,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 154,
+                  "FULL_WIN": 189
+                },
+                "candidate": {
+                  "FULL_LOSS": 154,
+                  "FULL_WIN": 189
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 188,
+              "candidate": 189,
+              "changed": 5,
+              "gained": 3,
+              "lost": 2,
+              "n": 343
+            }
+          }
+        },
+        "ger.1": {
+          "eligible_signals": 296,
+          "graded": 324,
+          "listed": 324,
+          "metrics": {
+            "first": {
+              "baseline": 45,
+              "candidate": 47,
+              "changed": 14,
+              "gained": 2,
+              "lost": 0,
+              "n": 324
+            },
+            "log_loss": {
+              "baseline": 2.9617148353218266,
+              "candidate": 2.9619028583176994
+            },
+            "n": 324,
+            "top3": {
+              "baseline": 107,
+              "candidate": 104,
+              "changed": 48,
+              "gained": 1,
+              "lost": 4,
+              "n": 324
+            },
+            "total": {
+              "baseline": 193,
+              "candidate": 193,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 324,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 131,
+                  "FULL_WIN": 193
+                },
+                "candidate": {
+                  "FULL_LOSS": 131,
+                  "FULL_WIN": 193
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 162,
+              "candidate": 163,
+              "changed": 4,
+              "gained": 2,
+              "lost": 1,
+              "n": 324
+            }
+          }
+        },
+        "ita.1": {
+          "eligible_signals": 364,
+          "graded": 364,
+          "listed": 364,
+          "metrics": {
+            "first": {
+              "baseline": 59,
+              "candidate": 62,
+              "changed": 10,
+              "gained": 4,
+              "lost": 1,
+              "n": 364
+            },
+            "log_loss": {
+              "baseline": 2.6991468995538592,
+              "candidate": 2.698057839988391
+            },
+            "n": 364,
+            "top3": {
+              "baseline": 150,
+              "candidate": 154,
+              "changed": 41,
+              "gained": 5,
+              "lost": 1,
+              "n": 364
+            },
+            "total": {
+              "baseline": 217,
+              "candidate": 217,
+              "changed": 0,
+              "gained": 0,
+              "lost": 0,
+              "n": 364,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 147,
+                  "FULL_WIN": 217
+                },
+                "candidate": {
+                  "FULL_LOSS": 147,
+                  "FULL_WIN": 217
+                }
+              }
+            },
+            "wdl": {
+              "baseline": 189,
+              "candidate": 190,
+              "changed": 4,
+              "gained": 1,
+              "lost": 0,
+              "n": 364
+            }
+          }
+        },
+        "jpn.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "jpn.league_cup": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "kor.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "ned.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "nor.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "swe.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "uefa.champions": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "uefa.europa": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "uefa.europa.conf": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "uefa.nations": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        },
+        "usa.1": {
+          "eligible_signals": 0,
+          "graded": 0,
+          "listed": 0,
+          "metrics": null
+        }
+      },
+      "feature_available": {
+        "first": {
+          "baseline": 214,
+          "candidate": 220,
+          "changed": 63,
+          "gained": 11,
+          "lost": 5,
+          "n": 1736
+        },
+        "log_loss": {
+          "baseline": 2.881413198272056,
+          "candidate": 2.881071746270113
+        },
+        "n": 1736,
+        "top3": {
+          "baseline": 598,
+          "candidate": 600,
+          "changed": 249,
+          "gained": 14,
+          "lost": 12,
+          "n": 1736
+        },
+        "total": {
+          "baseline": 1013,
+          "candidate": 1013,
+          "changed": 0,
+          "gained": 0,
+          "lost": 0,
+          "n": 1736,
+          "settlements": {
+            "baseline": {
+              "FULL_LOSS": 723,
+              "FULL_WIN": 1013
+            },
+            "candidate": {
+              "FULL_LOSS": 723,
+              "FULL_WIN": 1013
+            }
+          }
+        },
+        "wdl": {
+          "baseline": 941,
+          "candidate": 943,
+          "changed": 23,
+          "gained": 8,
+          "lost": 6,
+          "n": 1736
+        }
+      },
+      "feature_status": {
+        "available": 1736,
+        "incomplete_half_or_full": 2,
+        "oldest_over_90_days": 26
+      },
+      "graded": 1764,
+      "listed": 1764,
+      "prediction_status": {
+        "paired": 1764
+      }
+    }
+  }
+}
