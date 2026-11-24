@@ -1,0 +1,19 @@
+{
+  "beta": -0.03692188445553407,
+  "by_league": {
+    "eng.1": 895,
+    "esp.1": 894,
+    "fra.1": 854,
+    "ger.1": 701,
+    "ita.1": 895
+  },
+  "counts": {
+    "feature_gap": 1132,
+    "listed": 5377,
+    "market_gap": 6
+  },
+  "eligible": 4239,
+  "first_fit_day": "2019-09-24",
+  "last_fit_day": "2022-05-22",
+  "protocol_sha256": "c478f93901a71e615b661161d28fb3d23de89d69db1fc1be138836aa4d3d0c25"
+}
