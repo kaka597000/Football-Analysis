@@ -1,0 +1,4161 @@
+{
+  "windows": {
+    "early_development": {
+      "candidate_fixtures": 2605,
+      "paired_scores": 2605,
+      "prediction_statuses": {
+        "paired": 2605
+      },
+      "candidate_fallbacks": 0,
+      "metrics": {
+        "first": {
+          "n": 2605,
+          "baseline_hits": 330,
+          "candidate_hits": 327,
+          "gained": 57,
+          "lost": 60,
+          "choices_changed": 579,
+          "delta_95_matchday_bootstrap": [
+            -0.00948890603289549,
+            0.006627680311890838
+          ]
+        },
+        "top3": {
+          "n": 2605,
+          "baseline_hits": 820,
+          "candidate_hits": 807,
+          "gained": 98,
+          "lost": 111,
+          "choices_changed": 1444,
+          "delta_95_matchday_bootstrap": [
+            -0.015705165479055358,
+            0.006326385263628893
+          ]
+        },
+        "wdl": {
+          "n": 2605,
+          "baseline_hits": 1307,
+          "candidate_hits": 1299,
+          "gained": 70,
+          "lost": 78,
+          "choices_changed": 200,
+          "delta_95_matchday_bootstrap": [
+            -0.012028374236608833,
+            0.005857488402784125
+          ]
+        },
+        "total": {
+          "n": 0,
+          "baseline_hits": 0,
+          "candidate_hits": 0,
+          "gained": 0,
+          "lost": 0,
+          "choices_changed": 0,
+          "settlements": {
+            "baseline": {},
+            "candidate": {}
+          },
+          "non_push_n": {
+            "baseline": 0,
+            "candidate": 0
+          },
+          "delta_95_matchday_bootstrap": null
+        },
+        "score_log_loss": {
+          "baseline": 2.977046536269092,
+          "candidate": 2.993678782351887,
+          "delta_95_matchday_bootstrap": [
+            0.007921900817185728,
+            0.025290752412104215
+          ]
+        }
+      },
+      "by_competition": {
+        "eng.1": {
+          "candidate_fixtures": 599,
+          "paired_scores": 599,
+          "prediction_statuses": {
+            "paired": 599
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 599,
+              "baseline_hits": 80,
+              "candidate_hits": 85,
+              "gained": 18,
+              "lost": 13,
+              "choices_changed": 121
+            },
+            "top3": {
+              "n": 599,
+              "baseline_hits": 199,
+              "candidate_hits": 195,
+              "gained": 20,
+              "lost": 24,
+              "choices_changed": 355
+            },
+            "wdl": {
+              "n": 599,
+              "baseline_hits": 311,
+              "candidate_hits": 308,
+              "gained": 12,
+              "lost": 15,
+              "choices_changed": 37
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.965168476984479,
+              "candidate": 2.9777329645700963
+            }
+          }
+        },
+        "esp.1": {
+          "candidate_fixtures": 389,
+          "paired_scores": 389,
+          "prediction_statuses": {
+            "paired": 389
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 389,
+              "baseline_hits": 45,
+              "candidate_hits": 51,
+              "gained": 13,
+              "lost": 7,
+              "choices_changed": 119
+            },
+            "top3": {
+              "n": 389,
+              "baseline_hits": 123,
+              "candidate_hits": 113,
+              "gained": 14,
+              "lost": 24,
+              "choices_changed": 271
+            },
+            "wdl": {
+              "n": 389,
+              "baseline_hits": 209,
+              "candidate_hits": 201,
+              "gained": 14,
+              "lost": 22,
+              "choices_changed": 42
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.9922055574786404,
+              "candidate": 3.048661993638082
+            }
+          }
+        },
+        "ger.1": {
+          "candidate_fixtures": 364,
+          "paired_scores": 364,
+          "prediction_statuses": {
+            "paired": 364
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 364,
+              "baseline_hits": 54,
+              "candidate_hits": 49,
+              "gained": 7,
+              "lost": 12,
+              "choices_changed": 79
+            },
+            "top3": {
+              "n": 364,
+              "baseline_hits": 121,
+              "candidate_hits": 125,
+              "gained": 15,
+              "lost": 11,
+              "choices_changed": 212
+            },
+            "wdl": {
+              "n": 364,
+              "baseline_hits": 170,
+              "candidate_hits": 178,
+              "gained": 14,
+              "lost": 6,
+              "choices_changed": 30
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": 3.0107714905779743,
+              "candidate": 3.002984342612201
+            }
+          }
+        },
+        "ita.1": {
+          "candidate_fixtures": 422,
+          "paired_scores": 422,
+          "prediction_statuses": {
+            "paired": 422
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 422,
+              "baseline_hits": 45,
+              "candidate_hits": 38,
+              "gained": 5,
+              "lost": 12,
+              "choices_changed": 118
+            },
+            "top3": {
+              "n": 422,
+              "baseline_hits": 125,
+              "candidate_hits": 133,
+              "gained": 29,
+              "lost": 21,
+              "choices_changed": 268
+            },
+            "wdl": {
+              "n": 422,
+              "baseline_hits": 212,
+              "candidate_hits": 207,
+              "gained": 11,
+              "lost": 16,
+              "choices_changed": 38
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.95474025849933,
+              "candidate": 2.968642915176667
+            }
+          }
+        },
+        "fra.1": {
+          "candidate_fixtures": 474,
+          "paired_scores": 474,
+          "prediction_statuses": {
+            "paired": 474
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 474,
+              "baseline_hits": 61,
+              "candidate_hits": 62,
+              "gained": 13,
+              "lost": 12,
+              "choices_changed": 132
+            },
+            "top3": {
+              "n": 474,
+              "baseline_hits": 158,
+              "candidate_hits": 146,
+              "gained": 18,
+              "lost": 30,
+              "choices_changed": 302
+            },
+            "wdl": {
+              "n": 474,
+              "baseline_hits": 224,
+              "candidate_hits": 224,
+              "gained": 16,
+              "lost": 16,
+              "choices_changed": 46
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.858412296144228,
+              "candidate": 2.8801803538641653
+            }
+          }
+        },
+        "jpn.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "kor.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "aus.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "usa.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "nor.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "swe.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "ned.1": {
+          "candidate_fixtures": 357,
+          "paired_scores": 357,
+          "prediction_statuses": {
+            "paired": 357
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 357,
+              "baseline_hits": 45,
+              "candidate_hits": 42,
+              "gained": 1,
+              "lost": 4,
+              "choices_changed": 10
+            },
+            "top3": {
+              "n": 357,
+              "baseline_hits": 94,
+              "candidate_hits": 95,
+              "gained": 2,
+              "lost": 1,
+              "choices_changed": 36
+            },
+            "wdl": {
+              "n": 357,
+              "baseline_hits": 181,
+              "candidate_hits": 181,
+              "gained": 3,
+              "lost": 3,
+              "choices_changed": 7
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": 3.129954362405114,
+              "candidate": 3.1313237201035142
+            }
+          }
+        },
+        "uefa.champions": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.europa": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.europa.conf": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "afc.champions": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "fifa.world": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.nations": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "jpn.league_cup": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "bra.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        }
+      }
+    },
+    "later_archival_check": {
+      "candidate_fixtures": 1135,
+      "paired_scores": 1135,
+      "prediction_statuses": {
+        "paired": 1135
+      },
+      "candidate_fallbacks": 178,
+      "metrics": {
+        "first": {
+          "n": 1135,
+          "baseline_hits": 140,
+          "candidate_hits": 148,
+          "gained": 28,
+          "lost": 20,
+          "choices_changed": 243,
+          "delta_95_matchday_bootstrap": [
+            -0.0033312569779871378,
+            0.01791122292221611
+          ]
+        },
+        "top3": {
+          "n": 1135,
+          "baseline_hits": 366,
+          "candidate_hits": 361,
+          "gained": 39,
+          "lost": 44,
+          "choices_changed": 618,
+          "delta_95_matchday_bootstrap": [
+            -0.01920342541436464,
+            0.011736266590965069
+          ]
+        },
+        "wdl": {
+          "n": 1135,
+          "baseline_hits": 552,
+          "candidate_hits": 565,
+          "gained": 38,
+          "lost": 25,
+          "choices_changed": 90,
+          "delta_95_matchday_bootstrap": [
+            -0.0009279489307684796,
+            0.02454731357264727
+          ]
+        },
+        "total": {
+          "n": 1129,
+          "baseline_hits": 633,
+          "candidate_hits": 627,
+          "gained": 53,
+          "lost": 59,
+          "choices_changed": 112,
+          "settlements": {
+            "baseline": {
+              "FULL_LOSS": 496,
+              "FULL_WIN": 633
+            },
+            "candidate": {
+              "FULL_LOSS": 502,
+              "FULL_WIN": 627
+            }
+          },
+          "non_push_n": {
+            "baseline": 1129,
+            "candidate": 1129
+          },
+          "delta_95_matchday_bootstrap": [
+            -0.02583775953645582,
+            0.013611787998781566
+          ]
+        },
+        "score_log_loss": {
+          "baseline": 2.985970033731935,
+          "candidate": 2.9882977398366912,
+          "delta_95_matchday_bootstrap": [
+            -0.008672646889192406,
+            0.014355009205529295
+          ]
+        }
+      },
+      "by_competition": {
+        "eng.1": {
+          "candidate_fixtures": 247,
+          "paired_scores": 247,
+          "prediction_statuses": {
+            "paired": 247
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 247,
+              "baseline_hits": 26,
+              "candidate_hits": 34,
+              "gained": 10,
+              "lost": 2,
+              "choices_changed": 72
+            },
+            "top3": {
+              "n": 247,
+              "baseline_hits": 80,
+              "candidate_hits": 72,
+              "gained": 9,
+              "lost": 17,
+              "choices_changed": 165
+            },
+            "wdl": {
+              "n": 247,
+              "baseline_hits": 129,
+              "candidate_hits": 132,
+              "gained": 8,
+              "lost": 5,
+              "choices_changed": 20
+            },
+            "total": {
+              "n": 246,
+              "baseline_hits": 141,
+              "candidate_hits": 141,
+              "gained": 15,
+              "lost": 15,
+              "choices_changed": 30,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 141,
+                  "FULL_LOSS": 105
+                },
+                "candidate": {
+                  "FULL_WIN": 141,
+                  "FULL_LOSS": 105
+                }
+              },
+              "non_push_n": {
+                "baseline": 246,
+                "candidate": 246
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.9586809587225305,
+              "candidate": 2.9578555288809123
+            }
+          }
+        },
+        "esp.1": {
+          "candidate_fixtures": 188,
+          "paired_scores": 188,
+          "prediction_statuses": {
+            "paired": 188
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 188,
+              "baseline_hits": 29,
+              "candidate_hits": 33,
+              "gained": 8,
+              "lost": 4,
+              "choices_changed": 54
+            },
+            "top3": {
+              "n": 188,
+              "baseline_hits": 70,
+              "candidate_hits": 73,
+              "gained": 10,
+              "lost": 7,
+              "choices_changed": 134
+            },
+            "wdl": {
+              "n": 188,
+              "baseline_hits": 82,
+              "candidate_hits": 93,
+              "gained": 16,
+              "lost": 5,
+              "choices_changed": 29
+            },
+            "total": {
+              "n": 188,
+              "baseline_hits": 108,
+              "candidate_hits": 109,
+              "gained": 15,
+              "lost": 14,
+              "choices_changed": 29,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 80,
+                  "FULL_WIN": 108
+                },
+                "candidate": {
+                  "FULL_LOSS": 79,
+                  "FULL_WIN": 109
+                }
+              },
+              "non_push_n": {
+                "baseline": 188,
+                "candidate": 188
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.869593755243166,
+              "candidate": 2.845014864047783
+            }
+          }
+        },
+        "ger.1": {
+          "candidate_fixtures": 161,
+          "paired_scores": 161,
+          "prediction_statuses": {
+            "paired": 161
+          },
+          "candidate_fallbacks": 54,
+          "metrics": {
+            "first": {
+              "n": 161,
+              "baseline_hits": 18,
+              "candidate_hits": 15,
+              "gained": 0,
+              "lost": 3,
+              "choices_changed": 16
+            },
+            "top3": {
+              "n": 161,
+              "baseline_hits": 49,
+              "candidate_hits": 50,
+              "gained": 3,
+              "lost": 2,
+              "choices_changed": 60
+            },
+            "wdl": {
+              "n": 161,
+              "baseline_hits": 77,
+              "candidate_hits": 78,
+              "gained": 2,
+              "lost": 1,
+              "choices_changed": 5
+            },
+            "total": {
+              "n": 161,
+              "baseline_hits": 93,
+              "candidate_hits": 94,
+              "gained": 3,
+              "lost": 2,
+              "choices_changed": 5,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 93,
+                  "FULL_LOSS": 68
+                },
+                "candidate": {
+                  "FULL_WIN": 94,
+                  "FULL_LOSS": 67
+                }
+              },
+              "non_push_n": {
+                "baseline": 161,
+                "candidate": 161
+              }
+            },
+            "score_log_loss": {
+              "baseline": 3.1974735134411816,
+              "candidate": 3.1796641393737395
+            }
+          }
+        },
+        "ita.1": {
+          "candidate_fixtures": 188,
+          "paired_scores": 188,
+          "prediction_statuses": {
+            "paired": 188
+          },
+          "candidate_fallbacks": 69,
+          "metrics": {
+            "first": {
+              "n": 188,
+              "baseline_hits": 27,
+              "candidate_hits": 28,
+              "gained": 3,
+              "lost": 2,
+              "choices_changed": 27
+            },
+            "top3": {
+              "n": 188,
+              "baseline_hits": 57,
+              "candidate_hits": 54,
+              "gained": 1,
+              "lost": 4,
+              "choices_changed": 77
+            },
+            "wdl": {
+              "n": 188,
+              "baseline_hits": 88,
+              "candidate_hits": 88,
+              "gained": 5,
+              "lost": 5,
+              "choices_changed": 14
+            },
+            "total": {
+              "n": 188,
+              "baseline_hits": 103,
+              "candidate_hits": 98,
+              "gained": 5,
+              "lost": 10,
+              "choices_changed": 15,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 103,
+                  "FULL_LOSS": 85
+                },
+                "candidate": {
+                  "FULL_WIN": 98,
+                  "FULL_LOSS": 90
+                }
+              },
+              "non_push_n": {
+                "baseline": 188,
+                "candidate": 188
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.9860797340877423,
+              "candidate": 3.0037659708243463
+            }
+          }
+        },
+        "fra.1": {
+          "candidate_fixtures": 195,
+          "paired_scores": 195,
+          "prediction_statuses": {
+            "paired": 195
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 195,
+              "baseline_hits": 21,
+              "candidate_hits": 19,
+              "gained": 4,
+              "lost": 6,
+              "choices_changed": 48
+            },
+            "top3": {
+              "n": 195,
+              "baseline_hits": 61,
+              "candidate_hits": 61,
+              "gained": 10,
+              "lost": 10,
+              "choices_changed": 120
+            },
+            "wdl": {
+              "n": 195,
+              "baseline_hits": 97,
+              "candidate_hits": 96,
+              "gained": 5,
+              "lost": 6,
+              "choices_changed": 16
+            },
+            "total": {
+              "n": 192,
+              "baseline_hits": 99,
+              "candidate_hits": 95,
+              "gained": 10,
+              "lost": 14,
+              "choices_changed": 24,
+              "settlements": {
+                "baseline": {
+                  "FULL_LOSS": 93,
+                  "FULL_WIN": 99
+                },
+                "candidate": {
+                  "FULL_LOSS": 97,
+                  "FULL_WIN": 95
+                }
+              },
+              "non_push_n": {
+                "baseline": 192,
+                "candidate": 192
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.985322556552724,
+              "candidate": 3.0046691417388045
+            }
+          }
+        },
+        "jpn.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "kor.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "aus.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "usa.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "nor.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "swe.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "ned.1": {
+          "candidate_fixtures": 156,
+          "paired_scores": 156,
+          "prediction_statuses": {
+            "paired": 156
+          },
+          "candidate_fallbacks": 55,
+          "metrics": {
+            "first": {
+              "n": 156,
+              "baseline_hits": 19,
+              "candidate_hits": 19,
+              "gained": 3,
+              "lost": 3,
+              "choices_changed": 26
+            },
+            "top3": {
+              "n": 156,
+              "baseline_hits": 49,
+              "candidate_hits": 51,
+              "gained": 6,
+              "lost": 4,
+              "choices_changed": 62
+            },
+            "wdl": {
+              "n": 156,
+              "baseline_hits": 79,
+              "candidate_hits": 78,
+              "gained": 2,
+              "lost": 3,
+              "choices_changed": 6
+            },
+            "total": {
+              "n": 154,
+              "baseline_hits": 89,
+              "candidate_hits": 90,
+              "gained": 5,
+              "lost": 4,
+              "choices_changed": 9,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 89,
+                  "FULL_LOSS": 65
+                },
+                "candidate": {
+                  "FULL_WIN": 90,
+                  "FULL_LOSS": 64
+                }
+              },
+              "non_push_n": {
+                "baseline": 154,
+                "candidate": 154
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.951820777533714,
+              "candidate": 2.9725667503003828
+            }
+          }
+        },
+        "uefa.champions": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.europa": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.europa.conf": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "afc.champions": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "fifa.world": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.nations": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "jpn.league_cup": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "bra.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        }
+      }
+    },
+    "clocked_reconstruction": {
+      "candidate_fixtures": 33,
+      "paired_scores": 15,
+      "prediction_statuses": {
+        "no_season_source": 14,
+        "unresolved_club": 3,
+        "paired": 15,
+        "no_season_source_before_cutoff": 1
+      },
+      "candidate_fallbacks": 0,
+      "metrics": {
+        "first": {
+          "n": 15,
+          "baseline_hits": 0,
+          "candidate_hits": 1,
+          "gained": 1,
+          "lost": 0,
+          "choices_changed": 3,
+          "delta_95_matchday_bootstrap": null
+        },
+        "top3": {
+          "n": 15,
+          "baseline_hits": 5,
+          "candidate_hits": 4,
+          "gained": 0,
+          "lost": 1,
+          "choices_changed": 11,
+          "delta_95_matchday_bootstrap": null
+        },
+        "wdl": {
+          "n": 15,
+          "baseline_hits": 10,
+          "candidate_hits": 11,
+          "gained": 1,
+          "lost": 0,
+          "choices_changed": 1,
+          "delta_95_matchday_bootstrap": null
+        },
+        "total": {
+          "n": 15,
+          "baseline_hits": 10,
+          "candidate_hits": 11,
+          "gained": 1,
+          "lost": 0,
+          "choices_changed": 2,
+          "settlements": {
+            "baseline": {
+              "FULL_WIN": 10,
+              "FULL_LOSS": 3,
+              "HALF_LOSS": 1,
+              "PUSH": 1
+            },
+            "candidate": {
+              "FULL_WIN": 11,
+              "FULL_LOSS": 2,
+              "HALF_LOSS": 1,
+              "PUSH": 1
+            }
+          },
+          "non_push_n": {
+            "baseline": 14,
+            "candidate": 14
+          },
+          "delta_95_matchday_bootstrap": null
+        },
+        "score_log_loss": {
+          "baseline": 2.938425556507108,
+          "candidate": 2.934066598214623,
+          "delta_95_matchday_bootstrap": null
+        }
+      },
+      "by_competition": {
+        "eng.1": {
+          "candidate_fixtures": 6,
+          "paired_scores": 6,
+          "prediction_statuses": {
+            "paired": 6
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 6,
+              "baseline_hits": 0,
+              "candidate_hits": 1,
+              "gained": 1,
+              "lost": 0,
+              "choices_changed": 2
+            },
+            "top3": {
+              "n": 6,
+              "baseline_hits": 2,
+              "candidate_hits": 2,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 5
+            },
+            "wdl": {
+              "n": 6,
+              "baseline_hits": 3,
+              "candidate_hits": 3,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 6,
+              "baseline_hits": 5,
+              "candidate_hits": 6,
+              "gained": 1,
+              "lost": 0,
+              "choices_changed": 1,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 5,
+                  "FULL_LOSS": 1
+                },
+                "candidate": {
+                  "FULL_WIN": 6
+                }
+              },
+              "non_push_n": {
+                "baseline": 6,
+                "candidate": 6
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.9903478200461993,
+              "candidate": 3.055545117580824
+            }
+          }
+        },
+        "esp.1": {
+          "candidate_fixtures": 3,
+          "paired_scores": 0,
+          "prediction_statuses": {
+            "unresolved_club": 3
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "ger.1": {
+          "candidate_fixtures": 6,
+          "paired_scores": 6,
+          "prediction_statuses": {
+            "paired": 6
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 6,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 1
+            },
+            "top3": {
+              "n": 6,
+              "baseline_hits": 1,
+              "candidate_hits": 1,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 4
+            },
+            "wdl": {
+              "n": 6,
+              "baseline_hits": 4,
+              "candidate_hits": 5,
+              "gained": 1,
+              "lost": 0,
+              "choices_changed": 1
+            },
+            "total": {
+              "n": 6,
+              "baseline_hits": 3,
+              "candidate_hits": 3,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 3,
+                  "FULL_LOSS": 2,
+                  "HALF_LOSS": 1
+                },
+                "candidate": {
+                  "FULL_WIN": 3,
+                  "FULL_LOSS": 2,
+                  "HALF_LOSS": 1
+                }
+              },
+              "non_push_n": {
+                "baseline": 6,
+                "candidate": 6
+              }
+            },
+            "score_log_loss": {
+              "baseline": 3.1889013544457607,
+              "candidate": 3.0985638712713013
+            }
+          }
+        },
+        "ita.1": {
+          "candidate_fixtures": 2,
+          "paired_scores": 2,
+          "prediction_statuses": {
+            "paired": 2
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 2,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 2,
+              "baseline_hits": 2,
+              "candidate_hits": 1,
+              "gained": 0,
+              "lost": 1,
+              "choices_changed": 1
+            },
+            "wdl": {
+              "n": 2,
+              "baseline_hits": 2,
+              "candidate_hits": 2,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 2,
+              "baseline_hits": 1,
+              "candidate_hits": 1,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 1,
+              "settlements": {
+                "baseline": {
+                  "PUSH": 1,
+                  "FULL_WIN": 1
+                },
+                "candidate": {
+                  "PUSH": 1,
+                  "FULL_WIN": 1
+                }
+              },
+              "non_push_n": {
+                "baseline": 1,
+                "candidate": 1
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.075487572909102,
+              "candidate": 2.1300645515053276
+            }
+          }
+        },
+        "fra.1": {
+          "candidate_fixtures": 1,
+          "paired_scores": 1,
+          "prediction_statuses": {
+            "paired": 1
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 1,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 1,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 1
+            },
+            "wdl": {
+              "n": 1,
+              "baseline_hits": 1,
+              "candidate_hits": 1,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 1,
+              "baseline_hits": 1,
+              "candidate_hits": 1,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {
+                  "FULL_WIN": 1
+                },
+                "candidate": {
+                  "FULL_WIN": 1
+                }
+              },
+              "non_push_n": {
+                "baseline": 1,
+                "candidate": 1
+              }
+            },
+            "score_log_loss": {
+              "baseline": 2.8499131548366643,
+              "candidate": 2.8262159370959354
+            }
+          }
+        },
+        "jpn.1": {
+          "candidate_fixtures": 4,
+          "paired_scores": 0,
+          "prediction_statuses": {
+            "no_season_source": 4
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "kor.1": {
+          "candidate_fixtures": 2,
+          "paired_scores": 0,
+          "prediction_statuses": {
+            "no_season_source": 2
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "aus.1": {
+          "candidate_fixtures": 3,
+          "paired_scores": 0,
+          "prediction_statuses": {
+            "no_season_source": 3
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "usa.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "nor.1": {
+          "candidate_fixtures": 3,
+          "paired_scores": 0,
+          "prediction_statuses": {
+            "no_season_source": 3
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "swe.1": {
+          "candidate_fixtures": 2,
+          "paired_scores": 0,
+          "prediction_statuses": {
+            "no_season_source": 2
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "ned.1": {
+          "candidate_fixtures": 1,
+          "paired_scores": 0,
+          "prediction_statuses": {
+            "no_season_source_before_cutoff": 1
+          },
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.champions": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.europa": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.europa.conf": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "afc.champions": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "fifa.world": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "uefa.nations": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "jpn.league_cup": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        },
+        "bra.1": {
+          "candidate_fixtures": 0,
+          "paired_scores": 0,
+          "prediction_statuses": {},
+          "candidate_fallbacks": 0,
+          "metrics": {
+            "first": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "top3": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "wdl": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0
+            },
+            "total": {
+              "n": 0,
+              "baseline_hits": 0,
+              "candidate_hits": 0,
+              "gained": 0,
+              "lost": 0,
+              "choices_changed": 0,
+              "settlements": {
+                "baseline": {},
+                "candidate": {}
+              },
+              "non_push_n": {
+                "baseline": 0,
+                "candidate": 0
+              }
+            },
+            "score_log_loss": {
+              "baseline": null,
+              "candidate": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "training": [
+    {
+      "baseline": 110,
+      "candidate": 93,
+      "excluded_unequal": 17,
+      "known_equal": 93,
+      "league": "eng.1",
+      "window": "early_development",
+      "year": 2010
+    },
+    {
+      "baseline": 100,
+      "candidate": 72,
+      "excluded_unequal": 28,
+      "known_equal": 72,
+      "league": "esp.1",
+      "window": "early_development",
+      "year": 2010
+    },
+    {
+      "baseline": 99,
+      "candidate": 79,
+      "excluded_unequal": 20,
+      "known_equal": 79,
+      "league": "ger.1",
+      "window": "early_development",
+      "year": 2010
+    },
+    {
+      "baseline": 100,
+      "candidate": 87,
+      "excluded_unequal": 13,
+      "known_equal": 87,
+      "league": "ita.1",
+      "window": "early_development",
+      "year": 2010
+    },
+    {
+      "baseline": 119,
+      "candidate": 99,
+      "excluded_unequal": 20,
+      "known_equal": 99,
+      "league": "fra.1",
+      "window": "early_development",
+      "year": 2010
+    },
+    {
+      "baseline": 117,
+      "candidate": 117,
+      "league": "ned.1",
+      "unknown_cards": 117,
+      "window": "early_development",
+      "year": 2010
+    },
+    {
+      "baseline": 109,
+      "candidate": 89,
+      "excluded_unequal": 20,
+      "known_equal": 89,
+      "league": "eng.1",
+      "window": "early_development",
+      "year": 2011
+    },
+    {
+      "baseline": 110,
+      "candidate": 83,
+      "excluded_unequal": 27,
+      "known_equal": 83,
+      "league": "esp.1",
+      "window": "early_development",
+      "year": 2011
+    },
+    {
+      "baseline": 108,
+      "candidate": 90,
+      "excluded_unequal": 18,
+      "known_equal": 90,
+      "league": "ger.1",
+      "window": "early_development",
+      "year": 2011
+    },
+    {
+      "baseline": 98,
+      "candidate": 76,
+      "excluded_unequal": 22,
+      "known_equal": 76,
+      "league": "ita.1",
+      "window": "early_development",
+      "year": 2011
+    },
+    {
+      "baseline": 130,
+      "candidate": 104,
+      "excluded_unequal": 26,
+      "known_equal": 104,
+      "league": "fra.1",
+      "window": "early_development",
+      "year": 2011
+    },
+    {
+      "baseline": 108,
+      "candidate": 108,
+      "league": "ned.1",
+      "unknown_cards": 108,
+      "window": "early_development",
+      "year": 2011
+    },
+    {
+      "baseline": 99,
+      "candidate": 81,
+      "excluded_unequal": 18,
+      "known_equal": 81,
+      "league": "eng.1",
+      "window": "early_development",
+      "year": 2012
+    },
+    {
+      "baseline": 100,
+      "candidate": 68,
+      "excluded_unequal": 32,
+      "known_equal": 68,
+      "league": "esp.1",
+      "window": "early_development",
+      "year": 2012
+    },
+    {
+      "baseline": 90,
+      "candidate": 79,
+      "excluded_unequal": 11,
+      "known_equal": 79,
+      "league": "ger.1",
+      "window": "early_development",
+      "year": 2012
+    },
+    {
+      "baseline": 110,
+      "candidate": 75,
+      "excluded_unequal": 35,
+      "known_equal": 74,
+      "league": "ita.1",
+      "unknown_cards": 1,
+      "window": "early_development",
+      "year": 2012
+    },
+    {
+      "baseline": 109,
+      "candidate": 83,
+      "excluded_unequal": 26,
+      "known_equal": 83,
+      "league": "fra.1",
+      "window": "early_development",
+      "year": 2012
+    },
+    {
+      "baseline": 99,
+      "candidate": 99,
+      "league": "ned.1",
+      "unknown_cards": 99,
+      "window": "early_development",
+      "year": 2012
+    },
+    {
+      "baseline": 100,
+      "candidate": 89,
+      "excluded_unequal": 11,
+      "known_equal": 89,
+      "league": "eng.1",
+      "window": "early_development",
+      "year": 2013
+    },
+    {
+      "baseline": 122,
+      "candidate": 96,
+      "excluded_unequal": 26,
+      "known_equal": 96,
+      "league": "esp.1",
+      "window": "early_development",
+      "year": 2013
+    },
+    {
+      "baseline": 100,
+      "candidate": 81,
+      "excluded_unequal": 19,
+      "known_equal": 81,
+      "league": "ger.1",
+      "window": "early_development",
+      "year": 2013
+    },
+    {
+      "baseline": 110,
+      "candidate": 86,
+      "excluded_unequal": 24,
+      "known_equal": 86,
+      "league": "ita.1",
+      "window": "early_development",
+      "year": 2013
+    },
+    {
+      "baseline": 121,
+      "candidate": 96,
+      "excluded_unequal": 25,
+      "known_equal": 96,
+      "league": "fra.1",
+      "window": "early_development",
+      "year": 2013
+    },
+    {
+      "baseline": 107,
+      "candidate": 107,
+      "league": "ned.1",
+      "unknown_cards": 107,
+      "window": "early_development",
+      "year": 2013
+    },
+    {
+      "baseline": 106,
+      "candidate": 92,
+      "excluded_unequal": 14,
+      "known_equal": 92,
+      "league": "eng.1",
+      "window": "early_development",
+      "year": 2014
+    },
+    {
+      "baseline": 106,
+      "candidate": 88,
+      "excluded_unequal": 18,
+      "known_equal": 88,
+      "league": "esp.1",
+      "window": "early_development",
+      "year": 2014
+    },
+    {
+      "baseline": 97,
+      "candidate": 87,
+      "excluded_unequal": 10,
+      "known_equal": 87,
+      "league": "ger.1",
+      "window": "early_development",
+      "year": 2014
+    },
+    {
+      "baseline": 102,
+      "candidate": 80,
+      "excluded_unequal": 22,
+      "known_equal": 80,
+      "league": "ita.1",
+      "window": "early_development",
+      "year": 2014
+    },
+    {
+      "baseline": 126,
+      "candidate": 110,
+      "excluded_unequal": 16,
+      "known_equal": 110,
+      "league": "fra.1",
+      "window": "early_development",
+      "year": 2014
+    },
+    {
+      "baseline": 104,
+      "candidate": 104,
+      "league": "ned.1",
+      "unknown_cards": 104,
+      "window": "early_development",
+      "year": 2014
+    },
+    {
+      "baseline": 120,
+      "candidate": 98,
+      "excluded_unequal": 22,
+      "known_equal": 98,
+      "league": "eng.1",
+      "window": "early_development",
+      "year": 2015
+    },
+    {
+      "baseline": 110,
+      "candidate": 80,
+      "excluded_unequal": 30,
+      "known_equal": 80,
+      "league": "esp.1",
+      "window": "early_development",
+      "year": 2015
+    },
+    {
+      "baseline": 108,
+      "candidate": 95,
+      "excluded_unequal": 13,
+      "known_equal": 95,
+      "league": "ger.1",
+      "window": "early_development",
+      "year": 2015
+    },
+    {
+      "baseline": 120,
+      "candidate": 88,
+      "excluded_unequal": 32,
+      "known_equal": 88,
+      "league": "ita.1",
+      "window": "early_development",
+      "year": 2015
+    },
+    {
+      "baseline": 130,
+      "candidate": 96,
+      "excluded_unequal": 34,
+      "known_equal": 96,
+      "league": "fra.1",
+      "window": "early_development",
+      "year": 2015
+    },
+    {
+      "baseline": 108,
+      "candidate": 108,
+      "league": "ned.1",
+      "unknown_cards": 108,
+      "window": "early_development",
+      "year": 2015
+    },
+    {
+      "baseline": 110,
+      "candidate": 100,
+      "excluded_unequal": 10,
+      "known_equal": 100,
+      "league": "eng.1",
+      "window": "early_development",
+      "year": 2016
+    },
+    {
+      "baseline": 110,
+      "candidate": 90,
+      "excluded_unequal": 20,
+      "known_equal": 90,
+      "league": "esp.1",
+      "window": "early_development",
+      "year": 2016
+    },
+    {
+      "baseline": 90,
+      "candidate": 74,
+      "excluded_unequal": 16,
+      "known_equal": 74,
+      "league": "ger.1",
+      "window": "early_development",
+      "year": 2016
+    },
+    {
+      "baseline": 119,
+      "candidate": 95,
+      "excluded_unequal": 24,
+      "known_equal": 95,
+      "league": "ita.1",
+      "window": "early_development",
+      "year": 2016
+    },
+    {
+      "baseline": 120,
+      "candidate": 97,
+      "excluded_unequal": 23,
+      "known_equal": 97,
+      "league": "fra.1",
+      "window": "early_development",
+      "year": 2016
+    },
+    {
+      "baseline": 108,
+      "candidate": 108,
+      "league": "ned.1",
+      "unknown_cards": 108,
+      "window": "early_development",
+      "year": 2016
+    },
+    {
+      "baseline": 110,
+      "candidate": 98,
+      "excluded_unequal": 12,
+      "known_equal": 98,
+      "league": "eng.1",
+      "window": "early_development",
+      "year": 2017
+    },
+    {
+      "baseline": 110,
+      "candidate": 96,
+      "excluded_unequal": 14,
+      "known_equal": 96,
+      "league": "esp.1",
+      "window": "early_development",
+      "year": 2017
+    },
+    {
+      "baseline": 99,
+      "candidate": 86,
+      "excluded_unequal": 13,
+      "known_equal": 86,
+      "league": "ger.1",
+      "window": "early_development",
+      "year": 2017
+    },
+    {
+      "baseline": 118,
+      "candidate": 99,
+      "excluded_unequal": 19,
+      "known_equal": 99,
+      "league": "ita.1",
+      "window": "early_development",
+      "year": 2017
+    },
+    {
+      "baseline": 119,
+      "candidate": 89,
+      "excluded_unequal": 30,
+      "known_equal": 89,
+      "league": "fra.1",
+      "window": "early_development",
+      "year": 2017
+    },
+    {
+      "baseline": 99,
+      "candidate": 84,
+      "excluded_unequal": 15,
+      "known_equal": 84,
+      "league": "ned.1",
+      "window": "early_development",
+      "year": 2017
+    },
+    {
+      "baseline": 111,
+      "candidate": 93,
+      "excluded_unequal": 18,
+      "known_equal": 93,
+      "league": "eng.1",
+      "window": "later_archival_check",
+      "year": 2019
+    },
+    {
+      "baseline": 120,
+      "candidate": 98,
+      "excluded_unequal": 22,
+      "known_equal": 98,
+      "league": "esp.1",
+      "window": "later_archival_check",
+      "year": 2019
+    },
+    {
+      "baseline": 91,
+      "candidate": 79,
+      "excluded_unequal": 12,
+      "known_equal": 79,
+      "league": "ger.1",
+      "window": "later_archival_check",
+      "year": 2019
+    },
+    {
+      "baseline": 110,
+      "candidate": 85,
+      "excluded_unequal": 25,
+      "known_equal": 85,
+      "league": "ita.1",
+      "window": "later_archival_check",
+      "year": 2019
+    },
+    {
+      "baseline": 120,
+      "candidate": 98,
+      "excluded_unequal": 22,
+      "known_equal": 98,
+      "league": "fra.1",
+      "window": "later_archival_check",
+      "year": 2019
+    },
+    {
+      "baseline": 109,
+      "candidate": 91,
+      "excluded_unequal": 18,
+      "known_equal": 91,
+      "league": "ned.1",
+      "window": "later_archival_check",
+      "year": 2019
+    },
+    {
+      "baseline": 78,
+      "candidate": 68,
+      "excluded_unequal": 10,
+      "known_equal": 68,
+      "league": "eng.1",
+      "window": "later_archival_check",
+      "year": 2020
+    },
+    {
+      "baseline": 83,
+      "candidate": 65,
+      "excluded_unequal": 18,
+      "known_equal": 65,
+      "league": "esp.1",
+      "window": "later_archival_check",
+      "year": 2020
+    },
+    {
+      "baseline": 63,
+      "candidate": 59,
+      "excluded_unequal": 4,
+      "known_equal": 59,
+      "league": "ger.1",
+      "window": "later_archival_check",
+      "year": 2020
+    },
+    {
+      "baseline": 69,
+      "candidate": 58,
+      "excluded_unequal": 11,
+      "known_equal": 58,
+      "league": "ita.1",
+      "window": "later_archival_check",
+      "year": 2020
+    },
+    {
+      "baseline": 98,
+      "candidate": 76,
+      "excluded_unequal": 22,
+      "known_equal": 76,
+      "league": "fra.1",
+      "window": "later_archival_check",
+      "year": 2020
+    },
+    {
+      "baseline": 71,
+      "candidate": 50,
+      "excluded_unequal": 21,
+      "known_equal": 50,
+      "league": "ned.1",
+      "window": "later_archival_check",
+      "year": 2020
+    },
+    {
+      "baseline": 110,
+      "candidate": 94,
+      "excluded_unequal": 16,
+      "known_equal": 94,
+      "league": "eng.1",
+      "window": "later_archival_check",
+      "year": 2021
+    },
+    {
+      "baseline": 126,
+      "candidate": 101,
+      "excluded_unequal": 25,
+      "known_equal": 101,
+      "league": "esp.1",
+      "window": "later_archival_check",
+      "year": 2021
+    },
+    {
+      "baseline": 99,
+      "candidate": 86,
+      "excluded_unequal": 13,
+      "known_equal": 86,
+      "league": "ger.1",
+      "window": "later_archival_check",
+      "year": 2021
+    },
+    {
+      "baseline": 120,
+      "candidate": 98,
+      "excluded_unequal": 22,
+      "known_equal": 98,
+      "league": "ita.1",
+      "window": "later_archival_check",
+      "year": 2021
+    },
+    {
+      "baseline": 130,
+      "candidate": 98,
+      "excluded_unequal": 32,
+      "known_equal": 98,
+      "league": "fra.1",
+      "window": "later_archival_check",
+      "year": 2021
+    },
+    {
+      "baseline": 106,
+      "candidate": 91,
+      "excluded_unequal": 15,
+      "known_equal": 91,
+      "league": "ned.1",
+      "window": "later_archival_check",
+      "year": 2021
+    },
+    {
+      "baseline": 136,
+      "candidate": 125,
+      "excluded_unequal": 11,
+      "known_equal": 125,
+      "league": "eng.1",
+      "window": "later_archival_check",
+      "year": 2022
+    },
+    {
+      "baseline": 133,
+      "candidate": 100,
+      "excluded_unequal": 33,
+      "known_equal": 100,
+      "league": "esp.1",
+      "window": "later_archival_check",
+      "year": 2022
+    },
+    {
+      "baseline": 121,
+      "candidate": 100,
+      "excluded_unequal": 21,
+      "known_equal": 100,
+      "league": "ger.1",
+      "window": "later_archival_check",
+      "year": 2022
+    },
+    {
+      "baseline": 133,
+      "candidate": 112,
+      "excluded_unequal": 21,
+      "known_equal": 112,
+      "league": "ita.1",
+      "window": "later_archival_check",
+      "year": 2022
+    },
+    {
+      "baseline": 140,
+      "candidate": 103,
+      "excluded_unequal": 37,
+      "known_equal": 103,
+      "league": "fra.1",
+      "window": "later_archival_check",
+      "year": 2022
+    },
+    {
+      "baseline": 115,
+      "candidate": 101,
+      "excluded_unequal": 14,
+      "known_equal": 101,
+      "league": "ned.1",
+      "window": "later_archival_check",
+      "year": 2022
+    },
+    {
+      "baseline": 81,
+      "candidate": 72,
+      "excluded_unequal": 9,
+      "known_equal": 72,
+      "league": "ger.1",
+      "window": "clocked_reconstruction",
+      "year": 2026
+    },
+    {
+      "baseline": 90,
+      "candidate": 78,
+      "excluded_unequal": 12,
+      "known_equal": 78,
+      "league": "fra.1",
+      "window": "clocked_reconstruction",
+      "year": 2026
+    },
+    {
+      "baseline": 119,
+      "candidate": 93,
+      "excluded_unequal": 26,
+      "known_equal": 93,
+      "league": "esp.1",
+      "window": "clocked_reconstruction",
+      "year": 2026
+    },
+    {
+      "baseline": 100,
+      "candidate": 82,
+      "excluded_unequal": 18,
+      "known_equal": 82,
+      "league": "eng.1",
+      "window": "clocked_reconstruction",
+      "year": 2026
+    },
+    {
+      "baseline": 110,
+      "candidate": 100,
+      "excluded_unequal": 10,
+      "known_equal": 100,
+      "league": "ita.1",
+      "window": "clocked_reconstruction",
+      "year": 2026
+    }
+  ],
+  "decision": "retire_recipe",
+  "paired_actually_delivered_first": 0,
+  "paired_actually_delivered_three": 0,
+  "paired_actually_delivered_preselected_batches": 0,
+  "lock": {
+    "forecasts_sha256": "d5e13be9bf3901a547d44d48090f1e327e2bc54c117f9ade709e92bb9dbdf0e2",
+    "training_sha256": "17e8e920d308be7ce5033ceca29db36fc42b5b02796ce1b79ee299a5016edecc",
+    "rows": 3773,
+    "paired": 3755,
+    "clocked_population": 33,
+    "r7_checked": 192,
+    "r7_excluded": 0
+  },
+  "label_exclusions": {}
+}

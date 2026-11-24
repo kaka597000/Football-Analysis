@@ -63,3 +63,4 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual((m['first']['gained'],m['top3']['gained']),(1,0))
         self.assertEqual(m['total']['settlements']['candidate'],{'PUSH':1})
         self.assertEqual(m['total']['candidate_hits'],0)
+        self.assertEqual(m['total']['non_push_n'],{'baseline':0,'candidate':0})

@@ -62,6 +62,8 @@ def summarize(records, cache, intervals=False):
         if metric == 'total':
             measures[metric]['settlements'] = {name:dict(Counter(p[i]['settlement'] for p in valid))
                                                 for i,name in enumerate(ARMS,1)}
+            measures[metric]['non_push_n'] = {name:len(valid) - settlements.get('PUSH',0)
+                                             for name,settlements in measures[metric]['settlements'].items()}
         if intervals:
             measures[metric]['delta_95_matchday_bootstrap'] = blocked_interval(pairs,metric)
     measures['score_log_loss'] = {name:sum(p[i]['log_loss'] for p in pairs)/len(pairs) if pairs else None
