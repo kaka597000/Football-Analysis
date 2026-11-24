@@ -1,0 +1,28 @@
+{
+  "study": "single-book-1x2-margin-allocation-v1",
+  "classification": "retrospective paired model diagnostic, not issued predictions",
+  "source_base": "899ce01542d90fafb7f734d08cf13c37d553505a",
+  "data_commit": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+  "source_assets_sha256": "7c106ee66a816da84dbbfbf254633b55b7c25e610e7d0f31bf168d68f61d9659",
+  "archived_replay_reader_commit": "1e9ecf68fbcfcb67723b06cc8430458f3e68cc44",
+  "regular_season_csv": {"E0":"eng.1","SP1":"esp.1","D1":"ger.1","I1":"ita.1","F1":"fra.1","N1":"ned.1"},
+  "fit_seasons": ["1920","2021","2122","2223"],
+  "development_seasons": ["2324","2425","2526"],
+  "historical_snapshot": "Bet365 non-C H/D/A and both non-C prices at 2.5 from the SAME source row. A date or snapshot label is not a quote clock. Complete eligible rows, one per fixture, in both periods. Train and holdout match dates must not overlap.",
+  "clocked_replay": {
+    "packet_sha256": {
+      "nov6":"8a2cf5c88b6e9020ffe493c7ddef890925c6e447218cb345042e813195719ff1",
+      "nov7":"07c79bc107db14c8113cadab6ed6194bbe946f82cdbea9e2ea61c0a30bd237ac",
+      "nov8":"853e649f72b2cab552b37550ad00c5f3526226b55d9458c62894e3ac2a1eb123"
+    },
+    "eligible": "All project-scope senior men's regular-time first comprehensive freezes in these complete early-November packets with competition, stage and two team IDs. Historical frozen fixture selects book and main total. Require exact provider event, kickoff and home/away binding, same event/book/raw bytes for 1X2 and full-time main total, both quote clocks <= original collection <= original cutoff < kickoff, each quote <=60 min old at cutoff. No latest/other book, line or event substitution. Abstain on conflicting snapshots. Missing raw quotes or label remain in coverage.",
+    "evaluation": "Only settled after locking prediction identities and matrices. Verify raw ESPN final, regulation period, competition, event, teams, kickoff and result provenance. Project has previously seen these outcomes. No issued display or selected-three batch.",
+    "exclude": "All November 22 and later batches, all 192 R7 fixtures by immutable issue ID and team/kickoff, all other packets, live and extra-time quotes/results."
+  },
+  "baseline": "Existing quote_only_matrices proportional 1X2, same-book proportional total, independent Poisson anchor then joint 1X2/Asian-total projection. Existing stable score_picks + top_three_scores. Both arms have identical inputs and the identical plain Poisson matrix.",
+  "only_candidate": "Compute p_power from q_i=1/odds_i raised to k solving sum(q_i^k)=1; q from a single bookmaker. Move W/D/L only to (1-lambda)*p_proportional+lambda*p_power. One pooled lambda in [0,1] fitted ONCE by minimum mean historical 1X2 log loss on eligible training seasons; ties choose smallest lambda, no league-specific weights or parameter search. Rerun identical joint projection from the identical plain matrix. No change to main total price/line, market selection or score selection.",
+  "ablation": "Set lambda=0. Must reproduce existing quote_only_matrices projected grid, same WDL and main total objectives. Test before grading.",
+  "outputs": ["paired Top1", "matrix Top3", "WDL", "actual-line full wins/nonpush", "per-class settlements", "paired gains/losses and flips", "mean exact score and WDL negative natural log likelihood", "paired calendar-day block bootstrap 95% intervals", "per-competition and clock-tier coverage", "actual displayed metrics and prematch selected-three coverage"],
+  "decision": "Consider a separately authorized unseen test only if clocked paired n>=100, net Top1 gains>0, matrix Top3 gains>=0 and mean score log loss does not worsen. Otherwise retire for this round without changing the formula or starting a forward queue. Historic no-clock evidence cannot qualify. No promotion from either retrospective tier.",
+  "reference": "https://doi.org/10.11648/j.ajss.20170506.12"
+}
