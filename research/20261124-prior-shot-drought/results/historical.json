@@ -1,0 +1,705 @@
+{
+  "panel": "historical",
+  "overall": {
+    "roster": 688,
+    "forecast": 688,
+    "activated": 688,
+    "scored": 688,
+    "dates": 63,
+    "metrics": {
+      "first": {
+        "n": 688,
+        "base": 85,
+        "candidate": 84,
+        "gained": 0,
+        "lost": 1,
+        "changed": 3
+      },
+      "matrix_three": {
+        "n": 688,
+        "base": 212,
+        "candidate": 213,
+        "gained": 2,
+        "lost": 1,
+        "changed": 24
+      },
+      "wdl": {
+        "n": 688,
+        "base": 369,
+        "candidate": 369,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total_full_win": {
+        "n": 688,
+        "base": 399,
+        "candidate": 397,
+        "gained": 0,
+        "lost": 2,
+        "changed": 2
+      }
+    },
+    "quality": {
+      "base": {
+        "score_log_loss": 3.0241833180350084,
+        "team_zero_log_loss": 0.5314615058710204,
+        "error_path": {
+          "exact": 85,
+          "wrong_blank_status": 341,
+          "positive_counts_only": 262
+        },
+        "picked_blank_but_scored_sides": 148,
+        "picked_goal_but_blank_sides": 234,
+        "wdl_correct_but_score_misclassified": 330,
+        "settlements": {
+          "FULL_WIN": 399,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 289
+        },
+        "unpriced": 0
+      },
+      "candidate": {
+        "score_log_loss": 3.024317280267798,
+        "team_zero_log_loss": 0.5315284869874146,
+        "error_path": {
+          "exact": 84,
+          "wrong_blank_status": 342,
+          "positive_counts_only": 262
+        },
+        "picked_blank_but_scored_sides": 148,
+        "picked_goal_but_blank_sides": 235,
+        "wdl_correct_but_score_misclassified": 331,
+        "settlements": {
+          "FULL_WIN": 397,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 291
+        },
+        "unpriced": 0
+      }
+    },
+    "first_delta_pp_ci95": [
+      -0.49819434941248164,
+      0.0
+    ]
+  },
+  "active": {
+    "scored": 688,
+    "dates": 63,
+    "metrics": {
+      "first": {
+        "n": 688,
+        "base": 85,
+        "candidate": 84,
+        "gained": 0,
+        "lost": 1,
+        "changed": 3
+      },
+      "matrix_three": {
+        "n": 688,
+        "base": 212,
+        "candidate": 213,
+        "gained": 2,
+        "lost": 1,
+        "changed": 24
+      },
+      "wdl": {
+        "n": 688,
+        "base": 369,
+        "candidate": 369,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total_full_win": {
+        "n": 688,
+        "base": 399,
+        "candidate": 397,
+        "gained": 0,
+        "lost": 2,
+        "changed": 2
+      }
+    },
+    "quality": {
+      "base": {
+        "score_log_loss": 3.0241833180350084,
+        "team_zero_log_loss": 0.5314615058710204,
+        "error_path": {
+          "exact": 85,
+          "wrong_blank_status": 341,
+          "positive_counts_only": 262
+        },
+        "picked_blank_but_scored_sides": 148,
+        "picked_goal_but_blank_sides": 234,
+        "wdl_correct_but_score_misclassified": 330,
+        "settlements": {
+          "FULL_WIN": 399,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 289
+        },
+        "unpriced": 0
+      },
+      "candidate": {
+        "score_log_loss": 3.024317280267798,
+        "team_zero_log_loss": 0.5315284869874146,
+        "error_path": {
+          "exact": 84,
+          "wrong_blank_status": 342,
+          "positive_counts_only": 262
+        },
+        "picked_blank_but_scored_sides": 148,
+        "picked_goal_but_blank_sides": 235,
+        "wdl_correct_but_score_misclassified": 331,
+        "settlements": {
+          "FULL_WIN": 397,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 291
+        },
+        "unpriced": 0
+      }
+    },
+    "first_delta_pp_ci95": [
+      -0.49819434941248164,
+      0.0
+    ]
+  },
+  "by_competition": {
+    "eng.1": {
+      "roster": 123,
+      "forecast": 123,
+      "activated": 123,
+      "scored": 123,
+      "dates": 40,
+      "metrics": {
+        "first": {
+          "n": 123,
+          "base": 12,
+          "candidate": 11,
+          "gained": 0,
+          "lost": 1,
+          "changed": 1
+        },
+        "matrix_three": {
+          "n": 123,
+          "base": 38,
+          "candidate": 38,
+          "gained": 0,
+          "lost": 0,
+          "changed": 4
+        },
+        "wdl": {
+          "n": 123,
+          "base": 69,
+          "candidate": 69,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 123,
+          "base": 66,
+          "candidate": 66,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 3.0443619448371284,
+          "team_zero_log_loss": 0.5343676693147504,
+          "error_path": {
+            "exact": 12,
+            "wrong_blank_status": 64,
+            "positive_counts_only": 47
+          },
+          "picked_blank_but_scored_sides": 20,
+          "picked_goal_but_blank_sides": 45,
+          "wdl_correct_but_score_misclassified": 62,
+          "settlements": {
+            "FULL_WIN": 66,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 57
+          },
+          "unpriced": 0
+        },
+        "candidate": {
+          "score_log_loss": 3.045510988932485,
+          "team_zero_log_loss": 0.5349421913624287,
+          "error_path": {
+            "exact": 11,
+            "wrong_blank_status": 65,
+            "positive_counts_only": 47
+          },
+          "picked_blank_but_scored_sides": 20,
+          "picked_goal_but_blank_sides": 46,
+          "wdl_correct_but_score_misclassified": 63,
+          "settlements": {
+            "FULL_WIN": 66,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 57
+          },
+          "unpriced": 0
+        }
+      },
+      "first_delta_pp_ci95": [
+        -2.8308625336927222,
+        0.0
+      ]
+    },
+    "esp.1": {
+      "roster": 152,
+      "forecast": 152,
+      "activated": 152,
+      "scored": 152,
+      "dates": 45,
+      "metrics": {
+        "first": {
+          "n": 152,
+          "base": 20,
+          "candidate": 20,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        },
+        "matrix_three": {
+          "n": 152,
+          "base": 52,
+          "candidate": 52,
+          "gained": 1,
+          "lost": 1,
+          "changed": 7
+        },
+        "wdl": {
+          "n": 152,
+          "base": 84,
+          "candidate": 84,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 152,
+          "base": 97,
+          "candidate": 97,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.8410571317061497,
+          "team_zero_log_loss": 0.5536347854472348,
+          "error_path": {
+            "exact": 20,
+            "wrong_blank_status": 74,
+            "positive_counts_only": 58
+          },
+          "picked_blank_but_scored_sides": 29,
+          "picked_goal_but_blank_sides": 57,
+          "wdl_correct_but_score_misclassified": 72,
+          "settlements": {
+            "FULL_WIN": 97,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 55
+          },
+          "unpriced": 0
+        },
+        "candidate": {
+          "score_log_loss": 2.8418016258006635,
+          "team_zero_log_loss": 0.5540070324944918,
+          "error_path": {
+            "exact": 20,
+            "wrong_blank_status": 73,
+            "positive_counts_only": 59
+          },
+          "picked_blank_but_scored_sides": 29,
+          "picked_goal_but_blank_sides": 56,
+          "wdl_correct_but_score_misclassified": 72,
+          "settlements": {
+            "FULL_WIN": 97,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 55
+          },
+          "unpriced": 0
+        }
+      },
+      "first_delta_pp_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "fra.1": {
+      "roster": 96,
+      "forecast": 96,
+      "activated": 96,
+      "scored": 96,
+      "dates": 23,
+      "metrics": {
+        "first": {
+          "n": 96,
+          "base": 12,
+          "candidate": 12,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "matrix_three": {
+          "n": 96,
+          "base": 34,
+          "candidate": 35,
+          "gained": 1,
+          "lost": 0,
+          "changed": 6
+        },
+        "wdl": {
+          "n": 96,
+          "base": 56,
+          "candidate": 56,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 96,
+          "base": 49,
+          "candidate": 48,
+          "gained": 0,
+          "lost": 1,
+          "changed": 1
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.9226102653067656,
+          "team_zero_log_loss": 0.5179942765100828,
+          "error_path": {
+            "exact": 12,
+            "wrong_blank_status": 43,
+            "positive_counts_only": 41
+          },
+          "picked_blank_but_scored_sides": 21,
+          "picked_goal_but_blank_sides": 29,
+          "wdl_correct_but_score_misclassified": 51,
+          "settlements": {
+            "FULL_WIN": 49,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 47
+          },
+          "unpriced": 0
+        },
+        "candidate": {
+          "score_log_loss": 2.921592146821798,
+          "team_zero_log_loss": 0.5174852172675988,
+          "error_path": {
+            "exact": 12,
+            "wrong_blank_status": 43,
+            "positive_counts_only": 41
+          },
+          "picked_blank_but_scored_sides": 21,
+          "picked_goal_but_blank_sides": 29,
+          "wdl_correct_but_score_misclassified": 51,
+          "settlements": {
+            "FULL_WIN": 48,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 48
+          },
+          "unpriced": 0
+        }
+      },
+      "first_delta_pp_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "ger.1": {
+      "roster": 90,
+      "forecast": 90,
+      "activated": 90,
+      "scored": 90,
+      "dates": 24,
+      "metrics": {
+        "first": {
+          "n": 90,
+          "base": 12,
+          "candidate": 12,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "matrix_three": {
+          "n": 90,
+          "base": 20,
+          "candidate": 20,
+          "gained": 0,
+          "lost": 0,
+          "changed": 3
+        },
+        "wdl": {
+          "n": 90,
+          "base": 43,
+          "candidate": 43,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 90,
+          "base": 57,
+          "candidate": 56,
+          "gained": 0,
+          "lost": 1,
+          "changed": 1
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 3.3496582000810444,
+          "team_zero_log_loss": 0.47175970844923637,
+          "error_path": {
+            "exact": 12,
+            "wrong_blank_status": 43,
+            "positive_counts_only": 35
+          },
+          "picked_blank_but_scored_sides": 19,
+          "picked_goal_but_blank_sides": 29,
+          "wdl_correct_but_score_misclassified": 38,
+          "settlements": {
+            "FULL_WIN": 57,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 33
+          },
+          "unpriced": 0
+        },
+        "candidate": {
+          "score_log_loss": 3.3497280287384874,
+          "team_zero_log_loss": 0.47179462277795764,
+          "error_path": {
+            "exact": 12,
+            "wrong_blank_status": 43,
+            "positive_counts_only": 35
+          },
+          "picked_blank_but_scored_sides": 19,
+          "picked_goal_but_blank_sides": 29,
+          "wdl_correct_but_score_misclassified": 38,
+          "settlements": {
+            "FULL_WIN": 56,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 34
+          },
+          "unpriced": 0
+        }
+      },
+      "first_delta_pp_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "ita.1": {
+      "roster": 130,
+      "forecast": 130,
+      "activated": 130,
+      "scored": 130,
+      "dates": 45,
+      "metrics": {
+        "first": {
+          "n": 130,
+          "base": 19,
+          "candidate": 19,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        },
+        "matrix_three": {
+          "n": 130,
+          "base": 43,
+          "candidate": 43,
+          "gained": 0,
+          "lost": 0,
+          "changed": 4
+        },
+        "wdl": {
+          "n": 130,
+          "base": 60,
+          "candidate": 60,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 130,
+          "base": 67,
+          "candidate": 67,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.9243165583521056,
+          "team_zero_log_loss": 0.5375916361479993,
+          "error_path": {
+            "exact": 19,
+            "wrong_blank_status": 67,
+            "positive_counts_only": 44
+          },
+          "picked_blank_but_scored_sides": 39,
+          "picked_goal_but_blank_sides": 37,
+          "wdl_correct_but_score_misclassified": 54,
+          "settlements": {
+            "FULL_WIN": 67,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 63
+          },
+          "unpriced": 0
+        },
+        "candidate": {
+          "score_log_loss": 2.9244137879669543,
+          "team_zero_log_loss": 0.5376402509554237,
+          "error_path": {
+            "exact": 19,
+            "wrong_blank_status": 68,
+            "positive_counts_only": 43
+          },
+          "picked_blank_but_scored_sides": 39,
+          "picked_goal_but_blank_sides": 38,
+          "wdl_correct_but_score_misclassified": 54,
+          "settlements": {
+            "FULL_WIN": 67,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 63
+          },
+          "unpriced": 0
+        }
+      },
+      "first_delta_pp_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "ned.1": {
+      "roster": 97,
+      "forecast": 97,
+      "activated": 97,
+      "scored": 97,
+      "dates": 20,
+      "metrics": {
+        "first": {
+          "n": 97,
+          "base": 10,
+          "candidate": 10,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "matrix_three": {
+          "n": 97,
+          "base": 25,
+          "candidate": 25,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "wdl": {
+          "n": 97,
+          "base": 57,
+          "candidate": 57,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 97,
+          "base": 63,
+          "candidate": 63,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 3.2179375619718265,
+          "team_zero_log_loss": 0.5535367868137,
+          "error_path": {
+            "exact": 10,
+            "wrong_blank_status": 50,
+            "positive_counts_only": 37
+          },
+          "picked_blank_but_scored_sides": 20,
+          "picked_goal_but_blank_sides": 37,
+          "wdl_correct_but_score_misclassified": 53,
+          "settlements": {
+            "FULL_WIN": 63,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 34
+          },
+          "unpriced": 0
+        },
+        "candidate": {
+          "score_log_loss": 3.217076587080281,
+          "team_zero_log_loss": 0.5531062993679273,
+          "error_path": {
+            "exact": 10,
+            "wrong_blank_status": 50,
+            "positive_counts_only": 37
+          },
+          "picked_blank_but_scored_sides": 20,
+          "picked_goal_but_blank_sides": 37,
+          "wdl_correct_but_score_misclassified": 53,
+          "settlements": {
+            "FULL_WIN": 63,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 34
+          },
+          "unpriced": 0
+        }
+      },
+      "first_delta_pp_ci95": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "delivered_paired": {
+    "first": 0,
+    "ordered_three": 0,
+    "preselected_three_batches": 0
+  },
+  "forecast_sha256": "7fdfe5a18273b62ac0291ebbacd28e3e7f126cfeb84e69f534ce4ab1c3cca2c7",
+  "labels_sha256": "cfe1c7f2ec67e47a9f651029f25c6f4425d7f1b6736ed3408f25216723b869c1"
+}
