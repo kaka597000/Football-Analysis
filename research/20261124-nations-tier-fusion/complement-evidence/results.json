@@ -143,6 +143,11 @@
         },
         "oracle_rate": 0.23076923076923078
       },
+      "all_family_firsts_and_matrix_threes_missed_by_actual_total": {
+        "zero_to_two": 4,
+        "three": 9,
+        "four_or_more": 17
+      },
       "signed_author_primary_without_delivery": 45,
       "fixed_common_panels": {
         "team_market": {
@@ -560,6 +565,11 @@
             },
             "oracle_rate": 0.23076923076923078
           },
+          "all_family_firsts_and_matrix_threes_missed_by_actual_total": {
+            "zero_to_two": 2,
+            "three": 4,
+            "four_or_more": 8
+          },
           "signed_author_primary_without_delivery": 24,
           "fixed_common_panels": {
             "team_market": {
@@ -970,6 +980,11 @@
               }
             },
             "oracle_rate": 0.23076923076923078
+          },
+          "all_family_firsts_and_matrix_threes_missed_by_actual_total": {
+            "zero_to_two": 2,
+            "three": 5,
+            "four_or_more": 9
           },
           "signed_author_primary_without_delivery": 21,
           "fixed_common_panels": {
@@ -1650,6 +1665,11 @@
         },
         "oracle_rate": 0.2222222222222222
       },
+      "all_family_firsts_and_matrix_threes_missed_by_actual_total": {
+        "zero_to_two": 1,
+        "three": 4,
+        "four_or_more": 5
+      },
       "fixed_common_panels": {
         "team_market": {
           "registered": 18,
@@ -2103,6 +2123,11 @@
           }
         },
         "oracle_rate": 0.375
+      },
+      "all_family_firsts_and_matrix_threes_missed_by_actual_total": {
+        "zero_to_two": 0,
+        "three": 1,
+        "four_or_more": 2
       },
       "fixed_common_panels": {
         "team_market": {

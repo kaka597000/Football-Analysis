@@ -48,9 +48,13 @@
 
 21 场有核准原盘，扣除 2 场走盘后严格全赢分母为 19。全赢/半赢/走盘/半输/全输，球队为 8/1/2/1/9，择源为 10/1/2/1/7。三个改选中只有一场改对，双侧成对精确检验 p=1。单一国际比赛窗口不足以识别稳定收益。实际展示首选、展示三比分及精选三场批次的可结算分母均为零。
 
+## 巴甲独立回放
+
+在原三臂研究的 6 场中，所有比赛都有同截点的原球队、双市场报价及认证赛果。原球队和纯盘口都中 0/6，二者 6 场全错。将已登记的两条同源校准配方也算入敏感性比较，市场校准中 1/6，赛事分组校准中 0/6，四种选分共同漏掉 5 场。唯一成功的是弗拉门戈 2–1 巴拉纳竞技。该独立研究旧批次与用户收到的巴甲比分表分别计数。赛前原数据提交为 `aa565df1`，认证赛果为 `69821e4c`。纯盘口的首选是从同一份开球前 Pinnacle 原始响应回放所得；输入选择 SHA-256 `5aa46d7bf5eb402fcf96bd5c20b8052e8debc89b412907d06c2906fa336dccf2` 在本回放读取标签前已封存。[巴甲逐场 6 行](complement-evidence/brazil-fixtures.csv)
+
 ## 下一项数据缺口
 
-先补原负责人正常发送时留下的整文与首发回执，才可让作者首选进入同场诊断。模型侧要解决的是让正确比分出现在首选候选池。对 30 场所有来源的矩阵前三都漏掉的比赛，仅重排原有首选无法补回。本次 xG 原批次只有 A、B 两级，每级仅 8 条真正的双边过程训练记录。同一将来决策截点能否同时留下近期过程证据、球队分布、具名盘口和作者实发，是下一项可核的数据缺口。保留本次选择器的唯一配方作复核记录，结束本名单上的选参，不再增加常驻对照。
+先补原负责人正常发送时留下的整文与首发回执，才可让作者首选进入同场诊断。模型侧要解决的是让正确比分出现在首选候选池。评分后按常规时间总球数拆开 30 场所有来源矩阵前三都漏掉的比赛，其中 17 场打进至少 4 球，9 场恰好 3 球，还有 4 场最多 2 球。仅重排原有首选无法补回这些比赛，统一加球也解释不了全部漏判。本次 xG 原批次只有 A、B 两级，每级仅 8 条真正的双边过程训练记录。同一将来决策截点能否同时留下近期过程证据、球队分布、具名盘口和作者实发，是下一项可核的数据缺口。保留本次选择器的唯一配方作复核记录，结束本名单上的选参，不再增加常驻对照。
 
 ## 离线复现
 
@@ -68,6 +72,9 @@ cmp "$S/complement-panels-lock.json" "$OUT/panels.json"
 python "$S/complement_run.py" grade --data "$DATA" --seal-commit 3a2803d3136ae025136b2fe3ddd869e32fc9920b --out "$OUT/grade"
 cmp "$S/complement-evidence/results.json" "$OUT/grade/results.json"
 cmp "$S/complement-evidence/fixtures.csv" "$OUT/grade/fixtures.csv"
+python "$S/brazil_sources.py" choices --data "$DATA" --lock "$OUT/brazil-lock.jsonl"
+python "$S/brazil_sources.py" score --data "$DATA" --lock "$OUT/brazil-lock.jsonl" --out "$OUT/brazil.csv"
+cmp "$S/complement-evidence/brazil-fixtures.csv" "$OUT/brazil.csv"
 python -m unittest discover -v -s "$S"
 python scripts/run_tests.py --layer integration
 ```

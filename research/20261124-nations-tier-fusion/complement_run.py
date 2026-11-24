@@ -66,6 +66,14 @@ def describe(rows, kind):
                   covered_signed_record=sum(bool(r['original_issue_sha']) for r,_ in rows),
                   visible_author_first=sum(r['authored_first'] is not None for r,_ in rows),
                   available_family_union=oracle(rows,roles), same_source_inclusive_union=oracle(rows,roles+SENSITIVITY))
+    residual = dict(zero_to_two=0,three=0,four_or_more=0)
+    for row,actual in rows:
+        picks = [row['choices'][k] for k in roles if k in row['choices']]
+        if actual and picks and all(p.get('top3') and actual not in p['top3'] and actual!=p['primary'] for p in picks):
+            goals = sum(map(int,actual.split('-')))
+            group = 'zero_to_two' if goals<=2 else 'three' if goals==3 else 'four_or_more'
+            residual[group] += 1
+    result['all_family_firsts_and_matrix_threes_missed_by_actual_total'] = residual
     if kind=='main':
         result['signed_author_primary_without_delivery'] = sum(r['signed_primary_present'] for r,_ in rows)
     tests = {'team_market':('team','market')}
