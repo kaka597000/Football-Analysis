@@ -1,0 +1,325 @@
+{
+  "study": "ORIGINAL-FIRST-SCORE-COMPLEMENT-AUDIT-1",
+  "selector_lock_sha": "650ed0ac554cd487c87066722cc698ef6575ac0d3a8be768911bdd87181eaab4",
+  "rows": {
+    "main": [
+      {
+        "id": "espn:401861145",
+        "sha": "529d5e08865576cc31047c7bc8c4575bacb853702a9308a3e78e9a58c2f2fb5f"
+      },
+      {
+        "id": "espn:401861146",
+        "sha": "5a39ae987e5212f2127da7e24a20e3d2bc8aa50608cb83c2f5a5fc23668ad6e9"
+      },
+      {
+        "id": "espn:401861147",
+        "sha": "003918663d7ce23b567bdb97f05bbe5cc182cd32846b1ec30d988dbfddfc2819"
+      },
+      {
+        "id": "espn:401861148",
+        "sha": "008270ffe11cfa3cede172c87cbd55c88cd6f52a7e7b20b55b3b479a96f80d24"
+      },
+      {
+        "id": "espn:401861149",
+        "sha": "8da92bf217b171b2a24d2a6782972fe6a6cf839f5c65dd3d85bef333fafd4ac7"
+      },
+      {
+        "id": "espn:401861150",
+        "sha": "f7c7c614bf3227e8536963e5e094e110b19ddc40c01b402cbceca9670a2e7de7"
+      },
+      {
+        "id": "espn:401861151",
+        "sha": "4ae7a2d37aed6c0589734504a7e2cb7ee1292c25cb3f2c382f01f7fa4f6e16df"
+      },
+      {
+        "id": "espn:401861152",
+        "sha": "67672280d2260a561e3d78343135104d8918d9d730d973671309dcf0e2fddc78"
+      },
+      {
+        "id": "espn:401861153",
+        "sha": "41fce87893b4a78b4fd3bfb8059558a925ce1ec93f2911c7881561751abd744a"
+      },
+      {
+        "id": "espn:401861154",
+        "sha": "970543d8eebd5302184e202cce1c270b39a985398822bbe4710faf4a2c0df1ee"
+      },
+      {
+        "id": "espn:401861155",
+        "sha": "288da7633ab115c044488dbc09c947995662b279ea4d2f8c86013fdec99721ee"
+      },
+      {
+        "id": "espn:401861156",
+        "sha": "967001ad5b6fef532818181ebc3dcc99ed264212320ef6e95d4fc6173915a0e0"
+      },
+      {
+        "id": "espn:401861157",
+        "sha": "49e55f22fed8260ef664968ce3c31c8c316fab41408fe6b321d3d2c3e89257cb"
+      },
+      {
+        "id": "espn:401861158",
+        "sha": "d1be582982e9f39b86f9f4533127157147906c1c31ae972e89848027daa461ea"
+      },
+      {
+        "id": "espn:401861159",
+        "sha": "48197ca7cb6ce9a4531be87f05093278667976d03736ba5365e2d3b768ae2e89"
+      },
+      {
+        "id": "espn:401861160",
+        "sha": "8c49dcc735fb3d31ed6b24aa777ac96b70f32d9f3a674a157dc13b9240ada4b3"
+      },
+      {
+        "id": "espn:401861161",
+        "sha": "04553424468b004e2300b95178677b1b1efe166cdf806df78d559d1c6e09ce91"
+      },
+      {
+        "id": "espn:401861162",
+        "sha": "7ec82a3ea28ac5317a05854b20747d8e3c77c4a56ba5ccc221e9cc484fcb61a8"
+      },
+      {
+        "id": "espn:401861163",
+        "sha": "f3d575822c1fd66b8e9aa625ca7a0f58b7d970fd723c5603a7b03d8224b7777d"
+      },
+      {
+        "id": "espn:401861164",
+        "sha": "fb2f95f58db505d34065182228d1f73787f981f0f337a87906563dc63b560c20"
+      },
+      {
+        "id": "espn:401861165",
+        "sha": "6e8bb5f63d2839c9fe4fce3b26daa96ef2e6bb364ad01201d4072f5ca07f1d56"
+      },
+      {
+        "id": "espn:401861166",
+        "sha": "d7068a0f423f3b09424e6bd86ee6f4331a7dda2d2653733d797ef3ac256411a2"
+      },
+      {
+        "id": "espn:401861167",
+        "sha": "ae4649b25bc66d613b0c42ff81924838d6368fda45f5b6eb25fce9a1c88fab7c"
+      },
+      {
+        "id": "espn:401861168",
+        "sha": "3ea825845f5f28a8af864cfd2317ea75f6d937a307dc6548571d1ae6ba1d0008"
+      },
+      {
+        "id": "espn:401861169",
+        "sha": "601098d2072d9dfdd9f9b18a775b7209331089725c65037f1d78b179a82f2be0"
+      },
+      {
+        "id": "espn:401861170",
+        "sha": "1ab59431ca6448bbda1caa06d060cbf818dd13a88affb7fd10915462ef6fe7f1"
+      },
+      {
+        "id": "espn:401861171",
+        "sha": "8f4858b460a93b80a004acaa9a89fdabb662b62e8d8ac8475508423909a39d2b"
+      },
+      {
+        "id": "espn:401861172",
+        "sha": "74a83f935328eda5f85e3189bf63e28ae2a2b115567c3c45aa136b59f76f6526"
+      },
+      {
+        "id": "espn:401861173",
+        "sha": "b1f7dcf80f47f7cc4bc68d21b31611d56f10ad3a48f0504d03435fed8b0c8c8b"
+      },
+      {
+        "id": "espn:401861174",
+        "sha": "221ff9e1f36e1a5f6315f49c0870ffb965e6da7353cfa14a3a5333f7fa9b73cf"
+      },
+      {
+        "id": "espn:401861175",
+        "sha": "ce5d21d33596133a2cac7840b28ff941c6664091be47b8e50719799f849f8244"
+      },
+      {
+        "id": "espn:401861176",
+        "sha": "f830e2c4c8dc78479b8e43e47648e37e4fb8fb17794561617387864f5f20fcba"
+      },
+      {
+        "id": "espn:401861177",
+        "sha": "ba888972956f8d108555b605f650132cf8b28d18b9db89e3d41121838ced7699"
+      },
+      {
+        "id": "espn:401861178",
+        "sha": "d528b71485ad20c4b47f9374a4041bbf8016cce4bdd6acc7ea20e699a78505fb"
+      },
+      {
+        "id": "espn:401861179",
+        "sha": "40aac72a42ea2d67740ca4c07c17fecebad09e7bde0886f722cf9f5225527b43"
+      },
+      {
+        "id": "espn:401861180",
+        "sha": "a1dbc94db0550f75b4e73037ecab4b489997e012d749ee1fb81dd50f9bbb6864"
+      },
+      {
+        "id": "espn:401861181",
+        "sha": "6f651e2d17a9c7f1747196f55da501f5eb00777f77bcb3e3cf96cf9e2665173e"
+      },
+      {
+        "id": "espn:401861182",
+        "sha": "165c1155682b7ff9920525f2d359eec8bdf7df09d8928023f7923cb06059eba6"
+      },
+      {
+        "id": "espn:401861183",
+        "sha": "ab5714294bc8a2f48338d3c1ae0158afca23e7b75e010b6e75edc67ba091bf65"
+      },
+      {
+        "id": "espn:401861184",
+        "sha": "0ef0f195b8da7101fc44b06f20677663d1c79b601f8a62f48186812eb09daef1"
+      },
+      {
+        "id": "espn:401861185",
+        "sha": "37a33568981a8b32b9a56d46ed61a9d0fae7ad0903e2fb5da4ef60f1e60e7988"
+      },
+      {
+        "id": "espn:401861186",
+        "sha": "d7e2a11c579f378d16255233caec99084cc632be0d83f4b03cc13a9ca012cb40"
+      },
+      {
+        "id": "espn:401861187",
+        "sha": "cc8f2dc2e5e5027b25e92cfd58890815fac84cce3bc9d7eeb2c0721de7a46e4c"
+      },
+      {
+        "id": "espn:401861188",
+        "sha": "9c1851cd624c178392962bcdd57a4819da824a0be65b2b55903d914a8be48bac"
+      },
+      {
+        "id": "espn:401861189",
+        "sha": "681459a2750a0928ff352295b2917ad6f3ad4606cb00f472b87b9cef3a3ef56c"
+      },
+      {
+        "id": "espn:401861190",
+        "sha": "147b9a2a04f99aea867ae101acf221f0795865831d0574d84831b3aceeb2e3eb"
+      },
+      {
+        "id": "espn:401861191",
+        "sha": "96e8d9dcbe785ab2441c1f564dfa412bc584e1c301d64f37b820cb0b906bf770"
+      },
+      {
+        "id": "espn:401861192",
+        "sha": "0ffa706dc9b378cabcdfa8ec42415178964781d43e1e3da8580c88111e2d2ab7"
+      },
+      {
+        "id": "espn:401861193",
+        "sha": "e0bbf0b903e815119effec2b40e3bb7519c85df633a0532a79a1236420295ca2"
+      },
+      {
+        "id": "espn:401861194",
+        "sha": "b0d3d835918fe1b120589327e5f03ce7ab0b69a9ef709af2ab9c2f83bfaa6239"
+      },
+      {
+        "id": "espn:401861195",
+        "sha": "300067efdf61030e38d6033d89d8e91a24b65083b6a6c90fcfdf6abaae7aff2b"
+      },
+      {
+        "id": "espn:401861196",
+        "sha": "b1c0e6451371e11523e8c218050ce06ce7c434a90ced3853776fdc1d807eef2a"
+      }
+    ],
+    "repair": [
+      {
+        "id": "espn:401861179",
+        "sha": "751592e4efdd3a83d17b127cb0005cd083c44afb9bda08454c2b418e5d016f73"
+      },
+      {
+        "id": "espn:401861180",
+        "sha": "d3ba3c78112f22819c33eee7eb9b50f4047d5b4591687b83d052b0936b52a2cf"
+      },
+      {
+        "id": "espn:401861181",
+        "sha": "11b01447d0a4c11b898d2cc1b490490b76eb755e0114f0cea251f54a369ff3e3"
+      },
+      {
+        "id": "espn:401861182",
+        "sha": "8298f0f2aac9873a1d7f4a6509ff0aab0380adb62ba0abc47ca96db8bf184492"
+      },
+      {
+        "id": "espn:401861183",
+        "sha": "ba78221f3cdd6bcf70bca91eeed7437e92c1c1a7201526359be7505500fee562"
+      },
+      {
+        "id": "espn:401861184",
+        "sha": "e255691bc65e7f415984cfc854b02624988374de9672950875af8390cd34186b"
+      },
+      {
+        "id": "espn:401861185",
+        "sha": "6c12ce0d4584d1fae1639254f8eaf48d7a923dce35d3e29b71fdf982eaf40daa"
+      },
+      {
+        "id": "espn:401861186",
+        "sha": "d5ae502ef85b795ce62c7ca52deeaa17be5af18659d99a378768718b62bbb67d"
+      },
+      {
+        "id": "espn:401861187",
+        "sha": "f70256d868d30e7c4f7211cc8bd8412c71a83c4e48bcba6c122558addda7b1ef"
+      },
+      {
+        "id": "espn:401861188",
+        "sha": "433625531533fea609e74c5085b2088705751cb6d5deb6a54234d1134b3d4c82"
+      },
+      {
+        "id": "espn:401861189",
+        "sha": "11b18913b3c96f44d3f23bbb6cfc40636e9c12c5e795c7f797f3ce5958916d15"
+      },
+      {
+        "id": "espn:401861190",
+        "sha": "ee72474847d8e41635836d7ed1ea87f8e1236edbc014a29e22acda8583551377"
+      },
+      {
+        "id": "espn:401861191",
+        "sha": "6f8831ff1e3dff4b038b9be693f49cb4133d4cf8ca7460f779df5ae8afa467fc"
+      },
+      {
+        "id": "espn:401861192",
+        "sha": "b006d23b239e7ae05cf63b82e23861c4bbe4a75fe3d723dc9d87794bf13cfc1e"
+      },
+      {
+        "id": "espn:401861193",
+        "sha": "6918ecf635dab06711baaa88627f314863668cd6ea935a17697d25e59cbc8e5c"
+      },
+      {
+        "id": "espn:401861194",
+        "sha": "a0522bfe60eba1071fdddc847af263fd395bb5b37c3a8810353d44ceffe118ea"
+      },
+      {
+        "id": "espn:401861195",
+        "sha": "647a59bd10f5b455354b56d45131b9a03fbbf0053f96ad28b35eae3e4eb9d18c"
+      },
+      {
+        "id": "espn:401861196",
+        "sha": "f424289af331ed882522386661f1772c0551b4a242d2ffd5726ede070ef51ffa"
+      }
+    ],
+    "xg": [
+      {
+        "id": "espn:401861189",
+        "sha": "71e4394eb6e6b6511b847e63592d1bc39badacaab19cab941dba717fbed7c735"
+      },
+      {
+        "id": "espn:401861190",
+        "sha": "42cc5f024f5ba342dd3a1fe0fcd6306b706840223c314bd9a5294551744afee6"
+      },
+      {
+        "id": "espn:401861191",
+        "sha": "11bd50032edcb1aea4c40ec4d5abe8a02efb3d70389ad2a96068d88a7c28ec61"
+      },
+      {
+        "id": "espn:401861192",
+        "sha": "920369c55ffadf6a0adc6541dc6027a8ed1d48ffa152a7b8fefafd0fb14bcc54"
+      },
+      {
+        "id": "espn:401861193",
+        "sha": "20d944f6a97b072040b7d1dbf84fbe17fd1b680a588d2818414976c3be6f0856"
+      },
+      {
+        "id": "espn:401861194",
+        "sha": "7b5d22672d2ebaf3d76d113ec86780d0e7d68455da767f20554ab928d2b15f9b"
+      },
+      {
+        "id": "espn:401861195",
+        "sha": "6aedfdad8a8d10ec0f33420c608bf1deba1ffceb4fb1143424608b49235b4eed"
+      },
+      {
+        "id": "espn:401861196",
+        "sha": "8bc11e2f0690ca9ba0e4440091792ddde2717d76e900de396620a845d037df81"
+      }
+    ]
+  },
+  "fingerprint": "3582daf6f0c8b55adba9cd3e5992ba7496adf88f1ae02e52a237d198cf35e3ca"
+}
