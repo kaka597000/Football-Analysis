@@ -1,0 +1,8 @@
+{
+  "protocol_commit": "7fd9b9958a82f59ce9946428d6315f1c2fa40934",
+  "scope": "Nov 6 retained A-League regular-season first pair, original mathematical cutoff",
+  "data_archive_sha256": "7ccf7f258131eedcc1ea187ffee93c666df4a21db1c2e6e77eccda918052b9ba",
+  "blind_sha256": "0c6576c161540bb591d1d73967f767257c97344a31c71f9d494b161f6eecbcc2",
+  "fixtures": 1,
+  "native_prior_slots": 6
+}
