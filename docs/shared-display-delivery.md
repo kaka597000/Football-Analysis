@@ -39,3 +39,29 @@ python scripts/run_tests.py --layer integration
 同批赛后用 Data 提交 `a6d45024cf6cf622f05e4b378ab53cfe2d6ae329` 的 `normalized-results.jsonl` 和原始摘要重放。正式范围 14 场中，5 场的同场常规时间赛果通过 `certify_retained`，另 9 场在该固定文件未找到赛果。把原综合冻结原样交给 `settle`，登记 14 场、缺展示回执 14 场、确认赛果 5 场、待赛果 9 场，首选与展示前三可评分均为 0 场，命中率为空。
 
 用同一固定数据提交核对 ESPN 首半场开球事件。先验原始摘要哈希、赛事身份、主客、计划开球和常规时间结果，再查 `keyEvents` 中唯一的 `type.id=80`、`type.type=kickoff`、`period.number=1`、`clock.value=0` 事件，记录事件 ID 和带时区的 `wallclock`。同批 5 场已核赛果里有 3 场具备该字段。例如英超 `401879237` 的事件 `55596585` 记为北京时间 11 月 24 日 04:00:13，赛程列为 04:00。另在休息天数研究的 99 个冻结身份中，80 场有该字段、17 场无唯一开球事件、1 场开球事件缺时间、1 场的赛果身份与原冻结开球冲突。80 场的字段比计划时刻晚 6 至 1,014 秒，中位 104 秒。其中 45 场在同源文字直播引用了相同事件与时钟。此轮只核实了事件记录时间和字段覆盖，独立的现场时钟误差尚未核定。正式结算继续使用经核对的实际开球和独立渠道回执。[固定赛果索引](https://github.com/kaka597000/kaka597000-Football-Analysis-Data/blob/a6d45024cf6cf622f05e4b378ab53cfe2d6ae329/normalized-results.jsonl)
+
+## 原 ChatGPT 对话的正常批次查回
+
+批次负责人沿用已授权的原对话。新批次逐场调用原有 `publication.publish`，传入 `track='comprehensive'` 和 `publisher=None`，从 `freeze_receipt.path` 取得有序冻结。`blocks` 按同一顺序输出各场的比分与冻结标识。将这些完整比分段放入原批次的最终消息，并保留平常展示的对阵、分析和精选内容。只在比分段中展示每场的正式首选与两个备选。对照比赛的消息仍按各自轨道交付。
+
+以下命令从源码根目录运行。`FREEZE_1`、`FREEZE_2` 是正常新批次本地回执指向的 JSON，依照用户看到的比赛顺序继续列举。`CHAT_ROOM` 与 `SENDER_ID` 从已核对的原对话读取。正文、渠道原始响应及查回报告留在私有工作目录。
+
+```sh
+export PYTHONPATH=runtime
+python -m research.chat_display_readback blocks "$FREEZE_1" "$FREEZE_2"
+python -m research.chat_display_readback stage "$FREEZE_1" "$FREEZE_2" \
+  --body "$PRIVATE_DIR/batch.txt" --room-id "$CHAT_ROOM" --author-id "$SENDER_ID" \
+  --out "$PRIVATE_DIR/staged.json"
+```
+
+仍由原负责人按正常方式发送一次。取回该条消息的稳定 ID 后调用 `user_message_read.read_messages({message_id: MESSAGE_ID})`，将接口的 `structuredContent` 原样保存为 `provider-response.json`。原件包含 `room_id`、`partial` 和 `message`，正文在 `message.content.text`，发送时间在 `message.sent_at`。搜索用来定位消息，校验用指明 ID 的读取。如果首次接口结果丢失，只查回同一条消息。
+
+```sh
+python -m research.chat_display_readback check --plan "$PRIVATE_DIR/staged.json" \
+  --readback "$PRIVATE_DIR/provider-response.json" --message-id "$MESSAGE_ID" \
+  --out "$PRIVATE_DIR/observed.json"
+```
+
+成功结果为 `READBACK_MATCHED`，保存消息 ID、服务发送时间、正文 SHA-256、已验证渠道和逐场冻结哈希。原件相同可重试；已有结果和不同回执冲突时拒绝覆盖。聊天读取器可提供当前可见正文，正式评分还需渠道权威确认原始正文及该场最早可见交付，并核实同场实际开球时间。只有这些证据齐备，才把查回的发出时间、原有 `delivery_request` 摘要及对应比分段作为可信 `lookup_first`，与 `lookup_actual_kickoff` 一同交给上文的 `settle`。目前镜像读取没有提供原始修订和逐场首发槽记录，`observed.json` 标记两项未认证，独立于正式送达回执。
+
+查回实测使用原对话中两条现有消息。搜索与按 ID 读取的消息 ID、房间、作者、服务时间和正文一致。一条为比分专项，另一条为工程进度。11 月 23 日正式批次的首发在该读取范围内仍未定位。此外该日批次存有 14 份正式范围的原表，不能作为缺失的渠道回执。失败、错误身份或正文、同内容重挂新时间及开球边界由离线回归覆盖。
