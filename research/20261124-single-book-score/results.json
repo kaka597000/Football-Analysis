@@ -1,0 +1,1235 @@
+{
+  "actual_displayed_pairs": 0,
+  "actual_shortlist_batches": 0,
+  "decision": "STOP_THIS_RECIPE",
+  "historical_clocked": {
+    "binary": {
+      "full_win": {
+        "baseline": 25,
+        "candidate": 25,
+        "gained": 0,
+        "lost": 0,
+        "n": 53,
+        "picks_changed": 0
+      },
+      "top1": {
+        "baseline": 4,
+        "candidate": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 55,
+        "picks_changed": 1
+      },
+      "top3": {
+        "baseline": 17,
+        "candidate": 17,
+        "gained": 0,
+        "lost": 0,
+        "n": 55,
+        "picks_changed": 1
+      },
+      "wdl": {
+        "baseline": 34,
+        "candidate": 34,
+        "gained": 0,
+        "lost": 0,
+        "n": 55,
+        "picks_changed": 0
+      }
+    },
+    "by_book": {
+      "pinnacle": 55
+    },
+    "by_competition": {
+      "afc.champions": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "aus.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "bra.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 1
+      },
+      "eng.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 4,
+            "candidate": 4,
+            "gained": 0,
+            "lost": 0,
+            "n": 8,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 1,
+            "candidate": 1,
+            "gained": 0,
+            "lost": 0,
+            "n": 8,
+            "picks_changed": 0
+          },
+          "top3": {
+            "baseline": 4,
+            "candidate": 4,
+            "gained": 0,
+            "lost": 0,
+            "n": 8,
+            "picks_changed": 0
+          },
+          "wdl": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 8,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 3.0011050836217565,
+            "candidate": 3.0002848047399784
+          },
+          "wdl_log_loss": {
+            "baseline": 1.0194736420662491,
+            "candidate": 1.0193059825058601
+          }
+        },
+        "n": 8,
+        "paired": 8,
+        "registered": 10,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 3,
+            "FULL_WIN": 4,
+            "HALF_LOSS": 1
+          },
+          "candidate": {
+            "FULL_LOSS": 3,
+            "FULL_WIN": 4,
+            "HALF_LOSS": 1
+          }
+        }
+      },
+      "esp.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "top3": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "wdl": {
+            "baseline": 4,
+            "candidate": 4,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.416391376571032,
+            "candidate": 2.412810493666004
+          },
+          "wdl_log_loss": {
+            "baseline": 0.6842076844941622,
+            "candidate": 0.6815922100868267
+          }
+        },
+        "n": 5,
+        "paired": 5,
+        "registered": 10,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 4,
+            "HALF_LOSS": 1
+          },
+          "candidate": {
+            "FULL_LOSS": 4,
+            "HALF_LOSS": 1
+          }
+        }
+      },
+      "fifa.world": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "fra.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 2,
+            "candidate": 2,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "top3": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "wdl": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.6664532141117805,
+            "candidate": 2.6640871961569985
+          },
+          "wdl_log_loss": {
+            "baseline": 0.8179838907575878,
+            "candidate": 0.8163168145843528
+          }
+        },
+        "n": 5,
+        "paired": 5,
+        "registered": 9,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 1,
+            "FULL_WIN": 2,
+            "HALF_LOSS": 2
+          },
+          "candidate": {
+            "FULL_LOSS": 1,
+            "FULL_WIN": 2,
+            "HALF_LOSS": 2
+          }
+        }
+      },
+      "ger.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 2,
+            "candidate": 2,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 1,
+            "candidate": 1,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "top3": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "wdl": {
+            "baseline": 5,
+            "candidate": 5,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.7652385990427772,
+            "candidate": 2.761037481778428
+          },
+          "wdl_log_loss": {
+            "baseline": 0.4751637916331199,
+            "candidate": 0.47147112180679224
+          }
+        },
+        "n": 5,
+        "paired": 5,
+        "registered": 9,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 2,
+            "FULL_WIN": 2,
+            "PUSH": 1
+          },
+          "candidate": {
+            "FULL_LOSS": 2,
+            "FULL_WIN": 2,
+            "PUSH": 1
+          }
+        }
+      },
+      "ita.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 4,
+            "candidate": 4,
+            "gained": 0,
+            "lost": 0,
+            "n": 8,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 2,
+            "candidate": 2,
+            "gained": 0,
+            "lost": 0,
+            "n": 8,
+            "picks_changed": 0
+          },
+          "top3": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 8,
+            "picks_changed": 0
+          },
+          "wdl": {
+            "baseline": 4,
+            "candidate": 4,
+            "gained": 0,
+            "lost": 0,
+            "n": 8,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.5046565252242927,
+            "candidate": 2.5038370621026775
+          },
+          "wdl_log_loss": {
+            "baseline": 0.9426502358683934,
+            "candidate": 0.9419460269535953
+          }
+        },
+        "n": 8,
+        "paired": 8,
+        "registered": 10,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 4,
+            "FULL_WIN": 4
+          },
+          "candidate": {
+            "FULL_LOSS": 4,
+            "FULL_WIN": 4
+          }
+        }
+      },
+      "jpn.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "jpn.league_cup": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "kor.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "ned.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 4,
+            "candidate": 4,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "top3": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          },
+          "wdl": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 5,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 3.819146256292008,
+            "candidate": 3.8188254800392714
+          },
+          "wdl_log_loss": {
+            "baseline": 0.9593198646098319,
+            "candidate": 0.9586651754456206
+          }
+        },
+        "n": 5,
+        "paired": 5,
+        "registered": 9,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 1,
+            "FULL_WIN": 4
+          },
+          "candidate": {
+            "FULL_LOSS": 1,
+            "FULL_WIN": 4
+          }
+        }
+      },
+      "nor.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 2,
+            "candidate": 2,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          },
+          "top3": {
+            "baseline": 1,
+            "candidate": 1,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          },
+          "wdl": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 3.982685951575338,
+            "candidate": 3.9802158372362664
+          },
+          "wdl_log_loss": {
+            "baseline": 0.7075294095938476,
+            "candidate": 0.7047710012325064
+          }
+        },
+        "n": 4,
+        "paired": 4,
+        "registered": 7,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 2,
+            "FULL_WIN": 2
+          },
+          "candidate": {
+            "FULL_LOSS": 2,
+            "FULL_WIN": 2
+          }
+        }
+      },
+      "swe.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          },
+          "top3": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          },
+          "wdl": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 4,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 3.006587975230815,
+            "candidate": 3.0109056550742643
+          },
+          "wdl_log_loss": {
+            "baseline": 1.3948407734566808,
+            "candidate": 1.3991125978556032
+          }
+        },
+        "n": 4,
+        "paired": 4,
+        "registered": 7,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 1,
+            "FULL_WIN": 3
+          },
+          "candidate": {
+            "FULL_LOSS": 1,
+            "FULL_WIN": 3
+          }
+        }
+      },
+      "uefa.champions": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "uefa.europa": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "uefa.europa.conf": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "uefa.nations": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "usa.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 4,
+            "candidate": 4,
+            "gained": 0,
+            "lost": 0,
+            "n": 10,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 0,
+            "candidate": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 11,
+            "picks_changed": 1
+          },
+          "top3": {
+            "baseline": 3,
+            "candidate": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 11,
+            "picks_changed": 1
+          },
+          "wdl": {
+            "baseline": 9,
+            "candidate": 9,
+            "gained": 0,
+            "lost": 0,
+            "n": 11,
+            "picks_changed": 0
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.9037647284615318,
+            "candidate": 2.9028200969320195
+          },
+          "wdl_log_loss": {
+            "baseline": 0.8701003416568653,
+            "candidate": 0.8689448828304063
+          }
+        },
+        "n": 11,
+        "paired": 11,
+        "registered": 15,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 5,
+            "FULL_WIN": 4,
+            "HALF_LOSS": 1,
+            "PUSH": 1
+          },
+          "candidate": {
+            "FULL_LOSS": 5,
+            "FULL_WIN": 4,
+            "HALF_LOSS": 1,
+            "PUSH": 1
+          }
+        }
+      }
+    },
+    "day_block_candidate_minus_baseline_95": {
+      "days": 3,
+      "draws": 2000,
+      "intervals": {
+        "full_win": [
+          0.0,
+          0.0
+        ],
+        "score_log_loss": [
+          -0.0024668728345876062,
+          -0.0010170204903472684
+        ],
+        "top1": [
+          0.0,
+          0.0
+        ],
+        "top3": [
+          0.0,
+          0.0
+        ],
+        "wdl": [
+          0.0,
+          0.0
+        ],
+        "wdl_log_loss": [
+          -0.001422255078492902,
+          -0.0009389249167566978
+        ]
+      }
+    },
+    "gaps": {
+      "MISSING_TEAM_ID": 6,
+      "NO_EXACT_SIDED_TEAM_ALIAS": 20,
+      "NO_MATCHING_SOURCE_RECEIPT": 6,
+      "OUTSIDE_SCOPE": 22
+    },
+    "losses": {
+      "score_log_loss": {
+        "baseline": 2.950559051293779,
+        "candidate": 2.9493142768807106
+      },
+      "wdl_log_loss": {
+        "baseline": 0.879290030388696,
+        "candidate": 0.8782576507778276
+      }
+    },
+    "n": 55,
+    "paired": 55,
+    "registered": 109,
+    "settlement": {
+      "baseline": {
+        "FULL_LOSS": 23,
+        "FULL_WIN": 25,
+        "HALF_LOSS": 5,
+        "PUSH": 2
+      },
+      "candidate": {
+        "FULL_LOSS": 23,
+        "FULL_WIN": 25,
+        "HALF_LOSS": 5,
+        "PUSH": 2
+      }
+    },
+    "wdl_tie_audit": {
+      "changed_at_tied_price": 0,
+      "changed_at_unique_price": 0,
+      "joint_shortest_price": 0
+    }
+  },
+  "historical_no_quote_clock": {
+    "binary": {
+      "full_win": {
+        "baseline": 3648,
+        "candidate": 3648,
+        "gained": 0,
+        "lost": 0,
+        "n": 6174,
+        "picks_changed": 0
+      },
+      "top1": {
+        "baseline": 819,
+        "candidate": 823,
+        "gained": 19,
+        "lost": 15,
+        "n": 6174,
+        "picks_changed": 146
+      },
+      "top3": {
+        "baseline": 2078,
+        "candidate": 2085,
+        "gained": 14,
+        "lost": 7,
+        "n": 6174,
+        "picks_changed": 404
+      },
+      "wdl": {
+        "baseline": 3338,
+        "candidate": 3342,
+        "gained": 11,
+        "lost": 7,
+        "n": 6174,
+        "picks_changed": 25
+      }
+    },
+    "by_book": {
+      "Bet365": 6174
+    },
+    "by_competition": {
+      "afc.champions": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "aus.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "bra.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "eng.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 661,
+            "candidate": 661,
+            "gained": 0,
+            "lost": 0,
+            "n": 1140,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 143,
+            "candidate": 143,
+            "gained": 2,
+            "lost": 2,
+            "n": 1140,
+            "picks_changed": 30
+          },
+          "top3": {
+            "baseline": 350,
+            "candidate": 351,
+            "gained": 4,
+            "lost": 3,
+            "n": 1140,
+            "picks_changed": 93
+          },
+          "wdl": {
+            "baseline": 616,
+            "candidate": 621,
+            "gained": 5,
+            "lost": 0,
+            "n": 1140,
+            "picks_changed": 5
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.953998912589618,
+            "candidate": 2.9537949308464606
+          },
+          "wdl_log_loss": {
+            "baseline": 0.9661725277069018,
+            "candidate": 0.9659554090223083
+          }
+        },
+        "n": 1140,
+        "paired": 1140,
+        "registered": 1140,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 479,
+            "FULL_WIN": 661
+          },
+          "candidate": {
+            "FULL_LOSS": 479,
+            "FULL_WIN": 661
+          }
+        }
+      },
+      "esp.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 673,
+            "candidate": 673,
+            "gained": 0,
+            "lost": 0,
+            "n": 1140,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 183,
+            "candidate": 184,
+            "gained": 3,
+            "lost": 2,
+            "n": 1140,
+            "picks_changed": 25
+          },
+          "top3": {
+            "baseline": 460,
+            "candidate": 463,
+            "gained": 3,
+            "lost": 0,
+            "n": 1140,
+            "picks_changed": 58
+          },
+          "wdl": {
+            "baseline": 625,
+            "candidate": 626,
+            "gained": 2,
+            "lost": 1,
+            "n": 1140,
+            "picks_changed": 5
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.772434907742528,
+            "candidate": 2.771585111338996
+          },
+          "wdl_log_loss": {
+            "baseline": 0.9548020823567895,
+            "candidate": 0.9539749039987653
+          }
+        },
+        "n": 1140,
+        "paired": 1140,
+        "registered": 1140,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 467,
+            "FULL_WIN": 673
+          },
+          "candidate": {
+            "FULL_LOSS": 467,
+            "FULL_WIN": 673
+          }
+        }
+      },
+      "fifa.world": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "fra.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 530,
+            "candidate": 530,
+            "gained": 0,
+            "lost": 0,
+            "n": 918,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 97,
+            "candidate": 97,
+            "gained": 3,
+            "lost": 3,
+            "n": 918,
+            "picks_changed": 18
+          },
+          "top3": {
+            "baseline": 273,
+            "candidate": 273,
+            "gained": 1,
+            "lost": 1,
+            "n": 918,
+            "picks_changed": 61
+          },
+          "wdl": {
+            "baseline": 487,
+            "candidate": 486,
+            "gained": 1,
+            "lost": 2,
+            "n": 918,
+            "picks_changed": 4
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.951221904025114,
+            "candidate": 2.950928097959214
+          },
+          "wdl_log_loss": {
+            "baseline": 0.9824626120874643,
+            "candidate": 0.9822028932759835
+          }
+        },
+        "n": 918,
+        "paired": 918,
+        "registered": 918,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 388,
+            "FULL_WIN": 530
+          },
+          "candidate": {
+            "FULL_LOSS": 388,
+            "FULL_WIN": 530
+          }
+        }
+      },
+      "ger.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 583,
+            "candidate": 583,
+            "gained": 0,
+            "lost": 0,
+            "n": 918,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 103,
+            "candidate": 104,
+            "gained": 2,
+            "lost": 1,
+            "n": 918,
+            "picks_changed": 27
+          },
+          "top3": {
+            "baseline": 264,
+            "candidate": 265,
+            "gained": 1,
+            "lost": 0,
+            "n": 918,
+            "picks_changed": 65
+          },
+          "wdl": {
+            "baseline": 491,
+            "candidate": 493,
+            "gained": 2,
+            "lost": 0,
+            "n": 918,
+            "picks_changed": 2
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 3.0365802732935583,
+            "candidate": 3.0364470855444625
+          },
+          "wdl_log_loss": {
+            "baseline": 0.9619989919533755,
+            "candidate": 0.9616969563666061
+          }
+        },
+        "n": 918,
+        "paired": 918,
+        "registered": 918,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 335,
+            "FULL_WIN": 583
+          },
+          "candidate": {
+            "FULL_LOSS": 335,
+            "FULL_WIN": 583
+          }
+        }
+      },
+      "ita.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 648,
+            "candidate": 648,
+            "gained": 0,
+            "lost": 0,
+            "n": 1140,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 175,
+            "candidate": 175,
+            "gained": 3,
+            "lost": 3,
+            "n": 1140,
+            "picks_changed": 17
+          },
+          "top3": {
+            "baseline": 437,
+            "candidate": 440,
+            "gained": 3,
+            "lost": 0,
+            "n": 1140,
+            "picks_changed": 53
+          },
+          "wdl": {
+            "baseline": 616,
+            "candidate": 614,
+            "gained": 1,
+            "lost": 3,
+            "n": 1140,
+            "picks_changed": 6
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.745429036879657,
+            "candidate": 2.7450191458313578
+          },
+          "wdl_log_loss": {
+            "baseline": 0.9678817551644511,
+            "candidate": 0.967511262174725
+          }
+        },
+        "n": 1140,
+        "paired": 1140,
+        "registered": 1140,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 492,
+            "FULL_WIN": 648
+          },
+          "candidate": {
+            "FULL_LOSS": 492,
+            "FULL_WIN": 648
+          }
+        }
+      },
+      "jpn.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "jpn.league_cup": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "kor.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "ned.1": {
+        "binary": {
+          "full_win": {
+            "baseline": 553,
+            "candidate": 553,
+            "gained": 0,
+            "lost": 0,
+            "n": 918,
+            "picks_changed": 0
+          },
+          "top1": {
+            "baseline": 118,
+            "candidate": 120,
+            "gained": 6,
+            "lost": 4,
+            "n": 918,
+            "picks_changed": 29
+          },
+          "top3": {
+            "baseline": 294,
+            "candidate": 293,
+            "gained": 2,
+            "lost": 3,
+            "n": 918,
+            "picks_changed": 74
+          },
+          "wdl": {
+            "baseline": 503,
+            "candidate": 502,
+            "gained": 0,
+            "lost": 1,
+            "n": 918,
+            "picks_changed": 3
+          }
+        },
+        "losses": {
+          "score_log_loss": {
+            "baseline": 2.999972855901983,
+            "candidate": 2.9999025689370127
+          },
+          "wdl_log_loss": {
+            "baseline": 0.9446772147362573,
+            "candidate": 0.9445374534060103
+          }
+        },
+        "n": 918,
+        "paired": 918,
+        "registered": 918,
+        "settlement": {
+          "baseline": {
+            "FULL_LOSS": 365,
+            "FULL_WIN": 553
+          },
+          "candidate": {
+            "FULL_LOSS": 365,
+            "FULL_WIN": 553
+          }
+        }
+      },
+      "nor.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "swe.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "uefa.champions": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "uefa.europa": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "uefa.europa.conf": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "uefa.nations": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      },
+      "usa.1": {
+        "n": 0,
+        "paired": 0,
+        "registered": 0
+      }
+    },
+    "day_block_candidate_minus_baseline_95": {
+      "days": 559,
+      "draws": 2000,
+      "intervals": {
+        "full_win": [
+          0.0,
+          0.0
+        ],
+        "score_log_loss": [
+          -0.0005660944859866823,
+          -0.00011444279944046742
+        ],
+        "top1": [
+          -0.0011459491973347094,
+          0.0025076065155627573
+        ],
+        "top3": [
+          -0.00031732561298314306,
+          0.002555923439697898
+        ],
+        "wdl": [
+          -0.0007316824453261604,
+          0.002041250409990467
+        ],
+        "wdl_log_loss": [
+          -0.0005846535347550155,
+          -0.000146102302244956
+        ]
+      }
+    },
+    "gaps": {},
+    "losses": {
+      "score_log_loss": {
+        "baseline": 2.900664259429546,
+        "candidate": 2.900320060103615
+      },
+      "wdl_log_loss": {
+        "baseline": 0.9629941192091769,
+        "candidate": 0.9626285778946915
+      }
+    },
+    "n": 6174,
+    "paired": 6174,
+    "registered": 6174,
+    "settlement": {
+      "baseline": {
+        "FULL_LOSS": 2526,
+        "FULL_WIN": 3648
+      },
+      "candidate": {
+        "FULL_LOSS": 2526,
+        "FULL_WIN": 3648
+      }
+    },
+    "wdl_tie_audit": {
+      "changed_at_tied_price": 25,
+      "changed_at_unique_price": 0,
+      "joint_shortest_price": 73
+    }
+  },
+  "new_forward_fixtures": 0
+}
