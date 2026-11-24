@@ -1,0 +1,17 @@
+{
+  "status": "historical research design, no live candidate or delivery",
+  "question": "Can prior non-penalty shot quality generate exact scores missed by both original first-cut matrices?",
+  "scope_authority": "configs/analysis-scope.json",
+  "early": "original Nov 3 through Nov 6, 2026 evening batches",
+  "later": "original Nov 9 through Nov 18, 2026 evening batches, disjoint target fixtures",
+  "intake_only": "Nov 24 nine-match European Cup league-phase handoff, use its existing comprehensive cutoff only",
+  "never_grade": ["Nov 7-8 club panel of 65", "registered R7", "Nov 22 and subsequent actual deliveries", "Nov 24 intake"],
+  "slot": "The three immediately preceding finished senior competitive fixtures in the target team's pre-cutoff source schedule, across competitions. For each use a 90-minute FT, stable home/away and opponent IDs, no extra time or shootout, within 45 days. Missing slots remain missing.",
+  "evidence": "A prior match's native shot probabilities, team IDs and full-time period, tied to bytes by digest. Accept a verified pre-cutoff retained object or an independently bound response receipt by the cutoff. Also report collector-clock-only and digest-without-bytes evidence separately. Reject future, contradictory and unclocked history. A source response must be observed after the prior game ended. One provider's xG and shots count as one source family.",
+  "pair": "Unique original first team matrix plus one named Pinnacle market-only matrix reconstructed by the existing paired 1X2 and two-sided Asian-total contract, same fixture, original cutoff, original eligible stage. No re-timestamping and no newer repair or bookmaker substitution. Report incomplete joins.",
+  "candidate": "For each prior match side form the Poisson-binomial goal distribution from its regulation non-penalty non-own-goal shots. For each target team average its three attack distributions and the opposite team's three allowed distributions (six equal contributions). Multiply home and away marginals, order all nonzero exact-score cells by descending probability, break ties by home then away goals ascending. Candidate top three can contain scores absent from both baselines. No fitting, tuning or threshold search.",
+  "ablation": "For eligible fixtures only replace each prior shot vector by a Poisson distribution at the identical sum of xG, using the same six contributions and same original cutoff. This checks information in the shape of chances beyond total xG.",
+  "decision": "Early dates check mechanics. Report any eligible later pairs individually as a descriptive pilot. Interpreting a signal requires at least 12 pairs on at least two match dates in each period, positive later net Top1 and Top3, additional correct scores among both-baseline misses, and no worse full-score log loss than the original team baseline. This finite historical screen cannot promote a model. Missing evidence leaves original recommendations untouched.",
+  "metrics": ["matrix Top1 and Top3, gained and lost versus each baseline", "double Top3 misses, rescued and denominator", "90-minute WDL", "observed Asian total full wins and pushes by actual line", "exact-score log loss", "actual first visible Top1/Top3 and prelocked top-three slate only with original evidence"],
+  "privacy": "Publish code and aggregates only. No raw pages, private messages, forecasts or provider credentials."
+}
