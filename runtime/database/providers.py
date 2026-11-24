@@ -9,7 +9,7 @@ import re
 import sqlite3
 import urllib.request
 from pathlib import Path
-from registry import LEAGUES, competition, season_for, expected_fd
+from scope_registry import LEAGUES, competition, season_for, expected_fd
 from store import digest, now
 
 ESPN_UNAVAILABLE={'kor.1','kor.2','kor.cup','jpn.2','jpn.league_cup','jpn.emperor','jpn.centennial.1','jpn.centennial.2_3'}
