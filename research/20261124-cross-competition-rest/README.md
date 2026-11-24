@@ -8,7 +8,7 @@
 
 | 归档 | 首次记录 | 范围内 | 两臂锁定 | 90 分钟已核 | 休息修正场次 |
 |---|---:|---:|---:|---:|---:|
-| 11 月 6 日晚批 | 9 | 7 | 6 | 6 | 0 |
+| 11 月 7 日凌晨批（北京时间） | 9 | 7 | 6 | 6 | 0 |
 | 11 月 7 日 55 场批次 | 55 | 40 | 35 | 35 | 9 |
 | 11 月 8 日 46 场批次 | 46 | 40 | 40 | 40 | 32 |
 | 11 月 22 日批次 | 33 | 30 | 18 | 17 | 0 |
@@ -46,7 +46,7 @@
 | nov8.tar.gz | `1e1ac442`，`20261108-night19-46matches/parts` |
 | nov22.tar.gz | `87e3ad5b`，`20261122-covered-slate/evidence.tar.gz` |
 
-四个目录均在 `workspace-updates/` 下。欧战轮次另用原 WCPP 报告目录的 `ucl-full-20261103/review-20261104/staging`、`review-europe-20261105`，及 Data 的 `20261106-uel-review/parts/review.tar.gz.part000`。复盘使用 Data 固定提交 `a6d45024` 的标准化文件和原始 ESPN 响应，以及原有三组复盘的原始响应及取回回执。`EARLY_REVIEW` 指 `20261107-review-and-aleague` 包中的 `review-all-20261107`，`WEEKEND_BOARDS` 指 `20261108-review67-aus-jpn` 包的 `review-results/raw/espn`，`LATER_REVIEW` 指 `20261110-review-and-audit` 证据包中的 `review-20261108`。
+四个目录均在 `workspace-updates/` 下。欧战轮次另用原 WCPP 报告目录的 `ucl-full-20261103/review-20261104/staging`、`review-europe-20261105`，及 Data 的 `20261106-uel-review/parts/review.tar.gz.part000`。复盘使用 Data 固定提交 `a6d45024` 的标准化文件和原始 ESPN 响应，以及原有三组复盘的原始响应及取回回执。`EARLY_REVIEW` 指 `20261107-review-and-aleague` 包中的 `review-all-20261107`，`WEEKEND_BOARDS` 指 `20261108-review67-aus-jpn` 包的 `review-results/raw/espn`，`LATER_REVIEW` 指 `20261110-review-and-audit/review-20261108/20261110T085236+0800.tar.gz` 解包后的 `20261110T085236+0800` 目录。
 
 从源仓根目录执行，先按上表准备本地恢复路径。显式设置单线程与此次计算环境保持一致。
 
@@ -65,4 +65,4 @@ python -m unittest discover -s "$study" -v
 python scripts/run_tests.py --layer integration
 ```
 
-专项 8 项覆盖两列对称替换、时间与身份冲突、未知阶段、未完赛、取消、青年队、友谊赛、矩阵选分、走盘与常规时间结算。真实资产集成在源仓 `6903c8b` 的运行代码上通过 1,136 项，跳过 0 项。新增研究脚本可独立移除，正式预测入口没有导入这些代码。
+专项 8 项覆盖两列对称替换、时间与身份冲突、未知阶段、未完赛、取消、青年队、友谊赛、矩阵选分、走盘与常规时间结算。真实资产集成在源仓 `6903c8b` 的运行代码上通过 1,136 项，跳过 0 项。随后在含 #52 的源码提交 `9b790c3` 从头重建 99 对矩阵，名单、汇总和覆盖表字节一致；专项 8 项和严格资产集成 1,143 项均通过，跳过 0 项。新增研究脚本可独立移除，正式预测入口没有导入这些代码。
