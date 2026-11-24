@@ -1,0 +1,748 @@
+{
+  "actual_display_pairs": {
+    "first": 0,
+    "selected_three_batches": 0,
+    "top3": 0
+  },
+  "all_paired": {
+    "dates": 10,
+    "first": {
+      "baseline": 13,
+      "candidate": 14,
+      "gained": 1,
+      "lost": 0,
+      "n": 119,
+      "picks_changed": 2
+    },
+    "first_delta_95": [
+      0.0,
+      0.024
+    ],
+    "log_loss": {
+      "baseline": 2.975997309437532,
+      "candidate": 2.982241750031592
+    },
+    "paired": 119,
+    "settlement": {
+      "baseline": {
+        "FULL_LOSS": 60,
+        "FULL_WIN": 59
+      },
+      "candidate": {
+        "FULL_LOSS": 62,
+        "FULL_WIN": 57
+      }
+    },
+    "top3": {
+      "baseline": 37,
+      "candidate": 38,
+      "gained": 2,
+      "lost": 1,
+      "n": 119,
+      "picks_changed": 21
+    },
+    "total": {
+      "baseline": 59,
+      "candidate": 57,
+      "gained": 1,
+      "lost": 3,
+      "n": 119,
+      "picks_changed": 4
+    },
+    "wdl": {
+      "baseline": 70,
+      "candidate": 70,
+      "gained": 0,
+      "lost": 0,
+      "n": 119,
+      "picks_changed": 0
+    }
+  },
+  "beta": -0.4878540340760438,
+  "by_beijing_kickoff_day": {
+    "2026-11-08": {
+      "dates": 1,
+      "first": {
+        "baseline": 1,
+        "candidate": 1,
+        "gained": 0,
+        "lost": 0,
+        "n": 21,
+        "picks_changed": 0
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 2.996301466506204,
+        "candidate": 2.994345841321262
+      },
+      "paired": 21,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 11,
+          "FULL_WIN": 10
+        },
+        "candidate": {
+          "FULL_LOSS": 12,
+          "FULL_WIN": 9
+        }
+      },
+      "top3": {
+        "baseline": 6,
+        "candidate": 7,
+        "gained": 1,
+        "lost": 0,
+        "n": 21,
+        "picks_changed": 4
+      },
+      "total": {
+        "baseline": 10,
+        "candidate": 9,
+        "gained": 0,
+        "lost": 1,
+        "n": 21,
+        "picks_changed": 1
+      },
+      "wdl": {
+        "baseline": 11,
+        "candidate": 11,
+        "gained": 0,
+        "lost": 0,
+        "n": 21,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-09": {
+      "dates": 1,
+      "first": {
+        "baseline": 1,
+        "candidate": 2,
+        "gained": 1,
+        "lost": 0,
+        "n": 19,
+        "picks_changed": 1
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 3.1062679844331935,
+        "candidate": 3.1186438762468462
+      },
+      "paired": 19,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 10,
+          "FULL_WIN": 9
+        },
+        "candidate": {
+          "FULL_LOSS": 10,
+          "FULL_WIN": 9
+        }
+      },
+      "top3": {
+        "baseline": 5,
+        "candidate": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 19,
+        "picks_changed": 4
+      },
+      "total": {
+        "baseline": 9,
+        "candidate": 9,
+        "gained": 0,
+        "lost": 0,
+        "n": 19,
+        "picks_changed": 0
+      },
+      "wdl": {
+        "baseline": 9,
+        "candidate": 9,
+        "gained": 0,
+        "lost": 0,
+        "n": 19,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-13": {
+      "dates": 1,
+      "first": {
+        "baseline": 2,
+        "candidate": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 7,
+        "picks_changed": 0
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 2.4439575488281116,
+        "candidate": 2.443989807249325
+      },
+      "paired": 7,
+      "settlement": {
+        "baseline": {
+          "FULL_WIN": 7
+        },
+        "candidate": {
+          "FULL_WIN": 7
+        }
+      },
+      "top3": {
+        "baseline": 4,
+        "candidate": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 7,
+        "picks_changed": 1
+      },
+      "total": {
+        "baseline": 7,
+        "candidate": 7,
+        "gained": 0,
+        "lost": 0,
+        "n": 7,
+        "picks_changed": 0
+      },
+      "wdl": {
+        "baseline": 5,
+        "candidate": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 7,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-14": {
+      "dates": 1,
+      "first": {
+        "baseline": 0,
+        "candidate": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 11,
+        "picks_changed": 0
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 2.977182313680886,
+        "candidate": 2.9828819715028345
+      },
+      "paired": 11,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 6,
+          "FULL_WIN": 5
+        },
+        "candidate": {
+          "FULL_LOSS": 6,
+          "FULL_WIN": 5
+        }
+      },
+      "top3": {
+        "baseline": 3,
+        "candidate": 3,
+        "gained": 0,
+        "lost": 0,
+        "n": 11,
+        "picks_changed": 1
+      },
+      "total": {
+        "baseline": 5,
+        "candidate": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 11,
+        "picks_changed": 0
+      },
+      "wdl": {
+        "baseline": 7,
+        "candidate": 7,
+        "gained": 0,
+        "lost": 0,
+        "n": 11,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-15": {
+      "dates": 1,
+      "first": {
+        "baseline": 2,
+        "candidate": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 9,
+        "picks_changed": 0
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 2.848706539261399,
+        "candidate": 2.86509619160865
+      },
+      "paired": 9,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 5,
+          "FULL_WIN": 4
+        },
+        "candidate": {
+          "FULL_LOSS": 5,
+          "FULL_WIN": 4
+        }
+      },
+      "top3": {
+        "baseline": 3,
+        "candidate": 3,
+        "gained": 0,
+        "lost": 0,
+        "n": 9,
+        "picks_changed": 1
+      },
+      "total": {
+        "baseline": 4,
+        "candidate": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 9,
+        "picks_changed": 0
+      },
+      "wdl": {
+        "baseline": 6,
+        "candidate": 6,
+        "gained": 0,
+        "lost": 0,
+        "n": 9,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-16": {
+      "dates": 1,
+      "first": {
+        "baseline": 1,
+        "candidate": 1,
+        "gained": 0,
+        "lost": 0,
+        "n": 7,
+        "picks_changed": 0
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 3.257745274561674,
+        "candidate": 3.2548336955028736
+      },
+      "paired": 7,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 3,
+          "FULL_WIN": 4
+        },
+        "candidate": {
+          "FULL_LOSS": 3,
+          "FULL_WIN": 4
+        }
+      },
+      "top3": {
+        "baseline": 2,
+        "candidate": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 7,
+        "picks_changed": 0
+      },
+      "total": {
+        "baseline": 4,
+        "candidate": 4,
+        "gained": 0,
+        "lost": 0,
+        "n": 7,
+        "picks_changed": 0
+      },
+      "wdl": {
+        "baseline": 5,
+        "candidate": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 7,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-17": {
+      "dates": 1,
+      "first": {
+        "baseline": 0,
+        "candidate": 0,
+        "gained": 0,
+        "lost": 0,
+        "n": 8,
+        "picks_changed": 0
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 2.854984844490512,
+        "candidate": 2.8613339927057537
+      },
+      "paired": 8,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 4,
+          "FULL_WIN": 4
+        },
+        "candidate": {
+          "FULL_LOSS": 5,
+          "FULL_WIN": 3
+        }
+      },
+      "top3": {
+        "baseline": 2,
+        "candidate": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 8,
+        "picks_changed": 3
+      },
+      "total": {
+        "baseline": 4,
+        "candidate": 3,
+        "gained": 0,
+        "lost": 1,
+        "n": 8,
+        "picks_changed": 1
+      },
+      "wdl": {
+        "baseline": 7,
+        "candidate": 7,
+        "gained": 0,
+        "lost": 0,
+        "n": 8,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-18": {
+      "dates": 1,
+      "first": {
+        "baseline": 2,
+        "candidate": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 8,
+        "picks_changed": 0
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 2.5647935632283976,
+        "candidate": 2.5798662344727967
+      },
+      "paired": 8,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 3,
+          "FULL_WIN": 5
+        },
+        "candidate": {
+          "FULL_LOSS": 3,
+          "FULL_WIN": 5
+        }
+      },
+      "top3": {
+        "baseline": 5,
+        "candidate": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 8,
+        "picks_changed": 1
+      },
+      "total": {
+        "baseline": 5,
+        "candidate": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 8,
+        "picks_changed": 0
+      },
+      "wdl": {
+        "baseline": 5,
+        "candidate": 5,
+        "gained": 0,
+        "lost": 0,
+        "n": 8,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-22": {
+      "dates": 1,
+      "first": {
+        "baseline": 2,
+        "candidate": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 15,
+        "picks_changed": 0
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 3.0298275704968796,
+        "candidate": 3.041552677948147
+      },
+      "paired": 15,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 9,
+          "FULL_WIN": 6
+        },
+        "candidate": {
+          "FULL_LOSS": 9,
+          "FULL_WIN": 6
+        }
+      },
+      "top3": {
+        "baseline": 4,
+        "candidate": 3,
+        "gained": 0,
+        "lost": 1,
+        "n": 15,
+        "picks_changed": 2
+      },
+      "total": {
+        "baseline": 6,
+        "candidate": 6,
+        "gained": 0,
+        "lost": 0,
+        "n": 15,
+        "picks_changed": 0
+      },
+      "wdl": {
+        "baseline": 9,
+        "candidate": 9,
+        "gained": 0,
+        "lost": 0,
+        "n": 15,
+        "picks_changed": 0
+      }
+    },
+    "2026-11-23": {
+      "dates": 1,
+      "first": {
+        "baseline": 2,
+        "candidate": 2,
+        "gained": 0,
+        "lost": 0,
+        "n": 14,
+        "picks_changed": 1
+      },
+      "first_delta_95": null,
+      "log_loss": {
+        "baseline": 3.221238031102144,
+        "candidate": 3.2220748585998393
+      },
+      "paired": 14,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 9,
+          "FULL_WIN": 5
+        },
+        "candidate": {
+          "FULL_LOSS": 9,
+          "FULL_WIN": 5
+        }
+      },
+      "top3": {
+        "baseline": 3,
+        "candidate": 4,
+        "gained": 1,
+        "lost": 0,
+        "n": 14,
+        "picks_changed": 4
+      },
+      "total": {
+        "baseline": 5,
+        "candidate": 5,
+        "gained": 1,
+        "lost": 1,
+        "n": 14,
+        "picks_changed": 2
+      },
+      "wdl": {
+        "baseline": 6,
+        "candidate": 6,
+        "gained": 0,
+        "lost": 0,
+        "n": 14,
+        "picks_changed": 0
+      }
+    }
+  },
+  "deduplicated_original_fixtures": 276,
+  "eligible_for_future_proposal": false,
+  "fit_panel": "native",
+  "gaps": {
+    "missing_outcome": 1,
+    "no_pair": 51
+  },
+  "labels_sha256": "6b526fa094ebddb130d18fdeb001cf6f12f282e64bf456e23f8b1a826bff5ac9",
+  "listed": 171,
+  "lock_sha256": "2969092e186d998036e7be203ccd3cfbb374553942cdf55dd9cf61300d07e269",
+  "panel": "native",
+  "same_line": {
+    "dates": 10,
+    "first": {
+      "baseline": 10,
+      "candidate": 11,
+      "gained": 1,
+      "lost": 0,
+      "n": 95,
+      "picks_changed": 2
+    },
+    "first_delta_95": [
+      0.0,
+      0.030303030303030304
+    ],
+    "log_loss": {
+      "baseline": 2.9661689899085504,
+      "candidate": 2.973990973389532
+    },
+    "paired": 95,
+    "settlement": {
+      "baseline": {
+        "FULL_LOSS": 46,
+        "FULL_WIN": 49
+      },
+      "candidate": {
+        "FULL_LOSS": 48,
+        "FULL_WIN": 47
+      }
+    },
+    "top3": {
+      "baseline": 30,
+      "candidate": 31,
+      "gained": 2,
+      "lost": 1,
+      "n": 95,
+      "picks_changed": 21
+    },
+    "total": {
+      "baseline": 49,
+      "candidate": 47,
+      "gained": 1,
+      "lost": 3,
+      "n": 95,
+      "picks_changed": 4
+    },
+    "wdl": {
+      "baseline": 56,
+      "candidate": 56,
+      "gained": 0,
+      "lost": 0,
+      "n": 95,
+      "picks_changed": 0
+    }
+  },
+  "sensitivity_excluding_previously_reviewed_slate": {
+    "all_paired": {
+      "dates": 9,
+      "first": {
+        "baseline": 9,
+        "candidate": 10,
+        "gained": 1,
+        "lost": 0,
+        "n": 91,
+        "picks_changed": 1
+      },
+      "first_delta_95": [
+        0.0,
+        0.029419044845660998
+      ],
+      "log_loss": {
+        "baseline": 2.9338720009038846,
+        "candidate": 2.9412962534755565
+      },
+      "paired": 91,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 42,
+          "FULL_WIN": 49
+        },
+        "candidate": {
+          "FULL_LOSS": 45,
+          "FULL_WIN": 46
+        }
+      },
+      "top3": {
+        "baseline": 30,
+        "candidate": 31,
+        "gained": 1,
+        "lost": 0,
+        "n": 91,
+        "picks_changed": 15
+      },
+      "total": {
+        "baseline": 49,
+        "candidate": 46,
+        "gained": 0,
+        "lost": 3,
+        "n": 91,
+        "picks_changed": 3
+      },
+      "wdl": {
+        "baseline": 55,
+        "candidate": 55,
+        "gained": 0,
+        "lost": 0,
+        "n": 91,
+        "picks_changed": 0
+      }
+    },
+    "excluded_batch": "20261122-covered-slate",
+    "same_line": {
+      "dates": 9,
+      "first": {
+        "baseline": 6,
+        "candidate": 7,
+        "gained": 1,
+        "lost": 0,
+        "n": 71,
+        "picks_changed": 1
+      },
+      "first_delta_95": [
+        0.0,
+        0.0375
+      ],
+      "log_loss": {
+        "baseline": 2.9060167080255432,
+        "candidate": 2.915532299349798
+      },
+      "paired": 71,
+      "settlement": {
+        "baseline": {
+          "FULL_LOSS": 31,
+          "FULL_WIN": 40
+        },
+        "candidate": {
+          "FULL_LOSS": 34,
+          "FULL_WIN": 37
+        }
+      },
+      "top3": {
+        "baseline": 24,
+        "candidate": 25,
+        "gained": 1,
+        "lost": 0,
+        "n": 71,
+        "picks_changed": 15
+      },
+      "total": {
+        "baseline": 40,
+        "candidate": 37,
+        "gained": 0,
+        "lost": 3,
+        "n": 71,
+        "picks_changed": 3
+      },
+      "wdl": {
+        "baseline": 44,
+        "candidate": 44,
+        "gained": 0,
+        "lost": 0,
+        "n": 71,
+        "picks_changed": 0
+      }
+    }
+  }
+}

@@ -284,9 +284,10 @@ def main():
         if not roster.get('home_id') or not roster.get('away_id') or roster.get('_identity_incomplete'):
             counts['roster_identity_incomplete'] += 1
             continue
+        expected_stage = roster.get('stage') or roster.get('trusted_stage') or roster.get('freeze_stage')
         checks = {
             'competition': row.get('competition') == roster['competition'],
-            'stage': (not roster.get('stage') or row.get('stage') == roster.get('stage')),
+            'stage': bool(expected_stage and row.get('stage') == expected_stage),
             'home': row.get('home') == roster['home_id'],
             'away': row.get('away') == roster['away_id'],
             'kickoff_at': aware(row.get('kickoff_at', '')) == aware(roster['kickoff_at']),

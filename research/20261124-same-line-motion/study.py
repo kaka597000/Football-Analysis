@@ -257,6 +257,12 @@ def grade(panel, inputs, labels, lockpath, out):
                   labels_sha256=sha(labels), listed=len(frozen), gaps=seen, all_paired=total, same_line=same,
                   by_league=by_league, by_day=by_day, eligible_for_future_proposal=bool(gate),
                   actual_display_pairs={'first': 0, 'top3': 0, 'selected_three_batches': 0})
+    if panel == 'native':
+        # Project members previously reviewed this specific delivered slate. Report its contribution separately.
+        result['sensitivity_excluding_previously_reviewed_slate'] = {
+            'excluded_batch': '20261122-covered-slate',
+            'all_paired': summary([v for v in all_pairs if v[0]['batch'] != '20261122-covered-slate']),
+            'same_line': summary([v for v in eligible if v[0]['batch'] != '20261122-covered-slate'])}
     save(out, result)
     return result
 

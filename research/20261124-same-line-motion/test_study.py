@@ -4,7 +4,8 @@ from tempfile import TemporaryDirectory
 import unittest
 
 from assemble_native import assemble
-from study import fit, grade, input_rows, packed, seal, write
+from join_labels import join
+from study import fit, grade, input_rows, packed, save, seal, sha, write
 
 
 class PipelineTests(unittest.TestCase):
@@ -78,3 +79,21 @@ class PipelineTests(unittest.TestCase):
             assemble([inputs], ids, out)
             first = json.loads((out/'inputs.jsonl').read_bytes())
             self.assertEqual((first['id'], first['excluded']), ('fotmob:2', expected))
+
+    def test_independent_certifications_cannot_double_count_or_disagree(self):
+        identity = dict(id='espn:1',home_id='espn:10',away_id='espn:11',kickoff_at='2026-11-09T14:00:00Z')
+        inputs = self.file('inputs', [identity])
+        forecasts = self.file('forecasts.jsonl', [dict(id='espn:1',forecasts={'baseline':{},'candidate':{}})])
+        lock = self.root/'lock.json'
+        save(lock,dict(panel='native',input_sha256=sha(inputs),forecasts_sha256=sha(forecasts),
+                       result_cutoff_at='2026-11-24T11:26:32Z'))
+        label = dict(identity,observed_at='2026-11-09T17:00:00Z',evidence_sha256='a'*64,score=[1,2])
+        first = self.file('first', [label])
+        other = self.file('other', [dict(label,observed_at='2026-11-10T00:00:00Z',evidence_sha256='b'*64)])
+        join(inputs,lock,[other,first],self.root/'combined')
+        self.assertEqual(json.loads((self.root/'combined').read_bytes()), label)
+        for number,edit in enumerate(({'score':[2,1]}, {'away_id':'espn:12'},
+                                       {'observed_at':'2026-11-24T11:26:32Z'})):
+            invalid = self.file(f'invalid{number}',[dict(label,**edit)])
+            with self.assertRaises(ValueError):
+                join(inputs,lock,[first,invalid],self.root/'rejected')

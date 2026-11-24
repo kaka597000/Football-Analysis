@@ -1,0 +1,123 @@
+{
+  "actual_display_pairs": {
+    "first": 0,
+    "selected_three_batches": 0,
+    "top3": 0
+  },
+  "all_paired": {
+    "dates": 179,
+    "first": {
+      "baseline": 299,
+      "candidate": 298,
+      "gained": 4,
+      "lost": 5,
+      "n": 2234,
+      "picks_changed": 25
+    },
+    "first_delta_95": [
+      -0.003466268917695678,
+      0.0023097906246078016
+    ],
+    "log_loss": {
+      "baseline": 2.8930940791999333,
+      "candidate": 2.8928515076878174
+    },
+    "paired": 2234,
+    "settlement": {
+      "baseline": {
+        "FULL_LOSS": 862,
+        "FULL_WIN": 1372
+      },
+      "candidate": {
+        "FULL_LOSS": 865,
+        "FULL_WIN": 1369
+      }
+    },
+    "top3": {
+      "baseline": 752,
+      "candidate": 758,
+      "gained": 11,
+      "lost": 5,
+      "n": 2234,
+      "picks_changed": 156
+    },
+    "total": {
+      "baseline": 1372,
+      "candidate": 1369,
+      "gained": 17,
+      "lost": 20,
+      "n": 2234,
+      "picks_changed": 37
+    },
+    "wdl": {
+      "baseline": 1244,
+      "candidate": 1244,
+      "gained": 0,
+      "lost": 0,
+      "n": 2234,
+      "picks_changed": 0
+    }
+  },
+  "beta": 0.1282250663597548,
+  "eligible_for_future_proposal": false,
+  "fit_panel": "proxy",
+  "gaps": {},
+  "labels_sha256": "41116290505bea464c7aadd1c993ffbc095b4e3f19d070aefd7f300df224bb46",
+  "listed": 2234,
+  "lock_sha256": "4d843b0f1ff1e7fb7b87b62f427ecefc70ca112ffdcdf833db2be2ff90a3d7cd",
+  "panel": "proxy",
+  "same_line": {
+    "dates": 179,
+    "first": {
+      "baseline": 299,
+      "candidate": 298,
+      "gained": 4,
+      "lost": 5,
+      "n": 2234,
+      "picks_changed": 25
+    },
+    "first_delta_95": [
+      -0.003466268917695678,
+      0.0023097906246078016
+    ],
+    "log_loss": {
+      "baseline": 2.8930940791999333,
+      "candidate": 2.8928515076878174
+    },
+    "paired": 2234,
+    "settlement": {
+      "baseline": {
+        "FULL_LOSS": 862,
+        "FULL_WIN": 1372
+      },
+      "candidate": {
+        "FULL_LOSS": 865,
+        "FULL_WIN": 1369
+      }
+    },
+    "top3": {
+      "baseline": 752,
+      "candidate": 758,
+      "gained": 11,
+      "lost": 5,
+      "n": 2234,
+      "picks_changed": 156
+    },
+    "total": {
+      "baseline": 1372,
+      "candidate": 1369,
+      "gained": 17,
+      "lost": 20,
+      "n": 2234,
+      "picks_changed": 37
+    },
+    "wdl": {
+      "baseline": 1244,
+      "candidate": 1244,
+      "gained": 0,
+      "lost": 0,
+      "n": 2234,
+      "picks_changed": 0
+    }
+  }
+}
