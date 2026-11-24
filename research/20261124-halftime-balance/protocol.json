@@ -1,0 +1,19 @@
+{
+  "name": "Pre-match six-game first-half balance beyond the same-book market level",
+  "version": 1,
+  "source_main": "899ce01542d90fafb7f734d08cf13c37d553505a",
+  "read_only_audit_source": "54ec6d70fdff7145c1889ffe6071b2188663bef2",
+  "data_snapshot": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+  "season_capture": "a5ecf0d0f1148a7acdb5675d45c347c0d5fb9d12",
+  "market_archive_sha256": "7c106ee66a816da84dbbfbf254633b55b7c25e610e7d0f31bf168d68f61d9659",
+  "r7_exclusion_sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d",
+  "domestic_sources": {"E0":"eng.1","SP1":"esp.1","D1":"ger.1","I1":"ita.1","F1":"fra.1"},
+  "common_model": "Repository market_baseline.quote_only_matrices fully projected distribution from one bookmaker's same 90-minute 1X2 and actual two-sided totals line. No margin or projection edits. Historical rows use Bet365 non-C quoted columns and both named 2.5 legs. 2026 uses the book and line in the original first comprehensive freeze with original market bytes and clocks.",
+  "one_feature": "For each club, take its six latest completed regular domestic league matches in that season in the available source, before the target day; oldest <=90 days. At the club's perspective average halftime goal difference minus half fulltime goal difference. Subtract away's average from home's and clip to [-2,2]. Check both periods are nonnegative and half does not exceed full. If either six-game history or either club identity is missing, use the unmodified baseline and retain the fixture.",
+  "candidate": "Multiply each score's probability by exp(beta * feature * clip(home_goals-away_goals,-3,3)) then restore the exact original probability mass of each total-goal count. Unchanged wager-line distributions and unchanged zero cells. beta=0 is the exact ablation.",
+  "fit": "One common beta minimizing conditional exact-score negative log likelihood plus 5*beta^2 (ridge=10), hard bounds [-0.5,0.5]. Use all eligible 2019/20, 2020/21, 2021/22 domestic matches with prior six-game features, named book inputs and completed 90-minute labels. No alternative feature, coefficient grid, reselection or league-specific fit.",
+  "historical_test": "All domestic matches from 1 February through 30 April inclusive in 2023, 2024 and 2025. Fixed beta from seasons ending in 2022. Use strictly earlier completed match dates for rolling-six inputs, including earlier evaluation dates once past. No same-day information. Prices are archival pre-closing labels without quote or capture clocks; call this date-isolated historical evidence.",
+  "clocked_reconstruction": "All timestamp-certified archive fixtures kicking off Nov 20-21 Beijing, excluding the R7 192 by ID or home/away/cohort/kickoff. Use same frozen decision cutoff for both arms. Official past team IDs and archived 2026 training source must be available then; missing feature keeps the baseline in other competitions. Original source evidence of both market clocks, prices, and 90-minute result is required to score. This is retrospective input reconstruction, including fixtures previously studied by the project; no new future issue.",
+  "metrics": "Whole eligible roster and activated subset separately; paired matrix first, matrix top three, win/draw/loss, actual-line full-win/non-push, all five settlements, correct/incorrect switches, probability log loss, paired date-cluster 95% bootstrap. Report missing markets and feature fallback. Actual first, displayed triple and preselected batches require genuine delivered counterparts.",
+  "decision": "A separate future trial would require >=500 paired historical tests, a strictly positive 95% paired matchday lower bound for Top1 improvement, nonnegative matrix Top3 net and no worse mean joint log loss. Otherwise retire this exact recipe. Zero prospective issues; no R7 or production changes."
+}
