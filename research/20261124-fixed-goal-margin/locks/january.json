@@ -1,0 +1,10 @@
+{
+  "panel": "january",
+  "n": 612,
+  "roster_sha256": "82d9cbe612ec5688aa209834621cc4b7d0948beafe58f52ebc163efe5f223ee9",
+  "n_issued": 612,
+  "inputs_sha256": "328c2a23f050e93bd9481b36fbe494c57e51206437868f3a471de8f2955dafe1",
+  "forecasts_sha256": "38df4650c5f4257180e01fdf618ac32a35fdeaccb9b0d776e088da6dc0bbc1d4",
+  "protocol_sha256": "3ee944a3ad5d681b498940b73e31a8c0190d702ee38f3f20a343075ef3851c59",
+  "fit_sha256": "6f34c22abba2e24a53d5f712952e9ede7520310b1711c06eee725e428f4304d2"
+}

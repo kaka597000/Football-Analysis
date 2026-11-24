@@ -1,0 +1,46 @@
+{
+  "protocol_sha256": "3ee944a3ad5d681b498940b73e31a8c0190d702ee38f3f20a343075ef3851c59",
+  "training_sha256": "96b40252a7276b859b5ad05e80cd3a85d646454e165ff9fcf68f268e36a0a5c5",
+  "roster": 2206,
+  "training_pairs": 2070,
+  "beta": 0.1706930163356932,
+  "odds_ratio": 1.1861265716450238,
+  "development": {
+    "rank_at_most": {
+      "1": 265,
+      "3": 633,
+      "5": 975,
+      "10": 1533,
+      "20": 1973
+    },
+    "mode_errors": {
+      "exact": 265,
+      "wrong_mode_direction": 1165,
+      "score_miss_with_right_mode_direction": 640
+    },
+    "common_one_by_absolute_margin": {
+      "0": {
+        "common_one_observed": 243,
+        "unconditional_expected": 215.08155998346666,
+        "expected_given_actual_signed_margin": 224.03735808350845
+      },
+      "1": {
+        "common_one_observed": 336,
+        "unconditional_expected": 294.63056389817046,
+        "expected_given_actual_signed_margin": 296.1458641245345
+      },
+      "2": {
+        "common_one_observed": 165,
+        "unconditional_expected": 150.69672604733293,
+        "expected_given_actual_signed_margin": 147.79370559004403
+      },
+      "3": {
+        "common_one_observed": 98,
+        "unconditional_expected": 97.5786928020194,
+        "expected_given_actual_signed_margin": 91.99662680190085
+      }
+    },
+    "observed": 842,
+    "expected_given_actual_signed_margin": 759.9735545999879
+  }
+}
