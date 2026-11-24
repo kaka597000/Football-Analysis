@@ -1,0 +1,40 @@
+{
+  "archived_quote_offers": 88,
+  "backup_git": "466fd626a47481e70b176a9a69c58224d7d1bf63",
+  "data_git": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+  "paired_official_firsts": 0,
+  "paired_official_threes": 0,
+  "paired_official_top_match_batches": 0,
+  "previously_reviewed_30": {
+    "matched_november_evaluation": [],
+    "registered_outcome_ref": "22024b23f93e7809aed4d90b027d78ff4e53875c:workspace-updates/20261123-nov22-review-nonmls",
+    "source_replay_sha256": "1cfc009cf0992e459a442f1e08689796814d32c9b81b44afde41fb101900c6a7"
+  },
+  "protected_r7_sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d",
+  "protocol_git": "5bca4a14fda9d22d45017b70b0d3a01b599117e7",
+  "raw_market_archive_tree_oids": {
+    "20261107-night-analysis": "6db454e46414a33121752686a1dd83e73d617163",
+    "20261107-night19-55matches": "6025c3d8ea8302108ed1d108212d773b4a25685e",
+    "20261108-night19-46matches": "aa4d52452ee35bd0f4f5eb1dd2dcb57ef6534551"
+  },
+  "reproduced_files_sha256": {
+    "grade/paired.jsonl.gz": "00ed5f366b6049368f6c3373b777382f4199107dad1d6e37fa48a4ce13fa99d0",
+    "grade/roster.json": "fe0a485eefda0e841bde5c04d3d32a4ca3a4e9af2b21ed27c638de96b3d2c963",
+    "grade/study.json": "4899e560a474a7d768634dda338770c92ef30e717c1801aea032fde88260738f",
+    "inputs/archived-totals.csv": "4c2d57f5157d45336242ce12bf4e64313ec150869267bfba0ffca3712e89664b",
+    "inputs/bridge-gaps.csv": "813dbb01f4924e16578f4205f9ae686c16064a3645c31f6cfcc3f1338597a950",
+    "inputs/bridges.csv": "9e3f262466e2c263787e0e84881dee462aded5af6338515381c9b050762bbab8",
+    "inputs/input-manifest.json": "f2af195e142fc4cabc90793a684a5d7147d165c91e2bd36038ccc7aed8aeaebc",
+    "inputs/team-inputs.json.gz": "83b912c1b4745014a2002a1ed31bcb1f99f4a9d44a5986804f3e752848569c4f",
+    "replay/estimates.jsonl.gz": "357edd970b70ea62803a72ba224fdb4bfeee7d1c610a83eca797db2eba9ef68e",
+    "replay/fit.json": "a0bc75ecdb395cb1c60148117ab4e92e023a753e42222a6e3762d58e8dc90c59",
+    "tables/competition-coverage.csv": "363314868aa02c1a8e566a77c7d986c512375746b62d6f00b27d07c18774ea58",
+    "tables/metrics.json": "9a1a3cc489b3e6369a940c682874127f5b70c81aee62274d2badae6681ca2515",
+    "tables/november-fixtures.csv": "e402d8bfca8ae123ba9bdfc4565c059ecafc03c6f13cf09500e42cabc14d6db9",
+    "tables/november.md": "d36af4cbde1d4147677a5f21d2bc80b4434250474140523c230c3040784ccc25"
+  },
+  "schedule_rows": 77,
+  "source_base": "6903c8b6b0b7eb7c7cbef1af54eb2908e292e2c9",
+  "validated_selected_raw_markets": 3,
+  "verified_scores": 25
+}
