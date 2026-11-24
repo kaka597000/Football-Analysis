@@ -266,7 +266,7 @@ def collect(data_root, out, *, plan=DEFAULT_PLAN, regions='eu', max_events=None,
         old = verify_run(data_root, out)
         if (old['plan'] != (None if discover else str(plan)) or old.get('discovery_competition') != discover
                 or old['regions'] != regions or old['requested_markets'] != list(markets)
-                or old.get('collection_settings', settings) != settings):
+                or old.get('collection_settings', {} if brazil_first_issue_preflight else settings) != settings):
             raise ValueError('existing run was created with different collection settings')
         return old
     out.parent.mkdir(parents=True, exist_ok=True)

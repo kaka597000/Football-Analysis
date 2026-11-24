@@ -206,7 +206,7 @@ def verified_source_quotes(run, targets):
     return rows
 
 
-def bases(data, batch):
+def bases(data, batch, *, available_at=None):
     plan = verify(read(data / PARENT / "plan.json"))
     protocol = read(batch / "protocol.json")
     registration = read(batch.parent / "registration.json")
@@ -218,6 +218,11 @@ def bases(data, batch):
     ):
         raise ValueError("registered parent or comparison changed")
     snapshots = [verify(read(f)) for f in (data / PARENT / "freezes").glob("*.json")]
+    if available_at is not None and any(
+        aware(time) > available_at
+        for time in (registration["registered_at"], plan["recorded_at"], *(r["recorded_at"] for r in snapshots))
+    ):
+        raise ValueError("registered plan or parent freeze is later than preflight")
     originals = {r["match_id"]: r for r in snapshots}
     plan_fixtures = plan["payload"]["fixtures"]
     fixtures = {f["match_id"]: f for f in plan_fixtures}
@@ -275,7 +280,7 @@ def issued(batch, originals, protocol_sha):
 def preflight(data, batch, *, as_of=None):
     """Read the registered Brazil queue before collecting any extra markets."""
     at = as_of if as_of is not None else cutoff_now()
-    originals, protocol_sha = bases(data, batch)
+    originals, protocol_sha = bases(data, batch, available_at=at)
     first = issued(batch, originals, protocol_sha)
     rows = []
     for mid, original in sorted(originals.items()):

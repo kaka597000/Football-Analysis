@@ -49,7 +49,7 @@ class BrazilTeamMarketPreflight(unittest.TestCase):
         markets = {f['match_id']: dict(match_id=f['match_id'], provider='the-odds-api',
                                       provider_match_id=e['id'], source_sha256=raw_sha, bookmaker='test')
                    for f, e in zip(fixtures, events, strict=True)}
-        plan = signed({'payload': dict(fixtures=fixtures, markets=markets,
+        plan = signed({'recorded_at': self.recorded, 'payload': dict(fixtures=fixtures, markets=markets,
                                       binding={'market_archive': 'market/runs/anchor'},
                                       sources={'odds': {'sha256': raw_sha}})})
         plan_sha = plan['record_sha256']
@@ -58,7 +58,7 @@ class BrazilTeamMarketPreflight(unittest.TestCase):
         self.protocol_sha = digest(protocol)
         write(self.batch / 'protocol.json', protocol)
         write(self.batch.parent / 'registration.json',
-              dict(forward_plan_parent=plan_sha, forward_ids=list(markets),
+              dict(registered_at=self.recorded, forward_plan_parent=plan_sha, forward_ids=list(markets),
                    forward_arms={'team_markets': list(study.ARMS)}))
         self.original = {}
         for i, f in enumerate(fixtures, 1):
@@ -167,3 +167,29 @@ class BrazilTeamMarketPreflight(unittest.TestCase):
             summary = quotes.collect(self.root, self.out, fetcher=self.fetch)
         self.assertEqual([call.args[0]['match_id'] for call in self.fetch.call_args_list], ['espn:1', 'espn:3'])
         self.assertEqual(summary['collection_settings'], {'days': None, 'max_events': None})
+
+    def test_preflight_rejects_future_registration_or_parent_without_requesting(self):
+        later = (self.at + timedelta(minutes=5)).isoformat()
+        for path, field in ((self.batch.parent / 'registration.json', 'registered_at'),
+                            (self.root / study.PARENT / 'freezes' / '1.json', 'recorded_at')):
+            with self.subTest(field=field):
+                previous = study.read(path)
+                value = dict(previous, **{field: later})
+                write(path, signed(value) if 'record_sha256' in value else value)
+                try:
+                    with self.assertRaisesRegex(ValueError, 'later than preflight'):
+                        self.collect()
+                finally:
+                    write(path, previous)
+        self.fetch.assert_not_called()
+        self.assertFalse(self.out.exists())
+
+    def test_archived_default_run_cannot_satisfy_explicit_new_gate(self):
+        old = quotes.collect(self.root, self.out, fetcher=self.fetch)
+        del old['collection_settings']
+        write(self.out / 'coverage.json', old)
+        self.fetch.reset_mock()
+        self.assertEqual(quotes.collect(self.root, self.out, fetcher=self.fetch), old)
+        with self.assertRaisesRegex(ValueError, 'different collection settings'):
+            self.collect()
+        self.fetch.assert_not_called()
