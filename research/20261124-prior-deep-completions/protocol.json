@@ -1,0 +1,40 @@
+{
+  "schema": "prior-deep-completions-study-1",
+  "registered_at": "2026-11-24T06:32:20+00:00",
+  "research_only": true,
+  "signal": "Understat native deep/deep_allowed, verified reciprocal home/away team-history fields; counts of entries into dangerous attacking areas, not shots or probability.",
+  "scope_file": "configs/analysis-scope.json",
+  "scope_sha256": "eed6fcdfe58e94646767c5f081a2a80d991fb3c33e5fc3dd86bb92e05bdd4fff",
+  "covered_source": {
+    "eng.1": "EPL",
+    "esp.1": "La_liga",
+    "ger.1": "Bundesliga",
+    "ita.1": "Serie_A",
+    "fra.1": "Ligue_1"
+  },
+  "base_git": "6903c8b6b0b7eb7c7cbef1af54eb2908e292e2c9",
+  "data_git": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+  "input_backup_commit": "466fd626a47481e70b176a9a69c58224d7d1bf63",
+  "input_backup_time": "2026-11-02T03:09:28Z",
+  "backup_file_index_git_blob": "7f7e9ed63a734cc50e9d0a81e8d83dc0d20ee7f0",
+  "backup_index_sha256": "b1a80f06cdd236ffaf17e57aa3533d6a52b358b64278f17104075a659796e445",
+  "r7_sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d",
+  "r7_protected_issues": 192,
+  "prior61_sha256": "7d13c98afaeab3efffd6a5bcfe7ead014c9a9bd0fd27d178390436de81eb586d",
+  "training_season_start": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "diagnostic_season_start": 2025,
+  "source_timed_season_start": 2026,
+  "roster": "All unplayed fixtures in the October 15 vintage with scheduled calendar date 2026-11-02 through 2026-11-21 inclusive in covered competition regular seasons. Resolve ordered clubs and verified 90min independently; actual kickoff must also lie after backup and before 2026-11-22T00:00:00Z. R7 and the 61 prior IDs excluded even when otherwise eligible. No substitute games; log missing/changed dates, duplicates or unsettled rows. Earlier diagnostic: entire 2025/26 verified historical season using original source dates, no target-day information.",
+  "cutoff": "Same kickoff minus 60 min for both arms. On strict window use only the fixed October 15 unplayed schedule and those already-finished form games available in that same hash-verified edition. Both October capture and November 2 immutable bound must precede the target cutoff. In training/2025 diagnostic, simulate earlier complete match days, publication timestamps unknown. Original strength inputs contain no odds.",
+  "base": "For each competition separately, use runtime score_form.summarize/features on last six prior same-season league fixtures for each team, full goals and xG, 4-match shrinkage, venue and capped days-gap from existing functions; PoissonRegressor(alpha=0.01, max_iter=1000, tol=1e-9) on two team sides with observed goals. Independent Poisson 25x25; both arms use identical score ranking, WDL and actual O/U selector.",
+  "one_change": "Keep base coefficients frozen. For attacking team take prior 6 match deep-for and opponent deep-allowed, each smoothed with 4 games at 6.0; take mean of their log1p values. Centre and divide by SD from eligible training sides only. Fit one extra coefficient per competition by summed Poisson log likelihood with fixed base log-rate offset, 0.5*beta^2 penalty, bounded [-0.5,+0.5]. Require at least 3 valid prior pairs of reciprocal source counts per team for any adjustment in a fixture; otherwise both sides retain base. No later parameter search, reweighting, refit or selection.",
+  "grading": "Matrix Top1/three distinct most probable scores; full matrix WDL. Actual user-visible first/three and pre-ranked best-three all-hit require original real delivery evidence; shadow replay never grades as such. Strict totals use one pre-cutoff full match main line and both sides at one named book. Prefer documented same-capture provider quote time/pregame capture, then report captured-only separately; eligible priority Pinnacle, Bet365, then lexical, latest eligible packet at one book. No surrogate 2.5, closing without clock is excluded. Common O/U denominator excludes pushes; show both arms full five outcomes. Earlier diagnostic scores/WDL available; historical O/U with no qualifying capture not used.",
+  "output": "Paired counts, flips, coverage, log score in nats, match-date cluster bootstrap 1000 draws seed 20261124. Missing scopes and delivery evidence explicitly separate. Decision: only consider further separate prospective examination if both date-separated samples gain matrix Top1 and strict sample improves score log loss, without observed WDL or strict total deterioration. A sign-changing 95% interval cannot support a proven gain. No automatic registration/promotion regardless, no deployment.",
+  "boundaries": "No R7 or #63 re-fit, production routes, weights, first issues, existing queue, supplier calls or deployment. All results historical; never label as a fresh issued prediction."
+}
