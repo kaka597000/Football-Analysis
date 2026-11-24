@@ -11,6 +11,10 @@ DISPLAY_TRACK = 'comprehensive'
 ABSTAIN_TEXT = '第一比分待定；两项备选待定'
 
 
+class DeliveryAfterDeadline(ValueError):
+    """A confirmed service send was at or after this fixture's frozen kickoff."""
+
+
 def valid_score(value):
     return isinstance(value, str) and re.fullmatch(r'(?:0|[1-9][0-9]?)-(?:0|[1-9][0-9]?)', value) is not None
 
@@ -60,8 +64,92 @@ def prepare_authored_row(payload, fixture):
     return attach_display(body, first, alternatives)[0]
 
 
-def validate_display(payload):
+def approved_scope_for(rows, fixture):
+    """Select this cohort's row from the issuer's independently retained scope snapshot."""
+    if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
+        raise ValueError('approved stages must be an array of scope records')
+    matches = [row for row in rows if row.get('cohort') == fixture['cohort']]
+    if len(matches) > 1:
+        raise ValueError('a unique approved stage scope for the fixture cohort is required')
+    return matches[0] if matches else None
+
+
+def require_authored_stage(fixture, scope):
+    """Use the author's independently approved scope row; competition membership alone is insufficient."""
+    from automation.collector import PHASED_RESEARCH, REGULAR
+    from competition_scope import require
+
+    require(fixture)
+    identities = (fixture.get(k) for k in ('match_id', 'competition', 'cohort', 'stage', 'home', 'away'))
+    if (fixture.get('identity_verified') is not True
+            or fixture.get('stage_verified') is False
+            or not all(isinstance(value, str) and value.strip() for value in identities)
+            or fixture['home'] == fixture['away'] or fixture.get('score_basis') != 'regulation_90'):
+        raise ValueError('verified regulation-time fixture identity required')
+    if fixture.get('phase') is not None and str(fixture['phase']).casefold() != 'prematch':
+        raise ValueError('authored handoff requires a prematch fixture')
+    if (not isinstance(scope, dict) or not isinstance(scope.get('stages'), list)
+            or (scope.get('cohort'), scope.get('competition')) != (fixture['cohort'], fixture['competition'])):
+        raise ValueError('approved stages for the same competition and cohort required')
+    require(scope)
+    competition, cohort, stage = fixture['competition'], fixture['cohort'], fixture['stage']
+    token = stage
+    if competition in REGULAR and (cohort != competition or stage not in ('regular', 'regular-season')):
+        raise ValueError('fixture stage outside the approved regular league season')
+    if competition == 'uefa.champions':
+        token = 'NEW_FORMAT:league_phase'
+        if cohort != f'{competition}:{token}' or stage not in ('league_phase', token):
+            raise ValueError('fixture stage outside the approved UEFA era')
+    elif competition == 'afc.champions':
+        if cohort != f'{competition}:ELITE:league_phase' or stage != 'league_phase':
+            raise ValueError('fixture stage outside the approved AFC era')
+    elif competition in PHASED_RESEARCH:
+        from research_program.phase_classification import PHASES
+        if stage not in PHASES[competition]:
+            raise ValueError('fixture stage outside the recognized competition phases')
+    elif competition == 'uefa.nations':
+        from research_program.nations_phase import PHASES
+        if stage not in PHASES:
+            raise ValueError('fixture stage outside the recognized Nations League phases')
+    if token in scope['stages']:
+        return
+    # Specialist scope rows may carry the exact full cohort suffix as their stage token.
+    qualified = cohort.removeprefix(competition + ':')
+    if (competition not in ('uefa.champions', 'afc.champions') and qualified.endswith(':' + stage)
+            and qualified in scope['stages']):
+        return
+    raise ValueError('fixture stage outside the approved cohort stages')
+
+
+def bind_authored_row(payload, fixture, scope):
+    """Keep the score list consumed by the normal batch packager in the signed payload."""
+    require_authored_stage(fixture, scope)
+    if not isinstance(payload.get('displayed_scores'), list):
+        raise ValueError('an explicit analyst score list is required')
+    display = prepare_authored_row(payload, fixture)['displayed_scores']
+    if (('authored_display' in payload and payload['authored_display'] != display)
+            or ('authored_stage_scope' in payload and payload['authored_stage_scope'] != scope)):
+        raise ValueError('previously bound author display differs')
+    return dict(payload, authored_display=display, authored_stage_scope=deepcopy(scope))
+
+
+def validate_display(payload, *, allow_missing=False):
+    """Return the canonical display. Unsigned historical rows have no display to score."""
     display = payload.get('displayed_scores')
+    authored = 'authored_display' in payload or 'authored_stage_scope' in payload
+    if authored and not isinstance(display, list):
+        raise ValueError('authored display requires the retained table scores')
+    if allow_missing and not authored and (not isinstance(display, dict) or display.get('schema') != SCHEMA):
+        return None
+    if isinstance(display, list):
+        bound = payload.get('authored_display')
+        if not isinstance(bound, dict) or payload.get('selection_scope') != 'active_reference':
+            raise ValueError('explicit comprehensive display required')
+        alternatives = bound.get('alternatives')
+        if (not isinstance(alternatives, list) or display != [bound.get('first'), *alternatives]
+                or payload.get('alternates') != alternatives):
+            raise ValueError('bound display differs from the retained table scores')
+        display = bound
     if not isinstance(display, dict) or display.get('schema') != SCHEMA:
         raise ValueError('explicit comprehensive display required')
     if payload.get('selection_scope', 'active_reference') != 'active_reference':
@@ -87,7 +175,16 @@ def display_slot(match_id):
 def delivery_request(record):
     """Build the exact message and binding from the verified frozen record."""
     fixture = record['fixture']
-    display = validate_display(record['payload'])
+    payload = record['payload']
+    display = validate_display(payload)
+    if isinstance(payload['displayed_scores'], list):
+        if (record['stage'] != 'prematch' or record['track'] != DISPLAY_TRACK
+                or record['match_id'] != fixture['match_id']):
+            raise ValueError('authored display requires the same comprehensive prematch fixture')
+        require_authored_stage(fixture, payload.get('authored_stage_scope'))
+        # Recheck the signed row, its kickoff, and its order when reading the request.
+        if prepare_authored_row(payload, fixture)['displayed_scores'] != display:
+            raise ValueError('bound author row differs from the frozen fixture')
     stamp = aware(record['recorded_at']).astimezone(timezone(timedelta(hours=8)))
     text = (f"赛事 {record['match_id']}\n{display['text']}\n"
             f"冻结 {record['freeze_id']}（北京时间 {stamp:%Y-%m-%d %H:%M:%S}）")
@@ -99,13 +196,23 @@ def delivery_request(record):
 def verify_delivery(confirmation, request, record, *, at):
     """Check the first visible receipt from the configured delivery authority."""
     if (confirmation.get('status') != 'DELIVERED'
+            or confirmation.get('first_visible_verified', True) is not True
             or confirmation.get('request_sha256') != digest(request)
             or confirmation.get('text') != request['text']
+            or any(k in confirmation and confirmation[k] != request[k] for k in
+                   ('slot', 'match_id', 'track', 'revision', 'freeze_id', 'freeze_sha256'))
             or not isinstance(confirmation.get('message_id'), str)
             or not confirmation['message_id'].strip()):
         raise ValueError('delivery does not match the displayed freeze')
+    if 'ordered_scores' in confirmation:
+        display = validate_display(record['payload'])
+        expected = [display['first'], *display['alternatives']] if display['status'] == 'ISSUED' else []
+        if confirmation['ordered_scores'] != expected:
+            raise ValueError('delivery order differs from the displayed freeze')
     delivered_at = aware(confirmation['delivered_at'])
     recorded_at = aware(record['recorded_at'])
-    if not recorded_at <= delivered_at <= at or delivered_at >= aware(request['deadline']):
+    if not recorded_at <= delivered_at <= at:
         raise ValueError('delivery was not confirmed before the frozen kickoff')
+    if delivered_at >= aware(request['deadline']):
+        raise DeliveryAfterDeadline('delivery was not confirmed before the frozen kickoff')
     return delivered_at
