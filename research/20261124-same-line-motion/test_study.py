@@ -64,3 +64,17 @@ class PipelineTests(unittest.TestCase):
             stored = json.loads((out/'inputs.jsonl').read_bytes())
             self.assertEqual(stored['excluded'], reason)
             self.assertEqual(stored['cutoff_at'], first['cutoff_at'])
+
+    def test_revision_only_reference_cannot_hide_an_authenticated_original(self):
+        source = dict(id='fotmob:2', date='2026-11-09', provider='DraftKings', competition='eng.1',
+                      cutoff_at='2026-11-09T10:00:00Z', kickoff_at='2026-11-09T14:00:00Z',
+                      source_ids={'espn_event_id':'espn:22'}, excluded='missing_original_body')
+        revision = dict(source, id='espn:22', cutoff_at=None, recorded_at='2026-11-09T09:59:00Z',
+                        excluded='unavailable_unambiguous_original_first')
+        inputs = self.file('versions', [revision, source])
+        for directory, ids, expected in [('keep', set(), 'missing_original_body'),
+                                         ('protected', {'espn:22'}, 'excluded_R7')]:
+            out = self.root/directory
+            assemble([inputs], ids, out)
+            first = json.loads((out/'inputs.jsonl').read_bytes())
+            self.assertEqual((first['id'], first['excluded']), ('fotmob:2', expected))

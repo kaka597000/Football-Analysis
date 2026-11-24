@@ -16,7 +16,12 @@ from study import RULES, packed, write
 
 
 ARCHIVES = {'20261111-jleague-cup-prematch': 'evidence-and-freezes.tar.gz',
+            '20261112-nations-prematch': 'nations-prematch-evidence.tar.gz',
+            '20261113-nations-evening': 'nations-evening-evidence.tar.gz',
+            '20261114-nations-prematch': 'nations-prematch-evidence.tar.gz',
             '20261115-evening-scope': 'evening-scope-evidence.tar.gz',
+            '20261115-remaining-nations-brazil': 'remaining-evidence.tar.gz',
+            '20261116-nations-prematch-2044': 'nations-prematch-evidence.tar.gz',
             '20261117-internationals-prematch': None,
             '20261117-tonight-analysis': 'tonight-evidence.tar.gz'}
 
@@ -62,12 +67,12 @@ def slots(repo, name, archive):
             row['excluded'] = 'outside_competition_scope'
         elif f['competition'] == 'jpn.league_cup':
             row['excluded'] = 'no_bound_ESPN_full_match_market'
-        elif f['competition'] == 'uefa.nations':
+        elif f['competition'] in ('uefa.nations', 'bra.1'):
             evidence = f.get('phase_evidence') or {}
             digest = evidence.get('source_sha256')
             url = urlsplit(evidence.get('source_url', ''))
             if (digest not in bodies or url.hostname != 'site.api.espn.com'
-                    or not url.path.endswith('/soccer/uefa.nations/summary')
+                    or not url.path.endswith('/soccer/'+f['competition']+'/summary')
                     or parse_qs(url.query).get('event') != [mid.removeprefix('espn:')]
                     or not evidence.get('query_time') or aware(evidence['query_time']) >= aware(f['cutoff_at'])):
                 row['excluded'] = 'missing_bound_original_source'
@@ -76,14 +81,16 @@ def slots(repo, name, archive):
                 h = body['header']
                 comp, = h['competitions']
                 teams = {c['homeAway']: 'espn:'+str(c['team']['id']) for c in comp['competitors']}
+                stage_ok = (bool(re.fullmatch(r'uefa\.nations:[ABCD]:league-phase', f['cohort']))
+                            and f['stage'] == 'league-phase' and h['season']['name'].casefold().endswith(', league phase')
+                            if f['competition'] == 'uefa.nations' else f['cohort'] == 'bra.1' and f['stage'] == 'regular')
                 if (str(h['id']) != mid.removeprefix('espn:') or comp['id'] != h['id']
                         or not f.get('identity_verified') or f.get('gender') not in ('men','male')
                         or f.get('age') != 'senior' or f.get('score_basis') != 'regulation_90'
                         or not aware(f['cutoff_at']) <= aware(r['recorded_at']) < aware(f['kickoff_at'])
-                        or h['league']['slug'] != 'uefa.nations' or comp['status']['type']['state'] != 'pre'
+                        or h['league']['slug'] != f['competition'] or comp['status']['type']['state'] != 'pre'
                         or aware(comp['date']) != aware(f['kickoff_at']) or teams != {k:f[k] for k in ('home','away')}
-                        or not re.fullmatch(r'uefa\.nations:[ABCD]:league-phase', f['cohort'])
-                        or f['stage'] != 'league-phase' or not h['season']['name'].casefold().endswith(', league phase')):
+                        or not stage_ok):
                     row['excluded'] = 'unverified_native_identity_or_stage'
                 else:
                     row.update(project_quote(body.get('odds')), capture_at=evidence['query_time'], raw_sha256=digest)

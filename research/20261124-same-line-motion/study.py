@@ -173,6 +173,9 @@ def seal(panel, inputs, fitted, transfer, out):
     lock = dict(panel=panel, fit_panel=fit_panel, beta=beta, listed=sum(tally.values()), status=tally,
                 applicable_days=len(days), fit_sha256=sha(fitted), protocol_sha256=rule, input_sha256=sha(inputs),
                 forecasts_sha256=sha(out/'forecasts.jsonl'), transfer_sha256=sha(transfer) if transfer else None)
+    if panel == 'native':
+        # Timestamp of protocol commit 2c57739. Results may arrive after kickoff-window close.
+        lock['result_cutoff_at'] = '2026-11-24T11:26:32Z'
     save(out/'lock.json', lock)
     return lock
 
@@ -220,6 +223,8 @@ def grade(panel, inputs, labels, lockpath, out):
             seen['no_pair'] += 1
             continue
         score = observed_score(row, outcomes.get(key), panel, False)
+        if score is not None and panel == 'native' and aware(outcomes[key]['observed_at']) >= aware(lock['result_cutoff_at']):
+            raise ValueError('outcome observed after the registered evidence snapshot')
         if score is None:
             seen['missing_outcome'] += 1
             continue

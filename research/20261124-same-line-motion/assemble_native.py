@@ -24,7 +24,8 @@ def espn_team(value):
 
 def aliases(row):
     values = {row['id']}
-    for provider, number in (row.get('source_ids') or {}).items():
+    for field, number in (row.get('source_ids') or {}).items():
+        provider = 'espn' if field == 'espn_event_id' else field
         if number and provider in ('espn', 'fotmob', 'kleague'):
             text = str(number).removeprefix(provider + ':')
             values.add(provider + ':' + text)
@@ -68,7 +69,8 @@ def assemble(paths, r7, out):
     allowed = {r['code'] for r in policy()['competitions']}
     original_by_key, unique, batch_rows = {}, {}, Counter()
     earlier = sorted((json.loads(line) for path in paths for line in path.read_bytes().splitlines()),
-                     key=lambda r: (original_order(r), r['id'], not bool(r.get('latest_h2h'))))
+                     key=lambda r: (r.get('excluded') == 'unavailable_unambiguous_original_first',
+                                    original_order(r), r['id'], not bool(r.get('latest_h2h'))))
     for row in earlier:
         if {'score', 'result', 'home_goals', 'away_goals'} & row.keys() or row['provider'] != 'DraftKings':
             raise ValueError('unexpected target or bookmaker in input-only projection')
