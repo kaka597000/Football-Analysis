@@ -1,6 +1,7 @@
 """Verify evidence from only the requested completed window; earlier labels must be known by fit time."""
 
 import json
+from pathlib import PurePosixPath
 from urllib.parse import parse_qs, urlsplit
 
 from archive_inputs import Bundle
@@ -19,7 +20,7 @@ def certified(repo, roster, *, training):
         if training and arc.at > ANCHOR:
             raise ValueError('training label bundle did not exist by the fit origin')
         for name in arc.files:
-            if not name.endswith('/verified-results.json'):
+            if PurePosixPath(name).name != 'verified-results.json':
                 continue
             for label in arc.value(name):
                 mid = label['match_id']

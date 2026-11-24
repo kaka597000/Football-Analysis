@@ -1,0 +1,2601 @@
+{
+  "panel": {
+    "registered": 26,
+    "certified": 26,
+    "first_comprehensive": 24,
+    "expert": 16,
+    "positive_weight": 14,
+    "original_lines": 21,
+    "original_test": {
+      "n": 26,
+      "score_log_loss": 3.0752160894526606,
+      "states": {
+        "FULL_WIN": 8,
+        "HALF_WIN": 1,
+        "PUSH": 2,
+        "HALF_LOSS": 1,
+        "FULL_LOSS": 9
+      },
+      "top1": {
+        "n": 26,
+        "hits": 2
+      },
+      "top3": {
+        "n": 26,
+        "hits": 7
+      },
+      "wdl": {
+        "n": 26,
+        "hits": 16
+      },
+      "total": {
+        "n": 19,
+        "hits": 8
+      }
+    },
+    "tier_pool": {
+      "n": 26,
+      "score_log_loss": 2.9979202055867535,
+      "states": {
+        "FULL_WIN": 8,
+        "HALF_WIN": 0,
+        "PUSH": 2,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 9
+      },
+      "top1": {
+        "n": 26,
+        "hits": 2
+      },
+      "top3": {
+        "n": 26,
+        "hits": 8
+      },
+      "wdl": {
+        "n": 26,
+        "hits": 18
+      },
+      "total": {
+        "n": 19,
+        "hits": 8
+      }
+    },
+    "pooled_ablation": {
+      "n": 26,
+      "score_log_loss": 2.9743005836007703,
+      "states": {
+        "FULL_WIN": 9,
+        "HALF_WIN": 0,
+        "PUSH": 2,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 8
+      },
+      "top1": {
+        "n": 26,
+        "hits": 3
+      },
+      "top3": {
+        "n": 26,
+        "hits": 8
+      },
+      "wdl": {
+        "n": 26,
+        "hits": 18
+      },
+      "total": {
+        "n": 19,
+        "hits": 9
+      }
+    },
+    "market_reference": {
+      "n": 16,
+      "score_log_loss": 3.0076689430977317,
+      "states": {
+        "FULL_WIN": 5,
+        "HALF_WIN": 0,
+        "PUSH": 2,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 7
+      },
+      "top1": {
+        "n": 16,
+        "hits": 1
+      },
+      "top3": {
+        "n": 16,
+        "hits": 3
+      },
+      "wdl": {
+        "n": 16,
+        "hits": 13
+      },
+      "total": {
+        "n": 14,
+        "hits": 5
+      }
+    },
+    "tier_pool_minus_original_test": {
+      "top1": {
+        "n": 26,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1,
+        "two_sided_exact_p": null
+      },
+      "top3": {
+        "n": 26,
+        "gained": 1,
+        "lost": 0,
+        "changed": 8
+      },
+      "wdl": {
+        "n": 26,
+        "gained": 2,
+        "lost": 0,
+        "changed": 2
+      },
+      "total": {
+        "n": 19,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1
+      }
+    },
+    "tier_pool_minus_pooled_ablation": {
+      "top1": {
+        "n": 26,
+        "gained": 0,
+        "lost": 1,
+        "changed": 3,
+        "two_sided_exact_p": 1.0
+      },
+      "top3": {
+        "n": 26,
+        "gained": 0,
+        "lost": 0,
+        "changed": 5
+      },
+      "wdl": {
+        "n": 26,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 19,
+        "gained": 0,
+        "lost": 1,
+        "changed": 1
+      }
+    },
+    "tier_pool_minus_market_reference": {
+      "top1": {
+        "n": 16,
+        "gained": 0,
+        "lost": 1,
+        "changed": 9,
+        "two_sided_exact_p": 1.0
+      },
+      "top3": {
+        "n": 16,
+        "gained": 3,
+        "lost": 1,
+        "changed": 15
+      },
+      "wdl": {
+        "n": 16,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 14,
+        "gained": 2,
+        "lost": 3,
+        "changed": 5
+      }
+    }
+  },
+  "common_expert": {
+    "registered": 16,
+    "certified": 16,
+    "first_comprehensive": 16,
+    "expert": 16,
+    "positive_weight": 14,
+    "original_lines": 16,
+    "original_test": {
+      "n": 16,
+      "score_log_loss": 3.270333174471816,
+      "states": {
+        "FULL_WIN": 4,
+        "HALF_WIN": 1,
+        "PUSH": 2,
+        "HALF_LOSS": 1,
+        "FULL_LOSS": 8
+      },
+      "top1": {
+        "n": 16,
+        "hits": 0
+      },
+      "top3": {
+        "n": 16,
+        "hits": 4
+      },
+      "wdl": {
+        "n": 16,
+        "hits": 11
+      },
+      "total": {
+        "n": 14,
+        "hits": 4
+      }
+    },
+    "tier_pool": {
+      "n": 16,
+      "score_log_loss": 3.144727363189717,
+      "states": {
+        "FULL_WIN": 4,
+        "HALF_WIN": 0,
+        "PUSH": 2,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 8
+      },
+      "top1": {
+        "n": 16,
+        "hits": 0
+      },
+      "top3": {
+        "n": 16,
+        "hits": 5
+      },
+      "wdl": {
+        "n": 16,
+        "hits": 13
+      },
+      "total": {
+        "n": 14,
+        "hits": 4
+      }
+    },
+    "pooled_ablation": {
+      "n": 16,
+      "score_log_loss": 3.106345477462495,
+      "states": {
+        "FULL_WIN": 5,
+        "HALF_WIN": 0,
+        "PUSH": 2,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 7
+      },
+      "top1": {
+        "n": 16,
+        "hits": 1
+      },
+      "top3": {
+        "n": 16,
+        "hits": 5
+      },
+      "wdl": {
+        "n": 16,
+        "hits": 13
+      },
+      "total": {
+        "n": 14,
+        "hits": 5
+      }
+    },
+    "market_reference": {
+      "n": 16,
+      "score_log_loss": 3.0076689430977317,
+      "states": {
+        "FULL_WIN": 5,
+        "HALF_WIN": 0,
+        "PUSH": 2,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 7
+      },
+      "top1": {
+        "n": 16,
+        "hits": 1
+      },
+      "top3": {
+        "n": 16,
+        "hits": 3
+      },
+      "wdl": {
+        "n": 16,
+        "hits": 13
+      },
+      "total": {
+        "n": 14,
+        "hits": 5
+      }
+    },
+    "tier_pool_minus_original_test": {
+      "top1": {
+        "n": 16,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1,
+        "two_sided_exact_p": null
+      },
+      "top3": {
+        "n": 16,
+        "gained": 1,
+        "lost": 0,
+        "changed": 8
+      },
+      "wdl": {
+        "n": 16,
+        "gained": 2,
+        "lost": 0,
+        "changed": 2
+      },
+      "total": {
+        "n": 14,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1
+      }
+    },
+    "tier_pool_minus_pooled_ablation": {
+      "top1": {
+        "n": 16,
+        "gained": 0,
+        "lost": 1,
+        "changed": 3,
+        "two_sided_exact_p": 1.0
+      },
+      "top3": {
+        "n": 16,
+        "gained": 0,
+        "lost": 0,
+        "changed": 5
+      },
+      "wdl": {
+        "n": 16,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 14,
+        "gained": 0,
+        "lost": 1,
+        "changed": 1
+      }
+    },
+    "tier_pool_minus_market_reference": {
+      "top1": {
+        "n": 16,
+        "gained": 0,
+        "lost": 1,
+        "changed": 9,
+        "two_sided_exact_p": 1.0
+      },
+      "top3": {
+        "n": 16,
+        "gained": 3,
+        "lost": 1,
+        "changed": 15
+      },
+      "wdl": {
+        "n": 16,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 14,
+        "gained": 2,
+        "lost": 3,
+        "changed": 5
+      }
+    }
+  },
+  "original_fallback": {
+    "registered": 12,
+    "certified": 12,
+    "first_comprehensive": 10,
+    "expert": 2,
+    "positive_weight": 0,
+    "original_lines": 7,
+    "original_test": {
+      "n": 12,
+      "score_log_loss": 2.6969513072009517,
+      "states": {
+        "FULL_WIN": 4,
+        "HALF_WIN": 0,
+        "PUSH": 1,
+        "HALF_LOSS": 0,
+        "FULL_LOSS": 2
+      },
+      "top1": {
+        "n": 12,
+        "hits": 2
+      },
+      "top3": {
+        "n": 12,
+        "hits": 4
+      },
+      "wdl": {
+        "n": 12,
+        "hits": 6
+      },
+      "total": {
+        "n": 6,
+        "hits": 4
+      }
+    },
+    "tier_pool": {
+      "n": 12,
+      "score_log_loss": 2.6969513072009517,
+      "states": {
+        "FULL_WIN": 4,
+        "HALF_WIN": 0,
+        "PUSH": 1,
+        "HALF_LOSS": 0,
+        "FULL_LOSS": 2
+      },
+      "top1": {
+        "n": 12,
+        "hits": 2
+      },
+      "top3": {
+        "n": 12,
+        "hits": 4
+      },
+      "wdl": {
+        "n": 12,
+        "hits": 6
+      },
+      "total": {
+        "n": 6,
+        "hits": 4
+      }
+    },
+    "pooled_ablation": {
+      "n": 12,
+      "score_log_loss": 2.7125181350067833,
+      "states": {
+        "FULL_WIN": 4,
+        "HALF_WIN": 0,
+        "PUSH": 1,
+        "HALF_LOSS": 0,
+        "FULL_LOSS": 2
+      },
+      "top1": {
+        "n": 12,
+        "hits": 2
+      },
+      "top3": {
+        "n": 12,
+        "hits": 4
+      },
+      "wdl": {
+        "n": 12,
+        "hits": 6
+      },
+      "total": {
+        "n": 6,
+        "hits": 4
+      }
+    },
+    "market_reference": {
+      "n": 2,
+      "score_log_loss": 2.5633222831138953,
+      "states": {
+        "FULL_WIN": 1,
+        "HALF_WIN": 0,
+        "PUSH": 1,
+        "HALF_LOSS": 0,
+        "FULL_LOSS": 0
+      },
+      "top1": {
+        "n": 2,
+        "hits": 0
+      },
+      "top3": {
+        "n": 2,
+        "hits": 0
+      },
+      "wdl": {
+        "n": 2,
+        "hits": 1
+      },
+      "total": {
+        "n": 1,
+        "hits": 1
+      }
+    },
+    "tier_pool_minus_original_test": {
+      "top1": {
+        "n": 12,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0,
+        "two_sided_exact_p": null
+      },
+      "top3": {
+        "n": 12,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "wdl": {
+        "n": 12,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 6,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      }
+    },
+    "tier_pool_minus_pooled_ablation": {
+      "top1": {
+        "n": 12,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1,
+        "two_sided_exact_p": null
+      },
+      "top3": {
+        "n": 12,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1
+      },
+      "wdl": {
+        "n": 12,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 6,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      }
+    },
+    "tier_pool_minus_market_reference": {
+      "top1": {
+        "n": 2,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1,
+        "two_sided_exact_p": null
+      },
+      "top3": {
+        "n": 2,
+        "gained": 1,
+        "lost": 0,
+        "changed": 2
+      },
+      "wdl": {
+        "n": 2,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 1,
+        "gained": 0,
+        "lost": 1,
+        "changed": 1
+      }
+    }
+  },
+  "positive_weight": {
+    "registered": 14,
+    "certified": 14,
+    "first_comprehensive": 14,
+    "expert": 14,
+    "positive_weight": 14,
+    "original_lines": 14,
+    "original_test": {
+      "n": 14,
+      "score_log_loss": 3.3994430456684106,
+      "states": {
+        "FULL_WIN": 4,
+        "HALF_WIN": 1,
+        "PUSH": 1,
+        "HALF_LOSS": 1,
+        "FULL_LOSS": 7
+      },
+      "top1": {
+        "n": 14,
+        "hits": 0
+      },
+      "top3": {
+        "n": 14,
+        "hits": 3
+      },
+      "wdl": {
+        "n": 14,
+        "hits": 10
+      },
+      "total": {
+        "n": 13,
+        "hits": 4
+      }
+    },
+    "tier_pool": {
+      "n": 14,
+      "score_log_loss": 3.2558935470602974,
+      "states": {
+        "FULL_WIN": 4,
+        "HALF_WIN": 0,
+        "PUSH": 1,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 7
+      },
+      "top1": {
+        "n": 14,
+        "hits": 0
+      },
+      "top3": {
+        "n": 14,
+        "hits": 4
+      },
+      "wdl": {
+        "n": 14,
+        "hits": 12
+      },
+      "total": {
+        "n": 13,
+        "hits": 4
+      }
+    },
+    "pooled_ablation": {
+      "n": 14,
+      "score_log_loss": 3.1986855395384737,
+      "states": {
+        "FULL_WIN": 5,
+        "HALF_WIN": 0,
+        "PUSH": 1,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 6
+      },
+      "top1": {
+        "n": 14,
+        "hits": 1
+      },
+      "top3": {
+        "n": 14,
+        "hits": 4
+      },
+      "wdl": {
+        "n": 14,
+        "hits": 12
+      },
+      "total": {
+        "n": 13,
+        "hits": 5
+      }
+    },
+    "market_reference": {
+      "n": 14,
+      "score_log_loss": 3.071147037381137,
+      "states": {
+        "FULL_WIN": 4,
+        "HALF_WIN": 0,
+        "PUSH": 1,
+        "HALF_LOSS": 2,
+        "FULL_LOSS": 7
+      },
+      "top1": {
+        "n": 14,
+        "hits": 1
+      },
+      "top3": {
+        "n": 14,
+        "hits": 3
+      },
+      "wdl": {
+        "n": 14,
+        "hits": 12
+      },
+      "total": {
+        "n": 13,
+        "hits": 4
+      }
+    },
+    "tier_pool_minus_original_test": {
+      "top1": {
+        "n": 14,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1,
+        "two_sided_exact_p": null
+      },
+      "top3": {
+        "n": 14,
+        "gained": 1,
+        "lost": 0,
+        "changed": 8
+      },
+      "wdl": {
+        "n": 14,
+        "gained": 2,
+        "lost": 0,
+        "changed": 2
+      },
+      "total": {
+        "n": 13,
+        "gained": 0,
+        "lost": 0,
+        "changed": 1
+      }
+    },
+    "tier_pool_minus_pooled_ablation": {
+      "top1": {
+        "n": 14,
+        "gained": 0,
+        "lost": 1,
+        "changed": 2,
+        "two_sided_exact_p": 1.0
+      },
+      "top3": {
+        "n": 14,
+        "gained": 0,
+        "lost": 0,
+        "changed": 4
+      },
+      "wdl": {
+        "n": 14,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 13,
+        "gained": 0,
+        "lost": 1,
+        "changed": 1
+      }
+    },
+    "tier_pool_minus_market_reference": {
+      "top1": {
+        "n": 14,
+        "gained": 0,
+        "lost": 1,
+        "changed": 8,
+        "two_sided_exact_p": 1.0
+      },
+      "top3": {
+        "n": 14,
+        "gained": 2,
+        "lost": 1,
+        "changed": 13
+      },
+      "wdl": {
+        "n": 14,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total": {
+        "n": 13,
+        "gained": 2,
+        "lost": 2,
+        "changed": 4
+      }
+    }
+  },
+  "by_tier": {
+    "A": {
+      "registered": 8,
+      "certified": 8,
+      "first_comprehensive": 8,
+      "expert": 6,
+      "positive_weight": 6,
+      "original_lines": 8,
+      "original_test": {
+        "n": 8,
+        "score_log_loss": 3.442564795472255,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 1,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 3
+        },
+        "top1": {
+          "n": 8,
+          "hits": 0
+        },
+        "top3": {
+          "n": 8,
+          "hits": 2
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 5
+        },
+        "total": {
+          "n": 8,
+          "hits": 4
+        }
+      },
+      "tier_pool": {
+        "n": 8,
+        "score_log_loss": 3.3646303255492835,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 3
+        },
+        "top1": {
+          "n": 8,
+          "hits": 0
+        },
+        "top3": {
+          "n": 8,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 6
+        },
+        "total": {
+          "n": 8,
+          "hits": 4
+        }
+      },
+      "pooled_ablation": {
+        "n": 8,
+        "score_log_loss": 3.3411198568007427,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 3
+        },
+        "top1": {
+          "n": 8,
+          "hits": 0
+        },
+        "top3": {
+          "n": 8,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 6
+        },
+        "total": {
+          "n": 8,
+          "hits": 4
+        }
+      },
+      "market_reference": {
+        "n": 6,
+        "score_log_loss": 3.2329743300406975,
+        "states": {
+          "FULL_WIN": 1,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 4
+        },
+        "top1": {
+          "n": 6,
+          "hits": 0
+        },
+        "top3": {
+          "n": 6,
+          "hits": 1
+        },
+        "wdl": {
+          "n": 6,
+          "hits": 5
+        },
+        "total": {
+          "n": 6,
+          "hits": 1
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 1,
+          "lost": 0,
+          "changed": 3
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 1,
+          "lost": 0,
+          "changed": 1
+        },
+        "total": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 6,
+          "gained": 0,
+          "lost": 0,
+          "changed": 3,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 6,
+          "gained": 2,
+          "lost": 0,
+          "changed": 6
+        },
+        "wdl": {
+          "n": 6,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 6,
+          "gained": 2,
+          "lost": 0,
+          "changed": 2
+        }
+      }
+    },
+    "B": {
+      "registered": 8,
+      "certified": 8,
+      "first_comprehensive": 8,
+      "expert": 2,
+      "positive_weight": 2,
+      "original_lines": 5,
+      "original_test": {
+        "n": 8,
+        "score_log_loss": 2.608345401108613,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 8,
+          "hits": 2
+        },
+        "top3": {
+          "n": 8,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 5
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "tier_pool": {
+        "n": 8,
+        "score_log_loss": 2.57276292738715,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 8,
+          "hits": 2
+        },
+        "top3": {
+          "n": 8,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 5
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "pooled_ablation": {
+        "n": 8,
+        "score_log_loss": 2.5527983168046138,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 8,
+          "hits": 2
+        },
+        "top3": {
+          "n": 8,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 5
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "market_reference": {
+        "n": 2,
+        "score_log_loss": 3.134668106957455,
+        "states": {
+          "FULL_WIN": 1,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 2,
+          "hits": 0
+        },
+        "top3": {
+          "n": 2,
+          "hits": 0
+        },
+        "wdl": {
+          "n": 2,
+          "hits": 2
+        },
+        "total": {
+          "n": 2,
+          "hits": 1
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 2
+        },
+        "wdl": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      }
+    },
+    "C": {
+      "registered": 8,
+      "certified": 8,
+      "first_comprehensive": 6,
+      "expert": 6,
+      "positive_weight": 6,
+      "original_lines": 6,
+      "original_test": {
+        "n": 8,
+        "score_log_loss": 3.3519010751163636,
+        "states": {
+          "FULL_WIN": 0,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 4
+        },
+        "top1": {
+          "n": 8,
+          "hits": 0
+        },
+        "top3": {
+          "n": 8,
+          "hits": 1
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 5
+        },
+        "total": {
+          "n": 5,
+          "hits": 0
+        }
+      },
+      "tier_pool": {
+        "n": 8,
+        "score_log_loss": 3.2142063961966,
+        "states": {
+          "FULL_WIN": 0,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 4
+        },
+        "top1": {
+          "n": 8,
+          "hits": 0
+        },
+        "top3": {
+          "n": 8,
+          "hits": 1
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 6
+        },
+        "total": {
+          "n": 5,
+          "hits": 0
+        }
+      },
+      "pooled_ablation": {
+        "n": 8,
+        "score_log_loss": 3.1575674623644874,
+        "states": {
+          "FULL_WIN": 1,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 3
+        },
+        "top1": {
+          "n": 8,
+          "hits": 1
+        },
+        "top3": {
+          "n": 8,
+          "hits": 1
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 6
+        },
+        "total": {
+          "n": 5,
+          "hits": 1
+        }
+      },
+      "market_reference": {
+        "n": 6,
+        "score_log_loss": 2.8881460548628044,
+        "states": {
+          "FULL_WIN": 2,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 2
+        },
+        "top1": {
+          "n": 6,
+          "hits": 1
+        },
+        "top3": {
+          "n": 6,
+          "hits": 2
+        },
+        "wdl": {
+          "n": 6,
+          "hits": 5
+        },
+        "total": {
+          "n": 5,
+          "hits": 2
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 4
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 1,
+          "lost": 0,
+          "changed": 1
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 1,
+          "changed": 2,
+          "two_sided_exact_p": 1.0
+        },
+        "top3": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 2
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 1,
+          "changed": 1
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 6,
+          "gained": 0,
+          "lost": 1,
+          "changed": 4,
+          "two_sided_exact_p": 1.0
+        },
+        "top3": {
+          "n": 6,
+          "gained": 0,
+          "lost": 1,
+          "changed": 5
+        },
+        "wdl": {
+          "n": 6,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 2,
+          "changed": 2
+        }
+      }
+    },
+    "D": {
+      "registered": 2,
+      "certified": 2,
+      "first_comprehensive": 2,
+      "expert": 2,
+      "positive_weight": 0,
+      "original_lines": 2,
+      "original_test": {
+        "n": 2,
+        "score_log_loss": 2.3665640760956546,
+        "states": {
+          "FULL_WIN": 0,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 2,
+          "hits": 0
+        },
+        "top3": {
+          "n": 2,
+          "hits": 1
+        },
+        "wdl": {
+          "n": 2,
+          "hits": 1
+        },
+        "total": {
+          "n": 1,
+          "hits": 0
+        }
+      },
+      "tier_pool": {
+        "n": 2,
+        "score_log_loss": 2.3665640760956546,
+        "states": {
+          "FULL_WIN": 0,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 2,
+          "hits": 0
+        },
+        "top3": {
+          "n": 2,
+          "hits": 1
+        },
+        "wdl": {
+          "n": 2,
+          "hits": 1
+        },
+        "total": {
+          "n": 1,
+          "hits": 0
+        }
+      },
+      "pooled_ablation": {
+        "n": 2,
+        "score_log_loss": 2.4599650429306417,
+        "states": {
+          "FULL_WIN": 0,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 2,
+          "hits": 0
+        },
+        "top3": {
+          "n": 2,
+          "hits": 1
+        },
+        "wdl": {
+          "n": 2,
+          "hits": 1
+        },
+        "total": {
+          "n": 1,
+          "hits": 0
+        }
+      },
+      "market_reference": {
+        "n": 2,
+        "score_log_loss": 2.5633222831138953,
+        "states": {
+          "FULL_WIN": 1,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 0
+        },
+        "top1": {
+          "n": 2,
+          "hits": 0
+        },
+        "top3": {
+          "n": 2,
+          "hits": 0
+        },
+        "wdl": {
+          "n": 2,
+          "hits": 1
+        },
+        "total": {
+          "n": 1,
+          "hits": 1
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "wdl": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 1,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        },
+        "wdl": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 1,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 2,
+          "gained": 1,
+          "lost": 0,
+          "changed": 2
+        },
+        "wdl": {
+          "n": 2,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 1,
+          "gained": 0,
+          "lost": 1,
+          "changed": 1
+        }
+      }
+    }
+  },
+  "by_date": {
+    "2026-11-15": {
+      "registered": 8,
+      "certified": 8,
+      "first_comprehensive": 6,
+      "expert": 6,
+      "positive_weight": 6,
+      "original_lines": 6,
+      "original_test": {
+        "n": 8,
+        "score_log_loss": 3.544593151317529,
+        "states": {
+          "FULL_WIN": 2,
+          "HALF_WIN": 1,
+          "PUSH": 1,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 2
+        },
+        "top1": {
+          "n": 8,
+          "hits": 0
+        },
+        "top3": {
+          "n": 8,
+          "hits": 1
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 5
+        },
+        "total": {
+          "n": 5,
+          "hits": 2
+        }
+      },
+      "tier_pool": {
+        "n": 8,
+        "score_log_loss": 3.475903458328675,
+        "states": {
+          "FULL_WIN": 2,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 2
+        },
+        "top1": {
+          "n": 8,
+          "hits": 0
+        },
+        "top3": {
+          "n": 8,
+          "hits": 2
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 6
+        },
+        "total": {
+          "n": 5,
+          "hits": 2
+        }
+      },
+      "pooled_ablation": {
+        "n": 8,
+        "score_log_loss": 3.450046370324843,
+        "states": {
+          "FULL_WIN": 2,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 2
+        },
+        "top1": {
+          "n": 8,
+          "hits": 0
+        },
+        "top3": {
+          "n": 8,
+          "hits": 2
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 6
+        },
+        "total": {
+          "n": 5,
+          "hits": 2
+        }
+      },
+      "market_reference": {
+        "n": 6,
+        "score_log_loss": 3.3922648715314683,
+        "states": {
+          "FULL_WIN": 1,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 3
+        },
+        "top1": {
+          "n": 6,
+          "hits": 0
+        },
+        "top3": {
+          "n": 6,
+          "hits": 0
+        },
+        "wdl": {
+          "n": 6,
+          "hits": 5
+        },
+        "total": {
+          "n": 5,
+          "hits": 1
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 1,
+          "lost": 0,
+          "changed": 4
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 1,
+          "lost": 0,
+          "changed": 1
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 6,
+          "gained": 0,
+          "lost": 0,
+          "changed": 4,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 6,
+          "gained": 2,
+          "lost": 0,
+          "changed": 6
+        },
+        "wdl": {
+          "n": 6,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 2,
+          "lost": 1,
+          "changed": 3
+        }
+      }
+    },
+    "2026-11-16": {
+      "registered": 10,
+      "certified": 10,
+      "first_comprehensive": 10,
+      "expert": 10,
+      "positive_weight": 8,
+      "original_lines": 10,
+      "original_test": {
+        "n": 10,
+        "score_log_loss": 3.077531788155645,
+        "states": {
+          "FULL_WIN": 2,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 6
+        },
+        "top1": {
+          "n": 10,
+          "hits": 0
+        },
+        "top3": {
+          "n": 10,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 10,
+          "hits": 7
+        },
+        "total": {
+          "n": 9,
+          "hits": 2
+        }
+      },
+      "tier_pool": {
+        "n": 10,
+        "score_log_loss": 2.9315142444953697,
+        "states": {
+          "FULL_WIN": 2,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 6
+        },
+        "top1": {
+          "n": 10,
+          "hits": 0
+        },
+        "top3": {
+          "n": 10,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 10,
+          "hits": 8
+        },
+        "total": {
+          "n": 9,
+          "hits": 2
+        }
+      },
+      "pooled_ablation": {
+        "n": 10,
+        "score_log_loss": 2.8907888977348803,
+        "states": {
+          "FULL_WIN": 3,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 5
+        },
+        "top1": {
+          "n": 10,
+          "hits": 1
+        },
+        "top3": {
+          "n": 10,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 10,
+          "hits": 8
+        },
+        "total": {
+          "n": 9,
+          "hits": 3
+        }
+      },
+      "market_reference": {
+        "n": 10,
+        "score_log_loss": 2.77691138603749,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 1,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 4
+        },
+        "top1": {
+          "n": 10,
+          "hits": 1
+        },
+        "top3": {
+          "n": 10,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 10,
+          "hits": 8
+        },
+        "total": {
+          "n": 9,
+          "hits": 4
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 10,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 10,
+          "gained": 0,
+          "lost": 0,
+          "changed": 4
+        },
+        "wdl": {
+          "n": 10,
+          "gained": 1,
+          "lost": 0,
+          "changed": 1
+        },
+        "total": {
+          "n": 9,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 10,
+          "gained": 0,
+          "lost": 1,
+          "changed": 2,
+          "two_sided_exact_p": 1.0
+        },
+        "top3": {
+          "n": 10,
+          "gained": 0,
+          "lost": 0,
+          "changed": 4
+        },
+        "wdl": {
+          "n": 10,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 9,
+          "gained": 0,
+          "lost": 1,
+          "changed": 1
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 10,
+          "gained": 0,
+          "lost": 1,
+          "changed": 5,
+          "two_sided_exact_p": 1.0
+        },
+        "top3": {
+          "n": 10,
+          "gained": 1,
+          "lost": 1,
+          "changed": 9
+        },
+        "wdl": {
+          "n": 10,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 9,
+          "gained": 0,
+          "lost": 2,
+          "changed": 2
+        }
+      }
+    },
+    "2026-11-17": {
+      "registered": 8,
+      "certified": 8,
+      "first_comprehensive": 8,
+      "expert": 0,
+      "positive_weight": 0,
+      "original_lines": 5,
+      "original_test": {
+        "n": 8,
+        "score_log_loss": 2.60294440420906,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 8,
+          "hits": 2
+        },
+        "top3": {
+          "n": 8,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 4
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "tier_pool": {
+        "n": 8,
+        "score_log_loss": 2.60294440420906,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 8,
+          "hits": 2
+        },
+        "top3": {
+          "n": 8,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 4
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "pooled_ablation": {
+        "n": 8,
+        "score_log_loss": 2.60294440420906,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 8,
+          "hits": 2
+        },
+        "top3": {
+          "n": 8,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 8,
+          "hits": 4
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "market_reference": {
+        "n": 0,
+        "score_log_loss": null,
+        "states": {
+          "FULL_WIN": 0,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 0
+        },
+        "top1": {
+          "n": 0,
+          "hits": null
+        },
+        "top3": {
+          "n": 0,
+          "hits": null
+        },
+        "wdl": {
+          "n": 0,
+          "hits": null
+        },
+        "total": {
+          "n": 0,
+          "hits": null
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "wdl": {
+          "n": 8,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 0,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 0,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "wdl": {
+          "n": 0,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 0,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      }
+    }
+  },
+  "actual_lines_by_book": {
+    "nova88": {
+      "registered": 5,
+      "certified": 5,
+      "first_comprehensive": 5,
+      "expert": 0,
+      "positive_weight": 0,
+      "original_lines": 5,
+      "original_test": {
+        "n": 5,
+        "score_log_loss": 2.6043680861803273,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 5,
+          "hits": 2
+        },
+        "top3": {
+          "n": 5,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 5,
+          "hits": 2
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "tier_pool": {
+        "n": 5,
+        "score_log_loss": 2.6043680861803273,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 5,
+          "hits": 2
+        },
+        "top3": {
+          "n": 5,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 5,
+          "hits": 2
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "pooled_ablation": {
+        "n": 5,
+        "score_log_loss": 2.6043680861803273,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 1
+        },
+        "top1": {
+          "n": 5,
+          "hits": 2
+        },
+        "top3": {
+          "n": 5,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 5,
+          "hits": 2
+        },
+        "total": {
+          "n": 5,
+          "hits": 4
+        }
+      },
+      "market_reference": {
+        "n": 0,
+        "score_log_loss": null,
+        "states": {
+          "FULL_WIN": 0,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 0
+        },
+        "top1": {
+          "n": 0,
+          "hits": null
+        },
+        "top3": {
+          "n": 0,
+          "hits": null
+        },
+        "wdl": {
+          "n": 0,
+          "hits": null
+        },
+        "total": {
+          "n": 0,
+          "hits": null
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "wdl": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "wdl": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 5,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 0,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 0,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "wdl": {
+          "n": 0,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 0,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        }
+      }
+    },
+    "pinnacle": {
+      "registered": 16,
+      "certified": 16,
+      "first_comprehensive": 16,
+      "expert": 16,
+      "positive_weight": 14,
+      "original_lines": 16,
+      "original_test": {
+        "n": 16,
+        "score_log_loss": 3.270333174471816,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 1,
+          "PUSH": 2,
+          "HALF_LOSS": 1,
+          "FULL_LOSS": 8
+        },
+        "top1": {
+          "n": 16,
+          "hits": 0
+        },
+        "top3": {
+          "n": 16,
+          "hits": 4
+        },
+        "wdl": {
+          "n": 16,
+          "hits": 11
+        },
+        "total": {
+          "n": 14,
+          "hits": 4
+        }
+      },
+      "tier_pool": {
+        "n": 16,
+        "score_log_loss": 3.144727363189717,
+        "states": {
+          "FULL_WIN": 4,
+          "HALF_WIN": 0,
+          "PUSH": 2,
+          "HALF_LOSS": 2,
+          "FULL_LOSS": 8
+        },
+        "top1": {
+          "n": 16,
+          "hits": 0
+        },
+        "top3": {
+          "n": 16,
+          "hits": 5
+        },
+        "wdl": {
+          "n": 16,
+          "hits": 13
+        },
+        "total": {
+          "n": 14,
+          "hits": 4
+        }
+      },
+      "pooled_ablation": {
+        "n": 16,
+        "score_log_loss": 3.106345477462495,
+        "states": {
+          "FULL_WIN": 5,
+          "HALF_WIN": 0,
+          "PUSH": 2,
+          "HALF_LOSS": 2,
+          "FULL_LOSS": 7
+        },
+        "top1": {
+          "n": 16,
+          "hits": 1
+        },
+        "top3": {
+          "n": 16,
+          "hits": 5
+        },
+        "wdl": {
+          "n": 16,
+          "hits": 13
+        },
+        "total": {
+          "n": 14,
+          "hits": 5
+        }
+      },
+      "market_reference": {
+        "n": 16,
+        "score_log_loss": 3.0076689430977317,
+        "states": {
+          "FULL_WIN": 5,
+          "HALF_WIN": 0,
+          "PUSH": 2,
+          "HALF_LOSS": 2,
+          "FULL_LOSS": 7
+        },
+        "top1": {
+          "n": 16,
+          "hits": 1
+        },
+        "top3": {
+          "n": 16,
+          "hits": 3
+        },
+        "wdl": {
+          "n": 16,
+          "hits": 13
+        },
+        "total": {
+          "n": 14,
+          "hits": 5
+        }
+      },
+      "tier_pool_minus_original_test": {
+        "top1": {
+          "n": 16,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1,
+          "two_sided_exact_p": null
+        },
+        "top3": {
+          "n": 16,
+          "gained": 1,
+          "lost": 0,
+          "changed": 8
+        },
+        "wdl": {
+          "n": 16,
+          "gained": 2,
+          "lost": 0,
+          "changed": 2
+        },
+        "total": {
+          "n": 14,
+          "gained": 0,
+          "lost": 0,
+          "changed": 1
+        }
+      },
+      "tier_pool_minus_pooled_ablation": {
+        "top1": {
+          "n": 16,
+          "gained": 0,
+          "lost": 1,
+          "changed": 3,
+          "two_sided_exact_p": 1.0
+        },
+        "top3": {
+          "n": 16,
+          "gained": 0,
+          "lost": 0,
+          "changed": 5
+        },
+        "wdl": {
+          "n": 16,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 14,
+          "gained": 0,
+          "lost": 1,
+          "changed": 1
+        }
+      },
+      "tier_pool_minus_market_reference": {
+        "top1": {
+          "n": 16,
+          "gained": 0,
+          "lost": 1,
+          "changed": 9,
+          "two_sided_exact_p": 1.0
+        },
+        "top3": {
+          "n": 16,
+          "gained": 3,
+          "lost": 1,
+          "changed": 15
+        },
+        "wdl": {
+          "n": 16,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total": {
+          "n": 14,
+          "gained": 2,
+          "lost": 3,
+          "changed": 5
+        }
+      }
+    }
+  },
+  "missing_certified_results": [],
+  "result_issues": {},
+  "grade_evidence_digest": "7e86aa62f3d6b5c6ea1ee1555848fe10e594783f5c88e943c566bdf7454549fe",
+  "quote_age_seconds": [
+    914.774489,
+    914.812479,
+    914.848958,
+    914.884958,
+    914.920396,
+    914.95693,
+    1441.41381,
+    1497.83586,
+    1533.31372,
+    1983.910708,
+    2319.716367,
+    2356.644732,
+    2356.706898,
+    2356.763167,
+    2356.836538,
+    2356.903214,
+    2356.955573,
+    2357.017591,
+    2357.08648,
+    2357.15286,
+    2357.216982
+  ],
+  "genuine_candidate_deliveries": {
+    "top1": 0,
+    "displayed_three": 0,
+    "preselected_batches": 0
+  },
+  "seal_commit": "eb2fe3e7abd83a738e51e3d459551771d8dbc5f8"
+}

@@ -14,7 +14,7 @@ from nations_league.elo_reference import ALIASES
 from research.analysis_freeze import aware, digest, verify
 from research_program.future_validation import quote_audit
 from research_program.market_baseline import _paired_capture, quote_only_matrices
-from research_program.three_arm_model import _matrix
+from research_program.three_arm_model import _matrix, score_picks
 
 HERE = Path(__file__).resolve().parent
 SOURCES = json.loads((HERE / 'sources.json').read_bytes())
@@ -97,7 +97,12 @@ def original_pairs(repo):
                 or artifact['version'] != t['version'] or aware(artifact['created_at']) > aware(f['cutoff_at'])
                 or t['input'] != f or t['matrix_hash'] != digest(t['matrix'])):
             raise ValueError('invalid original Nations freeze ' + mid)
-        rows[mid] = dict(f=f, tier=tier, date=f['kickoff_at'][:10], names=names, base=_matrix(t['matrix']),
+        base = _matrix(t['matrix'])
+        picks = score_picks(base)
+        if (picks['primary'] != t['primary']
+                or {'home':'主胜', 'draw':'平局', 'away':'客胜'}[picks['wdl']] != t['wdl_reference']):
+            raise ValueError('recomputed baseline differs from the issued Test decision ' + mid)
+        rows[mid] = dict(f=f, tier=tier, date=f['kickoff_at'][:10], names=names, base=base,
                          pair_sha=r['record_sha256'], cutoff=f['cutoff_at'], issue_sha=None,
                          book=None, line=None, market=None, gap='NO_ORIGINAL_COMPREHENSIVE_CUTOFF')
     if len(rows) != 52:
@@ -133,6 +138,8 @@ def the_odds_inputs(arc, row, fixture, quote):
     if len(events) != 1:
         raise ValueError('AMBIGUOUS_OR_MISSING_SIDED_PROVIDER_EVENT')
     event = events[0]
+    if quote.get('provider_match_id', event['id']) != event['id']:
+        raise ValueError('FROZEN_PROVIDER_ID_CONFLICT')
     books = [b for b in event['bookmakers'] if b['key'] == quote['bookmaker']]
     if len(books) != 1:
         raise ValueError('ORIGINAL_BOOK_MISSING')

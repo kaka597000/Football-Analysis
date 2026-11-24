@@ -17,6 +17,7 @@ from research_program.three_arm_model import _fit_weight, score_picks, top_three
 from research_program.three_arm_review import settle_ou
 
 RECIPE = 'WCPP-NATIONS-TIER-SUPPORTED-POOL-1'
+SEAL_COMMIT = 'eb2fe3e7abd83a738e51e3d459551771d8dbc5f8'
 STATES = ('FULL_WIN', 'HALF_WIN', 'PUSH', 'HALF_LOSS', 'FULL_LOSS')
 ARMS = ('original_test', 'tier_pool', 'pooled_ablation', 'market_reference')
 
@@ -43,6 +44,8 @@ def fit(rows, labels):
 
 def forecast(row, weights):
     base, market = row['base'], row['market']
+    if market is not None and market.shape != base.shape:
+        raise ValueError('the two experts must use the same score support')
     ready = aware(row['cutoff']) >= ANCHOR and market is not None
     w = weights['weights'][row['tier']] if ready else 0.
     pooled = weights['global_weight'] if ready else 0.
@@ -159,10 +162,10 @@ def main():
     parser.add_argument('--out',type=Path,required=True)
     parser.add_argument('--seal-commit')
     args = parser.parse_args()
+    if args.command == 'grade' and args.seal_commit != SEAL_COMMIT:
+        parser.error('grade requires the published pre-grading --seal-commit ' + SEAL_COMMIT)
     locked, late, predictions = build(args.data)
     if args.command == 'grade':
-        if not args.seal_commit:
-            parser.error('grade requires the immutable pre-grading --seal-commit')
         path = 'research/20261124-nations-tier-fusion/forecast-lock.json'
         raw = subprocess.check_output(['git','-C',str(HERE),'show',args.seal_commit+':'+path])
         if locked != json.loads(raw):
