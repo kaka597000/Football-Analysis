@@ -1,0 +1,11 @@
+{
+  "panel": "clocked",
+  "n": 33,
+  "n_predicted": 15,
+  "activated": 15,
+  "inputs_sha256": "b980e6bbbadfa692313e3a927a9a59fd2fe066e31ca32d2965f928ec225e7e1c",
+  "roster_sha256": "ebe1d468eee22b37888310982bf05815025e1a28a81237b53da681054b7dc625",
+  "forecast_sha256": "479b5ed8b5916137bc8de404fe5fd3bac430badadc7cb1a33ade2b734d756346",
+  "fit_sha256": "a12cb4f27c20017edaa15ad12f15ef0757e15b941a266a0fcee5577b8d6afef9",
+  "protocol_sha256": "a12b447fe10bb04efbad2d5c579bdb67472f654b35192e7cb0fe741a86e3aea8"
+}
