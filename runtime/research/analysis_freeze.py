@@ -190,15 +190,18 @@ def main():
         result = save(data['payload'], data['fixture'], stage=args.stage,
                       track=args.track, root=args.root)
     else:
+        from research.display_delivery import approved_scope_for
+
         if (args.stage, args.track) != ('prematch', 'comprehensive'):
             parser.error('--authored-table-key requires --stage prematch --track comprehensive')
         scopes = json.loads(args.authored_scopes.read_bytes())
-        if not isinstance(scopes, list) or not all(isinstance(s, dict) for s in scopes):
-            parser.error('approved stages must be an array of scope records')
-        matches = [s for s in scopes if s.get('cohort') == data['fixture']['cohort']]
-        if len(matches) != 1:
+        try:
+            scope = approved_scope_for(scopes, data['fixture'])
+        except ValueError as exc:
+            parser.error(str(exc))
+        if scope is None:
             parser.error('a unique approved stage scope for the fixture cohort is required')
-        result = save_authored_row(data['payload'], data['fixture'], root=args.root, scope=matches[0],
+        result = save_authored_row(data['payload'], data['fixture'], root=args.root, scope=scope,
                                    idempotency_key=args.authored_table_key, out=args.authored_out)
         if args.authored_out is not None:
             result = result['receipt']

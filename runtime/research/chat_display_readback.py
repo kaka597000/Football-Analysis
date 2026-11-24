@@ -34,9 +34,9 @@ def prepare(records, text, *, room_id, author_id, at):
             raise ValueError('stage the original freeze before its planned kickoff')
         block = request['text'].split('\n')
         # The original block must occupy whole consecutive lines in the final message.
-        positions = [index for index, line in enumerate(lines)
-                     if line == block[0] and lines[index:index + len(block)] == block]
-        if (request['slot'] in slots or len(positions) != 1 or positions[0] < consumed_lines):
+        positions = [index for index, line in enumerate(lines) if line == block[0]]
+        if (request['slot'] in slots or len(positions) != 1 or positions[0] < consumed_lines
+                or lines[positions[0]:positions[0] + len(block)] != block):
             raise ValueError('each frozen display block must occur once and in batch order')
         consumed_lines = positions[0] + len(block)
         slots.add(request['slot'])
@@ -52,8 +52,7 @@ def prepare(records, text, *, room_id, author_id, at):
     return {'plan': plan, 'plan_sha256': digest(plan)}
 
 
-def match_readback(staged, response, *, message_id, at):
-    """Verify the named provider readback, leaving first-visible and kickoff proof pending."""
+def _match_message(staged, response, *, message_id, at):
     plan = staged['plan']
     if staged['plan_sha256'] != digest(plan):
         raise ValueError('staged batch checksum mismatch')
@@ -70,8 +69,7 @@ def match_readback(staged, response, *, message_id, at):
     if _text_hash(text) != plan['body_sha256']:
         raise ValueError('visible body does not match the staged message')
     sent = aware(message['sent_at'])
-    if (not aware(plan['prepared_at']) <= sent <= at
-            or any(sent >= aware(match['planned_kickoff_at']) for match in plan['matches'])):
+    if not aware(plan['prepared_at']) <= sent <= at:
         raise ValueError('service send time is outside the staged prematch window')
 
     return {'status': 'READBACK_MATCHED', 'first_visible_verified': False,
@@ -79,6 +77,65 @@ def match_readback(staged, response, *, message_id, at):
             'room_id': plan['room_id'], 'channel': plan['channel'], 'author_id': plan['author_id'],
             'body_sha256': plan['body_sha256'], 'plan_sha256': staged['plan_sha256'],
             'matches': plan['matches']}
+
+
+def match_readback(staged, response, *, message_id, at):
+    """Check a whole prematch batch. First-visible and actual kickoff proof remain separate."""
+    observed = _match_message(staged, response, message_id=message_id, at=at)
+    sent = aware(observed['sent_at'])
+    if any(sent >= aware(match['planned_kickoff_at']) for match in observed['matches']):
+        raise ValueError('service send time is outside the staged prematch window')
+    return observed
+
+
+def first_delivery_lookup(records, staged, *, message_id, read_message, lookup_original, at):
+    """Build settle's read-only lookup from the authorized channel's two independent reads.
+
+    read_message(id) retrieves the named visible message. lookup_original(slot)
+    retrieves the service's immutable first visible delivery in the authorized
+    room, including the hash of the original whole body. Neither can be derived
+    from a freeze, the staged plan or a current-message observation.
+    """
+    response = (read_message(message_id)
+                if message_id and read_message is not None and lookup_original is not None else None)
+    if not response or not response.get('message') or response.get('partial') is not False:
+        return lambda slot: None
+
+    observed = _match_message(staged, response, message_id=message_id, at=at)
+    records = [verify(record) for record in records]
+    body = response['message']['content']['text']
+    # Reproduce the blocks from the signed records against the actual channel text.
+    # A locally recomputed plan hash alone cannot establish what the user saw.
+    rebuilt = prepare(records, body, room_id=observed['room_id'],
+                      author_id=observed['author_id'], at=aware(staged['plan']['prepared_at']))
+    if rebuilt != staged:
+        raise ValueError('staged matches differ from the frozen records and visible body')
+    requests = {r['slot']: r for r in map(delivery_request, records)}
+
+    def lookup(slot):
+        request = requests.get(slot)
+        if request is None:
+            return None
+        first = lookup_original(slot)
+        if first is None:
+            return None
+        expected = {'status': 'DELIVERED', 'slot': slot, 'channel': observed['channel'],
+                    'room_id': observed['room_id'], 'author_id': observed['author_id'],
+                    'message_id': message_id, 'original_body_sha256': observed['body_sha256']}
+        if (not isinstance(first, dict) or any(first.get(k) != v for k, v in expected.items())
+                or not isinstance(first.get('delivered_at'), str)
+                or aware(first['delivered_at']) != aware(observed['sent_at'])):
+            raise ValueError('first channel delivery conflicts with the named original message')
+        if (first.get('original_text', body) != body
+                or first.get('body_sha256', observed['body_sha256']) != observed['body_sha256']
+                or first.get('text', request['text']) not in (request['text'], body)):
+            raise ValueError('first channel body conflicts with the original text')
+        # Keep the service's extra assertions for verify_delivery to cross-check.
+        # A first-slot provider may store only the whole body, without per-block hashes.
+        return dict(first, first_visible_verified=first.get('first_visible_verified', True),
+                    request_sha256=first.get('request_sha256', digest(request)), text=request['text'])
+
+    return lookup
 
 
 def _read_json(path):

@@ -7,11 +7,14 @@ import gzip
 import hashlib
 import json
 from pathlib import Path
+import re
 from urllib.parse import urlsplit
 
+from competition_scope import require
 from research.analysis_freeze import aware, verify
 from research.display_delivery import (
-    DISPLAY_TRACK, SCHEMA, attach_display, delivery_request, display_slot, render, valid_score, verify_delivery,
+    DISPLAY_TRACK, SCHEMA, DeliveryAfterDeadline, attach_display, delivery_request, display_slot, render, valid_score,
+    require_authored_stage, validate_display, verify_delivery,
 )
 from research_program.three_arm_review import _certify
 from automation.collector import regulation_row, PHASED_RESEARCH
@@ -87,44 +90,78 @@ def certify_retained(provider, fixture, meta, state, *, at=None):
     return {'match_id':fixture['match_id'],'home_goals':h,'away_goals':a,'score_basis':'regulation_90','evidence':meta,'adapter':provider}
 
 def settle(record, fixture, track, provider=None, meta=None, state=None, *, at=None,
-           lookup_first=None, lookup_actual_kickoff=None):
+           lookup_first=None, lookup_actual_kickoff=None, lookup_approved_scope=None):
     """Settle the first confirmed comprehensive display against a retained 90-minute result.
 
     The caller configures trusted readers. lookup_first uses the same delivery
     authority as publication. lookup_actual_kickoff verifies the start of this
-    exact fixture and returns a timezone-aware ISO timestamp, or None.
+    exact fixture and returns a timezone-aware ISO timestamp, or None. For the
+    author's list format, lookup_approved_scope(frozen) reads the independently
+    approved scope for this issue from the original batch's scope source.
     """
     if track != DISPLAY_TRACK:
         raise ValueError('comprehensive display has its own settlement track')
     at = at or datetime.now(timezone.utc)
-    result = certify_retained(provider, fixture, meta, state, at=at) if meta is not None else None
+    result = None
+    result_issue = None
+    if meta is not None:
+        try:
+            result = certify_retained(provider, fixture, meta, state, at=at)
+        except FileNotFoundError:
+            result_issue = 'RETAINED_RESULT_EVIDENCE_MISSING'
     row = {'match_id': fixture['match_id'], 'track': track, 'verified_completed': result is not None,
            'top1_issued': False, 'top3_issued': False, 'top1_hit': None, 'top3_hit': None,
            'display_status': 'MISSING', 'result': result}
+    if result_issue:
+        row['result_issue'] = result_issue
     if record is None:
         return row
     record = verify(record)
     if record['stage'] != 'prematch' or record['track'] != track:
         raise ValueError('wrong display track or stage')
     frozen = record['fixture']
-    if record['match_id'] != fixture['match_id'] or any(
-        frozen[k] != fixture[k] for k in ('match_id', 'cohort', 'stage', 'home', 'away', 'kickoff_at')
-    ):
+    if (record['match_id'] != fixture['match_id']
+            or any(frozen[k] != fixture[k] for k in ('match_id', 'cohort', 'stage', 'home', 'away'))
+            or aware(frozen['kickoff_at']) != aware(fixture['kickoff_at'])
+            or ('cutoff_at' in fixture and aware(frozen['cutoff_at']) != aware(fixture['cutoff_at']))):
         raise ValueError('fixture mismatch')
     if any(frozen.get(k) != fixture.get(k) for k in ('provider_competition', 'provider_stage')):
         raise ValueError('frozen provider scope mismatch')
     if not aware(frozen['cutoff_at']) <= aware(record['recorded_at']) < aware(frozen['kickoff_at']):
         raise ValueError('freeze is outside the prematch window')
-    display = record['payload'].get('displayed_scores')
-    if not isinstance(display, dict) or display.get('schema') != SCHEMA:
+    display = validate_display(record['payload'], allow_missing=True)
+    if display is None:
         return row
+    for identity in (frozen, fixture):
+        require(identity)
+        if identity.get('identity_verified') is False or identity.get('stage_verified') is False:
+            raise ValueError('unverified display fixture identity or stage')
+    request = delivery_request(record)
     if lookup_first is None:
         return dict(row, display_issue='UNCONFIRMED_DELIVERY')
-    confirmation = lookup_first(display_slot(fixture['match_id']))
+    confirmation = lookup_first(request['slot'])
     if confirmation is None:
         return dict(row, display_issue='UNCONFIRMED_DELIVERY')
-    sent = verify_delivery(confirmation, delivery_request(record), record, at=at)
-    kickoff = lookup_actual_kickoff(fixture) if lookup_actual_kickoff is not None else None
+    authored = isinstance(record['payload']['displayed_scores'], list)
+    if authored:
+        body_hash = confirmation.get('original_body_sha256')
+        if (confirmation.get('first_visible_verified') is None or confirmation.get('slot') is None
+                or not isinstance(body_hash, str) or not re.fullmatch(r'[0-9a-f]{64}', body_hash)
+                or any(not isinstance(confirmation.get(k), str) or not confirmation[k].strip()
+                       for k in ('channel', 'room_id', 'author_id'))):
+            return dict(row, display_issue='UNVERIFIED_ORIGINAL_MESSAGE')
+    try:
+        sent = verify_delivery(confirmation, request, record, at=at)
+    except DeliveryAfterDeadline:
+        if authored:
+            return dict(row, display_issue='DELIVERED_AT_OR_AFTER_PLANNED_KICKOFF')
+        raise
+    if authored:
+        scope = lookup_approved_scope(frozen) if lookup_approved_scope is not None else None
+        if scope is None:
+            return dict(row, display_issue='UNVERIFIED_AUTHORED_STAGE')
+        require_authored_stage(frozen, scope)
+    kickoff = lookup_actual_kickoff(frozen) if lookup_actual_kickoff is not None else None
     if kickoff is None:
         return dict(row, display_issue='UNVERIFIED_ACTUAL_KICKOFF')
     started = aware(kickoff)
@@ -138,6 +175,8 @@ def settle(record, fixture, track, provider=None, meta=None, state=None, *, at=N
     row.update(freeze_sha256=record['record_sha256'], display_status=display['status'],
                message_id=confirmation['message_id'], delivered_at=confirmation['delivered_at'],
                actual_kickoff_at=kickoff)
+    if 'original_body_sha256' in confirmation:
+        row['original_body_sha256'] = confirmation['original_body_sha256']
     if display['status'] == 'ISSUED':
         row.update(top1_issued=True, top3_issued=True)
         if result is not None:

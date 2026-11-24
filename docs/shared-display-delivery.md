@@ -65,3 +65,47 @@ python -m research.chat_display_readback check --plan "$PRIVATE_DIR/staged.json"
 成功结果为 `READBACK_MATCHED`，保存消息 ID、服务发送时间、正文 SHA-256、已验证渠道和逐场冻结哈希。原件相同可重试；已有结果和不同回执冲突时拒绝覆盖。聊天读取器可提供当前可见正文，正式评分还需渠道权威确认原始正文及该场最早可见交付，并核实同场实际开球时间。只有这些证据齐备，才把查回的发出时间、原有 `delivery_request` 摘要及对应比分段作为可信 `lookup_first`，与 `lookup_actual_kickoff` 一同交给上文的 `settle`。目前镜像读取没有提供原始修订和逐场首发槽记录，`observed.json` 标记两项未认证，独立于正式送达回执。
 
 查回实测使用原对话中两条现有消息。搜索与按 ID 读取的消息 ID、房间、作者、服务时间和正文一致。一条为比分专项，另一条为工程进度。11 月 23 日正式批次的首发在该读取范围内仍未定位。此外该日批次存有 14 份正式范围的原表，不能作为缺失的渠道回执。失败、错误身份或正文、同内容重挂新时间及开球边界由离线回归覆盖。
+
+## 作者原表进入同一结算接口
+
+正常作者可用 [原表写入接口](normal-authored-freeze.md) 保留打包器使用的比分列表。结算从已签入该冻结的作者原文读取第一比分与两个有序备选。旧裸列表仍可读取，缺少当时签入的作者正文时在覆盖表中记为缺展示。整个读取过程对冻结和渠道均为只读。
+
+正常批次接入时，使用已获授权的房间及原发布人的渠道读端。按稳定消息号获取命名消息。另从服务端按该场的综合首发槽读取首次可见交付的原始版本。需要原始版本的整条正文 SHA-256、服务发出时间、消息号、房间、渠道及作者。首发槽摘要由 `display_slot(match_id)` 生成。已存在该槽时，重试始终查询同一首发。普通聊天读取器目前只提供命名消息，首次槽与原版正文仍需交付方提供。两项读取的合同见 `first_delivery_lookup`。接线示例使用交付方配置的只读函数。
+
+```python
+from functools import partial
+from research.chat_display_readback import first_delivery_lookup
+from research.display_delivery import approved_scope_for
+from research.display_review import settle, summarize
+
+first = first_delivery_lookup(
+    frozen_records_in_display_order, staged_batch, message_id=original_message_id,
+    read_message=channel.read_message, lookup_original=channel.lookup_first_original,
+    at=review_time,
+)
+rows = []
+for record, fixture, provider, retained_result in evaluation_roster:
+    rows.append(settle(
+        record, fixture, 'comprehensive', provider, retained_result, retained_root,
+        at=review_time, lookup_first=first, lookup_actual_kickoff=verified_starts.for_frozen_fixture,
+        lookup_approved_scope=partial(approved_scope_for, original_batch_scope_rows),
+    ))
+summary = summarize(rows)
+```
+
+`channel.lookup_first_original(slot)` 由受信交付方返回 `status=DELIVERED`、`slot`、`channel=chatgpt`、`room_id`、`author_id`、`message_id`、`delivered_at` 和 `original_body_sha256`。SHA-256 取服务所存首版完整 UTF-8 正文的原字节。渠道如果还记录了请求摘要、冻结或有序比分，这些字段也须吻合。服务未能认证首版时返回空值。查询范围固定为已授权的原房间和发布人。该读端不能从赛后文件构建首次槽。
+
+独立阶段查询使用原批次在该场冻结截点获批的赛事、cohort 和阶段。已有 Data 常规范围与有专用来源的赛事分别采用各自当期批准记录。实际开球查询以冻结内的比赛、队伍、赛事阶段与赛程身份对照权威开球证据。只有时钟已核实才能返回时间，否则返回空值。两项查询均允许明确留缺。完整首发回执可用后，每场分别核对服务发出时间严格早于其计划及实际开球。即使同一条消息覆盖多场，有一场晚发时其他场仍可独立核验。
+
+缺少可信首版、当期阶段或实际开球分别记入缺展示原因。原始赛果文件缺失时保留已核的展示并等待赛果。原件哈希、版本、身份或顺序有冲突时拒绝该项。复盘汇总仍由 `settle` 和 `summarize` 计算。首选命中同时计展示三选，仅备选命中只计展示三选，首次真实待定计入弃权。
+
+在源码根目录可重放真实写入、读回与结算函数使用的离线测试。
+
+```sh
+PYTHONPATH=runtime python -m unittest research.test_authored_settlement \
+  research.test_authored_freeze research.test_chat_display_readback \
+  research.test_display_review test_publication_recovery
+python scripts/run_tests.py --layer integration
+```
+
+本切片在 #51 的 `d905fe4d` 之上原样引入 #71 的四个文件，再提交共享验证和结算改动。只读兼容补丁依赖这两个接口，不能直接摘到缺少它们的 main。评审时可单看相对 `3f44166` 的差异。先接纳 #51 后，本草稿可以提供 #71 的作者写入及结算两部分，避免再次合入重复的写入模块。如果先单独接纳 #71，须整合共享模块后在实际提交重跑。要回退本切片，可单独撤销兼容提交并停用新的读端，旧原表和冻结继续原样保存。
