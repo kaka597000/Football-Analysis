@@ -11,7 +11,7 @@ class NationsTierPool(unittest.TestCase):
         root = Path(__file__).resolve().parents[2]
         suite = root / 'research' / '20261124-nations-tier-fusion'
         process = subprocess.run(
-            [sys.executable, '-m', 'unittest', '-v', 'test_study'],
+            [sys.executable, '-m', 'unittest', 'discover', '-v'],
             cwd=suite, env=dict(os.environ, PYTHONPATH=str(root / 'runtime')),
             text=True, capture_output=True,
         )

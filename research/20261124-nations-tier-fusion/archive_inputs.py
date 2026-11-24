@@ -63,7 +63,7 @@ def same_fixture(first, other):
             and aware(first['kickoff_at']) == aware(other['kickoff_at']))
 
 
-def original_pairs(repo):
+def frozen_nations_roster(repo):
     arc = Bundle(repo, 'pairs')
     rows = {}
     for r in arc.freezes():
@@ -107,6 +107,11 @@ def original_pairs(repo):
                          book=None, line=None, market=None, gap='NO_ORIGINAL_COMPREHENSIVE_CUTOFF')
     if len(rows) != 52:
         raise ValueError('original Nations roster changed')
+    return rows
+
+
+def original_pairs(repo):
+    rows = frozen_nations_roster(repo)
     r7 = Bundle(repo, 'r7')
     issues = [verify(r) for n in r7.files if (r := r7.value(n)).get('track') == 'research-prematch-continuation-20261123']
     if len(issues) != 192 or len({r['match_id'] for r in issues}) != 192 or set(rows) & {r['match_id'] for r in issues}:
@@ -213,8 +218,7 @@ def nova_line(arc, row, fixture, quote):
         raise ValueError('ORIGINAL_NOVA_LINE_CONFLICT')
 
 
-def inputs(repo):
-    rows = original_pairs(repo)
+def merge_original_markets(repo, rows):
     for key in PREMATCH:
         arc = Bundle(repo, key)
         for r in arc.freezes():
@@ -232,6 +236,7 @@ def inputs(repo):
                     raise ValueError('conflicting original comprehensive records ' + mid)
                 continue
             row.update(issue_sha=r['record_sha256'], cutoff=f['cutoff_at'], gap='NO_ORIGINAL_QUOTE')
+            row['signed_primary_present'] = r['payload'].get('primary') is not None
             q = r['payload'].get('actual_quote')
             if not q or q != f.get('total_quote'):
                 continue
@@ -257,3 +262,7 @@ def inputs(repo):
             row.update(line=q['line'], book=q['bookmaker'], market=market, gap=gap,
                        raw_sha=q['source_sha256'], quote_age_s=(aware(f['cutoff_at'])-aware(q['quoted_at'])).total_seconds())
     return rows
+
+
+def inputs(repo):
+    return merge_original_markets(repo, original_pairs(repo))

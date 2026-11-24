@@ -1,0 +1,564 @@
+{
+  "study": "ORIGINAL-FIRST-SCORE-COMPLEMENT-AUDIT-1",
+  "protocol_commit": "b4f0523f3ead6971c4345e323f83755ca53ac48f",
+  "protocol_sha": "4ae7eff55b98970b1ae4a3d894b25a2dc43cce23090ce9c40b516924756171cd",
+  "earlier_evidence_sha": "4806dd477661fda00bec81f4312d0a4486e92ae2ebf85f13a1c23806a5bdbec5",
+  "trained": {
+    "earlier_registered": 26,
+    "earlier_labels": 26,
+    "earlier_price_pairs": 24,
+    "earlier_exclusive_market_rescue": true,
+    "disagreement_bins": {
+      "market_margin_larger": {
+        "disagreements": 8,
+        "market_only": 2,
+        "team_only": 1,
+        "neither": 5,
+        "days": [
+          "2026-11-12",
+          "2026-11-13",
+          "2026-11-14"
+        ]
+      },
+      "other": {
+        "disagreements": 9,
+        "market_only": 0,
+        "team_only": 2,
+        "neither": 7,
+        "days": [
+          "2026-11-12",
+          "2026-11-13",
+          "2026-11-14"
+        ]
+      }
+    },
+    "route": {
+      "market_margin_larger": "market",
+      "other": "team"
+    },
+    "disposition": "FIXED_RULE"
+  },
+  "late": [
+    {
+      "id": "espn:401861171",
+      "cutoff": "2026-11-10T08:11:42.783472+00:00",
+      "original_pair": "f6a6712d82aa6b6c490cb9d9a1b50ec88682aa2094a17823de313cebf19951d8",
+      "original_issue": null,
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "wdl": "away",
+        "total": null
+      },
+      "matrix_sha": "d10d773f5b49e8487d7a14ccf1ab9f79bd70b268e72ef3cf6a9c1cf19db1d0a3"
+    },
+    {
+      "id": "espn:401861172",
+      "cutoff": "2026-11-10T08:11:42.806383+00:00",
+      "original_pair": "d4a9c1796e371f50d660773465d7df413470bf2c9c91a12187feb275eb18dc5d",
+      "original_issue": null,
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "wdl": "away",
+        "total": null
+      },
+      "matrix_sha": "b60a1f3def1e7fd1b10bb14bfb5d59e8e21bf30229774a26e6004f4f728a8604"
+    },
+    {
+      "id": "espn:401861173",
+      "cutoff": "2026-11-15T14:03:43.774489+00:00",
+      "original_pair": "86f9009b25610216def211f39114c048c8ca1de3795dbc171621f9936549f72a",
+      "original_issue": "f024a7e50c4e05e3ce5002671a6469dc0801da6d1ef68fc50ce1c2e98cb3eb33",
+      "market_sha": "bde7a42366a2e89a0bbfa39edb21f7d48fbfad48dc2e405570daa954bad464dd",
+      "bin": "other",
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "wdl": "home",
+        "total": "over"
+      },
+      "matrix_sha": "1fbb92a73c28c6a6e3e9f3b2dde0d782bf2c991e9f811f93d307c30825f17523"
+    },
+    {
+      "id": "espn:401861174",
+      "cutoff": "2026-11-15T14:03:43.812479+00:00",
+      "original_pair": "2b81c21b8b920327849f3435b766a56aa4bf860988139e6137b6088f1af36846",
+      "original_issue": "7d7647c5307a533d663bbdd1d04c923f222c8b1d57521fc9ba5ee2ee77ebd518",
+      "market_sha": "bde7a42366a2e89a0bbfa39edb21f7d48fbfad48dc2e405570daa954bad464dd",
+      "bin": "market_margin_larger",
+      "source": "market",
+      "choices": {
+        "primary": "3-0",
+        "top3": [
+          "3-0",
+          "4-0",
+          "2-0"
+        ],
+        "wdl": "home",
+        "total": "over"
+      },
+      "matrix_sha": "d5f4b0bcee71b88c77002c27d3e2054482f46892b80a9cf95414f8c93d1638c3"
+    },
+    {
+      "id": "espn:401861175",
+      "cutoff": "2026-11-15T14:03:43.848958+00:00",
+      "original_pair": "d6f4c82c90c099ba6289f74284e01b1f61bc742a3bf387d6b45161344393b5bb",
+      "original_issue": "11e66ef0e11e54f78d8c0e0d40dfab17832c57a2448346ae3112b95b1dd5af84",
+      "market_sha": "bde7a42366a2e89a0bbfa39edb21f7d48fbfad48dc2e405570daa954bad464dd",
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "wdl": "home",
+        "total": "over"
+      },
+      "matrix_sha": "b7a09a240e170cd3531bb59f98e2e3663698429476741ead793c510bea0877c5"
+    },
+    {
+      "id": "espn:401861176",
+      "cutoff": "2026-11-15T14:03:43.884958+00:00",
+      "original_pair": "c1cfa108365cc0b0a3e9fc8e81d1ceea926ff0e17c4fc3b86e4c69d32b042df3",
+      "original_issue": "b6baaa06d1eab80ca1b60ae71b45cd917f22de455a5d8768ffb485ebc1bb70a1",
+      "market_sha": "bde7a42366a2e89a0bbfa39edb21f7d48fbfad48dc2e405570daa954bad464dd",
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "wdl": "home",
+        "total": "under"
+      },
+      "matrix_sha": "a39bfbf925b516cdfe0d80bfea0a43a2266c2e3a58d5a172ecd0503690c1a069"
+    },
+    {
+      "id": "espn:401861177",
+      "cutoff": "2026-11-15T14:03:43.920396+00:00",
+      "original_pair": "82ca0422374f72b8a59910ff4151706939be84539a3be35c0a2656eff4da6e9d",
+      "original_issue": "20e1cbe26651ca1ccc99d406bf00444d74dd59887117216b9267850ed0ebbc1b",
+      "market_sha": "bde7a42366a2e89a0bbfa39edb21f7d48fbfad48dc2e405570daa954bad464dd",
+      "bin": "other",
+      "source": "team",
+      "choices": {
+        "primary": "1-0",
+        "top3": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "wdl": "home",
+        "total": "under"
+      },
+      "matrix_sha": "0c613517c8ab34765ae424daee105c4aaa1fa7ebf8d3eb40101a16f7e2bc0f64"
+    },
+    {
+      "id": "espn:401861178",
+      "cutoff": "2026-11-15T14:03:43.956930+00:00",
+      "original_pair": "4d82bd45926907a465db9e49846a50f50c0c2403f50bce2c2e11d3e263f18dc4",
+      "original_issue": "2fe5e12d85f4f7e3565053ab756a705d825cd6bb496385c4a7c47ac125c2b310",
+      "market_sha": "bde7a42366a2e89a0bbfa39edb21f7d48fbfad48dc2e405570daa954bad464dd",
+      "bin": "other",
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "wdl": "home",
+        "total": "over"
+      },
+      "matrix_sha": "6af2aff8cf5fe268b34da6d2da3893f021180fa3f3bf60a665cd60d3087e1174"
+    },
+    {
+      "id": "espn:401861179",
+      "cutoff": "2026-11-16T12:43:56.955573+00:00",
+      "original_pair": "94049fd41e52110c747dc4fb12d1b701c2a6fe5caa9ef7fda2c5e66657620aff",
+      "original_issue": "84fb7d01b0c8772682bda8e66748995385c27990a15201a9d2c1bb7d12819586",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "0-1",
+        "top3": [
+          "0-1",
+          "0-0",
+          "1-1"
+        ],
+        "wdl": "away",
+        "total": "under"
+      },
+      "matrix_sha": "07b2a03d46115b1f4e80de2ea1dbe2e1af9b0eb6b96d9e0044529b93c8d6e9d4"
+    },
+    {
+      "id": "espn:401861180",
+      "cutoff": "2026-11-16T12:43:56.644732+00:00",
+      "original_pair": "504f2469c9fafa6e82fe029e81335acdba80763250b4a29dbd325cfee714b5ba",
+      "original_issue": "5d0c0849ab4dd5b974698a57f91ec5729c8b4611067d5faaed72a1597d2a05eb",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": "market_margin_larger",
+      "source": "market",
+      "choices": {
+        "primary": "1-0",
+        "top3": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "wdl": "home",
+        "total": "over"
+      },
+      "matrix_sha": "269504b5a03108ab3c6ff9d53bb2db034ce550dc946af2371ad6c88f09276700"
+    },
+    {
+      "id": "espn:401861181",
+      "cutoff": "2026-11-16T12:43:56.706898+00:00",
+      "original_pair": "5e30ba31e384d1c8bae09b6ff95f786a5345b37fe0fd8d0bae5dba49ed1616c1",
+      "original_issue": "a390b88ca358a0782be09820fd86c25121299aa31cbfb81f5c64f3843012f08f",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "wdl": "away",
+        "total": "under"
+      },
+      "matrix_sha": "c48c252f0bde83feeac7dd8955a001e86fd1d7be03ba7c46be001b6262265b28"
+    },
+    {
+      "id": "espn:401861182",
+      "cutoff": "2026-11-16T12:43:56.763167+00:00",
+      "original_pair": "75613ff36e123870e87ebdf58478562975dcb55d15f3fe8e227c7cdecf46a0ee",
+      "original_issue": "7387b8952d0c1dbd0efe7134c60c67950485b4c8c4b327dfebbea421bf1eb436",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": "other",
+      "source": "team",
+      "choices": {
+        "primary": "1-0",
+        "top3": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "wdl": "home",
+        "total": "under"
+      },
+      "matrix_sha": "180c3cd77acfcaa05b4289bcf2a83fc45d322ab7415ddacb4ccc3cf065e9c4c2"
+    },
+    {
+      "id": "espn:401861183",
+      "cutoff": "2026-11-16T12:43:56.836538+00:00",
+      "original_pair": "7fabc027a0092c001350790c2736ca877e0b4a02cab2534136dd9dcff6dcea43",
+      "original_issue": "023f658489d4973950a7ca524e863d4d6053335f49757caa8650f7510c044969",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-0",
+        "top3": [
+          "1-0",
+          "1-1",
+          "0-0"
+        ],
+        "wdl": "home",
+        "total": "under"
+      },
+      "matrix_sha": "a85b4e8d22d2c5025630cf6bd5bff04aebfe0fdfc9f2803bc18f2ae367639c06"
+    },
+    {
+      "id": "espn:401861184",
+      "cutoff": "2026-11-16T12:43:56.903214+00:00",
+      "original_pair": "ccedb63eee717c5a74e1e3eea7022c9efa240154f072a856cf76175306dc1d16",
+      "original_issue": "b5da649b44e3222828850c8a5351f92ec4480ecfc33c50b9aa12ff62e310a403",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": "market_margin_larger",
+      "source": "market",
+      "choices": {
+        "primary": "2-0",
+        "top3": [
+          "2-0",
+          "1-0",
+          "3-0"
+        ],
+        "wdl": "home",
+        "total": "over"
+      },
+      "matrix_sha": "34a405cba2a8bd58a517926630a44476765af05f3f13e5981159da40c784ac3c"
+    },
+    {
+      "id": "espn:401861185",
+      "cutoff": "2026-11-16T12:43:57.017591+00:00",
+      "original_pair": "c95b402f8efcb99c27da4859c70a80313e5c988610cbec223c6e0bd92b711b48",
+      "original_issue": "2f3c853cbe2eb2181d0be60d027401e8c03376b06c36a26683e4df4c91602b53",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "0-1",
+          "1-0"
+        ],
+        "wdl": "away",
+        "total": "under"
+      },
+      "matrix_sha": "cd03d0041ced0f16508f52baac4c549fa80a1056991ed6154376248c6ec714f5"
+    },
+    {
+      "id": "espn:401861186",
+      "cutoff": "2026-11-16T12:43:57.086480+00:00",
+      "original_pair": "62e2c78822b1dc362a2b913abd3efcbf2a4470a8494fb788584d289ea825e0f2",
+      "original_issue": "d4b4ebbfa98df5dbab8fe54b06a87ddcba4cfe1f340c3b176a62678580b21126",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": "other",
+      "source": "team",
+      "choices": {
+        "primary": "1-0",
+        "top3": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "wdl": "home",
+        "total": "under"
+      },
+      "matrix_sha": "60beb918ace227f89dc819a95a516ece1f60a162b528d35180c07f290737d6e2"
+    },
+    {
+      "id": "espn:401861187",
+      "cutoff": "2026-11-16T12:43:57.152860+00:00",
+      "original_pair": "dee9ede4628d0101c8cd20694643741aafcac989f3d3321e11e6e2ca1ade3e7d",
+      "original_issue": "0e5ad1a18231c0be530cb8ce4bacf11b8bcc2d0fad2980d7172b7f6f32f31912",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "0-1",
+        "top3": [
+          "0-1",
+          "1-1",
+          "0-0"
+        ],
+        "wdl": "away",
+        "total": "over"
+      },
+      "matrix_sha": "acb25332f06ecd83cda4c6b2b84ad1fea4669adaad75de8aa06b76ec542e61ee"
+    },
+    {
+      "id": "espn:401861188",
+      "cutoff": "2026-11-16T12:43:57.216982+00:00",
+      "original_pair": "6b2f88bccd06003d9f95c509079d47da7a57c839633d91376d74af2582509d96",
+      "original_issue": "94bc540937c036c920201a4f520ad87c57127938c0521c1323cbad000655e0e7",
+      "market_sha": "25efb5c8931f5d39b298e6e0e729a13b663b85a2889bcb5a34cf1357137126e5",
+      "bin": "other",
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "1-0",
+          "2-1"
+        ],
+        "wdl": "home",
+        "total": "under"
+      },
+      "matrix_sha": "5b3af4a8d49004de719d25374bdf51826571bbd924f10aef44f6e9b7a323466d"
+    },
+    {
+      "id": "espn:401861189",
+      "cutoff": "2026-11-17T13:26:14.313720+00:00",
+      "original_pair": "08a01b9c6e8997cdc4c10f7c4d7ba246d5f909e59fa45a3f0173deb866751e69",
+      "original_issue": "d986a67745500ec71b977ff7f2c0c1ae9c2ba1f03bda309879995398a635294b",
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "wdl": "away",
+        "total": "under"
+      },
+      "matrix_sha": "4726bc76d4359cddf237128e76474be5ffb89e3c068dcb78409f487581eb8cc7"
+    },
+    {
+      "id": "espn:401861190",
+      "cutoff": "2026-11-17T13:26:14.413810+00:00",
+      "original_pair": "26d1759b83c26dd86345cfbeb356f97851f4a78e7b6e0299c7360eb349c76b7e",
+      "original_issue": "a25281938fbb0d6f1e231844f87b237ffdee975566c6529d59a70522bea1501f",
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "0-0",
+        "top3": [
+          "0-0",
+          "1-0",
+          "0-1"
+        ],
+        "wdl": "home",
+        "total": "under"
+      },
+      "matrix_sha": "a77fc1967cb613a8f204fe00f4b9f2df41f5af12c6b766bc7fd39a2142dc9931"
+    },
+    {
+      "id": "espn:401861191",
+      "cutoff": "2026-11-17T13:26:14.547785+00:00",
+      "original_pair": "5df565150d0b8bb11a22721dcf82a3dfaa5837f73556bbad0c8a9e95fc1ebf41",
+      "original_issue": "feffd6379745db03fb1f90d167bc161dc8e47d37b9186ecd6e4893047f19bdef",
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "0-0",
+        "top3": [
+          "0-0",
+          "1-0",
+          "0-1"
+        ],
+        "wdl": "home",
+        "total": null
+      },
+      "matrix_sha": "b9edae340ebf2f44fed886a75fdb0ecbd85bb0138102840e5068801acb4f65bc"
+    },
+    {
+      "id": "espn:401861192",
+      "cutoff": "2026-11-17T13:26:14.637240+00:00",
+      "original_pair": "80146da53d3626f384be2a2dbbfb6461ec346ce28cc7ec150eacfd5e451b60e2",
+      "original_issue": "f8fd9760039e9827c599ee3ced3985ac502bbd62d96363635777814bca022e1f",
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-0",
+        "top3": [
+          "1-0",
+          "1-1",
+          "0-0"
+        ],
+        "wdl": "home",
+        "total": null
+      },
+      "matrix_sha": "a20834e07438a58f7a058956875aed4c2373b49614465347f5bb34f9e447b196"
+    },
+    {
+      "id": "espn:401861193",
+      "cutoff": "2026-11-17T13:26:14.716367+00:00",
+      "original_pair": "479467995ad5121adab4661512d2b8fc6b725bad321a5a00094d0615b4e96e9e",
+      "original_issue": "a9833fe44e7fd8657dd863652593033d31facc1bb353277de8ccbf796a30b82b",
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "0-1",
+          "1-2"
+        ],
+        "wdl": "away",
+        "total": "under"
+      },
+      "matrix_sha": "b191623453ab034f6b9dea254f404dd22323ade0a1e79a1b80657c9e6470e014"
+    },
+    {
+      "id": "espn:401861194",
+      "cutoff": "2026-11-17T13:26:14.835860+00:00",
+      "original_pair": "547f8338a6b856a452431af89c34fac323253690a6d2581f535daeb12e3f53c3",
+      "original_issue": "e70e5c99b493cf646c3f3347104c5e970341f38c46e6892bab0ace7ac041b6a5",
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "2-1",
+          "1-2"
+        ],
+        "wdl": "home",
+        "total": "over"
+      },
+      "matrix_sha": "32d1da6641211c935a46c0e3c6fd77c7e84f92d58d59b89a7d15fe213061beaf"
+    },
+    {
+      "id": "espn:401861195",
+      "cutoff": "2026-11-17T13:26:14.910708+00:00",
+      "original_pair": "5d146097b2730dd8e3c8aaeb3d635d6c9205f36dc27f721cb2f648f632497852",
+      "original_issue": "faf915fdb7d626348100812ec3f017da820931533ad78a38fbb4da2276af1f1d",
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-1",
+        "top3": [
+          "1-1",
+          "1-0",
+          "0-1"
+        ],
+        "wdl": "home",
+        "total": "under"
+      },
+      "matrix_sha": "67298b22ddb9d6e593d7ce054f9207943c5863029e0ee101f38aaa6e451ecade"
+    },
+    {
+      "id": "espn:401861196",
+      "cutoff": "2026-11-17T13:26:14.985028+00:00",
+      "original_pair": "e20dbcd76461015e8f3dcb23c804997bf049233f90a3b95a7a7fda9e196179c8",
+      "original_issue": "aacb70727622d2f06555ce6416c4c537614b8e9d9cde5ded4db68368aa0859c1",
+      "market_sha": null,
+      "bin": null,
+      "source": "team",
+      "choices": {
+        "primary": "1-0",
+        "top3": [
+          "1-0",
+          "1-1",
+          "2-0"
+        ],
+        "wdl": "home",
+        "total": null
+      },
+      "matrix_sha": "d4861ae712b913b48fcc873db738d9a355fbb789ddb287dec166d975ab2b5b3c"
+    }
+  ],
+  "late_sha": "cf940c0dfa599b10984965bf91e86d895d7662ba6867f914049d72c242a19fd0"
+}
