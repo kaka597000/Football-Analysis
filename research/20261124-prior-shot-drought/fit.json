@@ -1,0 +1,11 @@
+{
+  "n_training_fixtures": 2206,
+  "eligible_training_fixtures": 2043,
+  "common_volume_coefficients": [
+    -0.08583142552908345,
+    0.3088728367049533
+  ],
+  "drought_coefficient": 0.11477403126933829,
+  "protocol_sha256": "a12b447fe10bb04efbad2d5c579bdb67472f654b35192e7cb0fe741a86e3aea8",
+  "training_inputs_sha256": "96b40252a7276b859b5ad05e80cd3a85d646454e165ff9fcf68f268e36a0a5c5"
+}

@@ -1,0 +1,11 @@
+{
+  "panel": "historical",
+  "n": 688,
+  "n_predicted": 688,
+  "activated": 688,
+  "inputs_sha256": "ce4379faa9f34bd98e2e4b9964613fbac97e7f05da876734613b9a0bedb3d0c1",
+  "roster_sha256": "9db734a141bd72b3336b84b93ee2bbfac8769e25a71d2bfa45a2b70def5073ce",
+  "forecast_sha256": "7fdfe5a18273b62ac0291ebbacd28e3e7f126cfeb84e69f534ce4ab1c3cca2c7",
+  "fit_sha256": "a12cb4f27c20017edaa15ad12f15ef0757e15b941a266a0fcee5577b8d6afef9",
+  "protocol_sha256": "a12b447fe10bb04efbad2d5c579bdb67472f654b35192e7cb0fe741a86e3aea8"
+}
