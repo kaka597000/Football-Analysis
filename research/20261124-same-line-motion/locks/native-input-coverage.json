@@ -1,0 +1,39 @@
+{
+  "dispositions": {
+    "FREEZE_FIXTURE_IDENTITY_UNVERIFIED": 5,
+    "consider_market": 194,
+    "excluded_R7": 14,
+    "no ESPN summary citation in original first freeze": 2,
+    "no_bound_ESPN_full_match_market": 4,
+    "original first freeze binds ESPN response hash and pre-cutoff query; raw response absent from this pinned bundle, so DK fields are not independently inspectable": 31,
+    "outside_competition_scope": 23,
+    "outside_verified_regular_or_elite_phase": 3
+  },
+  "duplicate_references": 6,
+  "input_references": 282,
+  "r7_verified_fixture_issues": 192,
+  "raw_batch_references": {
+    "2026-11-20/21 fixed33": 33,
+    "20261105-europa-conference-analysis": 35,
+    "20261106-aleague-analysis": 1,
+    "20261107-night19-55matches": 55,
+    "20261108-night19-46matches": 45,
+    "20261111-jleague-cup-prematch": 4,
+    "20261112-nations-prematch": 8,
+    "20261113-nations-evening": 10,
+    "20261114-nations-prematch": 8,
+    "20261115-evening-scope": 6,
+    "20261115-remaining-nations-brazil": 7,
+    "20261116-nations-prematch-2044": 10,
+    "20261117-internationals-prematch": 3,
+    "20261117-tonight-analysis": 9,
+    "20261122-covered-slate": 33,
+    "20261123-evening-slate": 15
+  },
+  "split_counts": {
+    "excluded": 14,
+    "test": 171,
+    "train": 91
+  },
+  "unique": 276
+}

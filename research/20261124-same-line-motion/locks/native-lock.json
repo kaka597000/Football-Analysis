@@ -1,0 +1,23 @@
+{
+  "applicable_days": 10,
+  "beta": -0.4878540340760438,
+  "fit_panel": "native",
+  "fit_sha256": "1e842efbfe137460758d7b2bfb4fe4d2432fb59a938ad8c391d252c22d282451",
+  "forecasts_sha256": "679099112187129014c4f3c1277ddb948c45ba9671e43f91e808f390d15c0ad0",
+  "input_sha256": "410a3514b5a436597d29d30429991cfd3737758b5893fc672a0cfcbc390a3446",
+  "listed": 171,
+  "panel": "native",
+  "protocol_sha256": "c5f506db654c303d5afa5c6484e5810162ca3ab19e2d9cf285cb92fbbad3008b",
+  "result_cutoff_at": "2026-11-24T11:26:32Z",
+  "status": {
+    "different_total_line": 24,
+    "no ESPN summary citation in original first freeze": 2,
+    "no_bound_ESPN_full_match_market": 4,
+    "no_current_pair": 3,
+    "original first freeze binds ESPN response hash and pre-cutoff query; raw response absent from this pinned bundle, so DK fields are not independently inspectable": 31,
+    "outside_competition_scope": 8,
+    "outside_verified_regular_or_elite_phase": 3,
+    "same_line": 96
+  },
+  "transfer_sha256": null
+}

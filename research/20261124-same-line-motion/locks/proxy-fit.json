@@ -1,0 +1,14 @@
+{
+  "by_status": {
+    "no_current_pair": 4,
+    "opening_unavailable": 8,
+    "same_line": 6209
+  },
+  "coefficient": 0.1282250663597548,
+  "early_labels_sha256": "dde0a739d8fd106a697ce278a8ebf0eab1a916c6af3177554ce2e421ecd0dba2",
+  "fit_sources": 6209,
+  "input_sha256": "d91bb01ea6a301c3dbdca0eb83e32cff2b90b086880ab99f6e2cedaeb42a6a14",
+  "panel": "proxy",
+  "protocol_sha256": "c5f506db654c303d5afa5c6484e5810162ca3ab19e2d9cf285cb92fbbad3008b",
+  "train_roster": 6221
+}

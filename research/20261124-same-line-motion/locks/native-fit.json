@@ -1,0 +1,17 @@
+{
+  "by_status": {
+    "FREEZE_FIXTURE_IDENTITY_UNVERIFIED": 5,
+    "different_total_line": 11,
+    "no_current_pair": 1,
+    "no_eligible_early_outcome": 16,
+    "outside_competition_scope": 15,
+    "same_line": 59
+  },
+  "coefficient": -0.4878540340760438,
+  "early_labels_sha256": "d99734d5efa14d35c4137c711d7e746419b5f729e25224abf2d7a01dcd04c405",
+  "fit_sources": 43,
+  "input_sha256": "410a3514b5a436597d29d30429991cfd3737758b5893fc672a0cfcbc390a3446",
+  "panel": "native",
+  "protocol_sha256": "c5f506db654c303d5afa5c6484e5810162ca3ab19e2d9cf285cb92fbbad3008b",
+  "train_roster": 91
+}

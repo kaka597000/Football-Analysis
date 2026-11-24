@@ -1,0 +1,15 @@
+{
+  "applicable_days": 179,
+  "beta": 0.1282250663597548,
+  "fit_panel": "proxy",
+  "fit_sha256": "20904f559e889f9be17ec5462e9d9ef308a64c443972c924701f407b96f5e074",
+  "forecasts_sha256": "2f7a1d9426fbcfd48174821a4fdb49ffd171669bcf83ee14c5d6d12a0e9ff2a2",
+  "input_sha256": "d91bb01ea6a301c3dbdca0eb83e32cff2b90b086880ab99f6e2cedaeb42a6a14",
+  "listed": 2234,
+  "panel": "proxy",
+  "protocol_sha256": "c5f506db654c303d5afa5c6484e5810162ca3ab19e2d9cf285cb92fbbad3008b",
+  "status": {
+    "same_line": 2234
+  },
+  "transfer_sha256": null
+}
