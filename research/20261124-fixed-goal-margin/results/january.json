@@ -1,0 +1,874 @@
+{
+  "panel": "january",
+  "overall": {
+    "roster": 612,
+    "predicted": 612,
+    "scored": 612,
+    "dates": 73,
+    "metrics": {
+      "first": {
+        "n": 612,
+        "base": 84,
+        "candidate": 82,
+        "gained": 10,
+        "lost": 12,
+        "changed": 96
+      },
+      "matrix_three": {
+        "n": 612,
+        "base": 201,
+        "candidate": 196,
+        "gained": 15,
+        "lost": 20,
+        "changed": 349
+      },
+      "wdl": {
+        "n": 612,
+        "base": 292,
+        "candidate": 292,
+        "gained": 0,
+        "lost": 0,
+        "changed": 0
+      },
+      "total_full_win": {
+        "n": 612,
+        "base": 352,
+        "candidate": 344,
+        "gained": 12,
+        "lost": 20,
+        "changed": 32
+      }
+    },
+    "quality": {
+      "base": {
+        "score_log_loss": 2.940158728521631,
+        "conditional_score_log_loss": 1.0281970405219745,
+        "median_actual_rank": 5.0,
+        "rank_at_most": {
+          "1": 84,
+          "3": 201,
+          "5": 310,
+          "10": 477,
+          "20": 583
+        },
+        "mode_wrong_sign": 340,
+        "settlements": {
+          "FULL_WIN": 352,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 260
+        }
+      },
+      "candidate": {
+        "score_log_loss": 2.9378861226808417,
+        "conditional_score_log_loss": 1.025924434681185,
+        "median_actual_rank": 5.5,
+        "rank_at_most": {
+          "1": 82,
+          "3": 196,
+          "5": 306,
+          "10": 478,
+          "20": 583
+        },
+        "mode_wrong_sign": 358,
+        "settlements": {
+          "FULL_WIN": 344,
+          "HALF_WIN": 0,
+          "PUSH": 0,
+          "HALF_LOSS": 0,
+          "FULL_LOSS": 268
+        }
+      }
+    },
+    "first_delta_pp_ci95": [
+      -1.8832472331862857,
+      1.2821691176470582
+    ]
+  },
+  "years": {
+    "2023": {
+      "roster": 234,
+      "predicted": 234,
+      "scored": 234,
+      "dates": 28,
+      "metrics": {
+        "first": {
+          "n": 234,
+          "base": 34,
+          "candidate": 33,
+          "gained": 6,
+          "lost": 7,
+          "changed": 46
+        },
+        "matrix_three": {
+          "n": 234,
+          "base": 86,
+          "candidate": 84,
+          "gained": 7,
+          "lost": 9,
+          "changed": 137
+        },
+        "wdl": {
+          "n": 234,
+          "base": 104,
+          "candidate": 104,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 234,
+          "base": 134,
+          "candidate": 129,
+          "gained": 4,
+          "lost": 9,
+          "changed": 13
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.9311013542857407,
+          "conditional_score_log_loss": 1.002741985875344,
+          "median_actual_rank": 5.0,
+          "rank_at_most": {
+            "1": 34,
+            "3": 86,
+            "5": 122,
+            "10": 185,
+            "20": 220
+          },
+          "mode_wrong_sign": 135,
+          "settlements": {
+            "FULL_WIN": 134,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 100
+          }
+        },
+        "candidate": {
+          "score_log_loss": 2.935021817597096,
+          "conditional_score_log_loss": 1.006662449186699,
+          "median_actual_rank": 5.0,
+          "rank_at_most": {
+            "1": 33,
+            "3": 84,
+            "5": 119,
+            "10": 185,
+            "20": 220
+          },
+          "mode_wrong_sign": 138,
+          "settlements": {
+            "FULL_WIN": 129,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 105
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        -3.783975919047009,
+        2.834135812717914
+      ]
+    },
+    "2024": {
+      "roster": 167,
+      "predicted": 167,
+      "scored": 167,
+      "dates": 23,
+      "metrics": {
+        "first": {
+          "n": 167,
+          "base": 19,
+          "candidate": 17,
+          "gained": 2,
+          "lost": 4,
+          "changed": 25
+        },
+        "matrix_three": {
+          "n": 167,
+          "base": 44,
+          "candidate": 40,
+          "gained": 1,
+          "lost": 5,
+          "changed": 93
+        },
+        "wdl": {
+          "n": 167,
+          "base": 87,
+          "candidate": 87,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 167,
+          "base": 94,
+          "candidate": 93,
+          "gained": 2,
+          "lost": 3,
+          "changed": 5
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.9054098356401106,
+          "conditional_score_log_loss": 1.0893046114979752,
+          "median_actual_rank": 6.0,
+          "rank_at_most": {
+            "1": 19,
+            "3": 44,
+            "5": 78,
+            "10": 128,
+            "20": 162
+          },
+          "mode_wrong_sign": 86,
+          "settlements": {
+            "FULL_WIN": 94,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 73
+          }
+        },
+        "candidate": {
+          "score_log_loss": 2.910809954991803,
+          "conditional_score_log_loss": 1.0947047308496678,
+          "median_actual_rank": 6.0,
+          "rank_at_most": {
+            "1": 17,
+            "3": 40,
+            "5": 79,
+            "10": 129,
+            "20": 162
+          },
+          "mode_wrong_sign": 90,
+          "settlements": {
+            "FULL_WIN": 93,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 74
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        -4.545973432959735,
+        1.9047619047619047
+      ]
+    },
+    "2025": {
+      "roster": 211,
+      "predicted": 211,
+      "scored": 211,
+      "dates": 22,
+      "metrics": {
+        "first": {
+          "n": 211,
+          "base": 31,
+          "candidate": 32,
+          "gained": 2,
+          "lost": 1,
+          "changed": 25
+        },
+        "matrix_three": {
+          "n": 211,
+          "base": 71,
+          "candidate": 72,
+          "gained": 7,
+          "lost": 6,
+          "changed": 119
+        },
+        "wdl": {
+          "n": 211,
+          "base": 101,
+          "candidate": 101,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 211,
+          "base": 124,
+          "candidate": 122,
+          "gained": 6,
+          "lost": 8,
+          "changed": 14
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.977706077727376,
+          "conditional_score_log_loss": 1.0080620567983698,
+          "median_actual_rank": 5.0,
+          "rank_at_most": {
+            "1": 31,
+            "3": 71,
+            "5": 110,
+            "10": 164,
+            "20": 201
+          },
+          "mode_wrong_sign": 119,
+          "settlements": {
+            "FULL_WIN": 124,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 87
+          }
+        },
+        "candidate": {
+          "score_log_loss": 2.962492603219542,
+          "conditional_score_log_loss": 0.9928485822905365,
+          "median_actual_rank": 5.0,
+          "rank_at_most": {
+            "1": 32,
+            "3": 72,
+            "5": 108,
+            "10": 164,
+            "20": 201
+          },
+          "mode_wrong_sign": 130,
+          "settlements": {
+            "FULL_WIN": 122,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 89
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        0.0,
+        1.4287423103212569
+      ]
+    }
+  },
+  "leagues": {
+    "eng.1": {
+      "roster": 96,
+      "predicted": 96,
+      "scored": 96,
+      "dates": 36,
+      "metrics": {
+        "first": {
+          "n": 96,
+          "base": 12,
+          "candidate": 12,
+          "gained": 0,
+          "lost": 0,
+          "changed": 8
+        },
+        "matrix_three": {
+          "n": 96,
+          "base": 27,
+          "candidate": 28,
+          "gained": 2,
+          "lost": 1,
+          "changed": 52
+        },
+        "wdl": {
+          "n": 96,
+          "base": 53,
+          "candidate": 53,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 96,
+          "base": 59,
+          "candidate": 58,
+          "gained": 3,
+          "lost": 4,
+          "changed": 7
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 3.0011428895777583,
+          "conditional_score_log_loss": 1.0565763752611563,
+          "median_actual_rank": 7.0,
+          "rank_at_most": {
+            "1": 12,
+            "3": 27,
+            "5": 43,
+            "10": 68,
+            "20": 93
+          },
+          "mode_wrong_sign": 48,
+          "settlements": {
+            "FULL_WIN": 59,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 37
+          }
+        },
+        "candidate": {
+          "score_log_loss": 3.0110491370402612,
+          "conditional_score_log_loss": 1.066482622723659,
+          "median_actual_rank": 7.0,
+          "rank_at_most": {
+            "1": 12,
+            "3": 28,
+            "5": 41,
+            "10": 70,
+            "20": 93
+          },
+          "mode_wrong_sign": 49,
+          "settlements": {
+            "FULL_WIN": 58,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 38
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "esp.1": {
+      "roster": 107,
+      "predicted": 107,
+      "scored": 107,
+      "dates": 45,
+      "metrics": {
+        "first": {
+          "n": 107,
+          "base": 19,
+          "candidate": 17,
+          "gained": 3,
+          "lost": 5,
+          "changed": 25
+        },
+        "matrix_three": {
+          "n": 107,
+          "base": 45,
+          "candidate": 46,
+          "gained": 3,
+          "lost": 2,
+          "changed": 69
+        },
+        "wdl": {
+          "n": 107,
+          "base": 53,
+          "candidate": 53,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 107,
+          "base": 66,
+          "candidate": 62,
+          "gained": 3,
+          "lost": 7,
+          "changed": 10
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.735058812580757,
+          "conditional_score_log_loss": 0.8902521391722744,
+          "median_actual_rank": 4.0,
+          "rank_at_most": {
+            "1": 19,
+            "3": 45,
+            "5": 68,
+            "10": 90,
+            "20": 103
+          },
+          "mode_wrong_sign": 65,
+          "settlements": {
+            "FULL_WIN": 66,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 41
+          }
+        },
+        "candidate": {
+          "score_log_loss": 2.734602891409764,
+          "conditional_score_log_loss": 0.8897962180012828,
+          "median_actual_rank": 4.0,
+          "rank_at_most": {
+            "1": 17,
+            "3": 46,
+            "5": 68,
+            "10": 90,
+            "20": 103
+          },
+          "mode_wrong_sign": 68,
+          "settlements": {
+            "FULL_WIN": 62,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 45
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        -6.318445195557701,
+        2.5641025641025643
+      ]
+    },
+    "fra.1": {
+      "roster": 94,
+      "predicted": 94,
+      "scored": 94,
+      "dates": 27,
+      "metrics": {
+        "first": {
+          "n": 94,
+          "base": 12,
+          "candidate": 12,
+          "gained": 1,
+          "lost": 1,
+          "changed": 14
+        },
+        "matrix_three": {
+          "n": 94,
+          "base": 32,
+          "candidate": 31,
+          "gained": 3,
+          "lost": 4,
+          "changed": 56
+        },
+        "wdl": {
+          "n": 94,
+          "base": 39,
+          "candidate": 39,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 94,
+          "base": 55,
+          "candidate": 56,
+          "gained": 2,
+          "lost": 1,
+          "changed": 3
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.859169472751879,
+          "conditional_score_log_loss": 0.9795828724179959,
+          "median_actual_rank": 5.0,
+          "rank_at_most": {
+            "1": 12,
+            "3": 32,
+            "5": 54,
+            "10": 75,
+            "20": 90
+          },
+          "mode_wrong_sign": 58,
+          "settlements": {
+            "FULL_WIN": 55,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 39
+          }
+        },
+        "candidate": {
+          "score_log_loss": 2.846306633139342,
+          "conditional_score_log_loss": 0.9667200328054577,
+          "median_actual_rank": 5.0,
+          "rank_at_most": {
+            "1": 12,
+            "3": 31,
+            "5": 53,
+            "10": 75,
+            "20": 90
+          },
+          "mode_wrong_sign": 58,
+          "settlements": {
+            "FULL_WIN": 56,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 38
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        -2.830188679245283,
+        3.225806451612903
+      ]
+    },
+    "ger.1": {
+      "roster": 91,
+      "predicted": 91,
+      "scored": 91,
+      "dates": 29,
+      "metrics": {
+        "first": {
+          "n": 91,
+          "base": 9,
+          "candidate": 9,
+          "gained": 1,
+          "lost": 1,
+          "changed": 8
+        },
+        "matrix_three": {
+          "n": 91,
+          "base": 21,
+          "candidate": 22,
+          "gained": 3,
+          "lost": 2,
+          "changed": 51
+        },
+        "wdl": {
+          "n": 91,
+          "base": 48,
+          "candidate": 48,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 91,
+          "base": 58,
+          "candidate": 57,
+          "gained": 1,
+          "lost": 2,
+          "changed": 3
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 3.1522249702856904,
+          "conditional_score_log_loss": 1.068676820704396,
+          "median_actual_rank": 7.0,
+          "rank_at_most": {
+            "1": 9,
+            "3": 21,
+            "5": 36,
+            "10": 69,
+            "20": 82
+          },
+          "mode_wrong_sign": 54,
+          "settlements": {
+            "FULL_WIN": 58,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 33
+          }
+        },
+        "candidate": {
+          "score_log_loss": 3.159227757892307,
+          "conditional_score_log_loss": 1.0756796083110118,
+          "median_actual_rank": 7.0,
+          "rank_at_most": {
+            "1": 9,
+            "3": 22,
+            "5": 34,
+            "10": 69,
+            "20": 82
+          },
+          "mode_wrong_sign": 54,
+          "settlements": {
+            "FULL_WIN": 57,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 34
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        -2.9419044845661038,
+        3.4904485049833776
+      ]
+    },
+    "ita.1": {
+      "roster": 127,
+      "predicted": 127,
+      "scored": 127,
+      "dates": 46,
+      "metrics": {
+        "first": {
+          "n": 127,
+          "base": 21,
+          "candidate": 22,
+          "gained": 4,
+          "lost": 3,
+          "changed": 31
+        },
+        "matrix_three": {
+          "n": 127,
+          "base": 47,
+          "candidate": 45,
+          "gained": 4,
+          "lost": 6,
+          "changed": 66
+        },
+        "wdl": {
+          "n": 127,
+          "base": 64,
+          "candidate": 64,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 127,
+          "base": 67,
+          "candidate": 65,
+          "gained": 1,
+          "lost": 3,
+          "changed": 4
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 2.8878343497525516,
+          "conditional_score_log_loss": 1.0428854320035803,
+          "median_actual_rank": 5.0,
+          "rank_at_most": {
+            "1": 21,
+            "3": 47,
+            "5": 65,
+            "10": 102,
+            "20": 124
+          },
+          "mode_wrong_sign": 63,
+          "settlements": {
+            "FULL_WIN": 67,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 60
+          }
+        },
+        "candidate": {
+          "score_log_loss": 2.87231034597127,
+          "conditional_score_log_loss": 1.0273614282222976,
+          "median_actual_rank": 5.0,
+          "rank_at_most": {
+            "1": 22,
+            "3": 45,
+            "5": 67,
+            "10": 101,
+            "20": 124
+          },
+          "mode_wrong_sign": 77,
+          "settlements": {
+            "FULL_WIN": 65,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 62
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        -3.96838536739199,
+        5.455796497080893
+      ]
+    },
+    "ned.1": {
+      "roster": 97,
+      "predicted": 97,
+      "scored": 97,
+      "dates": 33,
+      "metrics": {
+        "first": {
+          "n": 97,
+          "base": 11,
+          "candidate": 10,
+          "gained": 1,
+          "lost": 2,
+          "changed": 10
+        },
+        "matrix_three": {
+          "n": 97,
+          "base": 29,
+          "candidate": 24,
+          "gained": 0,
+          "lost": 5,
+          "changed": 55
+        },
+        "wdl": {
+          "n": 97,
+          "base": 35,
+          "candidate": 35,
+          "gained": 0,
+          "lost": 0,
+          "changed": 0
+        },
+        "total_full_win": {
+          "n": 97,
+          "base": 47,
+          "candidate": 46,
+          "gained": 2,
+          "lost": 3,
+          "changed": 5
+        }
+      },
+      "quality": {
+        "base": {
+          "score_log_loss": 3.0540903748080797,
+          "conditional_score_log_loss": 1.1421798693515215,
+          "median_actual_rank": 7.0,
+          "rank_at_most": {
+            "1": 11,
+            "3": 29,
+            "5": 44,
+            "10": 73,
+            "20": 91
+          },
+          "mode_wrong_sign": 52,
+          "settlements": {
+            "FULL_WIN": 47,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 50
+          }
+        },
+        "candidate": {
+          "score_log_loss": 3.0566713105393397,
+          "conditional_score_log_loss": 1.1447608050827822,
+          "median_actual_rank": 6.0,
+          "rank_at_most": {
+            "1": 10,
+            "3": 24,
+            "5": 43,
+            "10": 73,
+            "20": 91
+          },
+          "mode_wrong_sign": 52,
+          "settlements": {
+            "FULL_WIN": 46,
+            "HALF_WIN": 0,
+            "PUSH": 0,
+            "HALF_LOSS": 0,
+            "FULL_LOSS": 51
+          }
+        }
+      },
+      "first_delta_pp_ci95": [
+        -4.820154404023863,
+        2.150537634408602
+      ]
+    }
+  },
+  "forecasts_sha256": "38df4650c5f4257180e01fdf618ac32a35fdeaccb9b0d776e088da6dc0bbc1d4",
+  "labels_sha256": "aa04b17136abc3846738e8fb52861e886c9ed8fd7cf299195cbc2565a1e87a69",
+  "actual_delivered_pairs": {
+    "first": 0,
+    "ordered_three": 0,
+    "preselected_three_batches": 0
+  }
+}

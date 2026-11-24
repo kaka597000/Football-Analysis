@@ -143,7 +143,7 @@ if __name__=='__main__':
     sealing=sub.add_parser('seal')
     for arg in ('inputs','fit','out'):
         sealing.add_argument('--'+arg,type=Path,required=True)
-    sealing.add_argument('--panel',choices=('january','original'),required=True)
+    sealing.add_argument('--panel',choices=('january',),required=True)
     args=p.parse_args()
     if args.mode=='fit':
         value=development(args.train)
