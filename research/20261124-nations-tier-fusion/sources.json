@@ -1,0 +1,91 @@
+{
+  "pairs": {
+    "commit": "b106c810a1debe6e47646131a2beb10bf730091b",
+    "committed_at": "2026-11-10T08:16:54Z",
+    "path": "workspace-updates/20261110-nations-model/nations-model-evidence.tar.gz",
+    "sha256": "e7a4c6af292c6984ff6d1dbbada60cc9a24f809089bc84c1b97c2a0ae6feb528"
+  },
+  "p12": {
+    "commit": "f7448c65ad358c8240dc3111850531d1abcb5ce3",
+    "committed_at": "2026-11-12T13:53:52Z",
+    "path": "workspace-updates/20261112-nations-prematch/nations-prematch-evidence.tar.gz",
+    "sha256": "0deb5a50e677e6f9bb05ffc9028217ba02d3fbb4909701045817cf334c298c76"
+  },
+  "p13": {
+    "commit": "b4e20971b703dd1df9c771350bd474cc38c45c50",
+    "committed_at": "2026-11-13T13:47:04Z",
+    "path": "workspace-updates/20261113-nations-evening/nations-evening-evidence.tar.gz",
+    "sha256": "9abc41224419ead5f36626db84de92e3e86c81159530785096e8e1120fb1bcb7"
+  },
+  "p14": {
+    "commit": "c026b91395749514994e74c7d1774189a87afa69",
+    "committed_at": "2026-11-14T13:19:45Z",
+    "path": "workspace-updates/20261114-nations-prematch/nations-prematch-evidence.tar.gz",
+    "sha256": "3565a4fb60da7f534a66accb44596364a6593b315418c40165b869ce7bf68a85"
+  },
+  "p14late": {
+    "commit": "e932ab13ec6938d5ffd1c5fc95678798da3466a1",
+    "committed_at": "2026-11-14T19:10:59Z",
+    "path": "workspace-updates/20261115-remaining-nations-brazil/remaining-evidence.tar.gz",
+    "sha256": "3f842a58a73eb453d354e8a770c934378785714189c2e73bf190f77596534e49"
+  },
+  "p15": {
+    "commit": "a4cbc462df2ace01739269a66262321ac6e69e66",
+    "committed_at": "2026-11-15T14:12:11Z",
+    "path": "workspace-updates/20261115-evening-scope/evening-scope-evidence.tar.gz",
+    "sha256": "8d9fd69c81955c12b7a65de9be099032bd947b7baae57fa8b1746d416db84809"
+  },
+  "p16": {
+    "commit": "a2381a5aeb4f21e0a01ce47574a055eec8168f04",
+    "committed_at": "2026-11-16T12:47:57Z",
+    "path": "workspace-updates/20261116-nations-prematch-2044/nations-prematch-evidence.tar.gz",
+    "sha256": "49ae1bbc3041b3ea0b3f3eb59c3706bbac6b9d5c88ffb4827f917490399b8dd0"
+  },
+  "p17": {
+    "commit": "0b366adac09a186847214a639bef4f559de2b79f",
+    "committed_at": "2026-11-17T13:37:57Z",
+    "path": "workspace-updates/20261117-tonight-analysis/tonight-evidence.tar.gz",
+    "sha256": "ce754819274a83450ad8e0459a12f6331eb03c472b61e4e027476acf6468e2c0"
+  },
+  "r12": {
+    "commit": "ea87500a7850cccd2b1029079f38ec3e1701d0cc",
+    "committed_at": "2026-11-13T00:59:04Z",
+    "path": "workspace-updates/20261113-nations-review/nations-review-evidence.tar.gz",
+    "sha256": "448edda016c523688b2f0558d6af396c787390f3bad578e8144a20a178af8f1e"
+  },
+  "r13": {
+    "commit": "fc9d3e8d1ddaefdc6ecee0ed566437d64644b007",
+    "committed_at": "2026-11-14T05:40:12Z",
+    "path": "workspace-updates/20261114-nations-review/nations-review-evidence.tar.gz",
+    "sha256": "7da16bb5c7c089a236ad41d62d52a5d7f6f09949056d6cd7593445d4c2f160e1"
+  },
+  "r14": {
+    "commit": "731eb2b5f2122d9475ece44cbcb2886a1f9aa7e4",
+    "committed_at": "2026-11-15T07:55:33Z",
+    "path": "workspace-updates/20261115-review-kashiwa/review-kashiwa-evidence.tar.gz",
+    "sha256": "d332e31f47de60fc92531447633e01632c60bb8c484bb73d4e249504b3e95586"
+  },
+  "r15": {
+    "commit": "3cef4b33f4e85e1a25b91c41c690c31d93dc14f1",
+    "committed_at": "2026-11-16T00:37:29Z",
+    "path": "workspace-updates/20261116-nations-review/nations-review-evidence.tar.gz",
+    "sha256": "3b58dc3cf731eaf7d4762f70ad534d888a3966b7b40ad00b636a46f2f50b5bc8"
+  },
+  "r16": {
+    "commit": "0e06c14e8338c7bca9b9f07ee68345dfe6930e41",
+    "committed_at": "2026-11-17T00:35:52Z",
+    "path": "workspace-updates/20261117-nations-review-0833/nations-review-evidence.tar.gz",
+    "sha256": "b00b5eebefdbd251d9e243d21c96057d1b507c8e8158b4c38d81cd4acb8e9071"
+  },
+  "r17": {
+    "commit": "3a40c16d1873fe803a6b79b23fe19e633d140868",
+    "committed_at": "2026-11-18T00:34:36Z",
+    "path": "workspace-updates/20261118-all-analysis-review/review-evidence.tar.gz",
+    "sha256": "7913ed0d798119f537f03889af46fccd6eec317f837e857a0881651abd2d1e25"
+  },
+  "r7": {
+    "commit": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+    "path": "workspace-updates/20261123-prematch-literature/first-issues.tar.gz",
+    "sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d"
+  }
+}
