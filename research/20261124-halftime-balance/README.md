@@ -25,6 +25,20 @@
 
 11 月 18 日北京时间 13:11:09 是六场原综合目标的截止。符合此截止的最后完整报价为 13:07:09，取回于 13:07:16。原本独立的盘口变化研究使用 14:19:42 的较晚截点，可以使用 14:17 的采样。把它当成 13:11 已知会造成泄漏。下次正常已授权采集如产生带供应商首报标志、原始价格与双时钟的同场双市场证据，才可验证真正的开盘增量；可继续使用现有市场路径研究入口。[决策前末次采集](https://github.com/kaka597000/kaka597000-Football-Analysis-Data/blob/a6d45024cf6cf622f05e4b378ab53cfe2d6ae329/market/runs/44241910588-1-bra1/source-metadata.json) · [原锁定协议](https://github.com/kaka597000/kaka597000-Football-Analysis-Data/blob/a6d45024cf6cf622f05e4b378ab53cfe2d6ae329/workspace-updates/20261118-market-signals/movement/protocol.json)
 
+### 11 月 7 日原综合首冻内的开盘字段
+
+模型计分结束后，又复核了当日原始名单的 55 场。48 场的首冻绑定 ESPN 事件、响应哈希与抓取时钟；其中 44 场找回匹配的原始响应。四份正文缺失，七场缺 ESPN 身份。44 场的同一份赛前响应同时载有 DraftKings 胜平负三边、大小球盘线及两边价格的 `open` 和 `close` 字段。按主／平／客和大／小分别比较，胜平负至少一边变价 **44/44**，大小球至少一边变价 **44/44**，实际盘线移动 **2/44**，两市场所有数值均相同 **0/44**。美赔先转换为等价小数，盘线按数值比较。
+
+所有 44 份抓取都早于各自综合截止；最后一份在北京时间 19:55:14，首冻截止约 20:08:16。两端报价都在该次抓取时可知，各自的首次挂牌和最后更新时间无逐价时钟，`close` 仅指赛前当次响应中的命名字段。此处只测数据可用性，未计这批的赛果或预测增益。下一步可对另一天正常留存的同格式归档，按原截止登记“来源标记开盘至观察价”的变化，和该观察价本身做同场比较。首报的准确时刻仍需独立证据。[固定数据清单](https://github.com/kaka597000/kaka597000-Football-Analysis-Data/blob/a6d45024cf6cf622f05e4b378ab53cfe2d6ae329/workspace-updates/20261107-night19-55matches/manifest.json)
+
+在固定 Data 提交的 `workspace-updates/20261107-night19-55matches` 目录运行已有恢复器，然后在本源码根目录运行以下命令。`STAGE` 指向新建恢复目录。清单中恢复包 SHA-256 为 `07c79bc107db14c8113cadab6ed6194bbe946f82cdbea9e2ea61c0a30bd237ac`。例如入围事件 401878758 的原响应 SHA-256 为 `e7119d00032084095f44f5ae779257e972b7b3ecad137464bef51cb2a370b874`。
+
+```sh
+python "$DATA_SNAPSHOT/workspace-updates/20261107-night19-55matches/restore.py" --stage "$STAGE"
+PYTHONPATH=runtime python research/20261124-halftime-balance/audit_open_quotes.py \
+  "$STAGE/WCPP/reports/night19-20261107-1935" "$STAGE/WCPP/forecasts/issued-analyses"
+```
+
 ## 离线复算
 
 在本分支源码根目录执行。使用 Python 3.12.14、NumPy 2.3.5、SciPy 1.17.0 和仓库依赖。`DATA_REPO` 为已有固定 Git 对象的数据仓；`OUT` 为新私有输出目录。`AUDIT` 为源码提交 `54ec6d70fdff7145c1889ffe6071b2188663bef2` 的干净检出，用来复用已核实的赛事身份、原始首冻和 90 分钟证据读取器。旧研究的模型系数和成绩不参与计算。

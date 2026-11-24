@@ -1,7 +1,8 @@
 from datetime import date
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
+from audit_open_quotes import archived_quote, markets
 from clocked_evidence import retained_h2h
 from history import book, projected_games, scores
 
@@ -58,3 +59,27 @@ class TemporalProjectionTests(unittest.TestCase):
                        {'bookmakers': [{'key': 'one', 'markets': [dict(market, last_update=kickoff)]}]}):
             self.assertIsNone(retained_h2h([dict(event, **change)], snap, kickoff))
         self.assertIsNone(retained_h2h([event, event], snap, kickoff))
+
+
+class OpeningFieldsTests(unittest.TestCase):
+    def test_open_and_observed_prices_compare_by_side_and_economic_value(self):
+        prices = {'open': {'odds': '+100'}, 'close': {'odds': '-100'}}
+        quote = {'moneyline': {side: prices for side in ('home', 'draw', 'away')},
+                 'total': {side: {'open': {'line': prefix + '2.50', 'odds': '-110'},
+                                  'close': {'line': prefix + '2.5', 'odds': '-110'}}
+                           for side, prefix in (('over', 'o'), ('under', 'u'))}}
+        self.assertEqual(markets(quote, 'open'), markets(quote, 'close'))
+        quote['total']['under']['close']['line'] = 'o2.5'
+        with self.assertRaisesRegex(ValueError, 'total side'):
+            markets(quote, 'close')
+
+    def test_unbound_or_postcut_snapshot_is_excluded_before_reading_body(self):
+        report = Mock()
+        cutoff = '2026-11-07T12:08:15Z'
+        for event, stamp in [('2', '2026-11-07T11:55:00Z'), ('1', cutoff),
+                             ('1', '2026-11-07T12:10:07Z')]:
+            source = {'source_url': f'https://site.api.espn.com/summary?event={event}',
+                      'query_time': stamp}
+            status, quote = archived_quote(report, {'cutoff_at': cutoff, 'sources': [source]}, '1')
+            self.assertEqual((status, quote), ('missing_bound_source', None))
+        report.glob.assert_not_called()
