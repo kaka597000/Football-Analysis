@@ -14,7 +14,7 @@ def write_coverage(historical, clocked, inputs, output):
     for r in inputs:
         reasons.setdefault(r["league"], Counter())[r["status"]] += 1
     with output.open("w", newline="") as f:
-        writer = csv.writer(f)
+        writer = csv.writer(f, lineterminator="\n")
         writer.writerow(["competition", "name", "panel", "roster", "predictions", "scored", "activated",
                          "first_base", "first_candidate", "three_base", "three_candidate",
                          "wdl_base", "wdl_candidate", "ou_nonpush", "ou_wins_base", "ou_wins_candidate",

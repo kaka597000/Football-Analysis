@@ -12,7 +12,7 @@
 
 ## 错在什么地方
 
-旧项目 20 项赛事、5,233 场的诊断中，3,491 场首选是 1–1，真实发生 580 场；1,598 场有四球以上，首选给出四球及以上共 36 场。这两组边际数量反映了首选过于集中的现象，无法说明单场错于何因。[原项目逐赛事诊断](https://github.com/kaka597000/kaka597000-Football-Analysis-Data/blob/a6d45024cf6cf622f05e4b378ab53cfe2d6ae329/workspace-updates/20261123-all-scope-kpi/results/miss-diagnostics.csv)
+旧项目 20 项赛事、5,233 场的诊断中，3,491 场首选是 1–1，真实发生 580 场；1,598 场至少有四球，首选给出四球及以上共 36 场。这两组边际数量反映了首选过于集中的现象，无法说明单场错于何因。[原项目逐赛事诊断](https://github.com/kaka597000/kaka597000-Football-Analysis-Data/blob/a6d45024cf6cf622f05e4b378ab53cfe2d6ae329/workspace-updates/20261123-all-scope-kpi/results/miss-diagnostics.csv)
 
 本轮开发段的共同基线在 2,070 场中精确命中 255 场。1,083 场错在至少一队究竟进球没有，占首选失误的 59.7%；其余 732 场判断对了哪些队会进球，但猜错正进球数。按球队一侧计，有 818 次预报进球、实际为零，另有 436 次预报零球、实际进球。同场两队都猜错时，两项可同时增加。[开发段诊断](results/training.json)
 
@@ -69,7 +69,7 @@ cmp "$OUT/historical.json" "$S/results/historical.json"
 cmp "$OUT/training.json" "$S/results/training.json"
 ~~~
 
-原时点核验复用已有两个研究的净签出目录。把 SRC69 和 SRC70 分别设为以上游提交 `54ec6d70fdff7145c1889ffe6071b2188663bef2` 和 `6e3906fb24e487eec736e73ff304975d0ac35e93` 签出的源码目录。Data 尚需含 `a5ecf0d0f1148a7acdb5675d45c347c0d5fb9d12` 及相关被引用的历史 Git 对象。
+原时点核验复用已有两个研究的干净签出目录。把 SRC69 和 SRC70 分别设为以上游提交 `54ec6d70fdff7145c1889ffe6071b2188663bef2` 和 `6e3906fb24e487eec736e73ff304975d0ac35e93` 签出的源码目录。Data 尚需含 `a5ecf0d0f1148a7acdb5675d45c347c0d5fb9d12` 及相关被引用的历史 Git 对象。
 
 ~~~sh
 AUDIT="$SRC69/runtime:$SRC69/research/20261124-prior-dismissals:$SRC70/research/20261124-halftime-balance"
