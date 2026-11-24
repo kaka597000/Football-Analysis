@@ -16,6 +16,7 @@ from research_program.replay import _finished_espn_label
 DATA = 'a6d45024cf6cf622f05e4b378ab53cfe2d6ae329'
 STUDY_DIR = 'research/20261124-nations-tier-fusion/complement-evidence/'
 PANEL = 'club-first-source-lock.json'
+CHOICE_COMMIT = '1b8e7df2e3152503b6a6e6b3fecf9056e17a6a68'
 
 
 def git(repo, *args):
@@ -93,6 +94,8 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     args = parser.parse_args()
     here = Path(__file__).resolve().parent
+    if args.lock_commit != CHOICE_COMMIT:
+        raise ValueError('the published pre-outcome club choice lock is required')
     raw = git(here, 'show', args.lock_commit + ':' + STUDY_DIR + PANEL)
     if raw != (here / 'complement-evidence' / PANEL).read_bytes():
         raise ValueError('source choices differ from their named commit')
@@ -106,8 +109,14 @@ def main():
     pairs = [('frozen_comprehensive', 'market'), ('current', 'market'), ('current', 'test_model'),
              ('current', 'test_model', 'market'), ('current', 'test_model', 'market', 'frozen_comprehensive')]
     rates = {','.join(roles): partition(rows, roles) for roles in pairs}
+    groups = {}
+    for field in ('batch','competition'):
+        groups[field] = {key: partition([r for r in rows if r[field] == key], ('current','market'))
+                         for key in sorted({r[field] for r in rows})}
+    rates_by_source = {k: partition(rows, (k,)) for k in ('current','test_model','market','frozen_comprehensive')}
     result = dict(registrations=len(rows), status=dict(Counter(r['result_status'] for r in rows)),
                   by_competition=dict(Counter(r['competition'] for r in rows)), fixed_pairs=rates,
+                  per_source=rates_by_source, current_market_by_group=groups,
                   authored_first_visible=dict(available=0, graded=0, rate=None))
     (args.out / 'club-results.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n')
 

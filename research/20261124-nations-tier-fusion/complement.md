@@ -52,13 +52,21 @@
 
 在原三臂研究的 6 场中，所有比赛都有同截点的原球队、双市场报价及认证赛果。原球队和纯盘口都中 0/6，二者 6 场全错。将已登记的两条同源校准配方也算入敏感性比较，市场校准中 1/6，赛事分组校准中 0/6，四种选分共同漏掉 5 场。唯一成功的是弗拉门戈 2–1 巴拉纳竞技。该独立研究旧批次与用户收到的巴甲比分表分别计数。赛前原数据提交为 `aa565df1`，认证赛果为 `69821e4c`。纯盘口的首选是从同一份开球前 Pinnacle 原始响应回放所得；输入选择 SHA-256 `5aa46d7bf5eb402fcf96bd5c20b8052e8debc89b412907d06c2906fa336dccf2` 在本回放读取标签前已封存。[巴甲逐场 6 行](complement-evidence/brazil-fixtures.csv)
 
+## 九个俱乐部联赛的补充清点
+
+这组 11 月 7–8 日的旧档只做逐场互补清点，从未用于欧国联择源规则的拟合或测试。先锁定综合首冻和同截点的 Pinnacle 两个市场，再逐场追溯 `current-test-pair` 自己的第一次冻结、来源时间、主客、矩阵哈希与两臂明示首选。65/65 场双模型首冻都已在综合判断前签发。65 场 Current 均标记盘口数值调整关闭。实际可见作者首发的有效分母为 0。综合冻结综合了球队及市场输入，占单独一列。[输入与代码先行锁](https://github.com/kaka597000/Football-Analysis/commit/1b8e7df2e3152503b6a6e6b3fecf9056e17a6a68) · [逐场原选择、球队和认证赛果](complement-evidence/club-fixtures.csv)
+
+- 两份原始名册分别登记 55 和 46 场。能核到正式范围、综合首选、原生赛前阶段、同机构同截点双盘的分别为 27、38 场；两份原名册有一场相同，65 场有效配对间没有重叠。五大联赛后续包的 20 条有效记录全部重复。所有 65 场的原 Git 包均在开球前提交，所有常规赛果均有归档 ESPN 原件和认证记录。英超 8、西甲 7、德甲 8、意甲 7、法甲 7、荷甲 7、美职联 10、挪超 6、瑞典超 5。其余赛事本清点未覆盖。
+- 65 场里，球队 Current 中 7、纯盘口中 4，球队独中 5、盘口独中 2、共同中 2、共同漏 56；事后逐场择优上界 **9/65**。7 日为 6/27，8 日为 3/38。两个旧模型共用球队输入，Test 中 6 场，6 场均被 Current 同时命中，Test 独中 0。
+- 原综合冻结中 8/65，其中 3 场是与 Current、Test、盘口一起比较时只有综合冻结选中的。四者全算，事后上界为 **12/65**，仍有 53 场全错。本名单达到首选 20% 至少要 13 场。综合冻结首选是可追溯的研究信息，实际向用户首发的正文和顺序仍需服务回执确认。[按批次、联赛和来源统计](complement-evidence/club-results.json)
+
 ## 下一项数据缺口
 
 先补原负责人正常发送时留下的整文与首发回执，才可让作者首选进入同场诊断。模型侧要解决的是让正确比分出现在首选候选池。评分后按常规时间总球数拆开 30 场所有来源矩阵前三都漏掉的比赛，其中 17 场打进至少 4 球，9 场恰好 3 球，还有 4 场最多 2 球。仅重排原有首选无法补回这些比赛，统一加球也解释不了全部漏判。本次 xG 原批次只有 A、B 两级，每级仅 8 条真正的双边过程训练记录。同一将来决策截点能否同时留下近期过程证据、球队分布、具名盘口和作者实发，是下一项可核的数据缺口。保留本次选择器的唯一配方作复核记录，结束本名单上的选参，不再增加常驻对照。
 
 ## 离线复现
 
-准备 Python 3.12 和源码 requirements.txt 固定的数值库。DATA 指向拥有上述原提交的项目数据 Git 对象库。命令使用全新的输出目录，只有 grade 读取原后段赛果归档。
+准备 Python 3.12 和源码 requirements.txt 固定的数值库。DATA 指向拥有上述原提交的项目数据 Git 对象库。源码 Git 对象库需要包含 #72 和本草稿的固定提交。命令使用全新的输出目录，欧国联的 grade 和两个俱乐部附表的 score 或 score_review 步骤才会读取各自评分标签。
 
 ```sh
 export DATA=/path/to/kaka597000-Football-Analysis-Data
@@ -75,6 +83,12 @@ cmp "$S/complement-evidence/fixtures.csv" "$OUT/grade/fixtures.csv"
 python "$S/brazil_sources.py" choices --data "$DATA" --lock "$OUT/brazil-lock.jsonl"
 python "$S/brazil_sources.py" score --data "$DATA" --lock "$OUT/brazil-lock.jsonl" --out "$OUT/brazil.csv"
 cmp "$S/complement-evidence/brazil-fixtures.csv" "$OUT/brazil.csv"
+git show 156fc1f29890c03cc07e5a21471442d9760d407f:research/20261124-same-line-motion/export_clean_native.py > "$OUT/club-stage.py"
+python "$S/club_first_sources.py" --data "$DATA" --stage-adapter "$OUT/club-stage.py" --out "$OUT/club-lock.json"
+cmp "$S/complement-evidence/club-first-source-lock.json" "$OUT/club-lock.json"
+python "$S/club_score_review.py" --data "$DATA" --lock-commit 1b8e7df2e3152503b6a6e6b3fecf9056e17a6a68 --out "$OUT/club-grade"
+cmp "$S/complement-evidence/club-fixtures.csv" "$OUT/club-grade/club-fixtures.csv"
+cmp "$S/complement-evidence/club-results.json" "$OUT/club-grade/club-results.json"
 python -m unittest discover -v -s "$S"
 python scripts/run_tests.py --layer integration
 ```

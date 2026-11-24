@@ -1,0 +1,225 @@
+{
+  "registrations": 65,
+  "status": {
+    "CERTIFIED": 65
+  },
+  "by_competition": {
+    "eng.1": 8,
+    "esp.1": 7,
+    "ita.1": 7,
+    "ger.1": 8,
+    "ned.1": 7,
+    "fra.1": 7,
+    "usa.1": 10,
+    "swe.1": 5,
+    "nor.1": 6
+  },
+  "fixed_pairs": {
+    "frozen_comprehensive,market": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "frozen_comprehensive": 6,
+        "frozen_comprehensive+market": 2,
+        "market": 2,
+        "none": 55
+      },
+      "retrospective_union": 10
+    },
+    "current,market": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "current": 5,
+        "current+market": 2,
+        "market": 2,
+        "none": 56
+      },
+      "retrospective_union": 9
+    },
+    "current,test_model": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "current": 1,
+        "current+test_model": 6,
+        "none": 58
+      },
+      "retrospective_union": 7
+    },
+    "current,test_model,market": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "current": 1,
+        "current+test_model": 4,
+        "current+test_model+market": 2,
+        "market": 2,
+        "none": 56
+      },
+      "retrospective_union": 9
+    },
+    "current,test_model,market,frozen_comprehensive": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "current": 1,
+        "current+test_model": 1,
+        "current+test_model+frozen_comprehensive": 3,
+        "current+test_model+market+frozen_comprehensive": 2,
+        "frozen_comprehensive": 3,
+        "market": 2,
+        "none": 53
+      },
+      "retrospective_union": 12
+    }
+  },
+  "per_source": {
+    "current": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "current": 7,
+        "none": 58
+      },
+      "retrospective_union": 7
+    },
+    "test_model": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "none": 59,
+        "test_model": 6
+      },
+      "retrospective_union": 6
+    },
+    "market": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "market": 4,
+        "none": 61
+      },
+      "retrospective_union": 4
+    },
+    "frozen_comprehensive": {
+      "available": 65,
+      "graded": 65,
+      "wins": {
+        "frozen_comprehensive": 8,
+        "none": 57
+      },
+      "retrospective_union": 8
+    }
+  },
+  "current_market_by_group": {
+    "batch": {
+      "nov07-55": {
+        "available": 27,
+        "graded": 27,
+        "wins": {
+          "current": 4,
+          "current+market": 2,
+          "none": 21
+        },
+        "retrospective_union": 6
+      },
+      "nov08-46": {
+        "available": 38,
+        "graded": 38,
+        "wins": {
+          "current": 1,
+          "market": 2,
+          "none": 35
+        },
+        "retrospective_union": 3
+      }
+    },
+    "competition": {
+      "eng.1": {
+        "available": 8,
+        "graded": 8,
+        "wins": {
+          "current": 2,
+          "current+market": 1,
+          "none": 5
+        },
+        "retrospective_union": 3
+      },
+      "esp.1": {
+        "available": 7,
+        "graded": 7,
+        "wins": {
+          "none": 7
+        },
+        "retrospective_union": 0
+      },
+      "fra.1": {
+        "available": 7,
+        "graded": 7,
+        "wins": {
+          "current": 1,
+          "none": 6
+        },
+        "retrospective_union": 1
+      },
+      "ger.1": {
+        "available": 8,
+        "graded": 8,
+        "wins": {
+          "current": 2,
+          "market": 1,
+          "none": 5
+        },
+        "retrospective_union": 3
+      },
+      "ita.1": {
+        "available": 7,
+        "graded": 7,
+        "wins": {
+          "current+market": 1,
+          "market": 1,
+          "none": 5
+        },
+        "retrospective_union": 2
+      },
+      "ned.1": {
+        "available": 7,
+        "graded": 7,
+        "wins": {
+          "none": 7
+        },
+        "retrospective_union": 0
+      },
+      "nor.1": {
+        "available": 6,
+        "graded": 6,
+        "wins": {
+          "none": 6
+        },
+        "retrospective_union": 0
+      },
+      "swe.1": {
+        "available": 5,
+        "graded": 5,
+        "wins": {
+          "none": 5
+        },
+        "retrospective_union": 0
+      },
+      "usa.1": {
+        "available": 10,
+        "graded": 10,
+        "wins": {
+          "none": 10
+        },
+        "retrospective_union": 0
+      }
+    }
+  },
+  "authored_first_visible": {
+    "available": 0,
+    "graded": 0,
+    "rate": null
+  }
+}

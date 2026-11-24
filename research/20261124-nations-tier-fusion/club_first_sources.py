@@ -73,6 +73,25 @@ def pair_choices(record, fixture):
                 pair_status='VERIFIED_EARLIER_FIRST')
 
 
+def verify_capture(archive, member, quote):
+    sidecar = member + '.meta.json'
+    if sidecar in archive.getnames():
+        meta = json.load(archive.extractfile(sidecar))
+        captured = meta.get('query_time_utc') or meta.get('query_time') or meta.get('queried_utc')
+        if (meta.get('http_status') != 200 or (meta.get('response_sha256') or meta.get('sha256')) != quote['raw_sha256']
+                or not captured or aware(captured) != aware(quote['query_utc'])):
+            raise ValueError('quote receipt hash, HTTP status or capture time differs')
+        return
+    index, = [n for n in archive.getnames() if n.endswith('/markets/root-verified-quotes.json')]
+    groups = json.load(archive.extractfile(index))
+    matches = [snap for group in groups.values() for snap in group.get('snapshots', [])
+               if snap.get('event_id') == quote['event_id'] and snap.get('raw_sha256') == quote['raw_sha256']
+               and aware(snap['query_utc']) == aware(quote['query_utc'])]
+    if len(matches) != 1 or any(matches[0].get(k) != quote.get(k) for k in
+                                ('h2h', 'total', 'market_last_update_utc', 'home', 'away', 'utc')):
+        raise ValueError('original quote acquisition index does not bind the signed snapshot')
+
+
 def market_score(raw, fixture, quote):
     if hashlib.sha256(raw).hexdigest() != quote['raw_sha256']:
         raise ValueError('Pinnacle source digest mismatch')
@@ -125,6 +144,7 @@ def build(repo, stage):
                     raise ValueError('native fixture proof unavailable: '+str(reason))
                 quote = p['quote']
                 name = stage.member(archive,quote.get('raw_path') or quote['source_file'])
+                verify_capture(archive,name,quote)
                 market = market_score(archive.extractfile(name).read(),f,quote)
                 if market != saved['market'] or quote['raw_sha256'] != saved['quote_sha256']:
                     raise ValueError('dual-market reply differs from original inventory lock')
