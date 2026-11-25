@@ -1,0 +1,27 @@
+{
+  "study": "Prior corner opportunities and Current exact scores",
+  "source_main": "baac2b8342f557ac7913e0c45ad3ea2ed4861e5b",
+  "data_pin": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+  "league_codes": {"E0":"eng.1","SP1":"esp.1","D1":"ger.1","I1":"ita.1","F1":"fra.1"},
+  "archive": "workspace-updates/20261123-kpi-optimization/source-assets.tar.gz",
+  "archive_sha256": "7c106ee66a816da84dbbfbf254633b55b7c25e610e7d0f31bf168d68f61d9659",
+  "fit_seasons": ["1920","2021","2122"],
+  "test_seasons": ["2324","2425","2526"],
+  "date_replay": "For each division and season, project every February league fixture. Lock all fixtures for that block at February 1. Both Current and the feature use only that season's completed games dated strictly earlier than January 31, excluding all February labels from their inputs. The 2022/23 season is a gap. Fit the one coefficient only on the three early February blocks. The later seasons are a date-separated historical development check; first-known and market timestamps are unavailable for historical CSVs.",
+  "current": "WCPP-MAIN-1.2 baseline execution recipe, v2.fit_baseline (180-day weights and eight-game shrinkage) and v4.distribution. As in Current, a club unseen by the baseline has no numeric prediction. Historical reconstructed parameters are not the original live artifact.",
+  "signal": "Six latest prior league appearances per club, exhaustive in the source up to the safe date. Use games in the previous 90 days; missing recent corner counts, unknown clubs or insufficient history give the identical Current distribution. For each past side divide its corners for and against by the corresponding home/away league corner mean at cutoff, from complete paired corner observations with >=60 usable league games. For an attack combine its 6 normalized earned counts with its opponent's 6 normalized conceded counts and two synthetic league-mean exposures: x=log((2+sum_for+sum_conceded)/14). For each matrix cell (h,a) multiply P by exp(beta*(x_home*h+x_away*a)) and normalize over the original support. No new score cells, candidate settings, hand rankings or cutoffs.",
+  "fit": "One common nonnegative coefficient in [0,1] by Poisson offset log likelihood on both team scores of eligible early fixtures using the Current means, with penalty 5*beta^2. No fitting on any 2026 or later-block result.",
+  "archive_check": {
+    "roster": "All existing first comprehensive fixtures kicking off from 2026-11-20T00:00:00+08:00 until 2026-11-22T00:00:00+08:00 in the KPI archive, including unscored and outside-study competitions in coverage. Only the five protocol leagues are eligible. The separate November 22 slate and November 24 author batch never enter the candidate evaluation.",
+    "current_pairs_commit": "f7143128733067d568167d726f850a182de165c0",
+    "current_pairs_archive": "workspace-updates/20261122-score-form/evidence.tar.gz",
+    "current_pairs_sha256": "f39f8715f7a3b25b335dbe7453ab93fa37a1c2624e4cd949c4d3158e61946f94",
+    "admission": "Require the actual first prematch pair (revision 1), its hash, ordered identity, stage, data cutoff, original top three, artifact and full archived matrix. Revisions or unavailable first pairs are not first forecasts. Candidate reads only prior corners available by the pair cutoff. Reuse the signed comprehensive reference for identity; a later comprehensive cutoff or quotation is never a model feature. Research replay was not issued. Report unsupported or missing signals and unchanged fallbacks.",
+    "season_source": "a5ecf0d0f1148a7acdb5675d45c347c0d5fb9d12",
+    "past_only": "Require the raw source hash and both capture time and retaining Git commit earlier than the pair cutoff. Exclude at least the preceding calendar date in the clocked replay. Verify identity through league-specific unique club names or already archived pre-cutoff aliases.",
+    "result": "Verify retained ESPN regulation evidence, home/away, event, kickoff, result source and captured time using the existing replay verifier. Actual line only when the original matched two-sided quote, hash, quote and retrieval times are attested by the pair cutoff. Non-push full wins only."
+  },
+  "outcomes": "Common graded denominator, stable row-major exact Top1 and distinct matrix Top3, WDL, five actual total-line outcomes, full-score natural log loss. Report corrections, losses, changes, rows where truth was already rank 2 or 3 vs outside all three, and 95% paired date-cluster bootstrap when >=5 matchdays (2000 draws, seed 20261125). Unsent candidates have zero paired displayed and selected-match denominators. Historical Bet365 double-sided 2.5 is a named archived line, latest price clock unknown; do not count as an executable market.",
+  "decision": "Consider a distinct prospective review only when date-separated historical Top1 improves with a positive date-cluster lower bound, matrix Top3, WDL and observed-line full wins do not regress, score log loss does not worsen, and the real dated Current comparison also gains Top1 without a matrix Top3 regression. Otherwise stop this exact recipe. No automatic promotion or new forward queue.",
+  "protected": "Read R7 first-issue identities only to exclude overlap, including fixture natural keys. Do not open its outcomes. No candidate lock for the #79 enrollment interval or changes to the original handoff. No provider calls, weights, production or historical issue writes."
+}
