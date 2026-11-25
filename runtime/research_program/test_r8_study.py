@@ -2,9 +2,9 @@ import unittest
 
 import numpy as np
 
-from . import all_scope_model as base
-from . import r8_market_movement as movement
-from . import r8_score_calibration as model
+from research_program import all_scope_model as base
+from research_program import r8_market_movement as movement
+from research_program import r8_score_calibration as model
 
 
 class R8StudyTests(unittest.TestCase):
