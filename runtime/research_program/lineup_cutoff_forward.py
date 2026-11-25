@@ -163,7 +163,7 @@ def _official(intake, early, at):
             stamp = aware(row['captured_at_utc']).astimezone(timezone.utc)
             suffix = ''
             if name == OFFICIAL_LOGS[1]:
-                prefix = '-FT-refresh-' if row.get('kind') == 'match-card-FT' else '-refresh-'
+                prefix = {'match-card-FT': '-FT-refresh-', 'postgame-state-check': '-postgame-check-'}.get(row.get('kind'), '-refresh-')
                 suffix = prefix + stamp.strftime('%Y%m%dT%H%M%S%fZ')
             if row['path'] != f'raw/jleague-official/match-{code}{suffix}.html':
                 raise ValueError('wrong official raw match card path')
