@@ -56,6 +56,12 @@ def _plan():
 
 
 class DisplayWindowReviewTests(unittest.TestCase):
+    def test_other_competition_publications_cannot_supply_the_registered_batch(self):
+        plan = _plan()
+        record = dict(track="fra-1-comprehensive-windows-20261125-nov27_dec04-registration")
+        self.assertIsNone(review._publication([record], "nov27_dec04", plan["record_sha256"], ["espn:101"],
+                          "esp-1-comprehensive-windows-20261125-"))
+
     def test_registered_complete_population_and_original_digest_required(self):
         plan = _plan()
         _, fixtures, slates, _ = review._registered(plan)

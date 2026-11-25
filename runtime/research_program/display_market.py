@@ -37,7 +37,7 @@ def comparisons(per_match, records):
             if market != snapshot['forecast']:
                 raise ValueError('same-book market forecast differs from the signed first issue')
         day = aware(review['kickoff_at']).astimezone(ZoneInfo('Asia/Shanghai')).date().isoformat()
-        row = dict(id=mid,date=day,cohort='jpn.1',actual=list(map(int,actual.split('-'))) if actual else None,
+        row = dict(id=mid,date=day,cohort=review.get('cohort', 'jpn.1'),actual=list(map(int,actual.split('-'))) if actual else None,
                    line=line,forecast=dict(authored=authored,market=market))
         rows.append(row)
         public = authored.copy() if review['confirmed_first_score'] else {}

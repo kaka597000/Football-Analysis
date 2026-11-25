@@ -12,9 +12,8 @@ from research.analysis_freeze import DEFAULT_ROOT, aware, digest
 from research.display_delivery import delivery_request
 from storage_lock import exclusive_lock
 from . import goal_state_forward as ledger
-from .goal_state_study import sha
+from .future_validation import read, sha
 from .kpi_validation import _first
-from .r8_score_study import read
 
 TRACK = 'j1-comprehensive-windows-20261125'
 
