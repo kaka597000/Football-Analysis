@@ -4,9 +4,12 @@ import argparse
 import hashlib
 import math
 from pathlib import Path
+import re
 
+from publication import atomic_json
 from research.analysis_freeze import DEFAULT_ROOT, aware, digest
 from research.display_delivery import delivery_request
+from storage_lock import exclusive_lock
 from . import goal_state_forward as ledger
 from .goal_state_study import sha, write_new
 from .r8_score_study import read
@@ -75,29 +78,78 @@ def ranked(eligible):
     return sorted(eligible, key=lambda r:(-r['ranking_probability'], aware(r['kickoff_at']), r['match_id']))[:3]
 
 
-def lock_publication(registered, window, entries, message, out, *, freeze_root=DEFAULT_ROOT):
+def _commit_batch(plan, window, identity, fixtures, out, freeze_root):
+    """Use one durable issuance key even across retries from another output directory."""
+    root = Path(freeze_root)
+    root.mkdir(parents=True, exist_ok=True)
+    slot = root / ('.'+TRACK+'-'+digest([plan['record_sha256'],window])+'.json')
+    index = out/'publication.json'
+    binding = dict(parent=plan['record_sha256'], window=window, identity_sha256=digest(identity))
+    with exclusive_lock(slot.with_suffix('.lock')):
+        if slot.exists() and read(slot) != binding:
+            raise ValueError('first placement changed')
+        if index.exists() and ledger._read(out,read(index))['payload']['identity'] != identity:
+            raise ValueError('first placement changed')
+        if not slot.exists():
+            atomic_json(slot,binding)
+        ref = ledger.register(fixtures, identity, TRACK+'-'+window, out, freeze_root=root)
+        if index.exists():
+            if read(index) != ref:
+                raise ValueError('first placement changed')
+        else:
+            atomic_json(index,ref)
+    return ref
+
+
+def prepared_batch(registered, window, entries, message, out):
+    """Reconstruct the publication from the registered slate, authored rows and actual message."""
     plan = ledger._read(registered, read(registered/'plan.json'))
     info = plan['payload']['identity']
     universe = plan['payload']['fixtures']
     mids = info['slates'][window]
     if set(entries) != set(mids):
         raise ValueError('every registered slot must be represented')
-    rows, eligible = {}, []
+    rows, eligible, labels = {}, [], {}
     for mid in sorted(mids):
         f = universe[mid]
         item = entries[mid]
+        if 'unissued_reason' in item:
+            reason = item['unissued_reason']
+            if (set(item) != {'unissued_reason'} or not isinstance(reason,str) or not reason.strip()
+                    or message.count(f'赛事 {mid}\n未出单　{reason}') != 1):
+                raise ValueError('missing issue must have one visible reason: '+mid)
+            rows[mid] = dict(match_id=mid,kickoff_at=f['kickoff_at'],authored=None,pair=None,
+                             displayed_scores=[],wdl=None,total_direction=None,total_line=None,
+                             ranking_probability=None,unissued_reason=reason)
+            continue
         record = ledger._read(out, item['authored'])
         pair = ledger._read(out, item['pair'])
         scope = ('home','away','cohort','match_id')
         if (any(f[k]!=record['fixture'][k] or f[k]!=pair['fixture'][k] for k in scope)
                 or not aware(f['kickoff_at'])==aware(record['fixture']['kickoff_at'])==aware(pair['fixture']['kickoff_at'])
-                or aware(pair['recorded_at'])>aware(record['recorded_at']) or pair['track']!='current-test-pair'
+                or record['fixture']['stage'] != info['protocol']['competition_stage']
+                or pair['fixture']['stage'] != record['fixture']['stage']
+                or not aware(plan['recorded_at']) <= aware(pair['recorded_at']) <= aware(record['recorded_at'])
+                or pair['track']!='current-test-pair' or record['track']!='comprehensive'
+                or record['payload']['registered_window']['sha256'] != plan['record_sha256']
+                or record['payload']['window'] != window
                 or record['payload']['current_test_reference']['sha256']!=pair['record_sha256']):
             raise ValueError('first current/test pair or authored row differs: '+mid)
         block = delivery_request(record)['text']
         if message.count(block) != 1:
             raise ValueError('actual prepared message must contain each original block once')
         p = record['payload']
+        label = message.partition(block)[0].rstrip().splitlines()
+        label = label[-1] if label else ''
+        labels[mid] = label
+        if re.findall(r'主胜|平局|客胜',label) != ([p['wdl']] if p.get('wdl') else []):
+            raise ValueError('visible WDL differs from the authored row: '+mid)
+        totals = re.findall(r'([大小])\s+(\d+(?:\.\d+)?)',label)
+        if [(side,float(line)) for side,line in totals] != (
+                [(p['total_direction'],p['total_line'])] if p.get('total_direction') else []):
+            raise ValueError('visible total differs from the authored row: '+mid)
+        if p.get('team_names_zh') and ' vs '.join(p['team_names_zh']) not in label:
+            raise ValueError('visible teams differ from the authored row: '+mid)
         base = dict(match_id=mid, kickoff_at=f['kickoff_at'], authored=item['authored'], pair=item['pair'],
                     displayed_scores=p['displayed_scores'], wdl=p.get('wdl'), total_direction=p.get('total_direction'),
                     total_line=p.get('total_line'), ranking_probability=None)
@@ -115,16 +167,20 @@ def lock_publication(registered, window, entries, message, out, *, freeze_root=D
             base['ranking_probability'] = math.sqrt(probs[0]*probs[1])
             eligible.append(base)
         rows[mid] = base
+    selected = [r['match_id'] for r in ranked(eligible)]
+    for mid, label in labels.items():
+        seats = re.findall(r'精选第([0-9]+)席',label)
+        if seats != ([str(selected.index(mid)+1)] if mid in selected else []):
+            raise ValueError('visible selected seat differs from the frozen ranking: '+mid)
     identity = dict(version=info['version'], parent=plan['record_sha256'], window=window, slots=3,
-                    rows=rows, selected=[r['match_id'] for r in ranked(eligible)],
+                    rows=rows, selected=selected,
                     body_sha256=hashlib.sha256(message.encode('utf8')).hexdigest())
-    ref = ledger.register([universe[mid] for mid in mids], identity, TRACK+'-'+window, out, freeze_root=freeze_root)
-    if (out/'publication.json').exists():
-        if read(out/'publication.json') != ref:
-            raise ValueError('first placement changed')
-    else:
-        write_new(out/'publication.json',ref)
-    return ref
+    return plan,[universe[mid] for mid in mids],identity
+
+
+def lock_publication(registered, window, entries, message, out, *, freeze_root=DEFAULT_ROOT):
+    plan, fixtures, identity = prepared_batch(registered,window,entries,message,out)
+    return _commit_batch(plan,window,identity,fixtures,out,freeze_root)
 
 
 if __name__ == '__main__':
