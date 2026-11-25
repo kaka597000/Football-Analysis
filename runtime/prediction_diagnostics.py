@@ -2,6 +2,17 @@
 import json
 from datetime import date
 
+
+def recent_form_snapshot(fixture):
+    snapshot = fixture.get('recent_league_form')
+    if snapshot is not None:
+        return snapshot
+    home, away = fixture.get('home_form'), fixture.get('away_form')
+    if all(isinstance(side, dict) and {'team_id', 'matches'} <= side.keys() for side in (home, away)):
+        return {'match_id': fixture['match_id'], 'cohort': fixture['cohort'], 'home': home, 'away': away}
+    return None
+
+
 def attach_kpi_references(output, fixture, test_artifact):
     """Expose the new evaluation objective and the feature inputs actually used."""
     from research_program.future_validation import quote_audit
@@ -60,11 +71,7 @@ def attach(output, fixture, artifact_path, test_artifact_path):
     attach_kpi_references(output, fixture, test_artifact)
     output['match_analysis'] = build_match_analysis(fixture, output,
         current_artifact=json.loads(artifact_path.read_text()), test_artifact=test_artifact)
-    snapshot = fixture.get('recent_league_form')
-    if snapshot is None and all(isinstance(fixture.get(s+'_form'), dict) and
-                                'matches' in fixture[s+'_form'] and 'team_id' in fixture[s+'_form'] for s in ('home','away')):
-        snapshot = {'match_id':fixture['match_id'], 'cohort':fixture['cohort'],
-                    'home':fixture['home_form'], 'away':fixture['away_form']}
+    snapshot = recent_form_snapshot(fixture)
     if snapshot is not None:
         from research_program.live_score_form import attach_candidate
         attach_candidate(output, fixture, test_artifact, snapshot)

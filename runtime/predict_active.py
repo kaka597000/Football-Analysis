@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from prediction_engine import ROOT, predict, legacy, file_sha256, object_sha256, source_identity
 from prediction_service import run
+from prediction_diagnostics import recent_form_snapshot
 
 
 def main():
@@ -33,7 +34,7 @@ def main():
         fixture['recent_league_form'] = json.loads(a.recent_form.read_text())
     if a.score_form_artifact:
         fixture['score_form_artifact'] = json.loads(a.score_form_artifact.read_text())
-    if 'score_form_artifact' in fixture and 'recent_league_form' not in fixture:
+    if 'score_form_artifact' in fixture and recent_form_snapshot(fixture) is None:
         p.error('score-form artifact requires a recent league form snapshot')
     # Reject an existing output before producing any new freeze revision.
     if a.report and (Path(a.report).exists() or Path(a.report).resolve() == Path(a.out).resolve()):

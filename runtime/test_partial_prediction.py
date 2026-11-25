@@ -109,6 +109,71 @@ class PartialPredictionTests(unittest.TestCase):
                 predict_generic_poisson(self.root/'current.json',self.fixture),AssertionError('BUG')]):
             with self.assertRaises(AssertionError):predict_models(self.fixture,self.registry,retain_current_on_test_failure=True)
 
+
+    def run_form_cli(self, flags, environment=None):
+        fixture = self.root / 'fixture.json'
+        fixture.write_text(json.dumps(self.fixture), encoding='utf-8')
+        out = self.root / 'out.json'
+        args = [sys.executable, str(ROOT / 'predict_active.py'), str(fixture),
+                '--registry', str(self.registry), '--out', str(out),
+                '--freeze-root', str(self.root / 'freezes')]
+        result = subprocess.run(args + flags, capture_output=True, text=True, timeout=40,
+                                env=dict(os.environ, OPENBLAS_NUM_THREADS='1', **(environment or {})))
+        return result, out
+
+    def test_cli_missing_ml_with_history_retains_current(self):
+        # Use the real Test loader with a deliberately absent optional dependency.
+        del self.route['test_engine']
+        self.write_registry()
+        # The generic Current adapter also imports LightGBM. Simulate its absence
+        # specifically for the native Test loader in this child process.
+        (self.root / 'sitecustomize.py').write_text(
+            "import builtins\n"
+            "original = builtins.__import__\n"
+            "def load(name, globals=None, locals=None, fromlist=(), level=0):\n"
+            "    if name == 'lightgbm' and (globals or {}).get('__name__') in ('ml_model', 'v6.ml_model'):\n"
+            "        raise ImportError('missing optional Test dependency')\n"
+            "    return original(name, globals, locals, fromlist, level)\n"
+            "builtins.__import__ = load\n", encoding='utf-8')
+        self.fixture['recent_league_form'] = {'match_id': self.fixture['match_id'], 'cohort': 'aus.1'}
+        result, out = self.run_form_cli(flags=['--retain-current-on-test-failure'],
+                                        environment={'PYTHONPATH': str(self.root)})
+        self.assertEqual(result.returncode, 0, result.stderr)
+        payload = json.loads(out.read_text(encoding='utf-8'))
+        self.assertEqual(payload['prediction_status'], 'PARTIAL_CURRENT_ONLY')
+        self.assertEqual(payload['test_model']['execution_failure']['error_type'], 'ImportError')
+        self.assertEqual(payload['score_form_candidate']['status'], 'UNSUPPORTED_TEST_ROUTE')
+        expected = predict_generic_poisson(self.root / 'current.json', self.fixture)
+        self.assertEqual(payload['current_model']['matrix_hash'], expected['matrix_hash'])
+        records = list((self.root / 'freezes').glob('*/*.json'))
+        self.assertEqual(len(records), 1)
+        frozen = verify(json.loads(records[0].read_text(encoding='utf-8')))['payload']
+        self.assertEqual(frozen['current_model']['matrix_hash'], expected['matrix_hash'])
+        self.assertIsNone(frozen['test_model']['matrix'])
+
+    def test_cli_form_artifact_accepts_both_structured_sides(self):
+        for side in ('home', 'away'):
+            self.fixture[side + '_form'] = {'team_id': self.fixture[side], 'matches': []}
+        artifact = self.root / 'form.json'
+        artifact.write_text('{}', encoding='utf-8')
+        result, out = self.run_form_cli(flags=['--score-form-artifact', str(artifact)])
+        self.assertEqual(result.returncode, 0, result.stderr)
+        payload = json.loads(out.read_text(encoding='utf-8'))
+        self.assertEqual(payload['score_form_candidate']['status'], 'UNSUPPORTED_TEST_ROUTE')
+        self.assertIsNotNone(payload['current_model']['matrix'])
+        self.assertIsNotNone(payload['test_model']['matrix'])
+
+    def test_cli_form_artifact_rejects_incomplete_sides_before_freeze(self):
+        self.fixture['home_form'] = {'team_id': self.fixture['home'], 'matches': []}
+        self.fixture['away_form'] = {'team_id': self.fixture['away']}
+        artifact = self.root / 'form.json'
+        artifact.write_text('{}', encoding='utf-8')
+        result, out = self.run_form_cli(flags=['--score-form-artifact', str(artifact)])
+        self.assertEqual(result.returncode, 2)
+        self.assertIn('requires a recent league form snapshot', result.stderr)
+        self.assertFalse(out.exists())
+        self.assertFalse((self.root / 'freezes').exists())
+
     def test_cli_opt_in_writes_partial_output_and_report(self):
         self.break_test();fp=self.root/'fixture.json';fp.write_text(json.dumps(self.fixture),encoding='utf-8')
         output=self.root/'cli.json';report=self.root/'report.md'

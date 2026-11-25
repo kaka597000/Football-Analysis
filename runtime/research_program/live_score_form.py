@@ -9,7 +9,6 @@ from urllib.parse import urlsplit
 import numpy as np
 
 from research.analysis_freeze import aware, digest
-from v6 import ml_model
 from . import score_form as form
 from .three_arm_model import score_picks, top_three_scores
 from .future_validation import quote_audit
@@ -54,6 +53,8 @@ def side_form(fixture, snapshot, side):
 
 
 def update_test_matrix(artifact, fixture, test, home, away):
+    from v6 import ml_model
+
     if (test.get('model_hash')!=ml_model.legacy.digest(artifact) or artifact['cohort']!=fixture['cohort']
             or test['matrix_hash']!=ml_model.legacy.digest(test['matrix']) or artifact['feature_names']!=ml_model.FEATURES):
         raise ValueError('frozen ML artifact or matrix identity mismatch')
@@ -82,6 +83,8 @@ def update_test_matrix(artifact, fixture, test, home, away):
 
 
 def candidate(fixture, test, test_artifact, snapshot, fitted=None, *, historical_replay=False):
+    from v6 import ml_model
+
     if (snapshot['match_id']!=fixture['match_id'] or snapshot['cohort']!=fixture['cohort']
             or fixture['stage']!='regular' or fixture['score_basis']!='regulation_90'
             or test['version']!=ml_model.VERSION):
@@ -118,9 +121,16 @@ def candidate(fixture, test, test_artifact, snapshot, fitted=None, *, historical
             'selection':form.select_scores(selections)}
 
 
+def supports_test(test, fixture):
+    if not test.get('ml') or fixture.get('stage') != 'regular':
+        return False
+    from v6 import ml_model
+    return test.get('version') == ml_model.VERSION
+
+
 def attach_candidate(output, fixture, test_artifact, snapshot):
     test=output['test_model']
-    if test.get('version')!=ml_model.VERSION or not test.get('ml') or fixture.get('stage')!='regular':
+    if not supports_test(test, fixture):
         output['score_form_candidate']={'version':form.VERSION,'status':'UNSUPPORTED_TEST_ROUTE','formal_kpi_eligible':False}
         return
     try:
