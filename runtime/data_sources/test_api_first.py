@@ -51,22 +51,97 @@ class ApiFirstTests(unittest.TestCase):
             out = self.collect(self.plan, folder, fetcher)
         self.assertEqual(len(self.calls), 2)
         self.assertEqual([t['field'] for t in out['web_gap_tasks']], ['lineup'])
-        self.assertIsNone(out['web_gap_tasks'][0]['assigned_model'])
+        task = out['web_gap_tasks'][0]
+        self.assertEqual(task['assigned_model'], 'gpt-6.2-sol')
+        self.assertEqual(task['reasoning_effort'], 'max')
+        self.assertEqual(task['status'], 'PLANNED_NOT_RUN')
         self.assertTrue(out['api_phase_complete'])
         self.assertFalse(out['model_ingestion_performed'])
 
-    def test_web_lookup_driver_is_chosen_by_batch_or_field(self):
+    def test_field_model_or_difficulty_can_override_the_batch_model(self):
         self.plan['web_gap_model'] = 'gpt-6.2-sol'
+        self.plan['fields'] = [self.field(name, 'one') for name in ('absences', 'quotes', 'shots', 'form')]
+        self.plan['fields'][1]['web_gap_model'] = ' gpt-6-luna '
+        self.plan['fields'][2]['web_gap_difficulty'] = 'hard'
+        self.plan['fields'][3].update(web_gap_model='gpt-6.2-sol', web_gap_difficulty='breakthrough')
+        with tempfile.TemporaryDirectory() as folder:
+            rows = self.collect(self.plan, folder)['web_gap_tasks']
+        self.assertEqual([(r['assigned_model'], r['reasoning_effort']) for r in rows], [
+            ('gpt-6.2-sol', 'max'), ('gpt-6-luna', None),
+            ('gpt-6.2-astra', None), ('gpt-6.2-sol', 'max')])
+
+    def test_routine_difficulty_and_null_model_override_a_batch_model(self):
+        self.plan['web_gap_model'] = 'gpt-6-luna'
         self.plan['fields'] = [self.field(name, 'one') for name in ('absences', 'quotes', 'shots')]
-        self.plan['fields'][1]['web_gap_model'] = 'gpt-6-luna'
+        self.plan['fields'][1]['web_gap_difficulty'] = 'routine'
         self.plan['fields'][2]['web_gap_model'] = None
         with tempfile.TemporaryDirectory() as folder:
             rows = self.collect(self.plan, folder)['web_gap_tasks']
-        self.assertEqual([r['assigned_model'] for r in rows], ['gpt-6.2-sol', 'gpt-6-luna', None])
+        self.assertEqual([(r['assigned_model'], r['reasoning_effort']) for r in rows], [
+            ('gpt-6-luna', None), ('gpt-6.2-sol', 'max'), ('gpt-6.2-sol', 'max')])
+
+    def test_hard_and_breakthrough_fields_use_astra_with_a_null_batch_model(self):
+        self.plan['web_gap_model'] = None
+        self.plan['fields'] = [self.field(name, 'one') for name in ('absences', 'quotes', 'shots', 'lineup')]
+        self.plan['fields'][0]['web_gap_difficulty'] = 'hard'
+        self.plan['fields'][1]['web_gap_difficulty'] = 'breakthrough'
+        self.plan['fields'][3]['web_gap_difficulty'] = 'hard'
+        with tempfile.TemporaryDirectory() as folder:
+            rows = self.collect(self.plan, folder)['web_gap_tasks']
+        self.assertEqual([(r['field'], r['assigned_model'], r['reasoning_effort']) for r in rows], [
+            ('absences', 'gpt-6.2-astra', None), ('quotes', 'gpt-6.2-astra', None),
+            ('shots', 'gpt-6.2-sol', 'max')])
+
+    def test_batch_difficulty_can_be_overridden_by_field(self):
+        self.plan['web_gap_difficulty'] = 'hard'
+        self.plan['fields'] = [self.field(name, 'one') for name in ('absences', 'quotes', 'shots', 'form')]
+        self.plan['fields'][1]['web_gap_difficulty'] = 'routine'
+        self.plan['fields'][2]['web_gap_difficulty'] = None
+        self.plan['fields'][3]['web_gap_model'] = 'gpt-6-luna'
+        with tempfile.TemporaryDirectory() as folder:
+            rows = self.collect(self.plan, folder)['web_gap_tasks']
+        self.assertEqual([(r['assigned_model'], r['reasoning_effort']) for r in rows], [
+            ('gpt-6.2-astra', None), ('gpt-6.2-sol', 'max'),
+            ('gpt-6.2-sol', 'max'), ('gpt-6-luna', None)])
+
+    def test_explicit_astra_requires_eligible_difficulty_before_collection(self):
+        cases = (
+            ({'web_gap_model': 'gpt-6.2-astra'}, {}),
+            ({}, {'web_gap_model': 'gpt-6.2-astra'}),
+            ({'web_gap_difficulty': 'hard'},
+             {'web_gap_model': 'gpt-6.2-astra', 'web_gap_difficulty': 'routine'}),
+        )
+        for batch_settings, field_settings in cases:
+            plan = copy.deepcopy(self.plan)
+            plan.update(batch_settings)
+            plan['fields'][0]['web_gap_difficulty'] = 'routine'
+            plan['fields'][1].update(field_settings)
+            message = r'fields\[1\].*gpt-6\.2-astra.*web_gap_difficulty.*hard.*breakthrough'
+            with self.subTest(batch=batch_settings, field=field_settings), tempfile.TemporaryDirectory() as folder:
+                with self.assertRaisesRegex(ValueError, message):
+                    self.collect(plan, folder)
+        self.assertFalse(self.calls)
+
+    def test_explicit_astra_accepts_effective_hard_or_breakthrough_difficulty(self):
+        self.plan.update(web_gap_model='gpt-6.2-astra', web_gap_difficulty='hard')
+        self.plan['fields'] = [self.field(name, 'one') for name in ('absences', 'quotes')]
+        self.plan['fields'][1].update(web_gap_model='gpt-6.2-astra', web_gap_difficulty='breakthrough')
+        with tempfile.TemporaryDirectory() as folder:
+            rows = self.collect(self.plan, folder)['web_gap_tasks']
+        self.assertEqual([(r['assigned_model'], r['reasoning_effort']) for r in rows], [
+            ('gpt-6.2-astra', None), ('gpt-6.2-astra', None)])
 
     def test_invalid_web_lookup_driver_is_rejected_before_collection(self):
-        self.plan['web_gap_model'] = ['gpt-6.2-sol']
-        with tempfile.TemporaryDirectory() as folder, self.assertRaisesRegex(ValueError, 'web_gap_model'):
+        for model in (['gpt-6.2-sol'], '', '  '):
+            self.plan['web_gap_model'] = model
+            with self.subTest(model=model), tempfile.TemporaryDirectory() as folder:
+                with self.assertRaisesRegex(ValueError, 'web_gap_model'):
+                    self.collect(self.plan, folder)
+        self.assertFalse(self.calls)
+
+    def test_invalid_web_lookup_difficulty_is_rejected_before_collection(self):
+        self.plan['fields'][0]['web_gap_difficulty'] = 'hardest'
+        with tempfile.TemporaryDirectory() as folder, self.assertRaisesRegex(ValueError, 'web_gap_difficulty'):
             self.collect(self.plan, folder)
         self.assertFalse(self.calls)
 
