@@ -1,0 +1,440 @@
+{
+  "candidate_trained": false,
+  "late_nations_source_upper_bound": {
+    "canonical_match_history": 758,
+    "level": "upper bound before exact calendar order and source-family matching",
+    "max_priors_per_team": 1,
+    "nonestimated_count_matched": 25,
+    "potential_both_three": 0,
+    "provider_opportunity_inventory": 148,
+    "source_captures": 29,
+    "target_teams": 16,
+    "targets": 8,
+    "teams_at_least_one": 14,
+    "teams_at_least_three": 0,
+    "unique_priors": 7
+  },
+  "new_prospective_trials": 0,
+  "next_action": "retain-normal-previous-match-page-with-clock-before-cutoff; audit-only",
+  "october_rosters": {
+    "jingcai-20261026": {
+      "complete_sources": 1,
+      "listed": 4,
+      "original_current": 2,
+      "scoreable": 2
+    },
+    "jingcai-remaining-20261024-1902": {
+      "complete_sources": 21,
+      "listed": 25,
+      "original_current": 22,
+      "scoreable": 22
+    },
+    "oct19": {
+      "complete_sources": 2,
+      "listed": 4,
+      "original_current": 2,
+      "scoreable": 1,
+      "unsettled_in_archive": 1
+    },
+    "remaining-20261025-1942": {
+      "complete_sources": 21,
+      "listed": 23,
+      "original_current": 21,
+      "scoreable": 20,
+      "unsettled_in_archive": 1
+    }
+  },
+  "panels": {
+    "Feb/Current": {
+      "0-2": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 128,
+        "targets": 270,
+        "unavailable_misses": 128
+      },
+      "3": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 96,
+        "targets": 129,
+        "unavailable_misses": 96
+      },
+      "4+": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 184,
+        "targets": 189,
+        "unavailable_misses": 184
+      },
+      "all": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 408,
+        "targets": 588,
+        "unavailable_misses": 408
+      }
+    },
+    "Nov21/Current": {
+      "0-2": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 3,
+        "targets": 5,
+        "unavailable_misses": 3
+      },
+      "3": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 1,
+        "targets": 1,
+        "unavailable_misses": 1
+      },
+      "4+": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 3,
+        "targets": 3,
+        "unavailable_misses": 3
+      },
+      "all": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 7,
+        "targets": 9,
+        "unavailable_misses": 7
+      }
+    },
+    "Nov24/Author": {
+      "0-2": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 4,
+        "targets": 6,
+        "unavailable_misses": 4
+      },
+      "3": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 1,
+        "targets": 2,
+        "unavailable_misses": 1
+      },
+      "4+": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 4,
+        "targets": 4,
+        "unavailable_misses": 4
+      },
+      "all": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 9,
+        "targets": 12,
+        "unavailable_misses": 9
+      }
+    },
+    "Nov24/Current": {
+      "0-2": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 6,
+        "targets": 6,
+        "unavailable_misses": 6
+      },
+      "3": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 1,
+        "targets": 2,
+        "unavailable_misses": 1
+      },
+      "4+": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 4,
+        "targets": 4,
+        "unavailable_misses": 4
+      },
+      "all": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 11,
+        "targets": 12,
+        "unavailable_misses": 11
+      }
+    },
+    "Nov4+6/Current": {
+      "0-2": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 0,
+        "targets": 0,
+        "unavailable_misses": 0
+      },
+      "3": {
+        "complete": 2,
+        "complete_misses": 1,
+        "misses": 1,
+        "targets": 3,
+        "unavailable_misses": 0
+      },
+      "4+": {
+        "complete": 3,
+        "complete_misses": 3,
+        "misses": 7,
+        "targets": 7,
+        "unavailable_misses": 4
+      },
+      "all": {
+        "complete": 5,
+        "complete_misses": 4,
+        "misses": 8,
+        "targets": 10,
+        "unavailable_misses": 4
+      }
+    },
+    "Nov4+6/Current+market": {
+      "0-2": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 0,
+        "targets": 0,
+        "unavailable_misses": 0
+      },
+      "3": {
+        "complete": 2,
+        "complete_misses": 1,
+        "misses": 1,
+        "targets": 3,
+        "unavailable_misses": 0
+      },
+      "4+": {
+        "complete": 3,
+        "complete_misses": 3,
+        "misses": 7,
+        "targets": 7,
+        "unavailable_misses": 4
+      },
+      "all": {
+        "complete": 5,
+        "complete_misses": 4,
+        "misses": 8,
+        "targets": 10,
+        "unavailable_misses": 4
+      }
+    },
+    "jingcai-20261026/Current": {
+      "0-2": {
+        "complete": 1,
+        "complete_misses": 1,
+        "misses": 1,
+        "targets": 1,
+        "unavailable_misses": 0
+      },
+      "3": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 0,
+        "targets": 0,
+        "unavailable_misses": 0
+      },
+      "4+": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 1,
+        "targets": 1,
+        "unavailable_misses": 1
+      },
+      "all": {
+        "complete": 1,
+        "complete_misses": 1,
+        "misses": 2,
+        "targets": 2,
+        "unavailable_misses": 1
+      }
+    },
+    "jingcai-remaining-20261024-1902/Current": {
+      "0-2": {
+        "complete": 12,
+        "complete_misses": 5,
+        "misses": 5,
+        "targets": 13,
+        "unavailable_misses": 0
+      },
+      "3": {
+        "complete": 6,
+        "complete_misses": 3,
+        "misses": 3,
+        "targets": 6,
+        "unavailable_misses": 0
+      },
+      "4+": {
+        "complete": 3,
+        "complete_misses": 3,
+        "misses": 3,
+        "targets": 3,
+        "unavailable_misses": 0
+      },
+      "all": {
+        "complete": 21,
+        "complete_misses": 11,
+        "misses": 11,
+        "targets": 22,
+        "unavailable_misses": 0
+      }
+    },
+    "oct19/Current": {
+      "0-2": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 0,
+        "targets": 0,
+        "unavailable_misses": 0
+      },
+      "3": {
+        "complete": 1,
+        "complete_misses": 1,
+        "misses": 1,
+        "targets": 1,
+        "unavailable_misses": 0
+      },
+      "4+": {
+        "complete": 0,
+        "complete_misses": 0,
+        "misses": 0,
+        "targets": 0,
+        "unavailable_misses": 0
+      },
+      "all": {
+        "complete": 1,
+        "complete_misses": 1,
+        "misses": 1,
+        "targets": 1,
+        "unavailable_misses": 0
+      }
+    },
+    "remaining-20261025-1942/Current": {
+      "0-2": {
+        "complete": 11,
+        "complete_misses": 5,
+        "misses": 5,
+        "targets": 11,
+        "unavailable_misses": 0
+      },
+      "3": {
+        "complete": 5,
+        "complete_misses": 4,
+        "misses": 4,
+        "targets": 5,
+        "unavailable_misses": 0
+      },
+      "4+": {
+        "complete": 4,
+        "complete_misses": 4,
+        "misses": 4,
+        "targets": 4,
+        "unavailable_misses": 0
+      },
+      "all": {
+        "complete": 20,
+        "complete_misses": 13,
+        "misses": 13,
+        "targets": 20,
+        "unavailable_misses": 0
+      }
+    }
+  },
+  "source78_location_audit": {
+    "attempts_by_native_type": {
+      "FreeKick": 30,
+      "FromCorner": 203,
+      "SetPiece": 66,
+      "ThrowInSetPiece": 20
+    },
+    "classified": {
+      "all": {
+        "0-2": {
+          "fixtures": 0,
+          "unavailable": 0,
+          "usable": 0
+        },
+        "3": {
+          "fixtures": 3,
+          "unavailable": 1,
+          "usable": 2
+        },
+        "4+": {
+          "fixtures": 7,
+          "unavailable": 4,
+          "usable": 3
+        },
+        "all": {
+          "fixtures": 10,
+          "unavailable": 5,
+          "usable": 5
+        }
+      },
+      "both_miss": {
+        "0-2": {
+          "fixtures": 0,
+          "unavailable": 0,
+          "usable": 0
+        },
+        "3": {
+          "fixtures": 1,
+          "unavailable": 0,
+          "usable": 1
+        },
+        "4+": {
+          "fixtures": 7,
+          "unavailable": 4,
+          "usable": 3
+        },
+        "all": {
+          "fixtures": 8,
+          "unavailable": 4,
+          "usable": 4
+        }
+      },
+      "current_miss": {
+        "0-2": {
+          "fixtures": 0,
+          "unavailable": 0,
+          "usable": 0
+        },
+        "3": {
+          "fixtures": 1,
+          "unavailable": 0,
+          "usable": 1
+        },
+        "4+": {
+          "fixtures": 7,
+          "unavailable": 4,
+          "usable": 3
+        },
+        "all": {
+          "fixtures": 8,
+          "unavailable": 4,
+          "usable": 4
+        }
+      }
+    },
+    "complete_priors_with_zero_set_plays": 0,
+    "complete_sides": 14,
+    "mean_xg_per_set_play": {
+      "FreeKick": 0.053816,
+      "FromCorner": 0.093215,
+      "SetPiece": 0.09214,
+      "ThrowInSetPiece": 0.091254
+    },
+    "native_inside_area": 231,
+    "slot_states": {
+      "complete": 51,
+      "no_completed_regulation": 3,
+      "no_native_shotmap": 6
+    },
+    "unique_complete_priors": 49
+  }
+}
