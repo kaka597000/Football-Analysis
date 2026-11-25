@@ -159,6 +159,8 @@ def prepared_batch(registered, window, entries, message, out):
                              displayed_scores=[],wdl=None,total_direction=None,total_line=None,
                              ranking_probability=None,unissued_reason=reason)
             continue
+        if mid in info.get('unavailable_new_firsts', {}):
+            raise ValueError('a resumed or unavailable match requires its registered empty slot: '+mid)
         record = ledger._read(out, item['authored'])
         pair = ledger._read(out, item['pair'])
         _bound_first(pair, plan, 'current-test-pair')

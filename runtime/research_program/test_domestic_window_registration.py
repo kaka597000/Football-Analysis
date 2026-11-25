@@ -1,3 +1,6 @@
+import gzip
+import json
+from hashlib import sha256
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
@@ -8,6 +11,25 @@ from research_program.r8_score_study import read
 
 
 class DomesticWindowsTests(TestCase):
+    def test_retains_a_suspended_first_half_on_its_resumption_calendar(self):
+        fixture = dict(match_id='espn:42', home='espn:3', away='espn:4', kickoff_at='2026-12-09T19:00Z')
+        status = dict(type=dict(name='STATUS_SUSPENDED', state='post'), clock=1980, period=1)
+        teams = [dict(homeAway=side, team={'id': fixture[side][5:]}) for side in ('home', 'away')]
+        game = dict(id='42', date=fixture['kickoff_at'], timeValid=True, status=status, competitors=teams)
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            raw = json.dumps({'events': [dict(id='42', date=game['date'], status=status, competitions=[game])]}).encode()
+            source = root / 'board.json.gz'
+            source.write_bytes(gzip.compress(raw))
+            proof = root / 'manifest.json'
+            entry = dict(competition='esp.1', source_provider='ESPN', compressed_path=source.name,
+                         compressed_sha256=windows.sha(source), body_sha256=sha256(raw).hexdigest(),
+                         observed_response_end_utc='2026-11-25T11:39:13Z')
+            windows.atomic_json(proof, {'captures': [entry]})
+            exceptions = windows.prematch_exceptions('esp.1', [fixture], proof)
+            self.assertEqual(exceptions['espn:42']['game_clock_seconds'], 33 * 60)
+            self.assertEqual(exceptions['espn:42']['source_sha256'], entry['body_sha256'])
+
     def test_midnight_boundary_and_each_competitions_actual_calendar_count(self):
         spec = read(windows.PROTOCOL)
         def fixture(n, start):
@@ -39,6 +61,7 @@ class DomesticWindowsTests(TestCase):
             original = {'registry_sha256': 'original', 'native_models': {}}
             args = ('esp.1', catalog, proof, goals, scope, registry, root / 'archive')
             with patch.object(windows, 'native_model_inputs', return_value=original), \
+                    patch.object(windows, 'prematch_exceptions', return_value={}), \
                     patch.object(windows.ledger, 'register', side_effect=OSError('interrupted')):
                 with self.assertRaisesRegex(OSError, 'interrupted'):
                     windows.register(*args, freeze_root=root / 'freezes')

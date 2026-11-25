@@ -1,5 +1,8 @@
 """Register complete consecutive display windows from a reconciled European league calendar."""
 import argparse
+import gzip
+from hashlib import sha256
+import json
 from pathlib import Path
 
 from publication import atomic_json
@@ -49,6 +52,41 @@ def native_model_inputs(registry, code):
         artifact = read(path)
         models[arm] = dict(sha256=fingerprint, artifact_file=path.name, version=artifact.get('version'))
     return dict(registry_sha256=sha(registry), native_models=models)
+
+
+def prematch_exceptions(code, fixtures, proof):
+    """Keep resumed or otherwise unavailable matches in their calendar slots."""
+    remaining = {f['match_id']: f for f in fixtures}
+    exceptions = {}
+    for entry in read(proof)['captures']:
+        if entry['competition'] != code or entry['source_provider'] != 'ESPN':
+            continue
+        path = (proof.parent / entry['compressed_path']).resolve()
+        if not path.is_relative_to(proof.parent.resolve()) or sha(path) != entry['compressed_sha256']:
+            raise ValueError('calendar source file differs')
+        body = gzip.decompress(path.read_bytes())
+        if sha256(body).hexdigest() != entry['body_sha256']:
+            raise ValueError('calendar source body differs')
+        for event in json.loads(body)['events']:
+            mid = 'espn:' + event['id']
+            if mid not in remaining:
+                continue
+            fixture = remaining.pop(mid)
+            game, = event['competitions']
+            status = event['status']
+            sides = {s['homeAway']: 'espn:' + s['team']['id'] for s in game['competitors']}
+            if (game['status'] != status or game['id'] != event['id'] or not game['timeValid']
+                    or sides != {k: fixture[k] for k in ('home', 'away')}
+                    or aware(event['date']) != aware(fixture['kickoff_at']) or aware(game['date']) != aware(event['date'])):
+                raise ValueError('calendar match, kickoff or original status differs: ' + mid)
+            kind = status['type']
+            if kind['name'] != 'STATUS_SCHEDULED' or kind['state'] != 'pre' or status.get('clock') != 0:
+                exceptions[mid] = dict(status=kind['name'], game_clock_seconds=status.get('clock'),
+                                       period=status.get('period'), source_sha256=entry['body_sha256'],
+                                       observed_at=entry['observed_response_end_utc'])
+    if remaining:
+        raise ValueError('missing source statuses: ' + ', '.join(sorted(remaining)))
+    return exceptions
 
 
 def earlier_slots(fixtures, root, dest):
@@ -117,9 +155,10 @@ def register(code, catalog, calendar_proof, goals, scope, registry, out, *, free
             roadmap = read(goals)['research_roadmap_20261124']['stages']
             model_inputs = native_model_inputs(registry, code)
             earlier = earlier_slots(fixtures, root, folder / 'earlier')
+            exceptions = prematch_exceptions(code, fixtures, calendar_proof)
             identity = dict(version=spec['version'], competitions=[code], protocol=spec, protocol_sha256=PROTOCOL_SHA,
                             scope_sha256=sha(scope), goals_sha256=sha(goals), roadmap=roadmap, slates=batches, minima=coverage,
-                            model_inputs=model_inputs, earlier_firsts=earlier, calendar_sha256=sha(catalog),
+                            model_inputs=model_inputs, earlier_firsts=earlier, unavailable_new_firsts=exceptions, calendar_sha256=sha(catalog),
                             calendar_proof_sha256=sha(calendar_proof))
             if index.is_file() and ledger._read(index.parent, read(index))['payload']['identity'] != identity:
                 raise ValueError('existing first has a different calendar or version')
