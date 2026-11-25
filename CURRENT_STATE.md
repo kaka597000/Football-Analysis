@@ -9,6 +9,6 @@
 - 欧国联：已有分组[研究模型](docs/nations-league-model.md)，尚未通过活动模型验收。
 - 日联杯：已有[八强首、次回合研究候选](docs/jleague-cup-quarterfinal-research.md)，尚未通过活动模型验收，不借用J1模型。
 
-[模型与代码用途](models/README.md) · [架构](ARCHITECTURE.md) · [运行与验证](OPERATIONS.md)
+[模型与代码用途](models/README.md) · [架构](ARCHITECTURE.md) · [运行与验证](OPERATIONS.md) · [模块、路由与候选状态](docs/model-governance.md)
 
 历史评估、旧模型快照和冻结预测保留用于复现。文档整理不代表重新训练、模型晋级或准确率改善。
