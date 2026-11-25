@@ -4,10 +4,10 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 
-from . import display_windows as windows
-from . import goal_state_forward as ledger
-from .goal_state_study import write_new
-from .r8_score_study import read
+from research_program import display_windows as windows
+from research_program import goal_state_forward as ledger
+from research_program.goal_state_study import write_new
+from research_program.r8_score_study import read
 
 
 class WindowPublicationTest(TestCase):
