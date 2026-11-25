@@ -155,6 +155,8 @@ def replay(code, panel, settings, baseline_path, refs, elite_extra, extension, h
 
 
 def run(r5, r7_dir, r10, domestic, targets, extension_path, out):
+    paths = dict(domestic_sha256=domestic, identities_sha256=targets, extension_sha256=extension_path)
+    digests = {key:sha(path) for key,path in paths.items()}
     history = model.DomesticHistory(read_lines(domestic))
     lookup = identities(targets)
     additions = defaultdict(list)
@@ -187,9 +189,10 @@ def run(r5, r7_dir, r10, domestic, targets, extension_path, out):
                           sorted(additions[code], key=lambda g: (g['date'], g['id'])), history, lookup, folder)
             for row in rows:
                 by_window[row['window']].append(row)
+    if any(sha(path) != digests[key] for key,path in paths.items()):
+        raise ValueError('a research input changed while the replay was running')
     write_new(out/'metrics.json', {w: summarize(rows) for w, rows in sorted(by_window.items())})
-    write_new(out/'inputs.json', dict(domestic_sha256=sha(domestic), identities_sha256=sha(targets),
-                                      extension_sha256=sha(extension_path), domestic_through=history.through))
+    write_new(out/'inputs.json', dict(digests, domestic_through=history.through))
 
 
 if __name__ == '__main__':
