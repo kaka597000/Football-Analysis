@@ -8,6 +8,7 @@
 - 日职联：加载与依赖问题见[专项核查](docs/j1-nations-model-readiness-20261111.md)；不能把注册表有条目等同于可用。
 - 欧国联：已有分组[研究模型](docs/nations-league-model.md)，尚未通过活动模型验收。
 - 日联杯：已有[八强首、次回合研究候选](docs/jleague-cup-quarterfinal-research.md)，尚未通过活动模型验收，不借用J1模型。
+- 已结束研究的结论与原报告见[归档索引](docs/research-archive-index.md)。
 
 [模型与代码用途](models/README.md) · [架构](ARCHITECTURE.md) · [运行与验证](OPERATIONS.md) · [模块、路由与候选状态](docs/model-governance.md)
 
