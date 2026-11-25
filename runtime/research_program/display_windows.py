@@ -12,8 +12,8 @@ from research.analysis_freeze import DEFAULT_ROOT, aware, digest
 from research.display_delivery import delivery_request
 from storage_lock import exclusive_lock
 from . import goal_state_forward as ledger
-from .goal_state_study import sha
-from .r8_score_study import read
+from .future_validation import read, sha
+from .kpi_validation import _first
 
 TRACK = 'j1-comprehensive-windows-20261125'
 
@@ -87,7 +87,11 @@ def _commit_batch(plan, window, identity, fixtures, out, freeze_root):
     """Use one durable issuance key even across retries from another output directory."""
     root = Path(freeze_root)
     root.mkdir(parents=True, exist_ok=True)
-    slot = root / ('.'+TRACK+'-'+digest([plan['record_sha256'],window])+'.json')
+    track = plan['payload']['track']
+    if not re.fullmatch(r'[a-z0-9][a-z0-9.-]*', track):
+        raise ValueError('invalid publication track')
+    _first(plan, track+'-registration')
+    slot = root / ('.'+track+'-'+digest([plan['record_sha256'],window])+'.json')
     index = out/'publication.json'
     binding = dict(parent=plan['record_sha256'], window=window, identity_sha256=digest(identity))
     with exclusive_lock(slot.with_suffix('.lock')):
@@ -97,13 +101,40 @@ def _commit_batch(plan, window, identity, fixtures, out, freeze_root):
             raise ValueError('first placement changed')
         if not slot.exists():
             atomic_json(slot,binding)
-        ref = ledger.register(fixtures, identity, TRACK+'-'+window, out, freeze_root=root)
+        ref = ledger.register(fixtures, identity, track+'-'+window, out, freeze_root=root)
         if index.exists():
             if read(index) != ref:
                 raise ValueError('first placement changed')
         else:
             atomic_json(index,ref)
     return ref
+
+
+def _bound_first(record, plan, track):
+    """Identify prior originals reserved at registration and newly issued originals."""
+    _first(record, track)
+    earlier = plan['payload']['identity'].get('earlier_firsts', {}).get(record['match_id'], {}).get(track)
+    if earlier is not None:
+        if (earlier['sha256'] != record['record_sha256'] or aware(earlier['recorded_at']) != aware(record['recorded_at'])
+                or aware(record['recorded_at']) > aware(plan['recorded_at'])):
+            raise ValueError('registered earlier first differs: ' + record['match_id'])
+        return True
+    if aware(record['recorded_at']) < aware(plan['recorded_at']):
+        raise ValueError('first predates registration without its original binding: ' + record['match_id'])
+    return False
+
+
+def _native_weight(info, pair, role, key):
+    registered = info.get(key)
+    if registered is None:
+        registered = info['model_inputs']['native_models'][role.capitalize()]['sha256']
+    payload = pair['payload']
+    native = payload[role + '_model']
+    fingerprints = [h for h in (native.get('source_artifact_sha256'),
+                                payload.get('execution_audit', {}).get(role, {}).get('artifact_sha256')) if h]
+    if not fingerprints or any(h != registered for h in fingerprints) or digest(native['matrix']) != native['matrix_hash']:
+        raise ValueError('native ranking artifact or matrix differs: ' + pair['match_id'])
+    return native
 
 
 def prepared_batch(registered, window, entries, message, out):
@@ -127,17 +158,22 @@ def prepared_batch(registered, window, entries, message, out):
                              displayed_scores=[],wdl=None,total_direction=None,total_line=None,
                              ranking_probability=None,unissued_reason=reason)
             continue
+        if mid in info.get('unavailable_new_firsts', {}):
+            raise ValueError('a resumed or unavailable match requires its registered empty slot: '+mid)
         record = ledger._read(out, item['authored'])
         pair = ledger._read(out, item['pair'])
+        _bound_first(pair, plan, 'current-test-pair')
+        earlier_authored = _bound_first(record, plan, 'comprehensive')
+        protocol = info['protocol']
+        stage = protocol.get('competition_stage', protocol.get('stage'))
         scope = ('home','away','cohort','match_id')
         if (any(f[k]!=record['fixture'][k] or f[k]!=pair['fixture'][k] for k in scope)
                 or not aware(f['kickoff_at'])==aware(record['fixture']['kickoff_at'])==aware(pair['fixture']['kickoff_at'])
-                or record['fixture']['stage'] != info['protocol']['competition_stage']
+                or record['fixture']['stage'] != stage
                 or pair['fixture']['stage'] != record['fixture']['stage']
-                or not aware(plan['recorded_at']) <= aware(pair['recorded_at']) <= aware(record['recorded_at'])
-                or pair['track']!='current-test-pair' or record['track']!='comprehensive'
-                or record['payload']['registered_window']['sha256'] != plan['record_sha256']
-                or record['payload']['window'] != window
+                or aware(pair['recorded_at']) > aware(record['recorded_at'])
+                or (not earlier_authored and (record['payload']['registered_window']['sha256'] != plan['record_sha256']
+                                              or record['payload']['window'] != window))
                 or record['payload']['current_test_reference']['sha256']!=pair['record_sha256']):
             raise ValueError('first current/test pair or authored row differs: '+mid)
         block = delivery_request(record)['text']
@@ -161,10 +197,8 @@ def prepared_batch(registered, window, entries, message, out):
         if p['authored_display']['status']=='ISSUED' and record['selection_audit'].get('top3_ready'):
             h,a = map(int,p['authored_display']['first'].split('-'))
             probs = []
-            for role, key in [('current_model','current_sha256'),('test_model','test_sha256')]:
-                native = pair['payload'][role]
-                if native.get('source_artifact_sha256') != info[key] or digest(native['matrix']) != native['matrix_hash']:
-                    raise ValueError('native ranking artifact or matrix differs: '+mid)
+            for role, key in [('current','current_sha256'),('test','test_sha256')]:
+                native = _native_weight(info, pair, role, key)
                 prob = native['matrix'][h][a]
                 if type(prob) not in (int,float) or not math.isfinite(prob) or not 0<=prob<=1:
                     raise ValueError('invalid authored-cell probability')

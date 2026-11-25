@@ -8,7 +8,6 @@ from zoneinfo import ZoneInfo
 
 from research.analysis_freeze import DEFAULT_ROOT, aware, digest, save, verify
 from storage_lock import exclusive_lock
-from .goal_state_study import write_new
 from .kpi_validation import _actual, fixture_identity
 from .paired_kpi_inference import compare
 
@@ -127,6 +126,7 @@ def review(folder, results, evidence_root, *, by_competition=False):
 
 
 if __name__ == '__main__':
+    from .goal_state_study import write_new
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--issued', type=Path, required=True)
     p.add_argument('--results', type=Path, required=True, help='JSON array in kpi_validation._actual evidence format')

@@ -1,0 +1,15 @@
+{
+  "version": "European-domestic-first-display-windows-20261125-1",
+  "competitions": ["esp.1", "ger.1", "ita.1", "fra.1"],
+  "season_start_year": 2026,
+  "stage": "regular",
+  "windows": [
+    {"name": "nov27_dec04", "from": "2026-11-27T00:00:00+08:00", "until": "2026-12-04T00:00:00+08:00"},
+    {"name": "dec04_dec11", "from": "2026-12-04T00:00:00+08:00", "until": "2026-12-11T00:00:00+08:00"}
+  ],
+  "population": "Freeze one two-window registration per competition before its earliest kickoff. Include every men's senior regular-season fixture in each half-open Beijing date interval on the complete retained provider calendar. Save original event and ordered team IDs, competition, season, kickoff and source observation clocks. List independent schedule discrepancies, subsequent changes, postponements and missing issues under their original window. Never select or extend a window using its outcomes.",
+  "coverage": "Each competition-window uses the actual full calendar count N. Require N separately verified first scores, ordered three-score selections and WDL picks. As in the existing EPL window design, require ceiling(0.80*N) institution-timestamped actual total markets and ceiling(0.70*N) nonpush total outcomes. Keep original scheduled and actual kickoff evidence. Publish whole-calendar coverage, short batches and unresolved slots.",
+  "selections": "Each competition-window is one batch. The comprehensive first and two distinct ranked alternatives are authored from the two native controls, current team evidence, market, plausible score paths and counterevidence. Record the reasons a fixture qualifies for the recommended three. Rank the eligible authored firsts using the existing registered geometric-mean confidence in that chosen score under the two native controls, then earliest kickoff then provider ID. Lock the ordered selected IDs, unique primaries, authorship and displayed text before the earliest kickoff in the whole window. Track all three positions including empty positions, individual first and three-score outcomes, fully observed batch sweeps and sweeps per registered batch.",
+  "markets": "Use same-fixture and same-institution 1X2 and actual Asian total lines. Preserve both total prices, the source-side quote update and actual acquisition clocks. Maximum quote age is 3600 seconds at forecast cutoff. Separate observed-only markets. Full wins are hits; full losses, half losses and half wins remain in denominator; pushes are excluded.",
+  "decision": "Use the four-stage targets and 100% primary-score sweeps in the project's registered roadmap. Each of the two consecutive windows must meet the phase targets and coverage protocol independently in that competition. Only the first genuinely presented prematch issue with authenticated regulation results contributes to formal outcomes. Preserve any earlier first, the native Current/Test records and the research forecasts."
+}

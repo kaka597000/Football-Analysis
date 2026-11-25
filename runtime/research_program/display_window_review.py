@@ -1,4 +1,4 @@
-"""Read-only live review for the two registered J1 comprehensive display windows.
+"""Read-only review of a competition's two registered comprehensive display windows.
 
 The registered universe is fixed by the original display_windows ledger record.
 Repository-issued model rows are reported as audit evidence only. Strict display
@@ -26,12 +26,14 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from optimization.evaluate import settle_ou
-from research.analysis_freeze import DEFAULT_ROOT, aware, digest, verify
+from research.analysis_freeze import DEFAULT_ROOT, aware, verify
 from research.chat_display_readback import first_delivery_lookup
 from research.display_delivery import DISPLAY_TRACK
 from research.display_review import review_batch, summarize as summarize_display
 from research_program.kpi_validation import _actual, quote_audit
+from research_program.kpi_validation import _first
 from research_program.three_arm_review import _certify, _results
+from research_program.display_windows import prepared_batch
 
 REGISTRATION_TRACK = "j1-comprehensive-windows-20261125-registration"
 PUBLICATION_TRACK = "j1-comprehensive-windows-20261125-"
@@ -48,35 +50,6 @@ def read_jsonl(path):
     if not path.exists():
         return []
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
-
-
-def _read_ledger_ref(folder, ref):
-    record = verify(json.loads((Path(folder) / ref["file"]).read_bytes()))
-    if (record.get("record_sha256") != ref.get("sha256") or record.get("freeze_id") != ref.get("id")
-            or record.get("evaluation_slot") != "FIRST_PREMATCH" or record.get("stage") != "prematch"
-            or record.get("revision") != 1 or record.get("previous_sha256") is not None):
-        raise ValueError("expected registered first issue")
-    return record
-
-
-def _prepared_batch_function():
-    """Execute display_windows.prepared_batch itself without importing its training stack."""
-    from types import SimpleNamespace
-    from research.display_delivery import delivery_request
-
-    source_path = Path(__file__).with_name("display_windows.py")
-    tree = ast.parse(source_path.read_text(encoding="utf-8"))
-    function = next(node for node in tree.body if isinstance(node, ast.FunctionDef)
-                    and node.name == "prepared_batch")
-    isolated = ast.Module(body=[function], type_ignores=[])
-    namespace = dict(Path=Path, math=math, re=__import__("re"), hashlib=hashlib,
-                     aware=aware, digest=digest,
-                     read=read, delivery_request=delivery_request,
-                     ranked=lambda eligible: sorted(eligible, key=lambda r:(-r["ranking_probability"],
-                         aware(r["kickoff_at"]), r["match_id"]))[:3],
-                     ledger=SimpleNamespace(_read=_read_ledger_ref))
-    exec(compile(isolated, str(source_path), "exec"), namespace)
-    return namespace["prepared_batch"]
 
 
 def _market_comparisons(per_match, records):
@@ -126,16 +99,40 @@ def _registered(plan_record):
     plan_record = verify(plan_record)
     payload = plan_record["payload"]
     identity = payload["identity"]
-    if (plan_record.get("track") != REGISTRATION_TRACK or payload.get("track") != "j1-comprehensive-windows-20261125"
-            or identity.get("version") != "J1-first-display-windows-20261125-1"
-            or identity.get("competitions") != ["jpn.1"]):
-        raise ValueError("unexpected or unverified J1 window registration")
+    protocol = identity["protocol"]
+    version = identity["version"]
+    specs = [dict(w) for w in protocol["windows"]]
+    if version == "J1-first-display-windows-20261125-1" and identity.get("competitions") == ["jpn.1"]:
+        code, stage, track = "jpn.1", "Japanese J1 League", "j1-comprehensive-windows-20261125"
+        names = WINDOW_NAMES
+    elif version == "EPL-first-display-windows-20261125-1" and protocol.get("competition") == "eng.1":
+        code, stage, track = "eng.1", "regular", "eng1-comprehensive-windows-20261125"
+        names = ("nov27_dec01", "dec01_dec05")
+        for w in specs:
+            w.update(minimum_confirmed_scores=w["minimum_first_scores"], minimum_confirmed_three=w["minimum_ordered_three"],
+                     minimum_confirmed_wdl=w["minimum_wdl"], minimum_strict_line_issues=w["minimum_strict_lines"],
+                     minimum_nonpush_settled=w["minimum_nonpush"])
+    elif version == "European-domestic-first-display-windows-20261125-1":
+        code, = identity["competitions"]
+        if code not in ("esp.1", "ger.1", "ita.1", "fra.1") or code not in protocol["competitions"]:
+            raise ValueError("competition outside the registered European scope")
+        stage, track = "regular", code.replace(".", "-") + "-comprehensive-windows-20261125"
+        names = ("nov27_dec04", "dec04_dec11")
+        for w in specs:
+            minima = identity["minima"][w["name"]]
+            w.update(expected=minima["registered"], minimum_confirmed_scores=minima["first"],
+                     minimum_confirmed_three=minima["ordered_three"], minimum_confirmed_wdl=minima["wdl"],
+                     minimum_strict_line_issues=minima["strict_lines"], minimum_nonpush_settled=minima["nonpush"])
+    else:
+        raise ValueError("unknown comprehensive window registration")
+    _first(plan_record, track + "-registration")
+    if len(specs) != 2 or payload.get("track") != track or aware(specs[0]["until"]) != aware(specs[1]["from"]):
+        raise ValueError("registration track or consecutive window boundary differs")
     fixtures = payload.get("fixtures", {})
     slates = identity.get("slates", {})
-    specs = identity.get("protocol", {}).get("windows", [])
-    if set(slates) != set(WINDOW_NAMES) or {s.get("name") for s in specs} != set(WINDOW_NAMES):
+    if set(slates) != set(names) or tuple(s.get("name") for s in specs) != names:
         raise ValueError("both registered windows are required")
-    if not fixtures or len(fixtures) != sum(len(slates[n]) for n in WINDOW_NAMES):
+    if not fixtures or len(fixtures) != sum(len(slates[n]) for n in names):
         raise ValueError("registered fixture population is incomplete or duplicated")
     windows = {}
     all_ids = set()
@@ -148,8 +145,8 @@ def _registered(plan_record):
         start, end = aware(spec["from"]), aware(spec["until"])
         for mid in ids:
             f = fixtures.get(mid)
-            if (not f or f.get("match_id") != mid or f.get("cohort") != "jpn.1"
-                    or f.get("stage") != "Japanese J1 League" or not start <= aware(f["kickoff_at"]) < end):
+            if (not f or f.get("match_id") != mid or f.get("cohort") != code
+                    or f.get("stage") != stage or not start <= aware(f["kickoff_at"]) < end):
                 raise ValueError("registered fixture does not belong to its original window: " + mid)
         windows[name] = dict(spec)
     if all_ids != set(fixtures):
@@ -170,9 +167,9 @@ def _ledger_records(root):
     return records
 
 
-def _publication(records, window, plan_sha, mids):
+def _publication(records, window, plan_sha, mids, track_prefix=PUBLICATION_TRACK):
     matches = [r for r in records if r.get("track") in
-               (PUBLICATION_TRACK + window, PUBLICATION_TRACK + window + "-registration")]
+               (track_prefix + window, track_prefix + window + "-registration")]
     if len(matches) > 1:
         raise ValueError("conflicting publication lock records for " + window)
     if not matches:
@@ -199,9 +196,10 @@ def _publication(records, window, plan_sha, mids):
         else:
             if row.get("unissued_reason"):
                 raise ValueError("issued and unissued fields conflict")
-            abstain = row.get("displayed_scores") == [] and row.get("ranking_probability") is None
-            if not abstain:
-                if not isinstance(row.get("ranking_probability"), (int, float)) or not math.isfinite(row["ranking_probability"]):
+            probability = row.get("ranking_probability")
+            if probability is not None:
+                if (not row.get("displayed_scores") or type(probability) not in (int, float)
+                        or not math.isfinite(probability) or not 0 <= probability <= 1):
                     raise ValueError("issued published row requires its locked ranking probability")
                 eligible.append(row)
     ranked = sorted(eligible, key=lambda r:(-r["ranking_probability"], aware(r["kickoff_at"]), r["match_id"]))[:3]
@@ -382,7 +380,7 @@ def _official_phases(window_reports):
     for name in names:
         per_window = {window: report["_window_phase_candidates"][name]
                       for window, report in window_reports.items()}
-        passed = len(per_window) == len(WINDOW_NAMES) and all(per_window.values())
+        passed = len(per_window) == 2 and all(per_window.values())
         phases.append(dict(stage=name, pass_=passed, per_window_thresholds_met=per_window,
                            blockers=[] if passed else ["SAME_STAGE_MUST_PASS_IN_BOTH_REGISTERED_WINDOWS"]))
     return phases
@@ -611,7 +609,8 @@ def _window_report(name, spec, fixtures, records, display_rows, publication, res
     body_ok = bool(body_audit["available"] and body_audit["sha256_matches_registered_batch"]
                    and body_audit["original_blocks_present_once_in_order"]
                    and body_audit["prepared_batch_verified"])
-    minima_ok = (settled == total_n and issued >= score_min and wdl_issued >= wdl_min
+    three_min = spec.get("minimum_confirmed_three", score_min)
+    minima_ok = (settled == total_n and issued >= score_min and summary["top3"]["settled_n"] >= three_min and wdl_issued >= wdl_min
                  and wdl_settled == wdl_issued and market_coverage_ok
                  and total_nonpush_n >= nonpush_min and independent_readback_ok and publication is not None
                  and body_ok and primary_sweep is True and not unissued_rows)
@@ -640,7 +639,7 @@ def _window_report(name, spec, fixtures, records, display_rows, publication, res
                                       per_match=[dict(match_id=r["match_id"], verified_completed=r["verified_completed"],
                                                       top1_hit=r["top1_hit"], top3_hit=r["top3_hit"])
                                                  for r in selected_results]),
-                  per_match=[dict(match_id=mid, kickoff_at=fixtures[mid]["kickoff_at"],
+                  per_match=[dict(match_id=mid, cohort=fixtures[mid]["cohort"], kickoff_at=fixtures[mid]["kickoff_at"],
                                   display_status=by_id[mid]["display_status"],
                                   display_issue=by_id[mid].get("display_issue"),
                                   confirmed_first_score=by_id[mid].get("top1_issued", False),
@@ -661,7 +660,8 @@ def _window_report(name, spec, fixtures, records, display_rows, publication, res
                                          strict_line_issues=quote_min, nonpush_settled=nonpush_min),
                   blockers=[])
     if settled != total_n: report["blockers"].append("UNSETTLED_REGISTERED_FIXTURES")
-    if issued < score_min or wdl_issued < wdl_min: report["blockers"].append("CONFIRMED_DISPLAY_MINIMUM_NOT_MET")
+    if issued < score_min or summary["top3"]["issued_n"] < three_min or wdl_issued < wdl_min:
+        report["blockers"].append("CONFIRMED_DISPLAY_MINIMUM_NOT_MET")
     if not independent_readback_ok: report["blockers"].append("INDEPENDENT_FIRST_RECEIPT_OR_READBACK_UNCERTIFIED")
     if not market_coverage_ok: report["blockers"].append("STRICT_BOOKMAKER_MARKET_COVERAGE_BELOW_REGISTERED_MINIMUM")
     if total_nonpush_n < nonpush_min: report["blockers"].append("NONPUSH_MARKET_SETTLEMENT_MINIMUM_NOT_MET")
@@ -680,11 +680,15 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
     """Review both locked windows; missing evidence stays visible and earns no credit."""
     now = aware(at) if isinstance(at, str) else (at or datetime.now(timezone.utc))
     plan_record, universe, slates, specs = _registered(plan_record)
+    if now < aware(plan_record["recorded_at"]):
+        raise ValueError("review cutoff predates registration")
     ledger_records = _ledger_records(ledger_root)
     if batch_root:
         ledger_records += _ledger_records(batch_root)
     unique_records = {}
     for record in ledger_records:
+        if aware(record["recorded_at"]) > now:
+            continue
         key = (record.get("track"), record.get("match_id"), record.get("record_sha256"))
         unique_records[key] = record
     ledger_records = list(unique_records.values())
@@ -746,12 +750,12 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
             if _actual(actual, universe[mid], actual_root, now) is not None:
                 result_by_id[mid] = dict(actual)
     reports, phases = {}, {}
-    for name in WINDOW_NAMES:
+    for name in specs:
         mids = slates[name]
         rich_fixtures = {}
         for mid in mids:
             f = dict(universe[mid])
-            f.update(competition="jpn.1", score_basis="regulation_90", provider_competition="jpn.1",
+            f.update(competition=f["cohort"], score_basis="regulation_90", provider_competition=f["cohort"],
                      provider_stage="regular", identity_verified=True, stage_verified=True)
             record = issues.get(mid)
             if record:
@@ -774,14 +778,14 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                             lookup_original=firsts.get,
                             lookup_actual_kickoff=starts.get,
                             lookup_approved_scope=scopes.get)
-        publication = _publication(ledger_records, name, plan_record["record_sha256"], mids)
+        publication = _publication(ledger_records, name, plan_record["record_sha256"], mids, plan_record["payload"]["track"] + "-")
         prepared_verified = False
         if publication:
             if batch_root:
                 folder = Path(batch_root) / name
                 entries_path, message_path = folder / "entries.json", folder / "message.txt"
                 if entries_path.is_file() and message_path.is_file():
-                    _, prepared_fixtures, prepared_identity = _prepared_batch_function()(
+                    _, prepared_fixtures, prepared_identity = prepared_batch(
                         Path(batch_root) / "registration", name, read(entries_path),
                         message_path.read_text(encoding="utf-8"), folder)
                     if (set(f["match_id"] for f in prepared_fixtures) != set(mids)
@@ -904,7 +908,10 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                                     raw_verified_prices=report["actual_bookmaker_quote"]["raw_verified_price_snapshots_n"],
                                     strict_quotes=report["actual_bookmaker_quote"]["strict_quote_issues_n"],
                                     full_win_rate=report["actual_bookmaker_quote"]["full_win_rate"]))
-        targets = plan_record["payload"]["identity"]["stages"]
+        identity = plan_record["payload"]["identity"]
+        targets = identity.get("stages", identity.get("roadmap"))
+        if isinstance(targets, dict):
+            targets = targets["stages"]
         stage_results = []
         for stage in targets:
             t = stage["targets"]
@@ -934,9 +941,10 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                 phase["blockers"].append("OTHER_REGISTERED_WINDOW_DID_NOT_PASS_SAME_STAGE")
         report.pop("_window_phase_candidates", None)
         report["phase_pass"] = any(p["pass_"] for p in report["phases"])
-    return dict(schema="WCPP-J1-DISPLAY-WINDOW-REVIEW-1", at=now.isoformat(),
+    schema = "WCPP-J1-DISPLAY-WINDOW-REVIEW-1" if plan_record["track"] == REGISTRATION_TRACK else "WCPP-DOMESTIC-DISPLAY-WINDOW-REVIEW-1"
+    return dict(schema=schema, at=now.isoformat(),
                 registration=dict(record_sha256=plan_record["record_sha256"], track=plan_record["track"],
-                                  windows={n: len(slates[n]) for n in WINDOW_NAMES}),
+                                  windows={n: len(slates[n]) for n in specs}),
                 windows=reports, combined=dict(registered_n=sum(x["registered_n"] for x in reports.values()),
                     completed_n=sum(x["completed_n"] for x in reports.values()),
                     pending_n=sum(x["pending_n"] for x in reports.values()),
