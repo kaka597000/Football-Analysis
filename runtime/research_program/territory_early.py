@@ -188,6 +188,22 @@ def evidence(pairs, code):
     return events, audit
 
 
+def source_history(rows, pairs, code):
+    """Keep unpaired team appearances in the last-eight window with zero metric exposure."""
+    events, audit = evidence(pairs, code)
+    used = {(r['date'], r['h_a'], r['team']) for _, home, away in pairs for r in (home, away)}
+    for row in rows:
+        if (row['date'], row['h_a'], row['team']) in used:
+            continue
+        side = {'h': 'home', 'a': 'away'}[row['h_a']]
+        events.append({'competition': code, 'date': row['date'], side: row['team'],
+                       side + '_id': row['team'], 'source_sha256': PIN})
+        audit['calendar_only_unjoined_team_rows'] += 1
+    if 2 * len(pairs) + audit['calendar_only_unjoined_team_rows'] != len(rows):
+        raise ValueError('secondary team appearances were duplicated or lost')
+    return events, audit
+
+
 def coverage(metadata):
     out = {'games': len(metadata), 'any_history': sum(m['available'] for m in metadata)}
     for name in th.METRICS:
@@ -215,7 +231,7 @@ def replay(code, rows, inputs, frozen):
     if len({g['id'] for g in games}) != len(games) or games[-1]['date'] >= BOUNDS[2]:
         raise ValueError('duplicate target or out-of-window fixture')
     join, identity = pair_fixtures(rows, games, code)
-    events, fields = evidence(join, code)
+    events, fields = source_history(rows, join, code)
     history = th.TerritoryHistory(events, code)
     x, meta = history.walk(games)
     if np.max(np.abs(x)) > 1 or not np.isfinite(x).all():
@@ -274,6 +290,7 @@ def run(r10, protocol, *, archive=None, main_root=None):
                                   'Exact source timestamp agreement and one-to-one use of both source rows required.',
                   eligibility='Both source sides must be uniquely identified. Each statistic needs a valid own value '
                               'and agreeing opponent mirror. Pressing uses only raw paired integer att >= 0, def > 0. '
+                              'Unpaired source team rows occupy their actual last-eight calendar slots without metrics. '
                               'Every original test fixture remains eligible for scoring.',
                   calibration='Per league, train both R14 hurdles on pre-date R7 input anchors in 2015/16–2016/17. '
                               'For validation and test use the R10 independent r7-control.json selection and fitted R7 '

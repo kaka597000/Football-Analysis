@@ -2,16 +2,17 @@
 
 import argparse
 import hashlib
+import json
 import math
 from pathlib import Path
 import re
 
-from publication import atomic_json
+from publication import atomic_json, deliver
 from research.analysis_freeze import DEFAULT_ROOT, aware, digest
 from research.display_delivery import delivery_request
 from storage_lock import exclusive_lock
 from . import goal_state_forward as ledger
-from .goal_state_study import sha, write_new
+from .goal_state_study import sha
 from .r8_score_study import read
 
 TRACK = 'j1-comprehensive-windows-20261125'
@@ -24,7 +25,9 @@ def register(protocol, scope, goals, board, registered, registry, crosswalk, out
     if (code not in {v['code'] for v in read(scope)['competitions']} or len(windows) != 2
             or aware(windows[0]['until']) != aware(windows[1]['from'])):
         raise ValueError('invalid competition or nonconsecutive windows')
-    raw = read(board)
+    board_bytes = board.read_bytes()
+    board_sha256 = hashlib.sha256(board_bytes).hexdigest()
+    raw = json.loads(board_bytes)
     if [v['slug'] for v in raw['leagues']] != [code]:
         raise ValueError('wrong schedule source')
     weights = read(registry)['models'][code]
@@ -59,19 +62,21 @@ def register(protocol, scope, goals, board, registered, registry, crosswalk, out
             raise ValueError('incomplete or duplicate schedule: '+window['name'])
         slates[window['name']] = sorted(ids)
     identity = dict(version=spec['version'], competitions=[code], pairs={}, protocol=spec,
-                    protocol_sha256=sha(protocol), calendar_sha256=sha(board),
+                    protocol_sha256=sha(protocol), calendar_sha256=board_sha256,
                     original_registration=parent['record_sha256'], scope_sha256=sha(scope),
                     roadmap_sha256=sha(goals), stages=read(goals)['research_roadmap_20261124']['stages'],
                     current_sha256=weights['artifact_sha256'], test_sha256=weights['test_artifact_sha256'],
                     compatibility_sha256=sha(crosswalk), slates=slates)
-    plan = ledger.register(all_fixtures, identity, TRACK, out, freeze_root=freeze_root)
+    out.mkdir(parents=True,exist_ok=True)
     index = out/'plan.json'
-    if index.exists():
-        if read(index) != plan:
+    with exclusive_lock(out/'.schedule.lock'):
+        if index.exists() and ledger._read(out,read(index))['payload']['identity'] != identity:
             raise ValueError('conflicting registered windows')
-    else:
-        write_new(index, plan)
-    return plan
+        deliver(out/('schedule-'+board_sha256+'.json'),board_bytes)
+        plan = ledger.register(all_fixtures, identity, TRACK, out, freeze_root=freeze_root)
+        if not index.exists():
+            atomic_json(index,plan)
+        return plan
 
 
 def ranked(eligible):
