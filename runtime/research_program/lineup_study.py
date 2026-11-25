@@ -27,6 +27,7 @@ from .r9_score_study import verified_archive
 
 CODE = 'jpn.1'
 PROTOCOL = Path(__file__).resolve().parents[2] / 'research/20261125-r15-j1/protocol.json'
+PROTOCOL_SHA256 = 'da900a991d6801de4547605b452d699dc71bcba28b6b6115b77ae583eb370e91'
 BOUNDS = ('2024-01-01', '2025-01-01', '2026-01-01')
 MODE = 'retrospective_prior_match_rosters'
 POSITIONS = {'G': 'G', 'GK': 'G', 'GOALKEEPER': 'G', 'D': 'D', 'DEFENDER': 'D',
@@ -387,8 +388,9 @@ def snapshot_identity(path, rows, roster_hash, panel_hash, package_hash):
 def run(r5, r7_dir, r10, rosters, out):
     if out.exists():
         raise FileExistsError(out)
-    if control.read(PROTOCOL)['version'] != VERSION:
-        raise ValueError('R15 protocol version mismatch')
+    protocol = PROTOCOL.read_bytes()
+    if sha256(protocol).hexdigest() != PROTOCOL_SHA256 or json.loads(protocol)['version'] != VERSION:
+        raise ValueError('R15 protocol differs from preregistration')
     rows, roster_hash = read_rosters(rosters)
     out.parent.mkdir(parents=True, exist_ok=True)
     with TemporaryDirectory(dir=out.parent) as tmp:
@@ -419,7 +421,7 @@ def run(r5, r7_dir, r10, rosters, out):
         fifth = [dict(r, window=w) for w in ('evaluation', 'recent')
                  for r in read_lines(root / 'r5/study' / (w + '.jsonl'))]
         originals = (fifth, archive.read_gzip(baseline / 'forecasts.jsonl.gz'), archive.read_gzip(shot / 'forecasts.jsonl.gz'))
-        inputs = dict(protocol_sha256=sha(PROTOCOL), panel_sha256=panel_hash, rosters_sha256=roster_hash,
+        inputs = dict(protocol_sha256=PROTOCOL_SHA256, panel_sha256=panel_hash, rosters_sha256=roster_hash,
                       schedule_index_sha256=manifests['r5']['files']['evidence/source-index.json'],
                       r7_fit_sha256=sha(baseline / 'fit.json'), baseline_sha256=sha(baseline / 'forward.json'),
                       r10_fit_sha256=sha(shot / 'fit.json'),

@@ -101,11 +101,15 @@ def archives(root, games):
     panel_sha = sha256(file5['panel.jsonl']).hexdigest()
     settings = encoded(dict(competition=s.CODE, version=s.r7.VERSION, source_panel_sha256=panel_sha, bounds=s.BOUNDS,
                             training_games=3, selection=dict(mix=0)))
-    pack(r7/model,{'main/fit.json':settings, 'main/forward.json':encoded(dict(version=s.r7.VERSION,
-         competition=s.CODE, through=games[-1]['date'], fit_sha256=sha256(settings).hexdigest())),
+    baseline = encoded(dict(version=s.r7.VERSION, competition=s.CODE, through=games[-1]['date'],
+                            state=s.r7.dump(s.r7.blank()), policy=dict(mix=0), fit_sha256=sha256(settings).hexdigest()))
+    pack(r7/model,{'main/fit.json':settings, 'main/forward.json':baseline,
          'main/forecasts.jsonl.gz':gzip.compress(lines(original(g,'r7') for g in held))})
-    pack(r10/'replay/main.tar.gz',{'main/jpn.1/fit.json':encoded(dict(version=s.decision.VERSION, competition=s.CODE,
-         bounds=s.BOUNDS, panel_sha256=[panel_sha], train_games=3, validation_games=3)),
+    shot = encoded(dict(version=s.decision.VERSION, competition=s.CODE, bounds=s.BOUNDS, panel_sha256=[panel_sha],
+                        train_games=3, validation_games=3))
+    pack(r10/'replay/main.tar.gz',{'main/jpn.1/fit.json':shot, 'main/jpn.1/forward.json':encoded(dict(
+         version=s.decision.VERSION, competition=s.CODE, through=games[-1]['date'], fit_sha256=sha256(shot).hexdigest(),
+         r7_forward_sha256=sha256(baseline).hexdigest())),
          'main/jpn.1/forecasts.jsonl.gz':gzip.compress(lines(original(g,'r10') for g in reversed(held)))})
     for directory in (r5,r7,r10):
         hashes = {p.relative_to(directory).as_posix():s.sha(p) for p in directory.rglob('*') if p.is_file()}
@@ -164,6 +168,7 @@ class LineupStudyTests(unittest.TestCase):
             self.assertEqual((fit['training_games'],fit['validation_games']), (3,3))
             self.assertEqual(recipe['doses'],fit['doses'])
             self.assertEqual(recipe['fit_sha256'],s.sha(out/'fit.json'))
+            self.assertEqual(recipe['study_inputs_sha256'],s.sha(out/'inputs.json'))
             self.assertEqual(recipe['through'],games[-1]['date'])
             self.assertEqual(recipe['fitted']['full']['training_games'],len(games))
             self.assertEqual(recipe['rosters_sha256'],s.sha(source))
@@ -264,3 +269,30 @@ class LineupStudyTests(unittest.TestCase):
         wrong['forecast']['market']['wdl'] = 'home'
         with self.assertRaisesRegex(ValueError,'controls disagree'):
             s._controls([g],[a],[b],[wrong])
+
+    def test_changing_a_holdout_starting_eleven_reaches_only_later_dates(self):
+        with TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            games = fixtures()
+            paths = archives(root, games)
+            source = root / 'rosters.jsonl'
+            rows = [roster(g) for g in games]
+            target = next(g for g in games if g['date'] == '2025-01-05' and g['home'] == 'Club 1')
+            results = []
+            for label in ('original', 'revised'):
+                if label == 'revised':
+                    xi = next(r for r in rows if 'espn:'+r['source_match_id'] == target['id'])
+                    for player in xi['home_starters']:
+                        player['player_id'] = 'replacement-' + player['player_id']
+                source.write_bytes(lines(rows))
+                out = root / label
+                s.run(*paths, source, out)
+                results.append({r['id']: r for r in s.archive.read_gzip(out/'forecasts.jsonl.gz')})
+            self.assertEqual((root/'original/fit.json').read_bytes(), (root/'revised/fit.json').read_bytes())
+            before, after = results
+            for g in games:
+                if g['date'] == target['date']:
+                    for key in ('features', 'forecast', 'quality'):
+                        self.assertEqual(before[g['id']][key], after[g['id']][key])
+            following = next(g['id'] for g in games if g['date'] == '2025-01-12' and g['away'] == 'Club 1')
+            self.assertNotEqual(before[following]['features'], after[following]['features'])
