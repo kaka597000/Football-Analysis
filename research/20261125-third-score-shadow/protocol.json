@@ -1,0 +1,25 @@
+{
+  "id": "third-score-low-score-shadow-20261125",
+  "window_start": "2026-11-25T12:00:00+08:00",
+  "window_end_exclusive": "2026-12-09T12:00:00+08:00",
+  "review_cutoff": "2026-12-16T12:00:00+08:00",
+  "population": "Every already approved original fixture in normal author batches, using its original scheduled kickoff in the window and a stable fixture identity. Keep missing, abstained and late rows in coverage. Deduplicate across batches.",
+  "excluded_development": "The revealed 2026-11-24 evening batch. No retrospective issuance or fitting.",
+  "r7": {
+    "source_commit": "a6d45024cf6cf622f05e4b378ab53cfe2d6ae329",
+    "path": "workspace-updates/20261123-prematch-literature/first-issues.tar.gz",
+    "archive_sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d",
+    "fixture_count": 192
+  },
+  "baseline": "Exact ordered three scores from the original authored comprehensive handoff.",
+  "rule": {
+    "rank_source": "The Test matrix in the original current-test-pair record referenced by the author, descending probability, stable home-away matrix order for ties.",
+    "eligible_scores": ["1-0", "0-1"],
+    "rank_limit": 3,
+    "replace_one_based_slot": 3,
+    "preserve_slots": [1, 2],
+    "if_none": "Use the original triplet in both arms."
+  },
+  "settlement": "Use the same certified regulation result and same author cutoff on both arms. Require an independently verified actual kickoff after the lock. Retain pending and invalid evidence separately. Accuracy uses the common settled denominator; application uses the locked denominator and is also reported against all eligible roster entries.",
+  "decision": "At the fixed review cutoff report gains, losses, net, application and both Top3 rates. A non-positive net on settled changes rules out adoption on this cohort. A positive net is a shadow result for review. No Top1 gain, promotion, or official display inference."
+}
