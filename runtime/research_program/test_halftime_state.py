@@ -3,9 +3,9 @@ import unittest
 
 import numpy as np
 
-from . import all_scope_model as base
-from . import halftime_state as model
-from .halftime_state_study import match_halves
+from research_program import all_scope_model as base
+from research_program import halftime_state as model
+from research_program.halftime_state_study import match_halves
 
 
 class HalftimeStateTests(unittest.TestCase):
