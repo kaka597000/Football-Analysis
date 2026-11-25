@@ -97,7 +97,15 @@ def review(folder, results, evidence_root, *, by_competition=False):
                 or f['match_id'] != mid or fixture_identity(f) != fixture_identity(population[mid])
                 or not aware(reg['recorded_at']) <= aware(f['cutoff_at']) <= aware(record['recorded_at']) < aware(f['kickoff_at'])):
             raise ValueError('research issue identity, scope, or chronology mismatch')
-        actual = _actual(result_by_id[mid], f, evidence_root, datetime.now(timezone.utc)) if mid in result_by_id else None
+        actual = None
+        if mid in result_by_id:
+            result = result_by_id[mid]
+            now = datetime.now(timezone.utc)
+            if isinstance(result.get('evidence'), dict) and 'schedule_revision' in result['evidence']:
+                from .result_schedule_revision import revised_actual
+                actual = revised_actual(result, record, evidence_root, now)
+            else:
+                actual = _actual(result, f, evidence_root, now)
         rows.append(dict(id=mid, date=aware(f['kickoff_at']).astimezone(ZoneInfo('Asia/Shanghai')).date().isoformat(),
                          cohort=f['cohort'], actual=actual, line=payload['line'], forecast=payload['forecasts']))
     def summarize(group):
