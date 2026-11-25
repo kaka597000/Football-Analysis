@@ -1,0 +1,238 @@
+{
+  "schema": "WCPP-MODULE-INVENTORY-1",
+  "as_of": "2026-11-25",
+  "source_base": "c32713e0f8a8ec2bb9f6413ce29f2c25a4b801ee",
+  "states": {
+    "active": "现行入口或共用依赖",
+    "validation": "隔离研究工具或已登记的独立验证",
+    "retired": "已停止继续评估的配方，保留证据",
+    "archived": "历史批次、复现实现或归档材料"
+  },
+  "modules": [
+    {"path": "docs/archive", "status": "archived", "role": "历史文档"},
+    {"path": "models", "status": "archived", "role": "仓库内历史参数"},
+    {"path": "runtime/active_route_engines.py", "status": "active", "role": "活动路由的数值适配"},
+    {"path": "runtime/asof_contract.py", "status": "active", "role": "预测信息时点契约"},
+    {"path": "runtime/aus_expert", "status": "active", "role": "活动推理"},
+    {"path": "runtime/automation", "status": "active", "role": "采集、候选训练和复盘入口"},
+    {"path": "runtime/build_active_routes_20261027.py", "status": "validation", "role": "离线构建工具，杯赛研究共用"},
+    {"path": "runtime/competition_scope.py", "status": "active", "role": "正式赛事准入和注册路由盘点"},
+    {"path": "runtime/continental", "status": "active", "role": "活动推理"},
+    {"path": "runtime/data_sources", "status": "active", "role": "供给方采集及证据时点"},
+    {"path": "runtime/database", "status": "active", "role": "采集持久化和结果证据"},
+    {"path": "runtime/emperor_cup", "status": "validation", "role": "特定赛事阶段的隔离研究"},
+    {"path": "runtime/fuse_models.py", "status": "archived", "role": "手动 50/50 参考，历史复现"},
+    {"path": "runtime/jleague_cup", "status": "validation", "role": "特定赛事阶段的隔离研究"},
+    {"path": "runtime/league_tracks.py", "status": "active", "role": "同赛事主客模型和候选分轨"},
+    {"path": "runtime/ml_core.py", "status": "active", "role": "v6 及欧冠活动推理共用数值实现"},
+    {"path": "runtime/model_source_identity.py", "status": "active", "role": "工件源码身份"},
+    {"path": "runtime/nations_league", "status": "validation", "role": "特定赛事阶段的隔离研究"},
+    {"path": "runtime/optimization", "status": "active", "role": "活动数值适配共用"},
+    {"path": "runtime/optimization_tools", "status": "active", "role": "澳超活动适配及日职联原工件哈希依赖"},
+    {"path": "runtime/predict_active.py", "status": "active", "role": "日常双模型预测命令"},
+    {"path": "runtime/prediction_diagnostics.py", "status": "active", "role": "综合辅助诊断和盘口证据"},
+    {"path": "runtime/prediction_engine.py", "status": "active", "role": "活动工件、身份检查和数值路由"},
+    {"path": "runtime/prediction_service.py", "status": "active", "role": "双模型结果和诊断组合"},
+    {"path": "runtime/publication.py", "status": "active", "role": "本地输出和冻结恢复"},
+    {"path": "runtime/research", "status": "active", "role": "预测诊断、冻结、交接回读及复盘"},
+    {"path": "runtime/research_program", "status": "active", "role": "共用证据校验和现行诊断，亦保存独立研究"},
+    {"path": "runtime/review_active.py", "status": "active", "role": "双模型原冻结复盘命令"},
+    {"path": "runtime/runtime_config.py", "status": "active", "role": "运行根目录及外部注册表解析"},
+    {"path": "runtime/score_adjustment", "status": "active", "role": "活动预测诊断"},
+    {"path": "runtime/shadow.py", "status": "archived", "role": "旧 WCPP 影子入口及复现"},
+    {"path": "runtime/storage_lock.py", "status": "active", "role": "本地状态并发锁"},
+    {"path": "runtime/upset", "status": "active", "role": "活动预测诊断"},
+    {"path": "runtime/upset_v2", "status": "active", "role": "活动预测诊断"},
+    {"path": "runtime/v2", "status": "active", "role": "共用概率与比分数学"},
+    {"path": "runtime/v2_test", "status": "active", "role": "证据合同和历史验证共用"},
+    {"path": "runtime/v3", "status": "active", "role": "活动兼容及复现"},
+    {"path": "runtime/v4", "status": "active", "role": "活动推理"},
+    {"path": "runtime/v5", "status": "active", "role": "活动预测、冻结回查及复盘"},
+    {"path": "runtime/v6", "status": "active", "role": "活动预测诊断"},
+    {"path": "runtime/v7", "status": "validation", "role": "隔离研究"},
+    {"path": "runtime/wcpp.py", "status": "archived", "role": "旧 WCPP 命令和复现"}
+  ],
+  "routing": {
+    "scope_path": "configs/analysis-scope.json",
+    "registry_reader": "runtime/runtime_config.py",
+    "inventory_reader": "runtime/competition_scope.py",
+    "recorded_registry": {
+      "version": "WCPP-DUAL-4",
+      "status": "ACTIVE_RESEARCH",
+      "sha256": "923e34fc44cda33fe965498a24a2435abb37a01a80c539108d8ec20d490bf013",
+      "scope_count": 20,
+      "retained_active_routes": [
+        "afc.champions:ELITE:league_phase",
+        "aus.1",
+        "bra.1",
+        "eng.1",
+        "esp.1",
+        "fra.1",
+        "ger.1",
+        "ita.1",
+        "jpn.1",
+        "kor.1",
+        "ned.1",
+        "nor.1",
+        "swe.1",
+        "uefa.champions:NEW_FORMAT:league_phase",
+        "usa.1"
+      ],
+      "historical_only_routes": [
+        "eng.2",
+        "ksa.1",
+        "mex.1:apertura:regular",
+        "por.1"
+      ],
+      "missing_competitions": [
+        "fifa.world",
+        "jpn.league_cup",
+        "uefa.europa",
+        "uefa.europa.conf",
+        "uefa.nations"
+      ]
+    },
+    "collection_snapshot": {
+      "reference": {
+        "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+        "commit": "e38e5ab2144d9ed8a114f68e106f0b17f6176c5d",
+        "path": "config/scopes.json"
+      },
+      "competition_count": 17,
+      "formal_competitions_without_persistent_scope": [
+        "bra.1",
+        "jpn.league_cup",
+        "uefa.nations"
+      ]
+    }
+  },
+  "candidate_review": {
+    "policy": {
+      "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+      "commit": "bb9326923ce3554e216d32ee7e9c5734cbb9c567",
+      "path": "workspace-updates/20261118-governance/third/policy.json"
+    },
+    "policy_record_sha256": "97527c6ec89742983e7ec8c832cdd57a00db0a66f31c131457131674e8f3f1d6",
+    "review_source_commit": "783e02ddebd427383dbdd6a9e4b359dc68c13d8b",
+    "review_source_sha256": "a78708b40f63cb78fae336ddb0b59b4e74c024e12fc85081dcfe16263f0ae609",
+    "model_promotion": "manual_review_only"
+  },
+  "candidates": [
+    {
+      "id": "active-current-test",
+      "status": "active",
+      "evidence": {
+        "repository": "kaka597000/Football-Analysis",
+        "commit": "c32713e0f8a8ec2bb9f6413ce29f2c25a4b801ee",
+        "path": "runtime/predict_active.py"
+      }
+    },
+    {
+      "id": "historical-equal-weight-fusion",
+      "status": "archived",
+      "evidence": {
+        "repository": "kaka597000/Football-Analysis",
+        "commit": "c32713e0f8a8ec2bb9f6413ce29f2c25a4b801ee",
+        "path": "docs/unified-model-fusion.md"
+      }
+    },
+    {
+      "id": "bounded-lightgbm-mixture-20261118",
+      "status": "retired",
+      "evidence": {
+        "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+        "commit": "bb9326923ce3554e216d32ee7e9c5734cbb9c567",
+        "path": "workspace-updates/20261118-governance/third/README.md"
+      }
+    },
+    {
+      "id": "three-arm-20261118-bra1-round",
+      "status": "archived",
+      "registered": 6,
+      "settled": 6,
+      "baseline": "current",
+      "outcomes": {
+        "market": {
+          "disposition": "CLOSED_INCONCLUSIVE",
+          "net_top1": 1
+        },
+        "market_cohort": {
+          "disposition": "CLOSED_NO_TOP1_ADVANTAGE",
+          "net_top1": 0
+        }
+      },
+      "evidence": {
+        "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+        "commit": "e38e5ab2144d9ed8a114f68e106f0b17f6176c5d",
+        "path": "workspace-updates/20261118-three-arm/batch/review.json"
+      }
+    },
+    {
+      "id": "sequence-20261118-bra1-round",
+      "status": "archived",
+      "registered": 6,
+      "settled": 6,
+      "baseline": "market_baseline",
+      "outcomes": {
+        "lightgbm": {
+          "disposition": "CLOSED_NO_TOP1_ADVANTAGE",
+          "net_top1": -1
+        },
+        "lstm": {
+          "disposition": "CLOSED_NO_TOP1_ADVANTAGE",
+          "net_top1": -1
+        }
+      },
+      "evidence": {
+        "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+        "commit": "e38e5ab2144d9ed8a114f68e106f0b17f6176c5d",
+        "path": "workspace-updates/20261118-sequence/forward/review.json"
+      }
+    },
+    {
+      "id": "transformer-20261118-bra1-round",
+      "status": "archived",
+      "registered": 6,
+      "settled": 6,
+      "baseline": "market_baseline",
+      "outcomes": {
+        "lightgbm": {
+          "disposition": "CLOSED_NO_TOP1_ADVANTAGE",
+          "net_top1": 0
+        },
+        "lstm": {
+          "disposition": "CLOSED_NO_TOP1_ADVANTAGE",
+          "net_top1": 0
+        },
+        "transformer": {
+          "disposition": "CLOSED_NO_TOP1_ADVANTAGE",
+          "net_top1": 0
+        }
+      },
+      "evidence": {
+        "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+        "commit": "e38e5ab2144d9ed8a114f68e106f0b17f6176c5d",
+        "path": "workspace-updates/20261118-transformer/forward/review.json"
+      }
+    },
+    {
+      "id": "r7-192",
+      "status": "validation",
+      "registered": 192,
+      "evidence": {
+        "repository": "kaka597000/kaka597000-Football-Analysis-Data",
+        "commit": "e38e5ab2144d9ed8a114f68e106f0b17f6176c5d",
+        "path": "workspace-updates/20261123-prematch-literature/README.md"
+      }
+    },
+    {
+      "id": "third-score-shadow-20261125",
+      "status": "validation",
+      "evidence": {
+        "repository": "kaka597000/Football-Analysis",
+        "commit": "86663b69968bad935d044749e962cfc706ff615b",
+        "path": "research/20261125-third-score-shadow/protocol.json"
+      }
+    }
+  ]
+}
