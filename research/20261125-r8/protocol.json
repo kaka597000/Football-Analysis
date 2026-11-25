@@ -1,0 +1,16 @@
+{
+  "version": "WCPP-R8-CONDITIONAL-SCORE-1",
+  "r7_source": "a6b0f9c",
+  "r7_evidence": "9490479",
+  "panel_sources": "a2c680dfe403e48d2745c722eb7f0c036ab8d651",
+  "target": "Recall of the three ordered scores and the single first score, separately by configured competition",
+  "score_partition": "Signed 90-minute WDL crossed with the five over settlement outcomes at the actual Asian total line; WDL alone when no line exists. Under settlement is the inverse of over settlement.",
+  "score_estimation": "Fit regularized conditional score offsets within each competition only on the archived R7 second chronological fold. Clip goal feature indices at five goals per team, use an L2 penalty of 8, and leave the R7 forecast unchanged when this fold is empty. Preserve the original probability of every partition on every match.",
+  "score_test": "Lock the offsets before the archived third fold. Keep main evaluation and recent windows separate. Also refit and run the archived six-league 2009/10 chronological window. These panels were already used for R7 evaluation; they are held out from R8 fitting, not unseen R7 outcomes. Compare the exact R7 matrix selections, the R7 market reference where covered, and R8 on identical IDs, labels and lines.",
+  "movement_test": "Both arms receive the same T-1h input. The second arm additionally receives same-provider and same-bookmaker normalized 1X2 changes from no later than T-24h to no later than T-1h with strictly ordered quote clocks. Reject conflicting endpoints. Require unchanged lines for any total-price movement; omit total movement in this first run. Record no-pair fallbacks on the full common panel and compare the paired subset separately. Use before 2022-07-01 for training, 2022/23 for calibration, and from 2023-07-01 for fixed assessment.",
+  "movement_fit": "Give both arms the identical R7 T-1h anchor. Fit three-class residuals to its WDL masses with the same standardized contemporaneous market features and L2 penalty. Add only the normalized movement vector to the second fit and fall back to the first at missing pairs. Preserve the conditional score shape within each WDL class. Pick a blend on validation log loss.",
+  "settlement": "Regulation 90. Report exact score, ordered three, WDL and actual total full-win with separate availability denominators. Exclude pushes and count full wins only for the totals hit rate; retain the five outcomes.",
+  "uncertainty": "Pair on actual fixture, partition by competition, 1000 calendar-date cluster bootstrap draws with the existing report seed.",
+  "forward": "Freeze the new score candidate next to the immutable original R7 issue on still-unstarted games whose R7 identity, recipe, three-score sequence and market line reproduce. Preserve Current, Test and comprehensive tracks.",
+  "targets": {"score_top1": 0.20, "score_top3": 0.40, "wdl": 0.65, "actual_ou": 0.70}
+}

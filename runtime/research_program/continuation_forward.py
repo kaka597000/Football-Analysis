@@ -19,7 +19,7 @@ def read(path):
     return json.loads(path.read_bytes())
 
 
-def predict(game,recipe):
+def matrix(game,recipe):
     d=date.fromisoformat(game['date']).toordinal()
     state=model.load(recipe['state'])
     hl=old.half_life(recipe['competition'])
@@ -32,6 +32,11 @@ def predict(game,recipe):
         probabilities=(1-p['mix'])*prior+p['mix']*fitted
     else:
         probabilities=prior
+    return probabilities
+
+
+def predict(game,recipe):
+    probabilities=matrix(game,recipe)
     return base.pick(probabilities,base.actual_line(game)),{
         'p_first':float(probabilities.max()),'p_three':float(np.partition(probabilities.ravel(),-3)[-3:].sum()),
         'wdl':[float(probabilities[mask].sum()) for mask in (base.H>base.A,base.H==base.A,base.H<base.A)]}
