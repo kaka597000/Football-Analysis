@@ -181,5 +181,96 @@
     "population": "按比赛身份事前锁定完整队列。正式比分取赛前实际首次展示的首选及两个互异备选。研究首版独立报告。缺盘口、弃权和待结算保留覆盖。大小球同时列实盘非走盘分母与完整验收分母。",
     "benchmark": "同一赛前信息时点的独立盘口基线及现用对照，各自冻结",
     "protocol": "docs/kpi-optimization-20261123.md"
+  },
+  "research_roadmap_20261124": {
+    "confirmed_at": "2026-11-24",
+    "status": "ASPIRATIONAL_NOT_PROSPECTIVELY_DEMONSTRATED",
+    "primary_metric": "first_exact_score",
+    "stages": [
+      {
+        "stage": "stage_1",
+        "targets": {
+          "first_exact_score": 0.2,
+          "three_exact_scores": 0.4,
+          "wdl": 0.65,
+          "actual_line_full_win_nonpush": 0.7,
+          "selected_three_primary_sweep": 1.0
+        }
+      },
+      {
+        "stage": "stage_2",
+        "targets": {
+          "first_exact_score": 0.45,
+          "three_exact_scores": 0.6,
+          "wdl": 0.75,
+          "actual_line_full_win_nonpush": 0.8,
+          "selected_three_primary_sweep": 1.0
+        }
+      },
+      {
+        "stage": "stage_3",
+        "targets": {
+          "first_exact_score": 0.7,
+          "three_exact_scores": 0.89,
+          "wdl": 0.95,
+          "actual_line_full_win_nonpush": 0.95,
+          "selected_three_primary_sweep": 1.0
+        }
+      },
+      {
+        "stage": "final",
+        "targets": {
+          "first_exact_score": 1.0,
+          "three_exact_scores": 1.0,
+          "wdl": 1.0,
+          "actual_line_full_win_nonpush": 1.0,
+          "selected_three_primary_sweep": 1.0
+        }
+      }
+    ],
+    "operational_stage_1": "first_release_acceptance_20261123",
+    "existing_registrations": "review_with_original_schema_targets_and_first_receipt",
+    "population": "预先登记完整赛事范围与名单。保留未发布、弃权、待结算、延期、来源冲突。各指标并列有效分母和完整登记覆盖。",
+    "metrics": {
+      "first_exact_score": "综合轨同场、同版、赛前实际首次展示的第一比分命中认证90分钟赛果。",
+      "three_exact_scores": "同一展示原文有序三个互异比分，含第一比分。任一比分与认证90分钟比分相同即计一次。",
+      "wdl": "按同版独立发布的90分钟胜平负方向与认证赛果比较。",
+      "actual_line_full_win_nonpush": "实际同机构、同线、同报价时点的大小球推荐。全赢数除以全赢、半赢、半输、全输之和。另列走盘和五类计数。",
+      "selected_three_primary_sweep": "一个赛前锁定批次的三个入选场次，按原顺序逐场结算，三场第一比分全部正确才算该批全中。"
+    },
+    "selected_three": {
+      "slots": 3,
+      "lock": "批次最早开球前锁定队列、三个赛事身份、顺序、实际展示版本和证据。沿用首次版本。",
+      "primary_rate": "第一比分三场全中批数 / 三场第一比分均可结算的完整批数",
+      "secondary": [
+        "逐场第一比分命中 / 可结算首选数",
+        "逐场展示三选命中 / 可结算三选数",
+        "三场均由展示三选覆盖的批数 / 三选完整批数"
+      ],
+      "coverage": "同步报告全中批数 / 全部预登记批数及各指标的可结算席位 / 计划席位。少于三场、缺发布、弃权、延期及待定分别列出，保留原席位与排序。",
+      "replacement_allowed": false
+    },
+    "stage_evidence": {
+      "kind": "prospective_research_readout",
+      "research_design_suggestion": {"suggested_consecutive_windows": 2, "binding": false},
+      "preregister": [
+        "window_count_and_boundaries",
+        "eligible_fixtures_and_ranked_batches",
+        "minimum_settled_counts_and_coverage_by_metric",
+        "first_publication_version_and_recipe",
+        "model_artifact_and_source_hashes",
+        "market_baseline_and_time_cutoff",
+        "stopping_rule"
+      ],
+      "criterion": "固定配方在预登记的连续、互不重叠、当时未见赛果窗口中逐窗达到同一阶段全部指标及覆盖条件。窗口数、最小有效分母及覆盖要求须在首场前定值。另报所有登记批次、配对改对改错和不确定性。",
+      "insufficient_evidence": "单批三中三仅为一次命中。样本或预登记信息不足记待验证。延长期预先登记并保留已完成窗口。改配方另起版本，旧窗口不得重算为未见数据。",
+      "automatic_promotion": false
+    },
+    "market_reference": "以同场、同一赛前信息截止的独立市场基线为要超越的对照。相同实盘线与机构比较，缺报价或来源时间单列。分别报告目标达成、同场净胜和不确定性。市场命中率不封顶研究目标。",
+    "policy": "docs/project-goals.md",
+    "historical_target_fields": [
+      "primary_metric.target_rate",
+      "secondary_metrics[].target_rate"
+    ]
   }
 }
