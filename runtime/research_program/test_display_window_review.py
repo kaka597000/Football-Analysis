@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import gzip
 import hashlib
 import json
+from copy import deepcopy
 from pathlib import Path
 import tarfile
 import tempfile
@@ -249,6 +250,161 @@ class DisplayWindowReviewTests(unittest.TestCase):
             broken = dict(quote, over_odds=2.2)
             self.assertEqual(review._quote_source(broken, fixture, root, cache)[1],
                              "QUOTE_RAW_TOTAL_LINE_OR_PRICES_DIFFER")
+
+
+class KickoffEvidenceTests(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        self.root = Path(temp.name)
+        self.fixture = dict(match_id="espn:101", competition="jpn.1", cohort="jpn.1",
+                            home="espn:11", away="espn:22", kickoff_at="2026-11-25T10:00:00Z")
+        self.now = "2026-11-25T12:30:00Z"
+        self.report = dict(match_id="espn:101", competition="jpn.1", home="espn:11", away="espn:22",
+                           identity_verified=True, actual_kickoff_at="2026-11-25T19:02:13+09:00",
+                           observed_at="2026-11-25T12:00:00Z", raw_file="summary.json",
+                           source_url="https://site.api.espn.com/apis/site/v2/sports/soccer/jpn.1/summary?event=101")
+        self.start = dict(type={"id": "80", "type": "kickoff", "text": "Kickoff"},
+                          period={"number": 1}, clock={"value": 0.0}, wallclock="2026-11-25T10:02:13Z")
+        self.game = dict(id="101", date=self.fixture["kickoff_at"], status={"type": {"state": "post"}},
+                         competitors=[{"homeAway": "away", "team": {"id": "22"}},
+                                      {"homeAway": "home", "team": {"id": "11"}}])
+        self.raw = dict(header={"id": "101", "league": {"slug": "jpn.1"}, "competitions": [self.game]},
+                        wallclockAvailable=True, keyEvents=[self.start,
+                            dict(type={"type": "kickoff"}, period={"number": 2}, clock={"value": 2700},
+                                 wallclock="2026-11-25T11:03:43Z")])
+
+    def write_source(self, source=None, *, compress=False):
+        body = json.dumps(self.raw if source is None else source).encode()
+        if compress:
+            body = gzip.compress(body)
+        (self.root / self.report["raw_file"]).write_bytes(body)
+        self.report["source_sha256"] = hashlib.sha256(body).hexdigest()
+
+    def verify(self, report=None):
+        mid = self.fixture["match_id"]
+        return review._validate_kickoff_reports({mid: report or self.report}, {mid},
+                                                {mid: self.fixture}, self.root, self.now)
+
+    def test_actual_kickoff_is_reproduced_from_compressed_or_plain_event_source(self):
+        for compress in (False, True):
+            with self.subTest(compress=compress):
+                self.write_source(compress=compress)
+                verified = self.verify()["espn:101"]
+                self.assertEqual(verified["actual_kickoff_at"], "2026-11-25T10:02:13+00:00")
+                self.assertEqual(verified["source_sha256"], self.report["source_sha256"])
+                self.assertEqual(self.report["actual_kickoff_at"], "2026-11-25T19:02:13+09:00")
+
+    def test_actual_start_may_precede_scheduled_kickoff(self):
+        self.start["wallclock"] = self.report["actual_kickoff_at"] = "2026-11-25T09:59:45Z"
+        self.write_source()
+        self.assertEqual(self.verify()["espn:101"]["actual_kickoff_at"], "2026-11-25T09:59:45+00:00")
+
+    def test_scheduled_or_unscoped_start_fields_do_not_prove_actual_kickoff(self):
+        self.raw.update(keyEvents=[], firstHalfStart=self.report["actual_kickoff_at"],
+                        commentary=[{"text": "MatchStarted", "time": {"value": 0},
+                                     "wallclock": self.report["actual_kickoff_at"]}],
+                        httpDate=self.report["actual_kickoff_at"])
+        self.game["date"] = self.report["actual_kickoff_at"]
+        self.write_source()
+        with self.assertRaisesRegex(ValueError, "one first-period kickoff"):
+            self.verify()
+
+    def test_only_typed_first_period_zero_clock_with_zoned_wallclock_is_accepted(self):
+        changes = [
+            {"type": {"type": "goal", "text": "MatchStarted"}},
+            {"type": {"id": "94", "type": "kickoff"}}, {"period": {"number": 2}},
+            {"period": {"number": True}}, {"clock": {"value": 1}},
+            {"clock": {"value": False}}, {"clock": {"value": "0"}}, {"shootout": True},
+            {"wallclock": None, "timestamp": self.start["wallclock"]},
+            {"wallclock": "2026-11-25T10:02:13"},
+        ]
+        for change in changes:
+            with self.subTest(change=change):
+                self.write_source(dict(self.raw, keyEvents=[dict(self.start, **change)]))
+                with self.assertRaises(ValueError):
+                    self.verify()
+
+    def test_event_league_and_oriented_team_identity_are_bound(self):
+        changes = [
+            (("header", "id"), "102"), (("header", "competitions", 0, "id"), "102"),
+            (("header", "league", "slug"), "jpn.2"),
+            (("header", "competitions", 0, "competitors", 0, "team", "id"), "99"),
+            (("header", "competitions", 0, "competitors", 0, "homeAway"), "home"),
+            (("header", "competitions", 0, "competitors"), [
+                {"homeAway": "home", "team": {"id": "22"}},
+                {"homeAway": "away", "team": {"id": "11"}}]),
+            (("header", "competitions"), [self.game, self.game]),
+        ]
+        for keys, value in changes:
+            with self.subTest(keys=keys):
+                doc = deepcopy(self.raw)
+                obj = doc
+                for key in keys[:-1]:
+                    obj = obj[key]
+                obj[keys[-1]] = value
+                self.write_source(doc)
+                with self.assertRaises(ValueError):
+                    self.verify()
+
+    def test_only_registered_public_espn_summary_url_is_accepted(self):
+        self.write_source()
+        original = self.report["source_url"]
+        invalid = (original.replace("https:", "http:"), original.replace(".espn.com", ".example.com"),
+                   original.replace("jpn.1", "jpn.2"), original.replace("summary", "scoreboard"),
+                   original.replace("=101", "=102"), original + "&event=102", original + "&event=")
+        for url in invalid:
+            with self.subTest(url=url):
+                self.report["source_url"] = url
+                with self.assertRaisesRegex(ValueError, "summary URL"):
+                    self.verify()
+
+    def test_claim_capture_and_later_play_chronology_are_checked(self):
+        original = self.report.copy()
+        for key, value in (("actual_kickoff_at", self.game["date"]),
+                           ("actual_kickoff_at", "2026-11-25T10:02:13"),
+                           ("observed_at", "2026-11-25T10:01:00Z"),
+                           ("observed_at", "2026-11-25T13:00:00Z"),
+                           ("observed_at", "2026-11-25T12:00:00")):
+            with self.subTest(key=key, value=value):
+                self.report = dict(original, **{key: value})
+                self.write_source()
+                with self.assertRaises(ValueError):
+                    self.verify()
+        self.report = original
+        for later in ("2026-11-25T10:01:00Z", "2026-11-25T12:10:00Z"):
+            with self.subTest(later=later):
+                self.raw["keyEvents"][1]["wallclock"] = later
+                self.write_source()
+                with self.assertRaisesRegex(ValueError, "later play"):
+                    self.verify()
+
+    def test_duplicate_starts_and_prematch_summary_are_rejected(self):
+        self.raw["keyEvents"].append(dict(self.start, wallclock="2026-11-25T10:02:14Z"))
+        self.write_source()
+        with self.assertRaisesRegex(ValueError, "one first-period kickoff"):
+            self.verify()
+        self.raw["keyEvents"].pop()
+        self.game["status"]["type"]["state"] = "pre"
+        self.write_source()
+        with self.assertRaisesRegex(ValueError, "no live wall-clock"):
+            self.verify()
+
+    def test_capture_hash_window_and_report_identity_are_checked(self):
+        mid = self.fixture["match_id"]
+        self.write_source()
+        self.assertEqual(review._validate_kickoff_reports({}, {mid}, {mid: self.fixture}, self.root, self.now), {})
+        with self.assertRaisesRegex(ValueError, "outside registered window"):
+            review._validate_kickoff_reports({mid: self.report}, set(), {mid: self.fixture}, self.root, self.now)
+        (self.root / self.report["raw_file"]).write_bytes(b"{}")
+        with self.assertRaisesRegex(ValueError, "SHA-256"):
+            self.verify()
+        self.report["raw_file"] = "../elsewhere.json"
+        with self.assertRaisesRegex(ValueError, "out-of-root"):
+            self.verify()
+        self.report["home"] = "espn:99"
+        with self.assertRaisesRegex(ValueError, "report identity"):
+            self.verify()
 
 
 if __name__ == "__main__":

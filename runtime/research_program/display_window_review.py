@@ -388,31 +388,98 @@ def _official_phases(window_reports):
     return phases
 
 
-def _validate_kickoff_reports(raw, window_ids, fixtures, root, now):
-    """Accept only retained, identity-bound actual-start attestations."""
-    from hashlib import sha256
-    from urllib.parse import urlsplit
+def _kickoff_instant(value):
+    if isinstance(value, str):
+        value = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if not isinstance(value, datetime) or value.utcoffset() is None:
+        raise ValueError("explicit timezone required for kickoff evidence")
+    return value.astimezone(timezone.utc)
 
+
+def summary_kickoff(body, source_url, fixture, observed):
+    """Extract the typed first-period kickoff from an ESPN summary response."""
+    match_id = fixture["match_id"]
+    event_id = match_id.removeprefix("espn:")
+    league = fixture["competition"]
+    url = urlsplit(source_url)
+    if (not match_id.startswith("espn:") or not event_id.isascii() or not event_id.isdecimal()
+            or fixture.get("cohort", league) != league or url.scheme != "https"
+            or url.hostname not in {"site.api.espn.com", "site.web.api.espn.com"}
+            or url.username is not None or url.password is not None or url.port not in (None, 443)
+            or url.path != f"/apis/site/v2/sports/soccer/{league}/summary"
+            or parse_qs(url.query, keep_blank_values=True).get("event") != [event_id]):
+        raise ValueError("expected the registered event's ESPN summary URL")
+
+    if body.startswith(b"\x1f\x8b"):
+        body = gzip.decompress(body)
+    raw = json.loads(body)
+    header = raw["header"]
+    game, = header["competitions"]
+    if (str(header["id"]) != event_id or str(game["id"]) != event_id
+            or header["league"]["slug"] != league):
+        raise ValueError("ESPN event or league differs from the registered fixture")
+    teams = [(entry["homeAway"], "espn:" + str(entry["team"]["id"]))
+             for entry in game["competitors"]]
+    expected_teams = [("away", fixture["away"]), ("home", fixture["home"])]
+    if fixture["home"] == fixture["away"] or sorted(teams) != expected_teams:
+        raise ValueError("ESPN home and away identities differ from the registered fixture")
+    if (game.get("status", {}).get("type", {}).get("state") == "pre"
+            or raw.get("wallclockAvailable") is False):
+        raise ValueError("ESPN summary has no live wall-clock evidence")
+
+    starts = []
+    events = raw.get("keyEvents", [])
+    for event in events:
+        kind = event.get("type", {})
+        period = event.get("period", {}).get("number")
+        if kind.get("type") == "kickoff" and type(period) is int and period == 1:
+            clock = event.get("clock", {}).get("value")
+            if (str(kind.get("id", "80")) != "80" or type(clock) not in (float, int)
+                    or clock != 0 or event.get("shootout") is True):
+                raise ValueError("first-period kickoff has conflicting type or match clock")
+            starts.append(_kickoff_instant(event.get("wallclock")))
+    if len(starts) != 1:
+        raise ValueError("expected one first-period kickoff with its own wallclock")
+    start = starts[0]
+    if start > observed:
+        raise ValueError("actual kickoff follows capture")
+    for event in events:
+        elapsed = event.get("clock", {}).get("value")
+        if type(elapsed) in (float, int) and elapsed > 0 and event.get("wallclock") is not None:
+            if not start < _kickoff_instant(event["wallclock"]) <= observed:
+                raise ValueError("later play contradicts the kickoff or capture chronology")
+    return start
+
+
+def _validate_kickoff_reports(raw, window_ids, fixtures, root, now):
+    """Return only kickoff claims reproduced from retained ESPN event evidence."""
     root = Path(root).resolve()
+    as_of = _kickoff_instant(now)
     checked = {}
     for mid, item in raw.items():
         if mid not in window_ids:
-            raise ValueError("actual kickoff report outside this registered window")
-        f = fixtures[mid]
-        if (item.get("match_id") != mid or item.get("competition") != f.get("competition")
-                or item.get("home") != f.get("home") or item.get("away") != f.get("away")
-                or item.get("identity_verified") is not True or not item.get("source_url")
-                or not item.get("observed_at") or not item.get("actual_kickoff_at")):
-            raise ValueError("actual kickoff report identity or certification missing: " + mid)
-        url = urlsplit(item["source_url"])
-        if url.scheme != "https" or not url.hostname:
-            raise ValueError("actual kickoff evidence must have a public HTTPS source")
-        path = (root / item["raw_file"]).resolve()
-        if not path.is_relative_to(root) or not path.is_file() or sha256(path.read_bytes()).hexdigest() != item.get("source_sha256"):
-            raise ValueError("actual kickoff retained source checksum mismatch: " + mid)
-        if aware(item["observed_at"]) > now + timedelta(minutes=1):
-            raise ValueError("actual kickoff observation is in the future")
-        checked[mid] = dict(item)
+            raise ValueError(f"actual kickoff outside registered window: {mid}")
+        try:
+            fixture = fixtures[mid]
+            if (item["match_id"] != mid or item["identity_verified"] is not True
+                    or any(item[key] != fixture[key]
+                           for key in ("match_id", "competition", "home", "away"))):
+                raise ValueError("report identity differs from registered fixture")
+            observed = _kickoff_instant(item["observed_at"])
+            if observed > as_of:
+                raise ValueError("capture follows review time")
+            path = (root / item["raw_file"]).resolve()
+            if not path.is_relative_to(root) or not path.is_file():
+                raise ValueError("missing or out-of-root retained source")
+            body = path.read_bytes()
+            if hashlib.sha256(body).hexdigest() != item["source_sha256"]:
+                raise ValueError("retained source SHA-256 differs")
+            start = summary_kickoff(body, item["source_url"], fixture, observed)
+            if start != _kickoff_instant(item["actual_kickoff_at"]):
+                raise ValueError("reported start differs from the actual kickoff wallclock")
+        except (AttributeError, EOFError, KeyError, OSError, TypeError, ValueError) as exc:
+            raise ValueError(f"{mid}: {exc}") from exc
+        checked[mid] = dict(item, actual_kickoff_at=start.isoformat())
     return checked
 
 
