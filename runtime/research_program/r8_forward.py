@@ -66,10 +66,7 @@ def issue(evidence, previous, original, fit_root, protocol, output, *, freeze_ro
             raise ValueError('R7 source identity or timing mismatch')
         original_payload = source['payload']
         code = f['cohort']
-        game = dict(id=mid, competition=code, date=aware(f['kickoff_at']).date().isoformat(),
-                    stage=original_payload['model_stage'], home=original_payload['model_teams'][0],
-                    away=original_payload['model_teams'][1], neutral=original_payload['neutral'],
-                    paired_market=original_payload['market_mode']=='paired', **original_payload['prices'])
+        game = r7.frozen_game(f, original_payload)
         prior = r7.matrix(game, recipes[code])
         line = base.actual_line(game)
         r7_selection = base.pick(prior, line)
