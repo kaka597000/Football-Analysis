@@ -1,0 +1,1306 @@
+{
+  "certified_labels_sha256": "d91983f310ec8c4139ee0277fde27f21b70b842fbac4f694d51f823835d3a69c",
+  "decision": "stop_recipe",
+  "fit": {
+    "beta": 0.2675140368760652,
+    "games": {
+      "paired": 636,
+      "roster": 636
+    },
+    "side_observations": 1272
+  },
+  "lock_sha256": "99b66dc409b771b21cb1684fb68b87560148aa588b6a4d621e982c9550cfd91a",
+  "missing_scores": [],
+  "paired_actual_display": {
+    "first": 0,
+    "preselected_three_batches": 0,
+    "three": 0
+  },
+  "panels": {
+    "historical": {
+      "active": {
+        "baseline": {
+          "error_paths": {
+            "first": 66,
+            "outside_three": 401,
+            "second_or_third": 113
+          },
+          "mean_log_loss": 2.942947369992107,
+          "total_outcomes": {
+            "FULL_LOSS": 264,
+            "FULL_WIN": 316
+          }
+        },
+        "candidate": {
+          "error_paths": {
+            "first": 72,
+            "outside_three": 399,
+            "second_or_third": 109
+          },
+          "mean_log_loss": 2.9385148916031976,
+          "total_outcomes": {
+            "FULL_LOSS": 263,
+            "FULL_WIN": 317
+          }
+        },
+        "first": {
+          "baseline": 66,
+          "candidate": 72,
+          "choices_changed": 68,
+          "gained": 12,
+          "lost": 6,
+          "n": 580
+        },
+        "full_win": {
+          "baseline": 316,
+          "candidate": 317,
+          "choices_changed": 23,
+          "gained": 12,
+          "lost": 11,
+          "n": 580
+        },
+        "paired": 580,
+        "population": 580,
+        "rank_transition": {
+          "backups->backups": 96,
+          "backups->first": 12,
+          "backups->outside": 5,
+          "first->backups": 6,
+          "first->first": 60,
+          "outside->backups": 7,
+          "outside->outside": 394
+        },
+        "statuses": {
+          "active": 580
+        },
+        "three": {
+          "baseline": 179,
+          "candidate": 181,
+          "choices_changed": 118,
+          "gained": 7,
+          "lost": 5,
+          "n": 580
+        },
+        "wdl": {
+          "baseline": 301,
+          "candidate": 297,
+          "choices_changed": 13,
+          "gained": 2,
+          "lost": 6,
+          "n": 580
+        }
+      },
+      "all": {
+        "baseline": {
+          "error_paths": {
+            "first": 66,
+            "outside_three": 408,
+            "second_or_third": 114
+          },
+          "mean_log_loss": 2.9500311801063894,
+          "total_outcomes": {
+            "FULL_LOSS": 270,
+            "FULL_WIN": 318
+          }
+        },
+        "candidate": {
+          "error_paths": {
+            "first": 72,
+            "outside_three": 406,
+            "second_or_third": 110
+          },
+          "mean_log_loss": 2.9456590075459,
+          "total_outcomes": {
+            "FULL_LOSS": 269,
+            "FULL_WIN": 319
+          }
+        },
+        "first": {
+          "baseline": 66,
+          "candidate": 72,
+          "choices_changed": 68,
+          "date_cluster_95_pp": [
+            -0.44719473796264136,
+            2.529182879377432
+          ],
+          "gained": 12,
+          "lost": 6,
+          "n": 588
+        },
+        "full_win": {
+          "baseline": 318,
+          "candidate": 319,
+          "choices_changed": 23,
+          "date_cluster_95_pp": [
+            -1.5845140175442514,
+            1.911863308541807
+          ],
+          "gained": 12,
+          "lost": 11,
+          "n": 588
+        },
+        "paired": 588,
+        "population": 588,
+        "rank_transition": {
+          "backups->backups": 97,
+          "backups->first": 12,
+          "backups->outside": 5,
+          "first->backups": 6,
+          "first->first": 60,
+          "outside->backups": 7,
+          "outside->outside": 401
+        },
+        "statuses": {
+          "active": 580,
+          "fallback_missing_signal": 8
+        },
+        "three": {
+          "baseline": 180,
+          "candidate": 182,
+          "choices_changed": 118,
+          "date_cluster_95_pp": [
+            -0.5989838504808565,
+            1.3043883841661257
+          ],
+          "gained": 7,
+          "lost": 5,
+          "n": 588
+        },
+        "wdl": {
+          "baseline": 303,
+          "candidate": 299,
+          "choices_changed": 13,
+          "date_cluster_95_pp": [
+            -1.5924838729370587,
+            0.17894759015840886
+          ],
+          "gained": 2,
+          "lost": 6,
+          "n": 588
+        }
+      },
+      "by_league": {
+        "eng.1": {
+          "baseline": {
+            "error_paths": {
+              "first": 15,
+              "outside_three": 98,
+              "second_or_third": 13
+            },
+            "mean_log_loss": 3.133178335745767,
+            "total_outcomes": {
+              "FULL_LOSS": 50,
+              "FULL_WIN": 76
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "first": 13,
+              "outside_three": 96,
+              "second_or_third": 17
+            },
+            "mean_log_loss": 3.130741869560502,
+            "total_outcomes": {
+              "FULL_LOSS": 53,
+              "FULL_WIN": 73
+            }
+          },
+          "first": {
+            "baseline": 15,
+            "candidate": 13,
+            "choices_changed": 11,
+            "gained": 0,
+            "lost": 2,
+            "n": 126
+          },
+          "full_win": {
+            "baseline": 76,
+            "candidate": 73,
+            "choices_changed": 3,
+            "gained": 0,
+            "lost": 3,
+            "n": 126
+          },
+          "paired": 126,
+          "population": 126,
+          "rank_transition": {
+            "backups->backups": 13,
+            "first->backups": 2,
+            "first->first": 13,
+            "outside->backups": 2,
+            "outside->outside": 96
+          },
+          "statuses": {
+            "active": 126
+          },
+          "three": {
+            "baseline": 28,
+            "candidate": 30,
+            "choices_changed": 22,
+            "gained": 2,
+            "lost": 0,
+            "n": 126
+          },
+          "wdl": {
+            "baseline": 63,
+            "candidate": 64,
+            "choices_changed": 5,
+            "gained": 2,
+            "lost": 1,
+            "n": 126
+          }
+        },
+        "esp.1": {
+          "baseline": {
+            "error_paths": {
+              "first": 14,
+              "outside_three": 76,
+              "second_or_third": 30
+            },
+            "mean_log_loss": 2.8376971019530486,
+            "total_outcomes": {
+              "FULL_LOSS": 62,
+              "FULL_WIN": 58
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "first": 16,
+              "outside_three": 75,
+              "second_or_third": 29
+            },
+            "mean_log_loss": 2.8273118918614215,
+            "total_outcomes": {
+              "FULL_LOSS": 59,
+              "FULL_WIN": 61
+            }
+          },
+          "first": {
+            "baseline": 14,
+            "candidate": 16,
+            "choices_changed": 21,
+            "gained": 3,
+            "lost": 1,
+            "n": 120
+          },
+          "full_win": {
+            "baseline": 58,
+            "candidate": 61,
+            "choices_changed": 5,
+            "gained": 4,
+            "lost": 1,
+            "n": 120
+          },
+          "paired": 120,
+          "population": 120,
+          "rank_transition": {
+            "backups->backups": 25,
+            "backups->first": 3,
+            "backups->outside": 2,
+            "first->backups": 1,
+            "first->first": 13,
+            "outside->backups": 3,
+            "outside->outside": 73
+          },
+          "statuses": {
+            "active": 120
+          },
+          "three": {
+            "baseline": 44,
+            "candidate": 45,
+            "choices_changed": 28,
+            "gained": 3,
+            "lost": 2,
+            "n": 120
+          },
+          "wdl": {
+            "baseline": 59,
+            "candidate": 59,
+            "choices_changed": 1,
+            "gained": 0,
+            "lost": 0,
+            "n": 120
+          }
+        },
+        "fra.1": {
+          "baseline": {
+            "error_paths": {
+              "first": 9,
+              "outside_three": 79,
+              "second_or_third": 20
+            },
+            "mean_log_loss": 2.9926866628901827,
+            "total_outcomes": {
+              "FULL_LOSS": 55,
+              "FULL_WIN": 53
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "first": 12,
+              "outside_three": 78,
+              "second_or_third": 18
+            },
+            "mean_log_loss": 2.9731613083665462,
+            "total_outcomes": {
+              "FULL_LOSS": 53,
+              "FULL_WIN": 55
+            }
+          },
+          "first": {
+            "baseline": 9,
+            "candidate": 12,
+            "choices_changed": 11,
+            "gained": 4,
+            "lost": 1,
+            "n": 108
+          },
+          "full_win": {
+            "baseline": 53,
+            "candidate": 55,
+            "choices_changed": 4,
+            "gained": 3,
+            "lost": 1,
+            "n": 108
+          },
+          "paired": 108,
+          "population": 108,
+          "rank_transition": {
+            "backups->backups": 16,
+            "backups->first": 4,
+            "first->backups": 1,
+            "first->first": 8,
+            "outside->backups": 1,
+            "outside->outside": 78
+          },
+          "statuses": {
+            "active": 108
+          },
+          "three": {
+            "baseline": 29,
+            "candidate": 30,
+            "choices_changed": 21,
+            "gained": 1,
+            "lost": 0,
+            "n": 108
+          },
+          "wdl": {
+            "baseline": 54,
+            "candidate": 53,
+            "choices_changed": 1,
+            "gained": 0,
+            "lost": 1,
+            "n": 108
+          }
+        },
+        "ger.1": {
+          "baseline": {
+            "error_paths": {
+              "first": 16,
+              "outside_three": 71,
+              "second_or_third": 21
+            },
+            "mean_log_loss": 2.890666771038195,
+            "total_outcomes": {
+              "FULL_LOSS": 42,
+              "FULL_WIN": 66
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "first": 17,
+              "outside_three": 72,
+              "second_or_third": 19
+            },
+            "mean_log_loss": 2.9029864471600755,
+            "total_outcomes": {
+              "FULL_LOSS": 42,
+              "FULL_WIN": 66
+            }
+          },
+          "first": {
+            "baseline": 16,
+            "candidate": 17,
+            "choices_changed": 12,
+            "gained": 2,
+            "lost": 1,
+            "n": 108
+          },
+          "full_win": {
+            "baseline": 66,
+            "candidate": 66,
+            "choices_changed": 2,
+            "gained": 1,
+            "lost": 1,
+            "n": 108
+          },
+          "paired": 108,
+          "population": 108,
+          "rank_transition": {
+            "backups->backups": 18,
+            "backups->first": 2,
+            "backups->outside": 1,
+            "first->backups": 1,
+            "first->first": 15,
+            "outside->outside": 71
+          },
+          "statuses": {
+            "active": 100,
+            "fallback_missing_signal": 8
+          },
+          "three": {
+            "baseline": 37,
+            "candidate": 36,
+            "choices_changed": 22,
+            "gained": 0,
+            "lost": 1,
+            "n": 108
+          },
+          "wdl": {
+            "baseline": 54,
+            "candidate": 52,
+            "choices_changed": 3,
+            "gained": 0,
+            "lost": 2,
+            "n": 108
+          }
+        },
+        "ita.1": {
+          "baseline": {
+            "error_paths": {
+              "first": 12,
+              "outside_three": 84,
+              "second_or_third": 30
+            },
+            "mean_log_loss": 2.888190797618727,
+            "total_outcomes": {
+              "FULL_LOSS": 61,
+              "FULL_WIN": 65
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "first": 14,
+              "outside_three": 85,
+              "second_or_third": 27
+            },
+            "mean_log_loss": 2.8862907639057154,
+            "total_outcomes": {
+              "FULL_LOSS": 62,
+              "FULL_WIN": 64
+            }
+          },
+          "first": {
+            "baseline": 12,
+            "candidate": 14,
+            "choices_changed": 13,
+            "gained": 3,
+            "lost": 1,
+            "n": 126
+          },
+          "full_win": {
+            "baseline": 65,
+            "candidate": 64,
+            "choices_changed": 9,
+            "gained": 4,
+            "lost": 5,
+            "n": 126
+          },
+          "paired": 126,
+          "population": 126,
+          "rank_transition": {
+            "backups->backups": 25,
+            "backups->first": 3,
+            "backups->outside": 2,
+            "first->backups": 1,
+            "first->first": 11,
+            "outside->backups": 1,
+            "outside->outside": 83
+          },
+          "statuses": {
+            "active": 126
+          },
+          "three": {
+            "baseline": 42,
+            "candidate": 41,
+            "choices_changed": 25,
+            "gained": 1,
+            "lost": 2,
+            "n": 126
+          },
+          "wdl": {
+            "baseline": 73,
+            "candidate": 71,
+            "choices_changed": 3,
+            "gained": 0,
+            "lost": 2,
+            "n": 126
+          }
+        }
+      },
+      "by_year": {
+        "2024": {
+          "baseline": {
+            "error_paths": {
+              "first": 24,
+              "outside_three": 138,
+              "second_or_third": 37
+            },
+            "mean_log_loss": 2.9873716325648227,
+            "total_outcomes": {
+              "FULL_LOSS": 84,
+              "FULL_WIN": 115
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "first": 24,
+              "outside_three": 138,
+              "second_or_third": 37
+            },
+            "mean_log_loss": 2.9830128806832303,
+            "total_outcomes": {
+              "FULL_LOSS": 82,
+              "FULL_WIN": 117
+            }
+          },
+          "first": {
+            "baseline": 24,
+            "candidate": 24,
+            "choices_changed": 24,
+            "gained": 2,
+            "lost": 2,
+            "n": 199
+          },
+          "full_win": {
+            "baseline": 115,
+            "candidate": 117,
+            "choices_changed": 6,
+            "gained": 4,
+            "lost": 2,
+            "n": 199
+          },
+          "paired": 199,
+          "population": 199,
+          "rank_transition": {
+            "backups->backups": 34,
+            "backups->first": 2,
+            "backups->outside": 1,
+            "first->backups": 2,
+            "first->first": 22,
+            "outside->backups": 1,
+            "outside->outside": 137
+          },
+          "statuses": {
+            "active": 199
+          },
+          "three": {
+            "baseline": 61,
+            "candidate": 61,
+            "choices_changed": 37,
+            "gained": 1,
+            "lost": 1,
+            "n": 199
+          },
+          "wdl": {
+            "baseline": 97,
+            "candidate": 97,
+            "choices_changed": 3,
+            "gained": 0,
+            "lost": 0,
+            "n": 199
+          }
+        },
+        "2025": {
+          "baseline": {
+            "error_paths": {
+              "first": 18,
+              "outside_three": 137,
+              "second_or_third": 41
+            },
+            "mean_log_loss": 3.024631774117184,
+            "total_outcomes": {
+              "FULL_LOSS": 96,
+              "FULL_WIN": 100
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "first": 19,
+              "outside_three": 136,
+              "second_or_third": 41
+            },
+            "mean_log_loss": 3.020706863476143,
+            "total_outcomes": {
+              "FULL_LOSS": 99,
+              "FULL_WIN": 97
+            }
+          },
+          "first": {
+            "baseline": 18,
+            "candidate": 19,
+            "choices_changed": 22,
+            "gained": 3,
+            "lost": 2,
+            "n": 196
+          },
+          "full_win": {
+            "baseline": 100,
+            "candidate": 97,
+            "choices_changed": 11,
+            "gained": 4,
+            "lost": 7,
+            "n": 196
+          },
+          "paired": 196,
+          "population": 196,
+          "rank_transition": {
+            "backups->backups": 35,
+            "backups->first": 3,
+            "backups->outside": 3,
+            "first->backups": 2,
+            "first->first": 16,
+            "outside->backups": 4,
+            "outside->outside": 133
+          },
+          "statuses": {
+            "active": 188,
+            "fallback_missing_signal": 8
+          },
+          "three": {
+            "baseline": 59,
+            "candidate": 60,
+            "choices_changed": 43,
+            "gained": 4,
+            "lost": 3,
+            "n": 196
+          },
+          "wdl": {
+            "baseline": 107,
+            "candidate": 104,
+            "choices_changed": 6,
+            "gained": 1,
+            "lost": 4,
+            "n": 196
+          }
+        },
+        "2026": {
+          "baseline": {
+            "error_paths": {
+              "first": 24,
+              "outside_three": 133,
+              "second_or_third": 36
+            },
+            "mean_log_loss": 2.835769695829996,
+            "total_outcomes": {
+              "FULL_LOSS": 90,
+              "FULL_WIN": 103
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "first": 29,
+              "outside_three": 132,
+              "second_or_third": 32
+            },
+            "mean_log_loss": 2.8309294711901667,
+            "total_outcomes": {
+              "FULL_LOSS": 88,
+              "FULL_WIN": 105
+            }
+          },
+          "first": {
+            "baseline": 24,
+            "candidate": 29,
+            "choices_changed": 22,
+            "gained": 7,
+            "lost": 2,
+            "n": 193
+          },
+          "full_win": {
+            "baseline": 103,
+            "candidate": 105,
+            "choices_changed": 6,
+            "gained": 4,
+            "lost": 2,
+            "n": 193
+          },
+          "paired": 193,
+          "population": 193,
+          "rank_transition": {
+            "backups->backups": 28,
+            "backups->first": 7,
+            "backups->outside": 1,
+            "first->backups": 2,
+            "first->first": 22,
+            "outside->backups": 2,
+            "outside->outside": 131
+          },
+          "statuses": {
+            "active": 193
+          },
+          "three": {
+            "baseline": 60,
+            "candidate": 61,
+            "choices_changed": 38,
+            "gained": 2,
+            "lost": 1,
+            "n": 193
+          },
+          "wdl": {
+            "baseline": 99,
+            "candidate": 98,
+            "choices_changed": 4,
+            "gained": 1,
+            "lost": 2,
+            "n": 193
+          }
+        }
+      },
+      "days": [
+        "2024-02-01",
+        "2024-02-02",
+        "2024-02-03",
+        "2024-02-04",
+        "2024-02-05",
+        "2024-02-07",
+        "2024-02-09",
+        "2024-02-10",
+        "2024-02-11",
+        "2024-02-12",
+        "2024-02-14",
+        "2024-02-16",
+        "2024-02-17",
+        "2024-02-18",
+        "2024-02-19",
+        "2024-02-20",
+        "2024-02-21",
+        "2024-02-22",
+        "2024-02-23",
+        "2024-02-24",
+        "2024-02-25",
+        "2024-02-26",
+        "2024-02-28",
+        "2025-02-01",
+        "2025-02-02",
+        "2025-02-03",
+        "2025-02-06",
+        "2025-02-07",
+        "2025-02-08",
+        "2025-02-09",
+        "2025-02-10",
+        "2025-02-12",
+        "2025-02-14",
+        "2025-02-15",
+        "2025-02-16",
+        "2025-02-17",
+        "2025-02-19",
+        "2025-02-21",
+        "2025-02-22",
+        "2025-02-23",
+        "2025-02-24",
+        "2025-02-25",
+        "2025-02-26",
+        "2025-02-27",
+        "2025-02-28",
+        "2026-02-01",
+        "2026-02-02",
+        "2026-02-03",
+        "2026-02-06",
+        "2026-02-07",
+        "2026-02-08",
+        "2026-02-09",
+        "2026-02-10",
+        "2026-02-11",
+        "2026-02-12",
+        "2026-02-13",
+        "2026-02-14",
+        "2026-02-15",
+        "2026-02-16",
+        "2026-02-18",
+        "2026-02-20",
+        "2026-02-21",
+        "2026-02-22",
+        "2026-02-23",
+        "2026-02-27",
+        "2026-02-28"
+      ]
+    },
+    "retained": {
+      "active": {
+        "baseline": {
+          "error_paths": {
+            "outside_three": 5,
+            "second_or_third": 2
+          },
+          "mean_log_loss": 3.060162916282646,
+          "total_outcomes": {
+            "FULL_LOSS": 2,
+            "FULL_WIN": 3,
+            "HALF_LOSS": 1,
+            "PUSH": 1
+          }
+        },
+        "candidate": {
+          "error_paths": {
+            "outside_three": 5,
+            "second_or_third": 2
+          },
+          "mean_log_loss": 3.03223127535981,
+          "total_outcomes": {
+            "FULL_LOSS": 2,
+            "FULL_WIN": 3,
+            "HALF_LOSS": 1,
+            "PUSH": 1
+          }
+        },
+        "first": {
+          "baseline": 0,
+          "candidate": 0,
+          "choices_changed": 2,
+          "gained": 0,
+          "lost": 0,
+          "n": 7
+        },
+        "full_win": {
+          "baseline": 3,
+          "candidate": 3,
+          "choices_changed": 2,
+          "gained": 1,
+          "lost": 1,
+          "n": 6
+        },
+        "paired": 7,
+        "population": 7,
+        "rank_transition": {
+          "backups->backups": 2,
+          "outside->outside": 5
+        },
+        "statuses": {
+          "active": 7
+        },
+        "three": {
+          "baseline": 2,
+          "candidate": 2,
+          "choices_changed": 2,
+          "gained": 0,
+          "lost": 0,
+          "n": 7
+        },
+        "wdl": {
+          "baseline": 6,
+          "candidate": 6,
+          "choices_changed": 0,
+          "gained": 0,
+          "lost": 0,
+          "n": 7
+        }
+      },
+      "all": {
+        "baseline": {
+          "error_paths": {
+            "outside_three": 7,
+            "second_or_third": 2
+          },
+          "mean_log_loss": 3.021351485693947,
+          "total_outcomes": {
+            "FULL_LOSS": 3,
+            "FULL_WIN": 4,
+            "HALF_LOSS": 1,
+            "PUSH": 1
+          }
+        },
+        "candidate": {
+          "error_paths": {
+            "outside_three": 7,
+            "second_or_third": 2
+          },
+          "mean_log_loss": 2.9996268760872966,
+          "total_outcomes": {
+            "FULL_LOSS": 3,
+            "FULL_WIN": 4,
+            "HALF_LOSS": 1,
+            "PUSH": 1
+          }
+        },
+        "first": {
+          "baseline": 0,
+          "candidate": 0,
+          "choices_changed": 2,
+          "gained": 0,
+          "lost": 0,
+          "n": 9
+        },
+        "full_win": {
+          "baseline": 4,
+          "candidate": 4,
+          "choices_changed": 2,
+          "gained": 1,
+          "lost": 1,
+          "n": 8
+        },
+        "paired": 9,
+        "population": 33,
+        "rank_transition": {
+          "backups->backups": 2,
+          "outside->outside": 7
+        },
+        "statuses": {
+          "active": 7,
+          "fallback_missing_signal": 2,
+          "first_pair_unavailable": 3,
+          "outside_study_leagues_or_stage": 15,
+          "revision_only": 6
+        },
+        "three": {
+          "baseline": 2,
+          "candidate": 2,
+          "choices_changed": 2,
+          "gained": 0,
+          "lost": 0,
+          "n": 9
+        },
+        "wdl": {
+          "baseline": 7,
+          "candidate": 7,
+          "choices_changed": 0,
+          "gained": 0,
+          "lost": 0,
+          "n": 9
+        }
+      },
+      "by_league": {
+        "aus.1": {
+          "paired": 0,
+          "population": 3,
+          "statuses": {
+            "outside_study_leagues_or_stage": 3
+          }
+        },
+        "eng.1": {
+          "paired": 0,
+          "population": 6,
+          "statuses": {
+            "revision_only": 6
+          }
+        },
+        "esp.1": {
+          "baseline": {
+            "error_paths": {
+              "outside_three": 2
+            },
+            "mean_log_loss": 2.885511478633501,
+            "total_outcomes": {
+              "FULL_LOSS": 1,
+              "FULL_WIN": 1
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "outside_three": 2
+            },
+            "mean_log_loss": 2.885511478633501,
+            "total_outcomes": {
+              "FULL_LOSS": 1,
+              "FULL_WIN": 1
+            }
+          },
+          "first": {
+            "baseline": 0,
+            "candidate": 0,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 2
+          },
+          "full_win": {
+            "baseline": 1,
+            "candidate": 1,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 2
+          },
+          "paired": 2,
+          "population": 3,
+          "rank_transition": {
+            "outside->outside": 2
+          },
+          "statuses": {
+            "fallback_missing_signal": 2,
+            "first_pair_unavailable": 1
+          },
+          "three": {
+            "baseline": 0,
+            "candidate": 0,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 2
+          },
+          "wdl": {
+            "baseline": 1,
+            "candidate": 1,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 2
+          }
+        },
+        "fra.1": {
+          "paired": 0,
+          "population": 1,
+          "statuses": {
+            "first_pair_unavailable": 1
+          }
+        },
+        "ger.1": {
+          "baseline": {
+            "error_paths": {
+              "outside_three": 4,
+              "second_or_third": 1
+            },
+            "mean_log_loss": 3.247094344280046,
+            "total_outcomes": {
+              "FULL_LOSS": 2,
+              "FULL_WIN": 2,
+              "HALF_LOSS": 1
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "outside_three": 4,
+              "second_or_third": 1
+            },
+            "mean_log_loss": 3.214096355076024,
+            "total_outcomes": {
+              "FULL_LOSS": 2,
+              "FULL_WIN": 2,
+              "HALF_LOSS": 1
+            }
+          },
+          "first": {
+            "baseline": 0,
+            "candidate": 0,
+            "choices_changed": 2,
+            "gained": 0,
+            "lost": 0,
+            "n": 5
+          },
+          "full_win": {
+            "baseline": 2,
+            "candidate": 2,
+            "choices_changed": 2,
+            "gained": 1,
+            "lost": 1,
+            "n": 5
+          },
+          "paired": 5,
+          "population": 6,
+          "rank_transition": {
+            "backups->backups": 1,
+            "outside->outside": 4
+          },
+          "statuses": {
+            "active": 5,
+            "first_pair_unavailable": 1
+          },
+          "three": {
+            "baseline": 1,
+            "candidate": 1,
+            "choices_changed": 2,
+            "gained": 0,
+            "lost": 0,
+            "n": 5
+          },
+          "wdl": {
+            "baseline": 4,
+            "candidate": 4,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 5
+          }
+        },
+        "ita.1": {
+          "baseline": {
+            "error_paths": {
+              "outside_three": 1,
+              "second_or_third": 1
+            },
+            "mean_log_loss": 2.5928343462891448,
+            "total_outcomes": {
+              "FULL_WIN": 1,
+              "PUSH": 1
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "outside_three": 1,
+              "second_or_third": 1
+            },
+            "mean_log_loss": 2.5775685760692753,
+            "total_outcomes": {
+              "FULL_WIN": 1,
+              "PUSH": 1
+            }
+          },
+          "first": {
+            "baseline": 0,
+            "candidate": 0,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 2
+          },
+          "full_win": {
+            "baseline": 1,
+            "candidate": 1,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 1
+          },
+          "paired": 2,
+          "population": 2,
+          "rank_transition": {
+            "backups->backups": 1,
+            "outside->outside": 1
+          },
+          "statuses": {
+            "active": 2
+          },
+          "three": {
+            "baseline": 1,
+            "candidate": 1,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 2
+          },
+          "wdl": {
+            "baseline": 2,
+            "candidate": 2,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 2
+          }
+        },
+        "jpn.1": {
+          "paired": 0,
+          "population": 4,
+          "statuses": {
+            "outside_study_leagues_or_stage": 4
+          }
+        },
+        "kor.1": {
+          "paired": 0,
+          "population": 2,
+          "statuses": {
+            "outside_study_leagues_or_stage": 2
+          }
+        },
+        "ned.1": {
+          "paired": 0,
+          "population": 1,
+          "statuses": {
+            "outside_study_leagues_or_stage": 1
+          }
+        },
+        "nor.1": {
+          "paired": 0,
+          "population": 3,
+          "statuses": {
+            "outside_study_leagues_or_stage": 3
+          }
+        },
+        "swe.1": {
+          "paired": 0,
+          "population": 2,
+          "statuses": {
+            "outside_study_leagues_or_stage": 2
+          }
+        }
+      },
+      "by_year": {
+        "2026": {
+          "baseline": {
+            "error_paths": {
+              "outside_three": 7,
+              "second_or_third": 2
+            },
+            "mean_log_loss": 3.021351485693947,
+            "total_outcomes": {
+              "FULL_LOSS": 3,
+              "FULL_WIN": 4,
+              "HALF_LOSS": 1,
+              "PUSH": 1
+            }
+          },
+          "candidate": {
+            "error_paths": {
+              "outside_three": 7,
+              "second_or_third": 2
+            },
+            "mean_log_loss": 2.9996268760872966,
+            "total_outcomes": {
+              "FULL_LOSS": 3,
+              "FULL_WIN": 4,
+              "HALF_LOSS": 1,
+              "PUSH": 1
+            }
+          },
+          "first": {
+            "baseline": 0,
+            "candidate": 0,
+            "choices_changed": 2,
+            "gained": 0,
+            "lost": 0,
+            "n": 9
+          },
+          "full_win": {
+            "baseline": 4,
+            "candidate": 4,
+            "choices_changed": 2,
+            "gained": 1,
+            "lost": 1,
+            "n": 8
+          },
+          "paired": 9,
+          "population": 33,
+          "rank_transition": {
+            "backups->backups": 2,
+            "outside->outside": 7
+          },
+          "statuses": {
+            "active": 7,
+            "fallback_missing_signal": 2,
+            "first_pair_unavailable": 3,
+            "outside_study_leagues_or_stage": 15,
+            "revision_only": 6
+          },
+          "three": {
+            "baseline": 2,
+            "candidate": 2,
+            "choices_changed": 2,
+            "gained": 0,
+            "lost": 0,
+            "n": 9
+          },
+          "wdl": {
+            "baseline": 7,
+            "candidate": 7,
+            "choices_changed": 0,
+            "gained": 0,
+            "lost": 0,
+            "n": 9
+          }
+        }
+      },
+      "days": [
+        "2026-11-21"
+      ]
+    }
+  }
+}

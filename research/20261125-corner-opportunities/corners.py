@@ -8,6 +8,7 @@ import numpy as np
 from scipy.optimize import brentq
 
 from optimization.evaluate import settle_ou
+from research.analysis_freeze import aware, digest
 from research_program.three_arm_model import top_three_scores
 from v2.model import probabilities, total_settlement
 
@@ -127,3 +128,40 @@ def hits(pick, actual, line, matrix):
         settlement=ou,
         log_loss=-math.log(max(float(probability), 1e-15)),
     )
+
+
+def verify_pair(pair, author, anchor):
+    f, p = pair["fixture"], pair["payload"]["current_model"]
+    ref = author["payload"]["current_test_reference"]
+    if (
+        pair["revision"] != 1
+        or pair["evaluation_slot"] != "FIRST_PREMATCH"
+        or pair["stage"] != "prematch"
+        or pair["track"] != "current-test-pair"
+        or pair["previous_sha256"] is not None
+        or ref["freeze_id"] != pair["freeze_id"]
+        or ref["sha256"] != pair["record_sha256"]
+        or ref["recorded_at"] != pair["recorded_at"]
+        or not pair["match_id"] == author["match_id"] == f["match_id"]
+        or p["input"] != f
+        or any(f[k] != author["fixture"][k] for k in ("cohort", "home", "away", "stage", "score_basis"))
+        or aware(f["kickoff_at"]) != aware(author["fixture"]["kickoff_at"])
+        or f["stage"] != "regular"
+        or f["score_basis"] != "regulation_90"
+        or f.get("neutral") is not False
+        or f.get("identity_verified") is not True
+        or p["version"] != anchor["version"]
+        or p["recipe"] != anchor["recipe"]
+        or p.get("context_numeric_adjustment_applied") is not False
+        or p["model_hash"] != anchor["hash"]
+        or p["matrix_hash"] != digest(p["matrix"])
+        or p["training_data_cutoff"] != anchor["train_end"]
+        or anchor["train_end"] >= f["cutoff_at"][:10]
+        or not max(aware(p["model_observed_at"]), aware(p["model_built_at"]))
+        <= aware(f["cutoff_at"])
+        <= aware(p["generated_at"])
+        <= aware(pair["recorded_at"])
+        < aware(f["kickoff_at"])
+    ):
+        raise ValueError("first Current pair, clock, matrix or artifact conflict")
+    return p
