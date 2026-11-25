@@ -252,7 +252,7 @@
     },
     "stage_evidence": {
       "kind": "prospective_research_readout",
-      "minimum_consecutive_windows": 2,
+      "research_design_suggestion": {"suggested_consecutive_windows": 2, "binding": false},
       "preregister": [
         "window_count_and_boundaries",
         "eligible_fixtures_and_ranked_batches",
