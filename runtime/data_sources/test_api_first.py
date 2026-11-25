@@ -51,8 +51,24 @@ class ApiFirstTests(unittest.TestCase):
             out = self.collect(self.plan, folder, fetcher)
         self.assertEqual(len(self.calls), 2)
         self.assertEqual([t['field'] for t in out['web_gap_tasks']], ['lineup'])
+        self.assertIsNone(out['web_gap_tasks'][0]['assigned_model'])
         self.assertTrue(out['api_phase_complete'])
         self.assertFalse(out['model_ingestion_performed'])
+
+    def test_web_lookup_driver_is_chosen_by_batch_or_field(self):
+        self.plan['web_gap_model'] = 'gpt-6.2-sol'
+        self.plan['fields'] = [self.field(name, 'one') for name in ('absences', 'quotes', 'shots')]
+        self.plan['fields'][1]['web_gap_model'] = 'gpt-6-luna'
+        self.plan['fields'][2]['web_gap_model'] = None
+        with tempfile.TemporaryDirectory() as folder:
+            rows = self.collect(self.plan, folder)['web_gap_tasks']
+        self.assertEqual([r['assigned_model'] for r in rows], ['gpt-6.2-sol', 'gpt-6-luna', None])
+
+    def test_invalid_web_lookup_driver_is_rejected_before_collection(self):
+        self.plan['web_gap_model'] = ['gpt-6.2-sol']
+        with tempfile.TemporaryDirectory() as folder, self.assertRaisesRegex(ValueError, 'web_gap_model'):
+            self.collect(self.plan, folder)
+        self.assertFalse(self.calls)
 
     def test_wrong_identity_or_stale_quote_does_not_fill_gap(self):
         plan = copy.deepcopy(self.plan)

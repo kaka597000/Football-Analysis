@@ -58,6 +58,10 @@ def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep, quota_le
     cache.mkdir(parents=True, exist_ok=True)
     requests = plan['requests']
     fields = plan['fields']
+    # Model assignments are hints for the agent that handles remaining web lookups.
+    drivers = [field.get('web_gap_model', plan.get('web_gap_model')) for field in fields]
+    if any(name is not None and (not isinstance(name, str) or not name.strip()) for name in drivers):
+        raise ValueError('web_gap_model must be a nonempty model name or null')
     # Reject secret-bearing plans before saving or making any request.
     def safe_keys(value):
         if isinstance(value, dict):
@@ -208,14 +212,14 @@ def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep, quota_le
             for future in futures:
                 results.update(future.result())
     evidence, gaps = [], []
-    for field in fields:
+    for field, driver in zip(fields, drivers, strict=True):
         selected = next((c for c in field['candidates'] if available(field, c)), None)
         base = {'match_id': field['match_id'], 'field': field['field']}
         if selected:
             evidence.append(dict(base, status='API_EVIDENCE_PENDING_REVIEW',
                                  request_id=selected['request_id'], pointer=selected['pointer']))
         else:
-            gaps.append(dict(base, assigned_model='gpt-6-luna',
+            gaps.append(dict(base, assigned_model=driver.strip() if driver is not None else None,
                              candidate_checks=field['candidates'],
                              reason='APPLICABLE_APIS_EXHAUSTED_OR_EVIDENCE_INVALID',
                              constraints='仅查此缺项；保存来源与时间；禁止中国体彩及镜像'))
