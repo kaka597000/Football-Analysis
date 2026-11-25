@@ -117,7 +117,7 @@ def _calendar(panel, extra, recipe, baseline):
     return games
 
 
-def _leagues(root, archives, manifests, events, recipes):
+def _leagues(root, archives, manifests, events, recipes, history_type=TerritoryHistory):
     verified_archive(archives['r11'], manifests['r11'], 'extension.tar.gz', root / 'extension')
     extra = defaultdict(list)
     for g in read_lines(root / 'extension/fixture-panels.jsonl'):
@@ -146,7 +146,7 @@ def _leagues(root, archives, manifests, events, recipes):
         observed = records[code]
         clocks = (r.get('source_fetched_at_utc') or r.get('source_fetched_at') for r in observed)
         last_clock = max((aware(stamp) for stamp in clocks if stamp), default=None)
-        history = TerritoryHistory(observed, code)
+        history = history_type(observed, code)
         history.walk(_calendar(panel, extra[code], recipe, baseline))
         provenance = dict(panel_sha256=panel_hash, r7_training_through=baseline['through'],
                           events_fetched_through=last_clock.isoformat() if last_clock else None,
@@ -155,7 +155,7 @@ def _leagues(root, archives, manifests, events, recipes):
     return leagues
 
 
-def _forecast(fixture, sources, league, recipe, identity, cutoff):
+def verified_parents(fixture, sources, baseline, recipe, cutoff):
     raw, published, previous = (batch.match(fixture, cutoff) for batch in sources)
     odds, r7_issue, r10_issue = (r['payload'] for r in (raw, published, previous))
     mid, code = fixture['match_id'], fixture['cohort']
@@ -163,7 +163,6 @@ def _forecast(fixture, sources, league, recipe, identity, cutoff):
     game['date'] = aware(fixture['kickoff_at']).astimezone(timezone.utc).date().isoformat()
     line = base.actual_line(game)
     control, market = r7_issue['forecasts']['candidate'], odds['forecasts']['market']
-    baseline, history, provenance = league
     if (aware(raw['recorded_at']) > aware(published['fixture']['cutoff_at'])
             or aware(published['recorded_at']) > aware(previous['fixture']['cutoff_at'])
             or not raw['record_sha256'] == r7_issue['input_sha256'] == r10_issue['odds_source_first_issue']
@@ -185,6 +184,16 @@ def _forecast(fixture, sources, league, recipe, identity, cutoff):
     odds_cutoff = aware(raw['fixture']['cutoff_at'])
     if any(aware(q[key]) > odds_cutoff for q in quotes for key in ('observed_at', 'quoted_at') if q.get(key)):
         raise ValueError('price observation after R5 cutoff: ' + mid)
+    return game, raw, published, previous
+
+
+def _forecast(fixture, sources, league, recipe, identity, cutoff):
+    baseline, history, provenance = league
+    game, raw, published, previous = verified_parents(fixture, sources, baseline, recipe, cutoff)
+    odds, r7_issue, r10_issue = (r['payload'] for r in (raw, published, previous))
+    mid, code = fixture['match_id'], fixture['cohort']
+    line = base.actual_line(game)
+    control, market = r7_issue['forecasts']['candidate'], odds['forecasts']['market']
     day = cutoff.date().isoformat()
     x, exposure = history.context(game, cutoff=day)
     for side in ('home', 'away'):
@@ -223,17 +232,19 @@ def _forecast(fixture, sources, league, recipe, identity, cutoff):
                 r7_recorded_at=published['recorded_at'], r10_recorded_at=previous['recorded_at'], **provenance)
 
 
-def _existing(out):
+def _existing(out, track=TRACK):
     if (out / 'receipts.json').exists():
         return ledger._read(out, read(out / 'receipts.json')['registration'])
-    plans = [r for p in out.glob('*-v000001.json') if (r := read(p))['track'] == TRACK + '-registration']
+    plans = [r for p in out.glob('*-v000001.json') if (r := read(p))['track'] == track + '-registration']
     if len(plans) > 1:
         raise ValueError('multiple R14 registrations in output')
     return verify(plans[0]) if plans else None
 
 
-def _issue(archives, study, events, protocol, out, freeze_root, root):
-    recipes, identity, manifests = _study(study, events, protocol, archives)
+def _issue(archives, study, events, protocol, out, freeze_root, root, track, configure, forecast,
+           history_type, population_index):
+    recipes, identity, manifests = configure(study, events, protocol, archives)
+    label = identity['version'].split('-')[0]
     batches = []
     for name, archive, prefix in (('r5', 'forward-first-issues.tar.gz', 'issued'),
                                   ('r7', 'first-issues.tar.gz', ''), ('r10', 'forward/first-issues.tar.gz', '')):
@@ -244,10 +255,10 @@ def _issue(archives, study, events, protocol, out, freeze_root, root):
     r5_plan, r7_plan, r10_plan = (b.registration['payload']['identity'] for b in batches)
     if (r5_plan['model'], r7_plan['version'], r10_plan['version']) != (base.VERSION, r7.model.VERSION, decision.VERSION):
         raise ValueError('wrong R5, R7 or R10 research registration')
-    old = _existing(out)
+    old = _existing(out, track)
     cutoff = aware(old['recorded_at'] if old else ledger._now()).astimezone(timezone.utc)
     fixtures, expired = [], []
-    for mid, f in batches[-1].registration['payload']['fixtures'].items():
+    for mid, f in batches[population_index].registration['payload']['fixtures'].items():
         if f['cohort'] not in CODES:
             continue
         if f['match_id'] != mid:
@@ -260,9 +271,9 @@ def _issue(archives, study, events, protocol, out, freeze_root, root):
         raise ValueError('no unstarted in-scope R10 fixtures at issue')
     identity['already_started'] = sorted(expired)
     population = {f['match_id']: f for f in fixtures}
-    if old and (old['track'] != TRACK + '-registration' or old['payload'] !=
-                dict(track=TRACK, identity=identity, fixtures=population)):
-        raise ValueError('inputs or population changed after R14 registration')
+    if old and (old['track'] != track + '-registration' or old['payload'] !=
+                dict(track=track, identity=identity, fixtures=population)):
+        raise ValueError('inputs or population changed after ' + label + ' registration')
     index = out / 'receipts.json'
     if index.exists():
         # Revalidate the requested archives without rebuilding completed forecasts.
@@ -272,7 +283,7 @@ def _issue(archives, study, events, protocol, out, freeze_root, root):
                 if sha(archives[key] / name) != manifests[key]['files'][name]:
                     raise ValueError('archive checksum mismatch: ' + name)
         return read(index)['registration']
-    leagues = _leagues(root, archives, manifests, events, recipes)
+    leagues = _leagues(root, archives, manifests, events, recipes, history_type)
 
     def forecasts(at):
         for code, (_, _, provenance) in leagues.items():
@@ -281,37 +292,39 @@ def _issue(archives, study, events, protocol, out, freeze_root, root):
             for key in ('events_fetched_through', 'extension_acquired_at'):
                 if provenance[key] and aware(provenance[key]) > at:
                     raise ValueError('source acquired after issue cutoff: ' + code)
-        return [_forecast(f, batches, leagues[f['cohort']], recipes[f['cohort']], identity, at) for f in fixtures]
+        return [forecast(f, batches, leagues[f['cohort']], recipes[f['cohort']], identity, at) for f in fixtures]
 
     payloads = forecasts(cutoff)
     if sha(events) != identity['events_sha256']:
         raise ValueError('Understat source changed while preparing the issue')
-    plan = ledger.register(fixtures, identity, TRACK, out, freeze_root=freeze_root)
+    plan = ledger.register(fixtures, identity, track, out, freeze_root=freeze_root)
     issued = aware(plan['recorded_at']).astimezone(timezone.utc)
     if issued.date() != cutoff.date() or issued < cutoff:
         # A registration recovered from the canonical store may predate this run.
         payloads = forecasts(issued)
     for f in fixtures:
         mid = f['match_id']
-        first = Path(freeze_root) / digest(dict(track=TRACK, stage='prematch', match_id=mid)) / '000001.json'
+        first = Path(freeze_root) / digest(dict(track=track, stage='prematch', match_id=mid)) / '000001.json'
         if first.exists() and verify(read(first))['idempotency_key'] != plan['sha256']:
             raise ValueError('fixture already has a different R14 first issue: ' + mid)
     receipts = {}
     for f, payload in zip(fixtures, payloads, strict=True):
-        receipts[f['match_id']] = ledger.issue(plan, dict(f, cutoff_at=plan['recorded_at']), payload, TRACK,
+        receipts[f['match_id']] = ledger.issue(plan, dict(f, cutoff_at=plan['recorded_at']), payload, track,
                                                out, freeze_root=freeze_root)
     atomic_json(index, dict(registration=plan, matches=receipts))
     return plan
 
 
-def run(r5, r7_dir, r10, r11, study, events, protocol, out, *, freeze_root=DEFAULT_ROOT):
+def run(r5, r7_dir, r10, r11, study, events, protocol, out, *, freeze_root=DEFAULT_ROOT,
+        track=TRACK, configure=_study, forecast=_forecast, history_type=TerritoryHistory, population_index=2):
     archives = dict(r5=r5, r7=r7_dir, r10=r10, r11=r11)
     out.mkdir(parents=True, exist_ok=True)
     freeze_root = Path(freeze_root)
     freeze_root.mkdir(parents=True, exist_ok=True)
-    with exclusive_lock(out / '.batch.lock'), exclusive_lock(freeze_root / ('.' + TRACK + '.lock')):
+    with exclusive_lock(out / '.batch.lock'), exclusive_lock(freeze_root / ('.' + track + '.lock')):
         with TemporaryDirectory() as tmp:
-            plan = _issue(archives, study, events, protocol, out, freeze_root, Path(tmp))
+            plan = _issue(archives, study, events, protocol, out, freeze_root, Path(tmp), track, configure,
+                          forecast, history_type, population_index)
         pending = ledger.review(out, [], out, by_competition=True)
         path = out / 'pending.json'
         if not path.exists():
