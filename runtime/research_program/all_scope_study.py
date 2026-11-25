@@ -36,12 +36,12 @@ def half_life(competition):
     return 1461 if competition=='fifa.world' else 730 if competition=='uefa.nations' else 270
 
 
-def check_panel(path,competition):
+def check_panel(path,competition,*,last=LAST):
     rows=sorted(read_lines(path),key=lambda r:(r['date'],r['id']))
     seen=set()
     for r in rows:
         if (r['competition']!=competition or not r['stage'] or not r['id'] or r['id'] in seen
-                or date.fromisoformat(r['date']).isoformat()!=r['date'] or r['date']>LAST
+                or date.fromisoformat(r['date']).isoformat()!=r['date'] or r['date']>last
                 or not r['home'] or not r['away'] or r['home']==r['away']
                 or any(type(r.get(k))!=int or r[k]<0 for k in ('home_goals','away_goals'))):
             raise ValueError('invalid, duplicate or non-regulation fixture in '+competition+': '+str(r.get('id')))
