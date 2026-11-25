@@ -19,6 +19,13 @@ def read(path):
     return json.loads(path.read_bytes())
 
 
+def frozen_game(fixture, payload):
+    return dict(id=fixture['match_id'], competition=fixture['cohort'], stage=payload['model_stage'],
+                date=aware(fixture['kickoff_at']).date().isoformat(),
+                home=payload['model_teams'][0], away=payload['model_teams'][1], neutral=payload['neutral'],
+                paired_market=payload['market_mode']=='paired', **payload['prices'])
+
+
 def matrix(game,recipe):
     d=date.fromisoformat(game['date']).toordinal()
     state=model.load(recipe['state'])
@@ -72,9 +79,7 @@ def issue(recipes,inputs,control,scope,protocol,output,*,freeze_root=DEFAULT_ROO
             date.fromisoformat(w['through'])>=aware(f['cutoff_at']).date() or
             aware(f['cutoff_at'])<max(aware(r['recorded_at']),aware(other['recorded_at']))):
             raise ValueError('inconsistent prediction time or artifact: '+mid)
-        game=dict(id=mid,competition=code,stage=orig['model_stage'],date=aware(f['kickoff_at']).date().isoformat(),
-            home=orig['model_teams'][0],away=orig['model_teams'][1],neutral=orig['neutral'],
-            paired_market=orig['market_mode']=='paired',**orig['prices'])
+        game=frozen_game(f,orig)
         forecast,q=predict(game,w)
         picks=other['payload']['forecasts']
         if forecast['total_line']!=orig['line']:
