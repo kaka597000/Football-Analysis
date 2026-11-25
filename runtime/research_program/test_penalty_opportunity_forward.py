@@ -11,9 +11,9 @@ from unittest.mock import patch
 import numpy as np
 
 from research.analysis_freeze import aware
-from . import penalty_opportunity_forward as forward
-from .goal_state_study import sha, write_new
-from .test_territory_forward import encoded, lines, record
+from research_program import penalty_opportunity_forward as forward
+from research_program.goal_state_study import sha, write_new
+from research_program.test_territory_forward import encoded, lines, record
 
 
 class PenaltyForwardTests(unittest.TestCase):
