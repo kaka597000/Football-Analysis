@@ -63,15 +63,29 @@ def sample(fixtures):
 
 
 def catalogue(name, code, raw):
-    def page(n):
-        route = '/matches?' + urlencode(dict(page=n,size=PAGE_SIZE,league=name,q=''))
-        return fetch(route, raw/f'{code}-page-{n}.json')
-    first = page(1)
-    pages = (first['total'] + PAGE_SIZE - 1)//PAGE_SIZE
-    games = first['rows'] + [g for n in range(2,pages+1) for g in page(n)['rows']]
-    if len(games) != first['total'] or len({g['id'] for g in games}) != len(games):
-        raise ValueError('Phoenix catalogue count or identity differs')
-    return sorted(games,key=lambda g:(g['kick'],g['id']))
+    games = {}
+    total = None
+    # Equal kickoff times can straddle pages in an unstable order. Merge
+    # deterministic page sizes to recover the omitted IDs before sampling.
+    for size in (PAGE_SIZE, 99, 97):
+        def page(n):
+            tag = str(n) if size == PAGE_SIZE else f'{size}-{n}'
+            route = '/matches?' + urlencode(dict(page=n,size=size,league=name,q=''))
+            return fetch(route, raw/f'{code}-page-{tag}.json')
+        first = page(1)
+        total = first['total'] if total is None else total
+        pages = (total + size - 1)//size
+        for n in range(1,pages+1):
+            result = first if n == 1 else page(n)
+            if result['total'] != total:
+                raise ValueError('Phoenix catalogue count shifted during capture')
+            for row in result['rows']:
+                if row['id'] in games and games[row['id']] != row:
+                    raise ValueError('Phoenix catalogue repeated one ID with different fields')
+                games[row['id']] = row
+        if len(games) == total:
+            return sorted(games.values(),key=lambda g:(g['kick'],g['id']))
+    raise ValueError(f'Phoenix catalogue retained {len(games)} of {total} unique fixtures')
 
 
 def normalize(fixture, detail, code, evidence_hash):
