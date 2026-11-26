@@ -9,6 +9,7 @@ from pathlib import Path
 import tarfile
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from research.analysis_freeze import digest
 from research_program import display_window_review as review
@@ -56,6 +57,38 @@ def _plan():
 
 
 class DisplayWindowReviewTests(unittest.TestCase):
+    def test_original_chronological_body_can_differ_from_fixture_id_order(self):
+        body = "赛事 102\n第二个ID先开球\n赛事 101\n第一个ID后开球"
+        identity = dict(rows={mid: {"authored": True} for mid in ("101", "102")},
+                        body_sha256=hashlib.sha256(body.encode("utf-8")).hexdigest())
+        records = {"101": "赛事 101\n第一个ID后开球", "102": "赛事 102\n第二个ID先开球"}
+        with patch("research.display_delivery.delivery_request", side_effect=lambda text: {"text": text}):
+            actual = review._batch_text_audit(body, identity, records)
+            reordered = review._batch_text_audit(records["101"] + "\n" + records["102"], identity, records)
+        self.assertTrue(actual["original_blocks_present_once_in_order"])
+        self.assertFalse(reordered["original_blocks_present_once_in_order"])
+
+    def test_strict_total_settles_only_for_the_same_confirmed_display_row(self):
+        mids = ("espn:101", "espn:102")
+        fixture = {mid: dict(kickoff_at="2026-12-05T06:00:00+00:00") for mid in mids}
+        stamp = "2026-12-05T05:00:00+00:00"
+        quote = dict(line=2.5, quoted_at=stamp)
+        records = {mid: dict(fixture=fixture[mid], payload=dict(total_quote=quote, total_direction="大"))
+                   for mid in mids}
+        results = {mid: dict(home_goals=2, away_goals=1) for mid in mids}
+        displays = [dict(match_id=mid, verified_completed=True, track="comprehensive", display_status="ISSUED",
+                         top1_issued=i == 0, top3_issued=i == 0, top1_hit=True if i == 0 else None,
+                         top3_hit=True if i == 0 else None, actual_kickoff_at=fixture[mid]["kickoff_at"])
+                    for i, mid in enumerate(mids)]
+        spec = dict(minimum_confirmed_scores=2, minimum_confirmed_wdl=2, minimum_strict_line_issues=2,
+                    minimum_nonpush_settled=2)
+        with patch.object(review, "quote_audit", side_effect=lambda _: {"eligible": True, "reasons": []}), \
+                patch.object(review, "_quote_source", return_value=(True, None, stamp)):
+            result, _, _ = review._window_report("test", spec, fixture, records, displays, None, results)
+        counted = result["actual_bookmaker_quote"]["five_way_settlements"]
+        self.assertEqual(counted["FULL_WIN"], 1)
+        self.assertEqual(result["actual_bookmaker_quote"]["observed_price_five_way_settlements"]["FULL_WIN"], 2)
+
     def test_registered_complete_population_and_original_digest_required(self):
         plan = _plan()
         _, fixtures, slates, _ = review._registered(plan)

@@ -483,6 +483,19 @@ def _validate_kickoff_reports(raw, window_ids, fixtures, root, now):
     return checked
 
 
+def _batch_text_audit(body, identity, records):
+    from research.display_delivery import delivery_request
+
+    observed_hash = hashlib.sha256(body.encode("utf-8")).hexdigest()
+    exact = observed_hash == identity.get("body_sha256")
+    # The body digest commits the original display order. The ledger encodes the
+    # fixture mapping by key for hashing, which can differ from display order.
+    ordered = exact and all(mid in records and body.count(delivery_request(records[mid])["text"]) == 1
+                            for mid, row in identity["rows"].items() if row.get("authored"))
+    return dict(sha256_matches_registered_batch=exact, original_blocks_present_once_in_order=ordered,
+                registered_body_sha256=identity.get("body_sha256"), observed_body_sha256=observed_hash)
+
+
 def _window_report(name, spec, fixtures, records, display_rows, publication, result_by_id,
                    *, quote_archive_root=None, archive_cache=None, batch_root=None,
                    prepared_batch_verified=False):
@@ -511,29 +524,12 @@ def _window_report(name, spec, fixtures, records, display_rows, publication, res
             body_path = folder / "message.txt"
             if body_path.is_file():
                 body = body_path.read_text(encoding="utf-8")
-                expected_hash = publication["payload"]["identity"].get("body_sha256")
-                exact_hash = hashlib.sha256(body.encode("utf-8")).hexdigest() == expected_hash
-                ordered = True
-                cursor = 0
-                from research.display_delivery import delivery_request
-                for mid in publication["payload"]["identity"]["rows"]:
-                    ref = publication["payload"]["identity"]["rows"][mid].get("authored")
-                    if ref is None:
-                        continue
-                    record = records.get(mid)
-                    block = delivery_request(record)["text"] if record else None
-                    at = body.find(block, cursor) if block else -1
-                    if at < 0 or body.count(block) != 1:
-                        ordered = False
-                        break
-                    cursor = at + len(block)
-                body_audit = {"available": True, "sha256_matches_registered_batch": exact_hash,
-                              "original_blocks_present_once_in_order": ordered,
-                              "prepared_batch_verified": prepared_batch_verified,
-                              "path": str(body_path), "registered_body_sha256": expected_hash,
-                              "observed_body_sha256": hashlib.sha256(body.encode("utf-8")).hexdigest()}
+                body_audit = dict(available=True, prepared_batch_verified=prepared_batch_verified,
+                                  path=str(body_path),
+                                  **_batch_text_audit(body, publication["payload"]["identity"], records))
     for mid, fixture in fixtures.items():
         record = records.get(mid)
+        dr = by_id[mid]
         quote = _quote_for(record)
         result = result_by_id.get(mid)
         goals = (result["home_goals"], result["away_goals"]) if result else None
@@ -564,7 +560,6 @@ def _window_report(name, spec, fixtures, records, display_rows, publication, res
                 _count_settlement(observed_only_settlements, settlement)
             if qa["eligible"] and dr.get("top1_issued") and dr.get("actual_kickoff_at"):
                 _count_settlement(strict_settlements, settlement)
-        dr = by_id[mid]
         wdl = record.get("payload", {}).get("wdl") if record else None
         if wdl and dr.get("top1_issued") and dr.get("actual_kickoff_at"):
             wdl_issued += 1
