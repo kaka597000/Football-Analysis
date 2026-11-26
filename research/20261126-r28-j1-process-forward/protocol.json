@@ -1,0 +1,17 @@
+{
+  "version": "R28-J1-verified-process-forward-1",
+  "label": "EXPERIMENTAL / OOD",
+  "track": "research-r28-j1-process-forward",
+  "competition": "jpn.1",
+  "population": "The original ten November 28–29 Beijing J1 regular-season fixtures in comprehensive publication 3ef75900d3e06bb1-v000001 and its signed parent. Freeze the independent research forecasts before the earliest kickoff in the whole window. Record every originally registered fixture.",
+  "inputs": {
+    "form": "workspace-updates/20261126-j1-recent-process/replay.json",
+    "form_sha256": "79423082c6c5fafd9c716af5b57cc676e0015d0692a1b6d8dda86ee2e8f15663",
+    "original_registration": "99791e2c015d1473-v000001",
+    "original_publication_sha256": "2b3468d4d94314c05ffd5013b566ea25634c04fb252f6d6fd76223ee82ac2675"
+  },
+  "method": "Use the two immutable native score distributions from the original Current/Test pair. Normalize the point-wise geometric mean for the common score prior. For each side pool the team's own chance creation and its opponent's chance concession in their recent five regular J1 matches. Use only bilateral FotMob reported xG rows. Count a shared match and shot team once. In the parallel goals control use the actual goals in exactly those same occupied observations. Add eight prior observations at the geometric-prior goal mean for each side. Weight each score cell by exp(home_goals * log(home_ratio) + away_goals * log(away_ratio)), where each ratio is the shrunk history mean divided by the prior goal mean and clipped to [1/1.25, 1.25]. Normalize and keep stable ordered grid ranks. Missing history has the same effect as the prior. Preset the weights and caps and perform no fit or selection on the seven reviewed matches or on future outcomes.",
+  "heads": "Score comparisons use the original comprehensive choices, the common prior, that prior adjusted with the matched goals history, and that prior adjusted with the verified xG history. Preserve the common-prior WDL pick for both adjusted score arms. Strict total quotes were unavailable in the parent window. Record no eligible totals direction for this research slate. Each statistical arm locks up to three highest first-score probabilities across the original ten games, tied by kickoff and stable fixture ID.",
+  "evaluation": "Report all 10 fixtures with the original archived forecasts, unique-first and ordered-three hit counts, paired corrections/losses, independent WDL and strict totals coverage. Settle only on source-verified 90-minute results and keep all pending slots. The selected three sweep needs all three unique firsts. A single research window does not confer model adoption or stage credit.",
+  "past_diagnostic": "Use all seven November 25 original comprehensive issues, their signed native matrices, earlier published independently rechecked 90-minute results and newly acquired FotMob postmatch process data. Show the actual cell rank for both models and for the authored order. Use postmatch process data only to diagnose that day's results."
+}
