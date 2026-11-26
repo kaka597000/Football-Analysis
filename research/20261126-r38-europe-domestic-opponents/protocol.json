@@ -1,0 +1,21 @@
+{
+  "version": "R38-European-domestic-opposition-1",
+  "label": "HISTORICAL DEVELOPMENT",
+  "question": "Do explicitly opponent-adjusted domestic schedule strengths supplement the R13 score grid in the adult men's Europa and Conference league phases?",
+  "r30_protocol_sha256": "f8942bc68b404b4d9d03116409073f89b1be01413907c8a15af73562178118d5",
+  "archives": {
+    "domestic": {
+      "path": "20261125-r13-domestic-form/inputs/domestic.tar.gz",
+      "sha256": "21b63839017ec1eed0a4c1925cbf2f959a04c5045a859f93cfe282001d820822"
+    },
+    "continental": {
+      "path": "20261125-r13-domestic-form/inputs/continental.tar.gz",
+      "sha256": "bc104871d05f8bef3800eb42d4b8e9e1739eed60969ca2feb2b24ec7673d905b"
+    }
+  },
+  "inputs": "Use the complete pinned R30 league-phase populations and reproduce their original R13 scores, probabilities and markets. Reuse the verified R13 domestic and continental club identity archives. Use the domestic finished period-2 observations and their original venue baselines. Connect the ordered target clubs through the original competition/event lookup and its source UTC kickoff date. A prior match or team rating must precede the full UTC day on which it is used. Keep every target in the denominator. These historical raw sources were collected after the fixtures.",
+  "design": "For each domestic match, multiply the R13 home/away league means by exp(opposing team's domestic log-concession strength) for goals for and exp(opposing team's log-attack strength) for goals against. Obtain both strengths from the R13 domestic profile using only dates strictly before that domestic match. With no opposing-team history use the venue means. For each continental club, aggregate the original and opponent-adjusted venue means across its last eight domestic matches in the preceding 120 days, with 5.6 pseudo-goals in both sums. Use log(original / opponent-adjusted) as the correction for relative attack and concessions, bounded to [-1, 1]. With no domestic history both corrections are zero. For a score (h,a), the attack design is corrected home attack times min(h,4) plus corrected away attack times min(a,4); the concession design is corrected away concessions times min(h,4) plus corrected home concessions times min(a,4).",
+  "fit": "Fit the two common score-bucket likelihood slopes per competition using the original R9 fitter on the signed R13 grids in the R30 training prefix. Coefficient bounds and ridge come from that fitter. Use the R9 score-grid exponential tilt and apply strength 0.5 and 1.0. R13 remains the zero-strength baseline and retains its original ordered scores. Only these score choices change; independent WDL and original line directions are read unchanged from the R13 forecasts.",
+  "selection": "Use the R30 validation window. A nonzero trial must match or beat original first and three counts. Among admitted trials choose by more first hits, then more three hits, then lower exact log loss, then smaller strength. Report every trial on the later date holdout. The selected dose may be considered for new independent prospective research only if at least one of the two paired score counts rises in the holdout and neither falls.",
+  "reporting": "Preserve result source hashes, complete date windows, exposure to domestic opponents on zero, one or both target sides, neutral fallbacks, the research market comparison and paired date-cluster intervals. Report the matches in which the selected dose gains or loses first or three hits and whether a first gain was already in the R13 shortlist. The 2026/27 dates were used in earlier historical research. The registered actual first displays and formal stage remain governed by the existing protocols."
+}
