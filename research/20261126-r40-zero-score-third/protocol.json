@@ -1,0 +1,17 @@
+{
+  "version": "R40-guarded-zero-score-third-1",
+  "label": "HISTORICAL DEVELOPMENT",
+  "question": "Does adding a supported zero-goal score as the second backup improve three-score coverage while keeping the signed first and first backup?",
+  "input_data_commit": "6f937f5eca6296eab26c9bc5270cc903b4a9c69d",
+  "europe_source_protocol_sha256": "f8942bc68b404b4d9d03116409073f89b1be01413907c8a15af73562178118d5",
+  "j1_source_protocol_sha256": "b07be887dce6ea449af5f905c8d2be53337d4876af6900fafca2f175155f7eb1",
+  "coverage_policy_sha256": "b35dc22da6578d1a60f237e6d4e7d7fdf2bf48b0246f362b7cd9a139c0fe6207",
+  "windows": {
+    "uefa.europa": {"earlier": 72, "later": 72},
+    "uefa.europa.conf": {"earlier": 54, "later": 54},
+    "jpn.1": {"earlier": 162, "later": 150}
+  },
+  "inputs": "Use the original R13 score head and the R30 validation and evaluation windows for men's Europa and Conference league phase. Use original R7 and the R25 late_2025 and early_2026_27 windows for men's J1 regular play. Reconcile the locked grids, original forecasts, match identities, regulation results, same-cutoff market and lines. These results were already available to the project. No new fit or score threshold search is performed.",
+  "selection": "Run the existing diverse score coverage policy on one signed grid with original first, no verified totals line, a 0.30 minimum marginal and a 0.015 absolute score probability cost. Apply its proposed third only if the reference scores match the signed three and the proposal adds a supported home-zero or away-zero path that none of the signed three cover. Keep the first, second, outcome and totals from the signed forecast in every case. Use the old three when the reference differs or the coverage policy proposes no new supported zero path. The zero marginal follows the existing policy; the maximum exact-score probability loss follows the existing European R30 replay.",
+  "report": "Report each competition and both registered historical date windows separately. Show full first and three coverage, both paired comparisons with the original and same-cutoff market, swaps gained and lost, realized blanks among the unchanged shared-score constraints, and the probability cost. These are development rows. An independent future full-slate research test is eligible only for a competition with positive later three-score net, nonnegative earlier three-score net and a nonnegative later paired net versus market for three. Original selections and registrations govern all official display windows."
+}
