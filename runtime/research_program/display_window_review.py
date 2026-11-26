@@ -224,15 +224,18 @@ def _book_alias(value):
 
 
 def _raw_market_clock(odds):
-    """Read only a clock attached directly to the exact bookmaker market object."""
+    """Read a consistent clock attached to the selected bookmaker market."""
+    clocks = set()
     for key in ("lastUpdated", "last_update", "lastUpdate", "quotedAt", "quoteTime"):
         value = odds.get(key)
         if isinstance(value, str) and value:
             try:
-                return aware(value).isoformat()
+                clocks.add(aware(value))
             except ValueError:
                 return "INVALID_TIMEZONE:" + value
-    return None
+    if len(clocks) > 1:
+        return "CONFLICTING_SOURCE_CLOCKS"
+    return next(iter(clocks)).astimezone(timezone.utc).isoformat() if clocks else None
 
 
 def _market_clock_match(quote, raw_clock):
@@ -240,6 +243,8 @@ def _market_clock_match(quote, raw_clock):
         return False, "RAW_BOOKMAKER_MARKET_CLOCK_MISSING"
     if raw_clock.startswith("INVALID_TIMEZONE:"):
         return False, "RAW_BOOKMAKER_MARKET_CLOCK_INVALID"
+    if raw_clock == "CONFLICTING_SOURCE_CLOCKS":
+        return False, "RAW_BOOKMAKER_MARKET_CLOCK_CONFLICT"
     try:
         if aware(raw_clock) != aware(quote["quoted_at"]):
             return False, "RAW_BOOKMAKER_MARKET_CLOCK_CONFLICT"
@@ -290,9 +295,16 @@ def _quote_source(quote, fixture, archive_root, archive_cache, expected_h2h=None
     body, _, _ = archive_cache[source_hash]
     try:
         raw = json.loads(body)
-        comp = raw["header"]["competitions"][0]
+        header = raw["header"]
+        comp, = header["competitions"]
+        status = comp["status"]["type"]
+        event_id = fixture["match_id"].removeprefix("espn:")
         teams = {v["homeAway"]: "espn:" + str(v["team"]["id"]) for v in comp["competitors"]}
-        if (teams.get("home") != fixture["home"] or teams.get("away") != fixture["away"]
+        if (str(header["id"]) != event_id or str(comp["id"]) != event_id
+                or header["league"]["slug"] != fixture["cohort"]
+                or status.get("state") != "pre" or status.get("completed") is not False
+                or len(comp["competitors"]) != 2 or set(teams) != {"home", "away"}
+                or teams["home"] != fixture["home"] or teams["away"] != fixture["away"]
                 or aware(comp["date"]) != aware(fixture["kickoff_at"])):
             return False, "QUOTE_RAW_FIXTURE_OR_SOURCE_DATE_MISMATCH", None
         market = raw.get("odds", raw.get("pickcenter", []))
@@ -816,6 +828,14 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                                               prepared_batch_verified=prepared_verified)
         report["same_fixture_market"] = _market_comparisons(
             report["per_match"], {mid: issues[mid] for mid in mids if mid in issues})
+        paired = report["same_fixture_market"]["channel_confirmed_rows"]["paired"]
+        eligible_pairs = {metric: value["eligible"] for metric, value in paired.items()}
+        market_comparison_ok = bool(eligible_pairs) and all(eligible_pairs.values())
+        report["market_comparison_coverage"] = dict(eligible_pairs=eligible_pairs,
+                                                     verified_same_cutoff=market_comparison_ok)
+        if minima_ok and not market_comparison_ok:
+            report["blockers"].append("VERIFIED_SAME_CUTOFF_MARKET_COMPARISON_UNAVAILABLE")
+        minima_ok = minima_ok and market_comparison_ok
         audit_rows = []
         audit_counts = dict(first_issued=0, first_settled=0, first_hits=0,
                             three_issued=0, three_settled=0, three_hits=0,
