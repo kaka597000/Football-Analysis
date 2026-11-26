@@ -142,9 +142,11 @@ def original_grids(panel, settings, fitted, refs, code, protocol):
         pick, heads = decision.decisions(prior, full, fitted['doses'], ref['line'], ref['forecast']['r7'])
         matrix = heads['score']
         q = control.quality(matrix, ref['actual'])
+        wdl = np.bincount(RESULT, weights=heads['wdl'].ravel(), minlength=3)
         if pick != ref['forecast']['candidate'] or any(
-                abs(q[key] - ref['quality']['candidate'][key]) > 2e-8 for key in ('p_observed', 'p_first', 'p_three')):
-            raise ValueError('signed R13 firsts or score probabilities differ: ' + game['id'])
+                abs(q[key] - ref['quality']['candidate'][key]) > 2e-8 for key in ('p_observed', 'p_first', 'p_three')) or (
+                not np.allclose(wdl, ref['quality']['candidate']['wdl'], rtol=0., atol=2e-8)):
+            raise ValueError('signed R13 firsts, score or WDL probabilities differ: ' + game['id'])
         grids.append(matrix)
         rows.append(ref)
     return rows, np.asarray(grids)
