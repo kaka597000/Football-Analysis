@@ -14,3 +14,11 @@ R28 在 11 月 28–29 日的原十场赛程上比较三种统计选分。共同
 PYTHONPATH=runtime OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
 python -B -m research_program.j1_process_forward --data "$DATA_REPO" --verify "$ARCHIVED_ISSUES"
 ```
+
+赛后使用包含 `normalized-results.jsonl` 和对应原始响应的状态目录。复盘逐场核对日职联常规赛的源赛段和 90 分钟赛果，按锁定的选分及精选席位统计配对结果。
+
+```bash
+PYTHONPATH=runtime OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+python -B -m research_program.j1_process_review --data "$DATA_REPO" \
+  --issued "$ARCHIVED_ISSUES" --result-state "$RESULT_STATE"
+```

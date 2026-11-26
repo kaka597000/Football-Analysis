@@ -89,7 +89,10 @@ def _predictions(batch):
 
 
 def _certify(row, fixture, state, now):
-    if (any(row[key] != fixture[key] for key in ('match_id', 'cohort', 'stage', 'home', 'away'))
+    registered_j1 = fixture['cohort'] == 'jpn.1' and fixture['stage'] == 'Japanese J1 League'
+    expected_stages = ('regular', 'Japanese J1 League') if registered_j1 else (fixture['stage'],)
+    if (any(row[key] != fixture[key] for key in ('match_id', 'cohort', 'home', 'away'))
+            or row['stage'] not in expected_stages
             or aware(row['kickoff_at']) != aware(fixture['kickoff_at'])):
         raise ValueError('result fixture identity conflict')
     meta = row['raw_reference']
@@ -109,6 +112,15 @@ def _certify(row, fixture, state, now):
     raw = gzip.decompress(path.read_bytes()) if path.suffix == '.gz' else path.read_bytes()
     if hashlib.sha256(raw).hexdigest() != meta['sha256']:
         raise ValueError('result raw source checksum mismatch')
+    if registered_j1:
+        body = json.loads(raw)
+        header = body.get('header') if isinstance(body, dict) else None
+        if not isinstance(header, dict):
+            raise ValueError('retained result lacks the registered J1 regular-season identity')
+        league, season = header.get('league'), header.get('season')
+        if (not isinstance(league, dict) or league.get('slug') != 'jpn.1'
+                or not isinstance(season, dict) or season.get('type') != 14287):
+            raise ValueError('retained result lacks the registered J1 regular-season identity')
     if any(type(row.get(key)) is not int or row[key] < 0 for key in ('home_goals', 'away_goals')):
         raise ValueError('invalid regulation scores')
     with tempfile.TemporaryDirectory() as tmp:
