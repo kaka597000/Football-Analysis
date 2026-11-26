@@ -1,0 +1,27 @@
+{
+  "version": "R24-ucl-zero-goals-1",
+  "competition": "uefa.champions",
+  "stage": "league-phase",
+  "question": "Does recalibrating the allocation of a fixed goal total between teams improve the unique first exact score in the Champions League league phase?",
+  "motivation": "In the marked November 26 review, five of nine Champions League matches had one team finish goalless. All nine comprehensive first picks had both teams scoring, and all five ordered-three hits were third picks. The batch is diagnostic only and is outside every R24 fit, selection and evaluation window.",
+  "sources": {
+    "data_commit": "ee8ccf985fa1030d739a82b99c850a93c08c7a41",
+    "review_commit": "217da435fe7180f8f246915ec644fd059eaebad1",
+    "review_csv_sha256": "52f9c1cd0a0db994065355a6734e7f2ed9542b6295d5ef71027e2f7b2879884e",
+    "archives": {
+      "r5": {"directory": "20261123-all-scope-kpi", "archive": "models/uefa.champions.tar.gz", "sha256": "52d8ef33d333cd3dc28cc514d7bb21722242be3827673b874d649d41c0fff847"},
+      "r7": {"directory": "20261123-prematch-literature", "archive": "models/uefa.champions.tar.gz", "sha256": "e4f083997b114e1fb2bfe450169efc886572da6ad386e18185d9358960b2a399"},
+      "r13": {"directory": "20261125-r13-domestic-form", "archive": "replay/forecasts.tar.gz", "sha256": "66dd22e8b4b5da665203776b404ecc6204fa833b61beb4b429c975a3be78655f"}
+    }
+  },
+  "windows": {
+    "train": {"from": "2024-07-01", "before": "2025-07-01", "fixtures": 144},
+    "validation": {"from": "2025-07-01", "before": "2025-12-01", "fixtures": 90},
+    "late_2025_26": {"from": "2025-12-01", "before": "2026-07-01", "fixtures": 54},
+    "early_2026_27": {"from": "2026-07-01", "before": "2026-11-05", "fixtures": 72}
+  },
+  "fit": "Replay the full R5 Champions League panel in date order to construct the existing R7 chronological anchor and earlier-only team state. Fit on the 144 2024/25 league-phase fixtures, using the anchor before R7's 2024/25 dose selection. For each positive total t, multiply score (0,t) by exp(beta_home_blank) and (t,0) by exp(beta_away_blank), leave all other weights unchanged, and renormalize within that total to its exact prior probability. Leave 0-0 unchanged. Fit two coefficients by conditional negative log likelihood of the observed allocation given its total, plus 8 times the sum of squared coefficients, with each coefficient in [-2,2]. Targets outside the model shape remain in evaluation and are counted and excluded only from fitting.",
+  "selection": "Use the locked post-fit R7 matrix for validation and both evaluation windows. Select the mixture of the R7 prior and the adjusted matrix from doses 0, 0.5, 1 on the 90 validation fixtures by most unique first hits, then most ordered-three hits, then lowest exact-score log loss, then smallest dose. At zero dose inherit all original R7 picks. For a nonzero dose only rerank the three score cells and retain the original R7 WDL and actual-line totals decisions. Report full dose even when it is not selected.",
+  "reporting": "Keep all 54 and 72 evaluation fixtures and check their original R7 and R13 fixture identity, regulation score and actual line. Report each window and the combined historical summary, with assigned score rank, scoreless-team diagnostics, four independent hit/eligible counts, market coverage, Asian settlement outcome counts and paired gains, losses and date-clustered intervals against R7, R13 and archived market. Use the existing deterministic score order for changed matrices and report differences between rebuilt and archived controls. Historical odds evidence lacks provider timestamps. The two windows are date-held development evaluations on previously studied matches. Published comprehensive choices stay in their own track.",
+  "prospective": "If the validation-selected dose is positive and both evaluation windows together show a net first-score gain and no net ordered-three loss versus R7, carry the locked candidate to the next two complete upcoming Champions League league-phase matchdays. Register the full schedule and source before the first kickoff, forecast on the same timestamped inputs as the isolated R7 control, retain missing market coverage, keep three distinct ordered scores and rank up to three research seats by chosen first-score probability. If the rule does not clear the screen, stop this recipe and retain the full-dose sensitivity result without moving its test outcomes into selection. No model promotion on historical evidence alone."
+}
