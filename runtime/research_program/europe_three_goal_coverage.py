@@ -30,25 +30,24 @@ def groups(matrix):
     return np.bincount(BUCKETS.ravel(), weights=matrix.ravel(), minlength=6).reshape(3, 2)
 
 
+def binary_offset(offsets, observed):
+    def loss(beta):
+        logits = offsets + beta
+        return (np.logaddexp(0., logits) - observed * logits).sum() + 8. * beta**2
+
+    result = minimize_scalar(loss, bounds=(-1.25, 1.25), method='bounded', options={'xatol': 1e-10})
+    if not result.success:
+        raise ValueError('total-score calibration failed: ' + result.message)
+    return round(float(result.x), 6)
+
+
 def fit(grids, actual):
     home, away = np.asarray(actual).T
     wdl = base.RESULT[home, away]
     high = home + away >= 3
     mass = np.array([groups(grid)[result] for grid, result in zip(grids, wdl, strict=True)])
     offsets = np.log(mass[:, 1] / mass[:, 0])
-    coefficients = []
-    for qualifying in (wdl != 1, wdl == 1):
-        old, observed = offsets[qualifying], high[qualifying]
-
-        def loss(beta):
-            logits = old + beta
-            return (np.logaddexp(0., logits) - observed * logits).sum() + 8. * beta**2
-
-        result = minimize_scalar(loss, bounds=(-1.25, 1.25), method='bounded', options={'xatol': 1e-10})
-        if not result.success:
-            raise ValueError('three-goal calibration failed: ' + result.message)
-        coefficients.append(round(float(result.x), 6))
-    win, draw = coefficients
+    win, draw = [binary_offset(offsets[where], high[where]) for where in (wdl != 1, wdl == 1)]
     return np.array([win, draw, win])
 
 
@@ -64,17 +63,17 @@ def adjust(grid, offsets):
     return updated
 
 
-def high_third(original, adjusted, ordered):
+def high_third(original, adjusted, ordered, *, target_mask=HIGH):
     old = [tuple(map(int, score.split('-'))) for score in ordered]
     past_low = {base.RESULT[score] for score in old[:2] if not HIGH[score]}
-    past_high = {base.RESULT[score] for score in old if HIGH[score]}
+    past_high = {base.RESULT[score] for score in old if target_mask[score]}
     mass = groups(adjusted)
     result_mass = mass.sum(axis=1)
     relevant = past_low - past_high
     viable = {r for r in relevant if result_mass[r] >= .30 and mass[r, 1] / result_mass[r] >= .60}
     ranked = np.argsort(-original.ravel(), kind='stable')[3:12]
     candidates = zip(*np.unravel_index(ranked, original.shape), strict=True)
-    options = [score for score in candidates if HIGH[score] and base.RESULT[score] in viable
+    options = [score for score in candidates if target_mask[score] and base.RESULT[score] in viable
                and adjusted[score] >= adjusted[old[2]] / 2]
     if not options:
         return ordered
@@ -82,13 +81,13 @@ def high_third(original, adjusted, ordered):
     return [*ordered[:2], f'{home}-{away}']
 
 
-def record(ref, grid, offsets):
+def record(ref, grid, offsets, *, calibrate=adjust, select_third=high_third):
     original = ref['forecast']['candidate']
     ordered = original['top3']
     rankable = base.top_three_scores(grid) == ordered
-    half, full = (adjust(grid, offsets*dose) if rankable else grid for dose in (.5, 1.))
+    half, full = (calibrate(grid, offsets*dose) if rankable else grid for dose in (.5, 1.))
     forecasts = dict(r13=original, r7=ref['forecast']['r7'], market=ref['forecast']['market'])
-    three = high_third(grid, full, ordered) if rankable else ordered
+    three = select_third(grid, full, ordered) if rankable else ordered
     for arm, scores in zip(ARMS, (three, ordered if half is grid else base.top_three_scores(half),
                                  ordered if full is grid else base.top_three_scores(full)), strict=True):
         forecasts[arm] = dict(original, primary=scores[0], top3=scores)
@@ -145,8 +144,8 @@ def grade(folds, offsets):
                 forward_screen_passed=selected != 'r13' and min(test_gains) >= 0 and max(test_gains) > 0)
 
 
-def run(data, out):
-    policy = control.read(PROTOCOL)
+def run(data, out, *, protocol=PROTOCOL, fit_offsets=fit, forecast_row=record):
+    policy = control.read(protocol)
     if sha(locked_grids.PROTOCOL) != policy['r30_protocol_sha256']:
         raise ValueError('locked source dimensions, archives or dates differ')
     source = control.read(locked_grids.PROTOCOL)
@@ -166,13 +165,13 @@ def run(data, out):
             if any(len(indices) != source['expected_per_window'][code] for indices in windows.values()):
                 raise ValueError('incomplete signed fixture window for ' + code)
             train = windows['train']
-            offsets = fit(grids[train], [refs[i]['actual'] for i in train])
-            folds = {tag: [record(refs[i], grids[i], offsets) for i in indices] for tag, indices in windows.items()}
+            offsets = fit_offsets(grids[train], [refs[i]['actual'] for i in train])
+            folds = {tag: [forecast_row(refs[i], grids[i], offsets) for i in indices] for tag, indices in windows.items()}
             results[code] = grade(folds, offsets)
             for tag, rows in folds.items():
                 ledger[tag].extend(rows)
     out.mkdir(parents=True, exist_ok=False)
-    write_new(out/'summary.json', dict(version=policy['version'], protocol_sha256=sha(PROTOCOL), competitions=results))
+    write_new(out/'summary.json', dict(version=policy['version'], protocol_sha256=sha(protocol), competitions=results))
     for tag, rows in ledger.items():
         archive.put(out/f'{tag}.jsonl.gz', rows)
 
