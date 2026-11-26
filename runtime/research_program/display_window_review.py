@@ -1,4 +1,4 @@
-"""Read-only live review for the two registered J1 comprehensive display windows.
+"""Read-only live review for a registered pair of J1 comprehensive display windows.
 
 The registered universe is fixed by the original display_windows ledger record.
 Repository-issued model rows are reported as audit evidence only. Strict display
@@ -30,6 +30,7 @@ from research.analysis_freeze import DEFAULT_ROOT, aware, digest, verify
 from research.chat_display_readback import first_delivery_lookup
 from research.display_delivery import DISPLAY_TRACK
 from research.display_review import review_batch, summarize as summarize_display
+from research_program.display_window_contract import consecutive_windows, series_for_version
 from research_program.kpi_validation import _actual, quote_audit
 from research_program.three_arm_review import _certify, _results
 
@@ -126,21 +127,19 @@ def _registered(plan_record):
     plan_record = verify(plan_record)
     payload = plan_record["payload"]
     identity = payload["identity"]
-    if (plan_record.get("track") != REGISTRATION_TRACK or payload.get("track") != "j1-comprehensive-windows-20261125"
-            or identity.get("version") != "J1-first-display-windows-20261125-1"
+    series = series_for_version(identity.get("version"))
+    if (plan_record.get("track") != series + "-registration" or payload.get("track") != series
             or identity.get("competitions") != ["jpn.1"]):
         raise ValueError("unexpected or unverified J1 window registration")
     fixtures = payload.get("fixtures", {})
     slates = identity.get("slates", {})
-    specs = identity.get("protocol", {}).get("windows", [])
-    if set(slates) != set(WINDOW_NAMES) or {s.get("name") for s in specs} != set(WINDOW_NAMES):
+    specs = consecutive_windows(identity.get("protocol", {}).get("windows", []))
+    if set(slates) != set(specs) or (plan_record['track'] == REGISTRATION_TRACK and tuple(specs) != WINDOW_NAMES):
         raise ValueError("both registered windows are required")
-    if not fixtures or len(fixtures) != sum(len(slates[n]) for n in WINDOW_NAMES):
+    if not fixtures or len(fixtures) != sum(len(ids) for ids in slates.values()):
         raise ValueError("registered fixture population is incomplete or duplicated")
-    windows = {}
     all_ids = set()
-    for spec in specs:
-        name = spec["name"]
+    for name, spec in specs.items():
         ids = slates[name]
         if len(ids) != spec["expected"] or len(set(ids)) != len(ids) or all_ids.intersection(ids):
             raise ValueError("registered window size or unique slot set differs")
@@ -151,10 +150,12 @@ def _registered(plan_record):
             if (not f or f.get("match_id") != mid or f.get("cohort") != "jpn.1"
                     or f.get("stage") != "Japanese J1 League" or not start <= aware(f["kickoff_at"]) < end):
                 raise ValueError("registered fixture does not belong to its original window: " + mid)
-        windows[name] = dict(spec)
     if all_ids != set(fixtures):
         raise ValueError("window slates do not cover the complete original ledger")
-    return plan_record, fixtures, slates, windows
+    if (plan_record.get("stage") != "prematch" or plan_record.get("evaluation_slot") != "FIRST_PREMATCH"
+            or aware(plan_record["recorded_at"]) >= min(aware(f["kickoff_at"]) for f in fixtures.values())):
+        raise ValueError("J1 series must be registered before its first kickoff")
+    return plan_record, fixtures, slates, specs
 
 
 def _ledger_records(root):
@@ -170,9 +171,9 @@ def _ledger_records(root):
     return records
 
 
-def _publication(records, window, plan_sha, mids):
+def _publication(records, window, plan_sha, mids, *, prefix=PUBLICATION_TRACK):
     matches = [r for r in records if r.get("track") in
-               (PUBLICATION_TRACK + window, PUBLICATION_TRACK + window + "-registration")]
+               (prefix + window, prefix + window + "-registration")]
     if len(matches) > 1:
         raise ValueError("conflicting publication lock records for " + window)
     if not matches:
@@ -382,7 +383,7 @@ def _official_phases(window_reports):
     for name in names:
         per_window = {window: report["_window_phase_candidates"][name]
                       for window, report in window_reports.items()}
-        passed = len(per_window) == len(WINDOW_NAMES) and all(per_window.values())
+        passed = len(per_window) == 2 and all(per_window.values())
         phases.append(dict(stage=name, pass_=passed, per_window_thresholds_met=per_window,
                            blockers=[] if passed else ["SAME_STAGE_MUST_PASS_IN_BOTH_REGISTERED_WINDOWS"]))
     return phases
@@ -741,7 +742,7 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
             if _actual(actual, universe[mid], actual_root, now) is not None:
                 result_by_id[mid] = dict(actual)
     reports, phases = {}, {}
-    for name in WINDOW_NAMES:
+    for name in specs:
         mids = slates[name]
         rich_fixtures = {}
         for mid in mids:
@@ -769,7 +770,8 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                             lookup_original=firsts.get,
                             lookup_actual_kickoff=starts.get,
                             lookup_approved_scope=scopes.get)
-        publication = _publication(ledger_records, name, plan_record["record_sha256"], mids)
+        publication = _publication(ledger_records, name, plan_record["record_sha256"], mids,
+                                   prefix=plan_record["payload"]["track"] + "-")
         prepared_verified = False
         if publication:
             if batch_root:
@@ -931,7 +933,7 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
         report["phase_pass"] = any(p["pass_"] for p in report["phases"])
     return dict(schema="WCPP-J1-DISPLAY-WINDOW-REVIEW-1", at=now.isoformat(),
                 registration=dict(record_sha256=plan_record["record_sha256"], track=plan_record["track"],
-                                  windows={n: len(slates[n]) for n in WINDOW_NAMES}),
+                                  windows={n: len(slates[n]) for n in specs}),
                 windows=reports, combined=dict(registered_n=sum(x["registered_n"] for x in reports.values()),
                     completed_n=sum(x["completed_n"] for x in reports.values()),
                     pending_n=sum(x["pending_n"] for x in reports.values()),
@@ -943,7 +945,7 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--registration", type=Path, required=True, help="original verified display_windows registration record")
     p.add_argument("--ledger-root", type=Path, default=Path(DEFAULT_ROOT))
-    p.add_argument("--batch-root", type=Path, help="R14 window archive containing nov25/, nov28_29/ and evidence/")
+    p.add_argument("--batch-root", type=Path, help="archive containing registration/, both window directories, and evidence/")
     p.add_argument("--results-state", type=Path, required=True, help="directory containing normalized-results.jsonl")
     p.add_argument("--result-evidence-root", type=Path, required=True)
     p.add_argument("--kickoff-evidence-root", type=Path, help="defaults to --result-evidence-root")

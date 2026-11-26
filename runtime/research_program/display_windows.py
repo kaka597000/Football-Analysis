@@ -11,6 +11,7 @@ from publication import atomic_json, deliver
 from research.analysis_freeze import DEFAULT_ROOT, aware, digest
 from research.display_delivery import delivery_request
 from storage_lock import exclusive_lock
+from .display_window_contract import consecutive_windows, series_for_version
 from . import goal_state_forward as ledger
 from .goal_state_study import sha
 from .r8_score_study import read
@@ -21,10 +22,10 @@ TRACK = 'j1-comprehensive-windows-20261125'
 def register(protocol, scope, goals, board, registered, registry, crosswalk, out, *, freeze_root=DEFAULT_ROOT):
     spec = read(protocol)
     code = spec['competition']
-    windows = spec['windows']
-    if (code not in {v['code'] for v in read(scope)['competitions']} or len(windows) != 2
-            or aware(windows[0]['until']) != aware(windows[1]['from'])):
-        raise ValueError('invalid competition or nonconsecutive windows')
+    windows = consecutive_windows(spec['windows'])
+    series = series_for_version(spec['version'])
+    if code != 'jpn.1' or code not in {v['code'] for v in read(scope)['competitions']}:
+        raise ValueError('registered competition must be in the J1 scope')
     board_bytes = board.read_bytes()
     board_sha256 = hashlib.sha256(board_bytes).hexdigest()
     raw = json.loads(board_bytes)
@@ -38,7 +39,7 @@ def register(protocol, scope, goals, board, registered, registry, crosswalk, out
     parent = ledger._read(registered, idx['registration'])
     all_fixtures = []
     slates = {}
-    for window in windows:
+    for window in windows.values():
         start, end = (aware(window[key]) for key in ('from','until'))
         ids = []
         for event in raw['events']:
@@ -73,7 +74,7 @@ def register(protocol, scope, goals, board, registered, registry, crosswalk, out
         if index.exists() and ledger._read(out,read(index))['payload']['identity'] != identity:
             raise ValueError('conflicting registered windows')
         deliver(out/('schedule-'+board_sha256+'.json'),board_bytes)
-        plan = ledger.register(all_fixtures, identity, TRACK, out, freeze_root=freeze_root)
+        plan = ledger.register(all_fixtures, identity, series, out, freeze_root=freeze_root)
         if not index.exists():
             atomic_json(index,plan)
         return plan
@@ -85,9 +86,12 @@ def ranked(eligible):
 
 def _commit_batch(plan, window, identity, fixtures, out, freeze_root):
     """Use one durable issuance key even across retries from another output directory."""
+    series = plan['payload']['track']
+    if not re.fullmatch(r'j1-comprehensive-windows-[0-9]{8}', series) or plan['track'] != series + '-registration':
+        raise ValueError('publication does not belong to its registered J1 series')
     root = Path(freeze_root)
     root.mkdir(parents=True, exist_ok=True)
-    slot = root / ('.'+TRACK+'-'+digest([plan['record_sha256'],window])+'.json')
+    slot = root / ('.'+series+'-'+digest([plan['record_sha256'],window])+'.json')
     index = out/'publication.json'
     binding = dict(parent=plan['record_sha256'], window=window, identity_sha256=digest(identity))
     with exclusive_lock(slot.with_suffix('.lock')):
@@ -97,7 +101,7 @@ def _commit_batch(plan, window, identity, fixtures, out, freeze_root):
             raise ValueError('first placement changed')
         if not slot.exists():
             atomic_json(slot,binding)
-        ref = ledger.register(fixtures, identity, TRACK+'-'+window, out, freeze_root=root)
+        ref = ledger.register(fixtures, identity, series+'-'+window, out, freeze_root=root)
         if index.exists():
             if read(index) != ref:
                 raise ValueError('first placement changed')
