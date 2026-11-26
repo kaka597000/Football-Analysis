@@ -24,8 +24,9 @@ class WindowPublicationTest(TestCase):
             plan_dir = root/'plan'
             kickoff = (datetime.now(timezone.utc) + timedelta(days=1)).isoformat()
             f = dict(match_id='test:1',home='team:1',away='team:2',cohort='jpn.1',stage='regular',kickoff_at=kickoff)
-            identity = dict(version='unit',slates={'first':['test:1']})
-            plan = ledger.register([f],identity,windows.TRACK,plan_dir,freeze_root=storage)
+            identity = dict(version='J1-first-display-windows-20261126-1',slates={'first':['test:1']})
+            series = 'j1-comprehensive-windows-20261126'
+            plan = ledger.register([f],identity,series,plan_dir,freeze_root=storage)
             write_new(plan_dir/'plan.json',plan)
             entries = {'test:1':dict(unissued_reason='missing teams')}
             body = '赛事 test:1\n未出单　missing teams'
@@ -35,7 +36,9 @@ class WindowPublicationTest(TestCase):
                 folder.mkdir()
             ref = windows.lock_publication(plan_dir,'first',entries,body,first,freeze_root=storage)
             self.assertEqual(windows.lock_publication(plan_dir,'first',entries,body,second,freeze_root=storage),ref)
-            saved = ledger._read(first,ref)['payload']['identity']
+            record = ledger._read(first,ref)
+            self.assertEqual(record['track'], series+'-first-registration')
+            saved = record['payload']['identity']
             self.assertEqual(saved['selected'],[])
             self.assertEqual(saved['slots'],3)
             self.assertEqual(saved['rows']['test:1']['unissued_reason'],'missing teams')

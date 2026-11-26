@@ -98,6 +98,31 @@ class DisplayWindowReviewTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "checksum"):
             review._registered(altered)
 
+    def test_new_series_reviews_its_own_two_named_windows(self):
+        old = _plan()
+        payload = deepcopy(old['payload'])
+        identity = payload['identity']
+        old_names = tuple(identity['slates'])
+        new_names = ('opening_round', 'following_round')
+        identity['version'] = 'J1-first-display-windows-20261126-1'
+        identity['slates'] = {new: identity['slates'][previous]
+                             for new, previous in zip(new_names, old_names, strict=True)}
+        for spec, name in zip(identity['protocol']['windows'], new_names, strict=True):
+            spec['name'] = name
+        payload['track'] = 'j1-comprehensive-windows-20261126'
+        plan = _freeze(payload, old['fixture'], payload['track'] + '-registration', old['recorded_at'])
+        with tempfile.TemporaryDirectory() as tmp:
+            result = review.review(plan, ledger_root=tmp, result_state=tmp, evidence_root=tmp,
+                                   at='2026-11-25T09:30:00+00:00')
+        self.assertEqual(tuple(result['windows']), new_names)
+        self.assertEqual(result['combined']['pending_n'], 2)
+        self.assertFalse(result['combined']['phase_pass'])
+
+        identity['protocol']['windows'][1]['from'] = '2026-11-27T01:00:00+08:00'
+        gap = _freeze(payload, old['fixture'], payload['track'] + '-registration', old['recorded_at'])
+        with self.assertRaisesRegex(ValueError, 'consecutive'):
+            review._registered(gap)
+
     def test_unissued_publication_slot_is_explicit_and_never_selected(self):
         plan = _plan()
         fixture = plan["payload"]["fixtures"]["espn:101"]
