@@ -1,0 +1,28 @@
+{
+  "version": "R30-European-outcome-conditional-score-dispersion-1",
+  "competitions": ["uefa.europa.conf", "uefa.europa"],
+  "stage": "league-phase",
+  "label": "HISTORICAL DEVELOPMENT",
+  "question": "Can adjusting the spread of scores within each win/draw/loss outcome improve the R13 first or third choice in the men's Europa and Conference league phases?",
+  "archives": {
+    "r13": {"path": "20261125-r13-domestic-form/replay/forecasts.tar.gz", "sha256": "66dd22e8b4b5da665203776b404ecc6204fa833b61beb4b429c975a3be78655f"},
+    "uefa.europa.conf": {
+      "panel": {"path": "20261123-all-scope-kpi/models/uefa.europa.conf.tar.gz", "sha256": "69849f3b00d92e4be99aaa218c3383165a942435b7bda1658a9e19d24cca269a"},
+      "r7": {"path": "20261123-prematch-literature/models/uefa.europa.conf.tar.gz", "sha256": "92760d1b4decde74615f94c84a2ffcff3d0b309733c01d2174bc674a73990b8e"}
+    },
+    "uefa.europa": {
+      "panel": {"path": "20261123-all-scope-kpi/models/uefa.europa.tar.gz", "sha256": "369305e83a1988f467ddd727282c7583f84fa9b707956d657cfa5705f0636b63"},
+      "r7": {"path": "20261123-prematch-literature/models/uefa.europa.tar.gz", "sha256": "bd0304a91ae3a1294edbf7040489ef9f124cfe3d83c3571ba387df54ea541db5"}
+    }
+  },
+  "windows": {
+    "train": {"from": "2025-07-01", "before": "2025-11-07"},
+    "validation": {"from": "2025-11-07", "before": "2026-07-01"},
+    "evaluation": {"from": "2026-07-01", "before": "2026-11-06"}
+  },
+  "expected_per_window": {"uefa.europa.conf": 54, "uefa.europa": 72},
+  "input": "Rebuild the chronological R7 grids and the R13 selected score head with the signed R13 fitted parameters and date-causal domestic features. Verify each competition, fixture, ordered teams, schedule date, actual result, line and source hash. The R13 dose and fit originate prior to 2025/26. Reproduce the archived ordered score choices and probability diagnostics. The 2026/27 dates are held out for R30 selection and were used by previous project studies.",
+  "calibration": "Within each WDL group tilt the total-goals distribution by exp(beta*g(n)+alpha*n). The fixed function g(n)=n*(n-1)/2 through six goals continues linearly thereafter with slope 5.5. Use bisection on alpha to preserve each fixture's WDL-conditional mean total, and preserve the WDL masses and relative scores at the same total and outcome. Fit separately for each competition, one beta shared by wins and one for draws, by minimizing NLL of the observed training totals conditional on the observed WDL plus 16*beta^2. Coefficients are bounded +/-0.22 and rounded to six decimals. Original R13 WDL and totals decisions are used unchanged in every score arm.",
+  "selection": "Compare baseline and both full re-ranking and third-only substitution at 0.5 and 1 doses, where dose is the mixture with the adjusted grid. Third-only retains the first two; it selects the highest adjusted-probability alternative that strictly improves on the original third and sacrifices at most 0.015 of original probability mass. Exact probability ties retain the original third, then favor lowest flattened score index among equally adjusted candidates. On validation, admit arms at least tying baseline in both first and three hits. Choose by first hits, three hits, exact NLL, smaller dose, then third-only over full. Use the chosen arm on evaluation, preserving all baseline, ablation and same-fixture market results.",
+  "study_end": "Report each competition's coverage, first and three hits, actual R13 rank counts, changed picks, pairs with gains and losses, original WDL and actual-line counts, and uncertainty by fixture date. A selected arm with positive holdout gain in either score metric and no loss in the other is eligible for a new independent prospective research test on a complete registered slate. No result or change to the original publicly displayed forecasts is credited from this development replay. The stage thresholds and both already registered official windows remain governed by their original protocols."
+}
