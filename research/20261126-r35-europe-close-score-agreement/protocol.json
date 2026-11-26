@@ -1,0 +1,15 @@
+{
+  "version": "R35-European-close-score-agreement-1",
+  "label": "HISTORICAL DEVELOPMENT",
+  "question": "Can simultaneous team-score and shot evidence resolve close R13 exact-score choices? Where is the actual score if these guarded choices have no chance to help?",
+  "r30_protocol_sha256": "f8942bc68b404b4d9d03116409073f89b1be01413907c8a15af73562178118d5",
+  "archives": {
+    "r9": {"path": "20261125-r9-team-score/replay/artifacts.tar.gz", "sha256": "3f5f3f16b58da4ae4001982966aa281149c0066fcfffd1d25f2d0e6851051e12"},
+    "r10": {"path": "20261125-r10-shot-conversion/replay/main.tar.gz", "sha256": "7aa2c0d85ccc82779a7e922d3ed1b5184f576362ef958590ecce71bc80039f77"}
+  },
+  "population": "Use the original complete R30 dates and fixtures by competition. Restore the signed R13 score grids. Compare to R9 full_dose and R10 fixed_full signed ordered scores only when both have pre-date evidence on both teams and use the same fixture, frozen line and signed R7 and market controls. All three historical windows have entered project research. Use the oldest for diagnostics, the middle to choose one policy and the latest to report the choices and diagnostics, without fitting weights.",
+  "first_policy": "The original R13 grid must reproduce its signed ordered three. Change the first only to a member of those three whose R13 score probability trails the original first by at most 0.015 and is the first choice for both R9 and R10. Move the new first to the front, preserving the order of the other two. Preserve the original when the condition fails.",
+  "three_policy": "Apply the first policy. Only the last choice can be replaced. An eligible new score ranks fourth through sixth in the original R13 matrix and must trail the original third by at most 0.015. Both evidence models must list it and prefer it to the current last choice (an absent score ranks after all displayed scores). Choose lowest total R9 and R10 rank, then best R13 rank. Keep the original independent WDL and actual-line directions in both variants.",
+  "selection": "On validation require at least one changed ordered score list and no loss of first or three hits against R13 for a new policy. Prefer more first hits, then more three hits, then the first-only policy. Report both fixed variants and the selected variant on the historical evaluation, with paired matchdate intervals and the original same-fixture market. Measure attainable upper bounds by allowing perfect hindsight within the R13 gap pools alone, before the R9/R10 agreement conditions. Report original rank, probability gaps and actual WDL coverage. Hindsight pools are diagnostic values, never predictions.",
+  "next_check": "Only a nonbaseline policy with a positive evaluation net gain in at least one score metric and no loss in the other enters an independent later full-slate pregame research comparison. If it qualifies, register and freeze it separately from the original displayed firsts. Only the preregistered actual first display and verified regulation results contribute to formal phase acceptance."
+}
