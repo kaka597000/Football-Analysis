@@ -1,0 +1,25 @@
+{
+  "version": "R25-J1-conditional-team-allocation-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "label": "EXPERIMENTAL / OOD",
+  "question": "Within each fixed full-time goal total, does strictly earlier J1 team scoring and conceding distribution improve the first exact score beyond R7 and the unrestricted R9 team-shape reference?",
+  "input_data_commit": "94ea9052f858114d90dd0a425eec83cc7180aab2",
+  "sources": {
+    "r5_panel": {"path": "20261123-all-scope-kpi/models/jpn.1.tar.gz", "sha256": "b9c883ee9055b0e562e8ad5b482a26dab219d1c0d6bd76ae0c16f74a42f23edb"},
+    "r7_fit": {"path": "20261123-prematch-literature/models/jpn.1.tar.gz", "sha256": "b6261ab328fe4ade9178dacb587fb819e765c80ef7fb2c6721abe0b16b98d183"},
+    "r9_replay": {"path": "20261125-r9-team-score/replay/artifacts.tar.gz", "sha256": "3f5f3f16b58da4ae4001982966aa281149c0066fcfffd1d25f2d0e6851051e12"},
+    "r5_firsts": {"path": "20261123-all-scope-kpi/forward-first-issues.tar.gz", "sha256": "11eeb44fab0fd49602c8f9b04e00979318391d6242d483efc82034a3bdcf8d7a"},
+    "r7_firsts": {"path": "20261123-prematch-literature/first-issues.tar.gz", "sha256": "52f1dd07d146a93ba9cec41ce9e1c9cdf75b3db43f8a65da7ffea222467f385d"},
+    "weekend_plan": {"path": "20261125-j1-stage-windows/registration/99791e2c015d1473-v000001.json", "sha256": "4badb2dcf2fde1a022f359ae4746ebb943b29462cc40621d123851944e1bd8f0"}
+  },
+  "windows": {
+    "train": {"before": "2025-01-01", "fixtures": 2291},
+    "validation": {"from": "2025-01-01", "before": "2025-07-01", "fixtures": 218},
+    "late_2025": {"from": "2025-07-01", "before": "2026-01-01", "fixtures": 162},
+    "early_2026_27": {"from": "2026-01-01", "before": "2026-11-22", "fixtures": 150}
+  },
+  "method": "Use only the adult men's J1 regular phase for R25; R7's original broader panel is replayed intact for its causal anchors. Reuse R9's fixture-date grouping, 270-day decay, five goal buckets, pseudo counts and neutral cold-start for strictly earlier team attack and opponent conceding residuals. Fit the R9 two-slope bounded ridge likelihood on chronological R7 anchors conditioned on each training match's actual total. Actual totals may enter the fit labels only. For prediction use every candidate total of the post-fit R7 prior: multiply by the two team residual weights and rescale each total to its original prior mass. Report probability preservation and exposure. Retain original R7 WDL and totals decisions, and signed scores for exact zero adjustment.",
+  "selection": "Choose dose 0, 0.5 or 1 on 218 validation fixtures by first exact hits, then ordered-three hits, then lowest exact log loss, then smaller dose. Never select on the evaluation windows. Compare the selected and full-dose alternatives with archived R7, R9 and market on matched IDs, labels and actual lines. Report each evaluation segment and the 312 combined fixtures, the four metrics, all Asian settlements, per-metric coverage, gained/lost and paired date-clustered intervals. The two windows previously entered project research. Historical quotes have no verified provider clock.",
+  "forward": "Proceed only at a positive selected dose, with a positive combined first-score net and no combined three-score net loss versus R7. Keep the dose and refit the two slopes through November 21 on the same inputs available to the original R7 snapshot. Use the ten previously registered November 28–29 Beijing fixtures, original R5 prices and R7 research firsts, preserve their original timestamps and any missing line, and verify the schedule and ancestry. Freeze an independent OOD research registration, firsts and top-three ranked seats before the original earliest kickoff. Rank by the probability of the issued first, then kickoff then match ID. Leave all ten in coverage, preserve price deficiencies, and settle after verified regulation results. A missing totals price does not block score and WDL research. If the historical screen fails, finish this recipe as a development experiment. No automatic promotion or alteration to the two original J1 display windows."
+}
