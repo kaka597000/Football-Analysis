@@ -226,6 +226,27 @@ class DisplayWindowReviewTests(unittest.TestCase):
         for comparison in result.values():
             self.assertEqual(comparison["population"], 7)
 
+    def test_observed_prices_only_pair_in_the_frozen_audit(self):
+        from research_program import all_scope_model as scores
+
+        mid = "espn:101"
+        quote = dict(line=2.5, over_odds=1.9, under_odds=1.95)
+        h2h = dict(home=2.1, draw=3.2, away=3.5)
+        matrix = scores._full_market(tuple(h2h[side] for side in scores.SIDES), 2.5, (1.9, 1.95))
+        record = dict(fixture=dict(total_quote=quote),
+                      payload=dict(total_line=2.5, primary="2-1", displayed_scores=["2-1", "1-1", "1-0"],
+                                   wdl="主胜", total_direction="大",
+                                   market_snapshot=dict(quote=quote, h2h=h2h, forecast=scores.pick(matrix, 2.5))))
+        item = dict(match_id=mid, kickoff_at="2026-11-25T10:00:00+00:00", actual_result="2-1",
+                    actual_result_source_sha256="settled", confirmed_first_score=True,
+                    quote=dict(raw_source_verified=True, strict=False))
+        observed = review._market_comparisons([item], {mid: record})
+        self.assertEqual(observed["first_frozen_rows"]["paired"]["score_top1"]["eligible"], 1)
+        self.assertTrue(all(v["eligible"] == 0 for v in observed["channel_confirmed_rows"]["paired"].values()))
+        item["quote"]["strict"] = True
+        verified = review._market_comparisons([item], {mid: record})
+        self.assertTrue(all(v["eligible"] == 1 for v in verified["channel_confirmed_rows"]["paired"].values()))
+
     def test_current_empty_window_keeps_full_denominator_and_cannot_pass(self):
         plan = _plan()
         with tempfile.TemporaryDirectory() as tmp:
@@ -263,8 +284,11 @@ class DisplayWindowReviewTests(unittest.TestCase):
     def test_actual_quote_is_bound_to_original_raw_source_prices_and_event(self):
         fixture = dict(match_id="espn:101", cohort="jpn.1", home="espn:1", away="espn:2",
                        kickoff_at="2026-11-25T10:00:00+00:00", cutoff_at="2026-11-25T09:30:00+00:00")
-        event = dict(header=dict(competitions=[dict(date=fixture["kickoff_at"], competitors=[
-            dict(homeAway="home", team=dict(id="1")), dict(homeAway="away", team=dict(id="2"))])]),
+        game = dict(id="101", date=fixture["kickoff_at"],
+                    status=dict(type=dict(state="pre", completed=False)),
+                    competitors=[dict(homeAway="home", team=dict(id="1")),
+                                 dict(homeAway="away", team=dict(id="2"))])
+        event = dict(header=dict(id="101", league=dict(slug="jpn.1"), competitions=[game]),
             odds=[dict(provider=dict(id="100", name="DraftKings"), overUnder=2.5,
                        overOdds=110, underOdds=-110,
                        homeTeamOdds=dict(moneyLine=120), drawOdds=dict(moneyLine=220),
@@ -308,6 +332,21 @@ class DisplayWindowReviewTests(unittest.TestCase):
             broken = dict(quote, over_odds=2.2)
             self.assertEqual(review._quote_source(broken, fixture, root, cache)[1],
                              "QUOTE_RAW_TOTAL_LINE_OR_PRICES_DIFFER")
+            wrong_game = dict(timed, header=dict(timed["header"], competitions=[dict(game, id="103")]))
+            wrong_body = json.dumps(wrong_game).encode()
+            wrong_sha = hashlib.sha256(wrong_body).hexdigest()
+            cache[wrong_sha] = (wrong_body, "timed.tar.gz", "wrong-game.json")
+            self.assertEqual(review._quote_source(dict(timed_quote, source_sha256=wrong_sha), fixture, root, cache)[1],
+                             "QUOTE_RAW_FIXTURE_OR_SOURCE_DATE_MISMATCH")
+
+    def test_conflicting_bookmaker_clocks_do_not_verify(self):
+        stamp = "2026-11-25T09:05:00+00:00"
+        clocks = dict(lastUpdated=stamp, last_update="2026-11-25T17:05:00+08:00")
+        self.assertEqual(review._market_clock_match(dict(quoted_at=stamp), review._raw_market_clock(clocks)),
+                         (True, None))
+        clocks["last_update"] = "2026-11-25T17:04:00+08:00"
+        self.assertEqual(review._market_clock_match(dict(quoted_at=stamp), review._raw_market_clock(clocks)),
+                         (False, "RAW_BOOKMAKER_MARKET_CLOCK_CONFLICT"))
 
 
 class KickoffEvidenceTests(unittest.TestCase):

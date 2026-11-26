@@ -41,10 +41,9 @@ def comparisons(per_match, records):
                    line=line,forecast=dict(authored=authored,market=market))
         rows.append(row)
         public = authored.copy() if review['confirmed_first_score'] else {}
-        verified_market = market.copy()
+        verified_market = market if line_audit['strict'] else {}
         if not line_audit['strict']:
             public.pop('total_side',None)
-            verified_market.pop('total_side',None)
         strict.append(dict(row,forecast=dict(authored=public,market=verified_market)))
     return {name:compare(group,baseline='market',candidate='authored')
             for name,group in [('first_frozen_rows',rows),('channel_confirmed_rows',strict)]}
