@@ -19,4 +19,14 @@ python scripts/capture_public_club_markets.py \
 
 采集清单记录真实接收和核验时刻，以及对应节点截止。预测冻结仍走现有接口并登记真实签发时刻。该节点的报价供该节点或通过新截止复核的后续版本使用。盘口行的 `as_of` 来自提供商具名机构对象，独立于响应包时钟和下载时刻。上游接口说明未给出机构原生发布时间的定义。
 
+自包含采集目录可在自己的节点截止前签发独立市场基准。入口使用原登记窗口，重核同机构原始报价，并把首次冻结和回执写入该采集目录的 `benchmark/`。恢复同次采集时会读回已保存的原记录。不同采集到达同一场同一节点时以原首次冻结为准。
+
+```bash
+PYTHONPATH=runtime python -B -m research_program.j1_checkpoint_issue \
+  --registration PATH/ORIGINAL-REGISTRATION.json --window nov28_29 \
+  --capture PATH/SELF-CONTAINED-MARKET-CAPTURE
+```
+
+用 `j1_window_intake --market-checkpoint` 接入对应赛果窗口，并按每个节点的原盘线独立复盘。正式综合首版继续使用当时的冻结证据。[赛果入口](j1-official-kickoff-proof.md)
+
 北京时间 11 月 27 日的公开样本定位鹿岛鹿角对冈山绿雉，返回六家机构的同场 1X2 与全场大小球。返回对象为 `stale=true`，最新行距采集约 7 小时 27 分钟，当前严格盘口覆盖为 0/1。12 月 4 日和 12 日的查询尚未定位原登记的 J1 比赛。新入口在该真实陈旧样本上复核拒收，时钟与价格一致的接入由回归用例验证。

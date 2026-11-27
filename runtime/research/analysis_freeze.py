@@ -16,6 +16,10 @@ from zoneinfo import ZoneInfo
 DEFAULT_ROOT = '/workspace/WCPP/forecasts/issued-analyses'
 
 
+class PrematchDeadlineElapsed(ValueError):
+    pass
+
+
 def encoded(value):
     return json.dumps(value, ensure_ascii=False, sort_keys=True,
                       separators=(',', ':'), allow_nan=False).encode('utf-8')
@@ -55,7 +59,7 @@ def verify(record):
     return record
 
 
-def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=None):
+def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=None, first_issue_deadline=None):
     """Save actual issued content, including ABSTAIN. Never backdate or overwrite."""
     if stage not in ('prematch', 'live', 'review') or not track:
         raise ValueError('explicit stage and track required')
@@ -63,6 +67,9 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=N
     now = datetime.now(ZoneInfo('Asia/Shanghai'))
     kickoff = aware(fixture['kickoff_at'])
     cutoff = aware(fixture['cutoff_at'])
+    deadline = aware(first_issue_deadline) if first_issue_deadline is not None else None
+    if deadline is not None and (stage != 'prematch' or not cutoff <= deadline < kickoff):
+        raise ValueError('first issue deadline must fall between cutoff and kickoff')
     if cutoff > now:
         raise ValueError('invalid cutoff or late prematch freeze')
     if stage == 'live' and now < kickoff:
@@ -96,11 +103,15 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=N
                     return {'freeze_id': prior['freeze_id'], 'recorded_at': prior['recorded_at'],
                             'path': str(path), 'sha256': prior['record_sha256'],
                             'evaluation_slot': prior['evaluation_slot']}
+        if deadline is not None and records:
+            raise ValueError('checkpoint already has its first issue')
         # Lock contention and chain verification can cross kickoff. Do not use
         # the time captured before waiting as the issued record's timestamp.
         now = datetime.now(ZoneInfo('Asia/Shanghai'))
         if cutoff > now or (stage == 'prematch' and now >= kickoff):
             raise ValueError('invalid cutoff or late prematch freeze')
+        if deadline is not None and now > deadline:
+            raise PrematchDeadlineElapsed('first issue deadline elapsed before freeze')
         version = len(records) + 1
         record = dict(scope, schema='WCPP-ISSUED-FREEZE-1',
                       freeze_id=f'{digest(scope)[:16]}-v{version:06d}',
@@ -124,6 +135,8 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=N
             commit_time = datetime.now(ZoneInfo('Asia/Shanghai'))
             if cutoff > commit_time or (stage == 'prematch' and commit_time >= kickoff):
                 raise ValueError('invalid cutoff or late prematch freeze')
+            if deadline is not None and commit_time > deadline:
+                raise PrematchDeadlineElapsed('first issue deadline elapsed before publication')
             os.link(temporary, target)
             if os.name != 'nt':
                 directory_fd = os.open(folder, os.O_RDONLY)

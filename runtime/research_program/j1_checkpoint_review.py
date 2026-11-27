@@ -14,9 +14,8 @@ from .nov25_first_review import same_fixture
 from .paired_kpi_inference import METRICS, OUTCOMES, _decisions
 
 
-def read_wave(directory, plan, fixtures):
-    """Bind an immutable first forecast to the original registration and captured prices."""
-    plan = verify(plan)
+def capture_wave(directory, fixtures):
+    """Read a self-contained checkpoint capture for the original window population."""
     prepared = json.loads((directory / 'prepared-fixtures.json').read_bytes())
     entries = {row['match_id']: row for row in prepared}
     names = {row['market_checkpoint']['name'] for row in prepared}
@@ -31,9 +30,32 @@ def read_wave(directory, plan, fixtures):
     manifest = (directory / 'receipts.json').read_bytes()
     manifest_sha = sha256(manifest).hexdigest()
     receipts = json.loads(manifest)['captures']
+    return checkpoint, entries, manifest_sha, receipts
+
+
+def benchmark_track(checkpoint):
+    return 'j1-' + checkpoint.lower().replace('-', '').removesuffix('h') + '-market-baseline'
+
+
+def verify_capture_time(plan, source, receipts, cutoff):
+    timing = source['market_checkpoint']
+    deadline, checked = aware(timing['deadline']), aware(timing['checked_at'])
+    collected = source['market_evidence']
+    captured = aware(collected['odds']['captured_at'])
+    if (any(meta not in receipts for key, meta in collected.items() if key != 'event_id')
+            or aware(source['cutoff_at']) != deadline or checked < deadline - market.MAXIMUM_QUOTE_AGE
+            or not (aware(plan['recorded_at']) <= checked <= captured <= aware(timing['verified_at'])
+                    <= cutoff <= deadline < aware(source['kickoff_at']))):
+        raise ValueError('checkpoint capture or cutoff chronology differs: ' + source['match_id'])
+
+
+def read_wave(directory, plan, fixtures):
+    """Bind an immutable first forecast to the original registration and captured prices."""
+    plan = verify(plan)
+    checkpoint, entries, manifest_sha, receipts = capture_wave(directory, fixtures)
     folder = directory / 'benchmark'
     refs = json.loads((folder / 'index.json').read_bytes())
-    track = 'j1-' + checkpoint.lower().replace('-', '').removesuffix('h') + '-market-baseline'
+    track = benchmark_track(checkpoint)
     records = {}
     for ref in refs:
         mid = ref['match_id']
@@ -47,20 +69,16 @@ def read_wave(directory, plan, fixtures):
         fixture, payload = record['fixture'], record['payload']
         timing = source['market_checkpoint']
         cutoff, issued_at = aware(fixture['cutoff_at']), aware(record['recorded_at'])
-        deadline, checked = aware(timing['deadline']), aware(timing['checked_at'])
-        captured = aware(fixture['market_evidence']['odds']['captured_at'])
         if (any(record[key] != value for key, value in scope.items())
                 or record['recorded_at'] != ref['recorded_at']
                 or fixture != dict(source, cutoff_at=fixture['cutoff_at'])
-                or any(meta not in receipts for key, meta in fixture['market_evidence'].items() if key != 'event_id')
                 or payload['registration_id'] != plan['freeze_id']
                 or payload['registration_sha256'] != plan['record_sha256']
                 or payload['capture_manifest_sha256'] != manifest_sha
                 or payload['checkpoint'] != checkpoint or payload['checkpoint_deadline'] != timing['deadline']
-                or aware(source['cutoff_at']) != deadline or checked < deadline - market.MAXIMUM_QUOTE_AGE
-                or not (aware(plan['recorded_at']) <= checked <= captured <= aware(timing['verified_at'])
-                        <= cutoff <= issued_at <= deadline < aware(fixture['kickoff_at']))):
+                or not cutoff <= issued_at <= aware(timing['deadline'])):
             raise ValueError('checkpoint fixture, registration or issue time differs: ' + mid)
+        verify_capture_time(plan, source, receipts, cutoff)
         _verify_forecast(source, fixture, payload['forecast'], directory)
         records[mid] = record
     return checkpoint, records
@@ -84,7 +102,11 @@ def _verify_forecast(source, fixture, forecast, directory):
             or any(total[key] != replay_total[key] for key in ('line', 'direction', 'objective'))
             or any(not isclose(a, b, rel_tol=0, abs_tol=1e-10) for a, b in numbers)):
         raise ValueError('frozen market probabilities or decisions changed')
-    quote = forecast['quote_snapshot']
+
+    verify_market_quote(source, fixture, forecast['quote_snapshot'], directory)
+
+
+def verify_market_quote(source, fixture, quote, directory):
     for inputs in (source, fixture):
         ok, reason, quote_clock = club_market.verify_j1_quote(
             inputs, inputs['total_quote'], directory, quote['h2h']['prices'])

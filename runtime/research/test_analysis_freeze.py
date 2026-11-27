@@ -7,7 +7,7 @@ import unittest
 import sys
 from unittest.mock import patch
 
-from analysis_freeze import save, verify
+from analysis_freeze import PrematchDeadlineElapsed, save, verify
 
 
 class FreezeTests(unittest.TestCase):
@@ -77,6 +77,26 @@ class FreezeTests(unittest.TestCase):
                 clock.fromisoformat.side_effect = datetime.fromisoformat
                 resumed = save({}, fixture, stage='prematch', track='test', root=root, idempotency_key='same')
             self.assertEqual(resumed, first)
+            self.assertEqual(len(list(Path(root).glob('*/*.json'))), 1)
+
+    def test_checkpoint_deadline_is_enforced_before_publication_and_on_retry(self):
+        fixture = self.fixture()
+        deadline = datetime.fromisoformat(fixture['kickoff_at'])-timedelta(minutes=30)
+        early, late = deadline-timedelta(seconds=1), deadline+timedelta(seconds=1)
+        with tempfile.TemporaryDirectory() as root, patch('analysis_freeze.datetime') as clock:
+            clock.fromisoformat.side_effect = datetime.fromisoformat
+            clock.now.side_effect = [early, early, late]
+            options = dict(stage='prematch', track='market', root=root, first_issue_deadline=deadline.isoformat())
+            with self.assertRaises(PrematchDeadlineElapsed):
+                save({}, fixture, **options)
+            self.assertEqual(list(Path(root).glob('*/*.json')), [])
+            clock.now.side_effect = None
+            clock.now.return_value = early
+            first = save({}, fixture, **options, idempotency_key='retained-capture')
+            with self.assertRaisesRegex(ValueError, 'already has its first issue'):
+                save({'new': True}, fixture, **options)
+            clock.now.return_value = late
+            self.assertEqual(save({}, fixture, **options, idempotency_key='retained-capture'), first)
             self.assertEqual(len(list(Path(root).glob('*/*.json'))), 1)
 
     def test_default_cli_saves_exact_pair_before_output(self):
