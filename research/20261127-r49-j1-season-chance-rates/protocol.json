@@ -1,0 +1,28 @@
+{
+  "version": "R49-J1-season-chance-rates-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "label": "EXPERIMENTAL / OOD",
+  "track": "research-r49-j1-season-chance-rates",
+  "question": "Does season-wide chance creation alter exact score allocation when the original total-goals distribution is held fixed?",
+  "archives": {
+    "r25_protocol_sha256": "b07be887dce6ea449af5f905c8d2be53337d4876af6900fafca2f175155f7eb1",
+    "forward": {
+      "path": "workspace-updates/20261127-r42-j1-fixed-first-backups",
+      "protocol.json": "03e2b0af6869f15a50e1282a3562ad6bc15ec6514ae19b9646ffd3e820e93a51",
+      "issued/receipts.json": "ffa1b5da18589b6acaba856b7ff31beabc48ba97432b51020e62a62ec774a514",
+      "registration": "ae9a7febb865d855-v000001"
+    }
+  },
+  "snapshots": {
+    "path": "workspace-updates/20261127-r49-j1-season-chance-rates/evidence/snapshots.json",
+    "sha256": "6b7da1e132e2cad42d7c847e55e08f10646d1ee690e7ede9125799e05ff0881c"
+  },
+  "team_ids": {
+    "path": "workspace-updates/20261127-j1-december-readiness/prepared/team-ids.json",
+    "sha256": "73d93c317001a4695dc17ff357b33f37ac93e2ce0d91a531bf24c96ae80b8d24"
+  },
+  "source_windows": "Compare all 140 Aug 7 to Nov 8 regular games using the 2025 full-season table. This table was retained after the historical target dates; results here are date-separated development. On the next ten Nov 20-21 matches use the archived 2026/27 table of 140 games actually retrieved before their scheduled start. Require exact retained data sources, team and season bindings, the 14-game prior roster counts, verified cutoff and signed historical R7 priors. The 2026/27 table updated Nov 26, covering a schedule of 157 completed matches, is reserved for the genuine Nov 28–29 slate.",
+  "method": "For each side take the arithmetic mean of the team's season attacking rate and its opponent's allowed rate. Use n equal to the smaller of the two teams' completed counts. Shrink that mean to the original R7 expected score for that side with eight prior games. Cap the new-to-original rate ratio at [0.8, 1.25]. Exponentially tilt the R7 grid by these two ratios; project precisely onto the original distribution of every total. Compare unmodified R7, source scope goals excluding own goals, complete 90-minute score counts per match, and source xG. Define the source-goals and xG rates in their original Football LAB table. If a team does not appear in the previous-season roster, preserve the original grid. Keep the same WDL and actual-line decisions and the same market and original comprehensive controls.",
+  "evaluation": "No fitting or selection on the historical populations. Report two complete historical groups, both score measures, coverage, paired gains and losses and original market comparisons. Preserve the source-goals and the independently totaled regulation-goals variants. Reproduce actual R42 signed R7 grids on the complete original ten upcoming fixtures. If the newly observed Football LAB xG and source goals produce any different ordered list, independently freeze both paired tracks, the regulation-goals control and the original R7 and comprehensive controls for all ten. Freeze before their first scheduled start and verify against actual kickoff and regulation results. Rank each track's selections by the first-cell probabilities, then kickoff then fixture ID. The existing stage protocol and original first display remain the formal evaluation."
+}
