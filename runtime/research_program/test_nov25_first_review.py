@@ -167,7 +167,7 @@ class OfficialJLeagueTests(unittest.TestCase):
     ref = dict(code='112501',url=review.J1_URL.format('112501'),captured_at_utc='2026-11-25T10:13Z')
 
     def card(self, *, state='in-game', status='前半 7分', header='2026/11/25 (水) 19:04 KO',
-             native='2026-11-25T10:04:00.000Z', score=(2,1), alter=None, captured=None):
+             native='2026-11-25T10:04:00.000Z', score=(2,1), alter=None, captured=None, return_raw=False):
         home = dict(teamId='176',code='mito',name='水戸ホーリーホック',nameS='水戸',score=score[0])
         away = dict(teamId='123',code='tokyov',name='東京ヴェルディ',nameS='東京Ｖ',score=score[1])
         g = dict(variant='game-details', tournament='j1',tournamentName='明治安田Ｊ１リーグ',section='第16節',
@@ -189,7 +189,54 @@ class OfficialJLeagueTests(unittest.TestCase):
                    url=self.ref['url'],state=state,header=header,status=status,h=score[0],a=score[1],
                    flight=json.dumps([1,'2:'+json.dumps(g,ensure_ascii=False)+'\n'],ensure_ascii=False))
         ref = dict(self.ref,captured_at_utc=captured or self.ref['captured_at_utc'])
+        if return_raw:
+            return doc.encode(), ref
         return review.official_card(doc.encode(),ref,self.fixture)
+
+    def test_bound_current_path_admits_minute_and_withholds_source_conflicts(self):
+        from research.analysis_freeze import digest
+        from research_program import jleague_kickoff_proof as proof
+
+        root = Path(self.enterContext(TemporaryDirectory()))
+        mid = self.fixture['match_id']
+        fixtures = {mid: self.fixture}
+        names = dict(home='水戸ホーリーホック', away='東京ヴェルディ')
+        pre, pre_ref = self.card(state='pre-game', status='KICK OFF', header='2026/11/25 (水) 19:00 KO',
+                                 native='2026-11-25T10:00:00Z', captured='2026-11-25T09:50Z', return_raw=True)
+        mapping = review.official_binding(pre, pre_ref, self.fixture, names)
+        pre = pre.replace(b'19:00 KO', b'', 1).replace(b' </p>', b'</p>', 1).replace(
+            b'<p>KICK OFF</p>', b'<p>KICK OFF</p><p>19:00</p>')
+        self.assertEqual(review.official_binding(pre, pre_ref, self.fixture, names), mapping)
+        with self.assertRaises(ValueError):
+            review.official_binding(pre.replace(b'<p>19:00</p>', b'<p>19:01</p>'), pre_ref, self.fixture, names)
+        matching_scope = 'a'*64
+        reg = dict(record_sha256=matching_scope, recorded_at='2026-11-25T09:00Z')
+        scope = 'j1-official-kickoff:' + matching_scope
+
+        def retained(name, body, ref):
+            (root/name).write_bytes(body)
+            return dict(ref, raw_file=name, sha256=sha256(body).hexdigest(), http_status=200)
+
+        pre_ref = retained('pregame.html', pre, pre_ref)
+        binding_record = dict(match_id=scope, stage='prematch', track=proof.TRACK, revision=1,
+                              previous_sha256=None, evaluation_slot='FIRST_PREMATCH', recorded_at='2026-11-25T09:55Z',
+                              fixture={'match_id': scope}, payload=dict(registration_sha256=matching_scope,
+                              bindings={mid: dict(identity=mapping, source=pre_ref)}))
+        binding_record['record_sha256'] = digest(binding_record)
+        live, live_ref = self.card(return_raw=True)
+        refs = {mid: [retained('live.html', live, live_ref)]}
+        cutoff = review.aware('2026-11-25T12:15Z')
+        paired = proof.bindings(dict(binding_record=binding_record, captures=refs), reg, fixtures, root, cutoff)
+        starts, audit = proof.compare_sources(refs, paired, fixtures, root, cutoff, {}, {})
+        self.assertEqual(starts[mid]['actual_kickoff_interval'], dict(start_inclusive='2026-11-25T10:04:00+00:00',
+                                                                    end_exclusive='2026-11-25T10:05:00+00:00'))
+        self.assertFalse(audit[mid]['issues'])
+        exact = {mid: {'actual_kickoff_at': '2026-11-25T10:04:30Z'}}
+        self.assertEqual(proof.compare_sources(refs, paired, fixtures, root, cutoff, exact, {})[0], exact)
+        exact[mid]['actual_kickoff_at'] = '2026-11-25T10:05:30Z'
+        starts, audit = proof.compare_sources(refs, paired, fixtures, root, cutoff, exact, {})
+        self.assertEqual(starts, {})
+        self.assertIn('ESPN kickoff falls outside the official KO minute', audit[mid]['issues'])
 
     def test_jst_original_label_half_open_and_issue_must_precede_every_possible_instant(self):
         p = self.card()

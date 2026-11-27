@@ -543,6 +543,7 @@ def _window_report(name, spec, fixtures, records, display_rows, publication, res
     for mid, fixture in fixtures.items():
         record = records.get(mid)
         dr = by_id[mid]
+        kickoff_proof = dr.get('actual_kickoff_at') or dr.get('actual_kickoff_interval')
         quote = _quote_for(record)
         result = result_by_id.get(mid)
         goals = (result["home_goals"], result["away_goals"]) if result else None
@@ -571,10 +572,10 @@ def _window_report(name, spec, fixtures, records, display_rows, publication, res
         if settlement in SETTLEMENTS:
             if not qa["eligible"]:
                 _count_settlement(observed_only_settlements, settlement)
-            if qa["eligible"] and dr.get("top1_issued") and dr.get("actual_kickoff_at"):
+            if qa["eligible"] and dr.get("top1_issued") and kickoff_proof:
                 _count_settlement(strict_settlements, settlement)
         wdl = record.get("payload", {}).get("wdl") if record else None
-        if wdl and dr.get("top1_issued") and dr.get("actual_kickoff_at"):
+        if wdl and dr.get("top1_issued") and kickoff_proof:
             wdl_issued += 1
             if goals is not None:
                 wdl_settled += 1
@@ -684,10 +685,14 @@ def _window_report(name, spec, fixtures, records, display_rows, publication, res
 
 def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root,
            batch_root=None, kickoff_evidence_root=None, readbacks=None,
-           actual_kickoffs=None, approved_scopes=None, at=None):
+           actual_kickoffs=None, approved_scopes=None, jleague_kickoffs=None, at=None):
     """Review both locked windows; missing evidence stays visible and earns no credit."""
     now = aware(at) if isinstance(at, str) else (at or datetime.now(timezone.utc))
     plan_record, universe, slates, specs = _registered(plan_record)
+    kickoff_root = kickoff_evidence_root or evidence_root
+    if jleague_kickoffs is not None:
+        from research_program import jleague_kickoff_proof
+        official_bindings = jleague_kickoff_proof.bindings(jleague_kickoffs, plan_record, universe, kickoff_root, now)
     ledger_records = _ledger_records(ledger_root)
     if batch_root:
         ledger_records += _ledger_records(batch_root)
@@ -773,7 +778,11 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
         msg = package.get("message_readback")
         firsts = package.get("first_deliveries", {})
         starts = _validate_kickoff_reports((actual_kickoffs or {}).get(name, {}), set(mids),
-                                           rich_fixtures, kickoff_evidence_root or evidence_root, now)
+                                           rich_fixtures, kickoff_root, now)
+        if jleague_kickoffs is not None:
+            official = {mid: jleague_kickoffs['captures'][mid] for mid in mids if mid in jleague_kickoffs['captures']}
+            starts, kickoff_audit = jleague_kickoff_proof.compare_sources(
+                official, official_bindings, rich_fixtures, kickoff_root, now, starts, result_by_id)
         scopes = (approved_scopes or {}).get(name, {})
         rows = review_batch(rich_fixtures.values(), records, state=result_state, at=now,
                             staged=staged, room_id=package.get("room_id"), author_id=package.get("author_id"),
@@ -826,6 +835,8 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                                               rows, publication, result_by_id,
                                               quote_archive_root=quote_archives, archive_cache={}, batch_root=batch_root,
                                               prepared_batch_verified=prepared_verified)
+        if jleague_kickoffs is not None:
+            report['jleague_kickoff_evidence'] = kickoff_audit
         report["same_fixture_market"] = _market_comparisons(
             report["per_match"], {mid: issues[mid] for mid in mids if mid in issues})
         paired = report["same_fixture_market"]["channel_confirmed_rows"]["paired"]
@@ -971,6 +982,7 @@ def main():
     p.add_argument("--kickoff-evidence-root", type=Path, help="defaults to --result-evidence-root")
     p.add_argument("--readbacks", type=Path, help="JSON export of per-window staged body, original-message readback and first receipts")
     p.add_argument("--actual-kickoffs", type=Path, help="JSON map window -> match_id -> independently verified actual kickoff")
+    p.add_argument("--jleague-kickoffs", type=Path, help="archive packet with the pregame binding record and official J.League captures")
     p.add_argument("--approved-scopes", type=Path, help="JSON map window -> match_id -> original approved issue scope")
     p.add_argument("--at", help="ISO-8601 review time; defaults to current UTC")
     args = p.parse_args()
@@ -979,7 +991,8 @@ def main():
                     kickoff_evidence_root=args.kickoff_evidence_root,
                     readbacks=read(args.readbacks) if args.readbacks else None,
                     actual_kickoffs=read(args.actual_kickoffs) if args.actual_kickoffs else None,
-                    approved_scopes=read(args.approved_scopes) if args.approved_scopes else None, at=args.at)
+                    approved_scopes=read(args.approved_scopes) if args.approved_scopes else None,
+                    jleague_kickoffs=read(args.jleague_kickoffs) if args.jleague_kickoffs else None, at=args.at)
     print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
 
 
