@@ -265,20 +265,20 @@ def _display_slots(folder, parent, cutoff):
                 test_sha256=spec['test_sha256'], slots=slots)
 
 
-def _existing(out):
+def _existing(out, *, track=TRACK):
     if (out / 'receipts.json').is_file():
         return ledger._read(out, read(out / 'receipts.json')['registration'])
-    plans = [verify(r) for p in out.glob('*-v000001.json') if (r := read(p))['track'] == TRACK + '-registration']
+    plans = [verify(r) for p in out.glob('*-v000001.json') if (r := read(p))['track'] == track + '-registration']
     if len(plans) > 1:
         raise ValueError('multiple R15 registrations in one output')
     return plans[0] if plans else None
 
 
-def _canonical_plan(store):
-    binding = store / ('.' + TRACK + '-registration.json')
+def _canonical_plan(store, *, track=TRACK):
+    binding = store / ('.' + track + '-registration.json')
     if binding.is_file():
         scope = read(binding)
-        if scope['track'] != TRACK + '-registration' or scope['stage'] != 'prematch':
+        if scope['track'] != track + '-registration' or scope['stage'] != 'prematch':
             raise ValueError('invalid R15 canonical registration binding')
         first = store / digest(scope) / '000001.json'
         if first.is_file():
@@ -333,28 +333,28 @@ def _prepare(folders, folder, rosters, protocol, display_folder, old, root):
     return fixtures, payloads, identity
 
 
-def _save(fixtures, payloads, identity, out, store, old):
+def _save(fixtures, payloads, identity, out, store, old, *, track=TRACK):
     if not fixtures:
         raise ValueError('no unstarted registered R10 J1 fixtures')
-    body = dict(track=TRACK, fixtures=fixtures, identity=identity)
-    if old and (old['track'] != TRACK + '-registration' or old['payload'] != body):
+    body = dict(track=track, fixtures=fixtures, identity=identity)
+    if old and (old['track'] != track + '-registration' or old['payload'] != body):
         raise ValueError('R15 first registration differs from the current inputs or seats')
-    scope = dict(track=TRACK + '-registration', stage='prematch', match_id=TRACK + '-plan:' + digest(body))
+    scope = dict(track=track + '-registration', stage='prematch', match_id=track + '-plan:' + digest(body))
     original = store / digest(scope) / '000001.json'
     registered = verify(read(original)) if original.exists() else None
     for mid in fixtures:
-        first = store / digest(dict(track=TRACK, stage='prematch', match_id=mid)) / '000001.json'
+        first = store / digest(dict(track=track, stage='prematch', match_id=mid)) / '000001.json'
         if first.exists() and (not registered or verify(read(first)).get('idempotency_key') != registered['record_sha256']):
             raise ValueError('fixture already has a different R15 first: ' + mid)
-    binding = store / ('.' + TRACK + '-registration.json')
+    binding = store / ('.' + track + '-registration.json')
     if not binding.is_file() or read(binding) != scope:
         atomic_json(binding, scope)
-    plan = ledger.register(list(fixtures.values()), identity, TRACK, out, freeze_root=store)
+    plan = ledger.register(list(fixtures.values()), identity, track, out, freeze_root=store)
     committed_at = aware(plan['recorded_at']).astimezone(timezone.utc)
     if (aware(identity['inputs_cutoff_at']) > committed_at or aware(identity['roster_snapshot_at']) > committed_at
             or any(aware(p['source_slots']['r10']['recorded_at']) > committed_at for p in payloads.values())):
         raise ValueError('inputs postdate the original registration')
-    matches = {mid: ledger.issue(plan, dict(f, cutoff_at=plan['recorded_at']), payloads[mid], TRACK, out,
+    matches = {mid: ledger.issue(plan, dict(f, cutoff_at=plan['recorded_at']), payloads[mid], track, out,
                                  freeze_root=store) for mid, f in fixtures.items()}
     index = dict(registration=plan, matches=matches)
     path = out / 'receipts.json'
