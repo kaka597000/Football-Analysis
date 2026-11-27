@@ -463,8 +463,9 @@ def official_card(body, ref, fixture, *, binding=None):
     if len(page.og_title) != 1 or not page.og_title[0].startswith(title):
         raise ValueError('official title differs from the registered calendar and teams')
     header, = fields['date']
-    parts = re.fullmatch(r'(\d{4}/\d{2}/\d{2}) \(([月火水木金土日])\)(?: (\d{2}:\d{2}) KO)?', header)
-    if not parts or parts[1] != day.strftime('%Y/%m/%d') or parts[2] != '月火水木金土日'[day.weekday()]:
+    parts = re.fullmatch(r'([0-9]{4}/[0-9]{1,2}/[0-9]{1,2}) \(([月火水木金土日])\)(?: (\d{2}:\d{2}) KO)?', header)
+    if (not parts or tuple(map(int, parts[1].split('/'))) != (day.year, day.month, day.day)
+            or parts[2] != '月火水木金土日'[day.weekday()]):
         raise ValueError('official Japanese calendar day or weekday differs')
     raw_date = g['date'].removeprefix('$D')
     native = aware(raw_date)
