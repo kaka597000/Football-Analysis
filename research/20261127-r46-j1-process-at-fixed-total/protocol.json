@@ -1,0 +1,23 @@
+{
+  "version": "R46-J1-matched-process-at-fixed-total-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "label": "EXPERIMENTAL / OOD",
+  "track": "research-r46-j1-process-at-fixed-total",
+  "question": "On identical pregame team windows, does measured chance creation improve how the common J1 prior assigns goals to the teams at each fixed total?",
+  "motivation": "In the 150 recent R7 development rows, 32 three-score misses had an actual game total already represented. R28 has complete prematch inputs on the next ten registered fixtures and uses exactly matched observations for xG and goals. This experiment isolates score allocation at each total from changes in the total-goal distribution.",
+  "inputs": {
+    "data_commit": "14beed90540968bae3848954538e58c8564ce2cb",
+    "r28_protocol_sha256": "45b7304f06781f1c318a9905689d57333e01ee4babd18116a56ac848c883cf44",
+    "r28_issued": "workspace-updates/20261126-r28-j1-process-forward/issued",
+    "r28_receipts_sha256": "8c5de84311ffcb46bf131d2f9bdef050ae49a9031dc25911b44257575f06c16e",
+    "r28_registration": "d7f7b90b447f4512-v000001",
+    "form_sha256": "79423082c6c5fafd9c716af5b57cc676e0015d0692a1b6d8dda86ee2e8f15663",
+    "original_registration": "99791e2c015d1473-v000001",
+    "original_comprehensive_batch": "3ef75900d3e06bb1-v000001"
+  },
+  "population": "Use all ten original unstarted regular J1 fixtures on November 28–29 Beijing time, the exact R28 score snapshots and team evidence, and the separately frozen Current, Test and comprehensive rows. Verify the R28 originals from their receipts, the latest five-match team form identity and capture clocks, the pinned original matrices and the R28 probability ranks and exposure. Preserve missing data on the full slate. No results from these fixtures enter the comparison or rule.",
+  "method": "Calculate the exact R28 geometric pool and apply its fixed eight-match prior and clipped 1/1.25 to 1.25 scaling separately to goals and team xG on identical deduplicated scoring-side observations. Reproduce R28's saved common prior, goals and xG forecasts. For each alternative and for each integer total t, multiply post-tilt cells at t by the common-prior mass at t divided by their own mass at t. Preserve all common-prior total probabilities and the within-total relative score probabilities of the measured-process and matched-goals alternatives. There is no fit, dose selection or additional smoothing. Histories with no matched xG contribute the same neutral fallback as R28.",
+  "choices": "Take the three highest-probability distinct cells with the same tie-breaking behavior as R28. Keep the original common-prior WDL direction on the two new research arms. Record the already missing strict totals market and preserve the common prior's complete goal-total distribution. Save goal rates, real process coverage, original form captures, two original models, the projected grids, ordered scores, and original firsts. Record model probabilities only for the research variants.",
+  "forward": "Freeze the complete ten-fixture independently issued comparison before the original earliest kickoff if the fixed-total xG arm changes a first score or three-score membership against the common prior, the fixed-total goals arm or the original R28 xG arm. Otherwise archive a complete pregame eligibility replay. For the two new arms rank three research seats by issued first-score probability, then kickoff and fixture ID. Compare verified 90-minute results on the same ten matches, first and three hits, paired gains and losses, and outcomes whose total was covered by the original ordered three. Include R28 xG and goals as unprojected diagnostic controls, plus the original comprehensive issue. True stage credit follows the original display protocol."
+}
