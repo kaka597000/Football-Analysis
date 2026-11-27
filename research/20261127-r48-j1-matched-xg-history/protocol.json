@@ -1,0 +1,26 @@
+{
+  "version": "R48-J1-matched-xg-history-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "label": "EXPERIMENTAL / OOD",
+  "question": "Does chance creation on exactly the same previous J1 fixtures as recorded goals improve the signed R7 first score and three ordered scores?",
+  "r25_protocol_sha256": "b07be887dce6ea449af5f905c8d2be53337d4876af6900fafca2f175155f7eb1",
+  "r28_protocol_sha256": "45b7304f06781f1c318a9905689d57333e01ee4babd18116a56ac848c883cf44",
+  "observations": {
+    "path": "workspace-updates/20261127-r48-j1-matched-xg-history/evidence/observations.jsonl",
+    "sha256": "967bca67fda904bbae0a109c057f25eabc711c970d8a43ee3d7f8fd23262064d",
+    "records": 51
+  },
+  "alternate": {
+    "path": "workspace-updates/20261127-r48-j1-matched-xg-history/evidence/alternate.jsonl",
+    "sha256": "5391280afa47706e5e548c548735ed395f1f6e8193a67f8d8b3b32175b7a1e95",
+    "records": 1
+  },
+  "windows": {
+    "through_oct10": {"from": "2026-08-07", "before": "2026-10-11", "fixtures": 86},
+    "from_oct11": {"from": "2026-10-11", "before": "2026-11-22", "fixtures": 64}
+  },
+  "method": "Use the original signed R7 J1 score matrices and the original regular 90-minute calendar. Keep each team's last five regular-season fixtures before the entire UTC target date, including fixtures with missing process values in that five-fixture window. For each scoring side, deduplicate the scoring-team attacking history and its opponent's defending history by fixture and scoring orientation. In each arm use goals or source-reported bilateral xG on exactly the same examples. Reuse R28's eight prior pseudo-observations and rate ratio cap of 1.25. Leave the original forecast in place when neither side has examples and assign a neutral rate ratio to an uncovered side. Compare R7, matched goals and xG, the two forms projected to each original full-match total probability, and the matched pair restricted to raw response hashes with an original capture receipt strictly before the UTC target date. Keep the original WDL and Asian total decisions and same-game market references.",
+  "revisions": "Okayama versus Kobe has two complete retained raw FotMob versions and one regulation result. Use the earlier exact capture for the main scores. Replay the later exact capture as a sensitivity on both unrestricted and fixed-total xG. Record any changes in either ranked list or in hits. Keep the documented one-hour difference between FotMob and ESPN scheduled times on an unrelated matched fixture; team orientation, calendar date and regulation score remain verified for that row. Source timing credit requires capture after both scheduled times with at least 90 minutes elapsed.",
+  "evaluation": "No refit or selection on these previously inspected dates. Report full exposure, original market coverage, first and three, paired gains and losses and match-date clustered intervals on both complete slices and the union. The clock-restricted arms only represent what is provably in the retained input archive before the target date; historical reconstruction of R7 remains a development comparison. Assess real prospective effects on the existing independent R28 and R46 first freezes once the registered weekend has completed. The original formal displays, shortlist and first-stage gates apply as registered."
+}
