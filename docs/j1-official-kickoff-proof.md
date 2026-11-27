@@ -20,7 +20,16 @@ PYTHONPATH=runtime python -B -m unittest \
 
 ## 从原件接收赛果
 
-把已登记窗口的 ESPN 单场摘要和 J.League 同一地址的采集放在一个新目录。ESPN 采集清单用 `espn.jsonl`，沿用 `nov25_first_review.inspect` 的 GET、请求与接收时刻、原件路径、字节数和哈希字段。官方采集清单用 `official-captures.json`，以 ESPN 比赛 ID 分组，引用采集目录内的原件。源数据可以逐场追加。每次复盘选择自己的 `--at` 并写到新输出目录。
+每个原计划开球时段可用同一个收集目录保留多次原件。每次命令只采集该时段的登记比赛，从原绑定派生 ESPN 单场摘要和 J.League 官方地址。请求时刻、接收时刻、字节数和哈希随原件写入独立子目录。复盘只读取已完成的采集子目录及截止前的响应。
+
+```bash
+PYTHONPATH=runtime python -B -m research_program.j1_window_capture \
+  --registration PATH/ORIGINAL-REGISTRATION.json --window nov28_29 \
+  --binding PATH/kickoff-packet.json --binding-root PATH/ORIGINAL-CARDS \
+  --scheduled 2026-11-28T13:00:00+08:00 --out PATH/LIVE-CAPTURES
+```
+
+手工原件也可按相同字段存放在根目录。ESPN 采集清单用 `espn.jsonl`，沿用 `nov25_first_review.inspect` 的证据字段。官方采集清单用 `official-captures.json`，以 ESPN 比赛 ID 分组，引用采集目录内的原件。每次复盘选择自己的 `--at` 并写到新输出目录。
 
 ```bash
 PYTHONPATH=runtime python -B -m research_program.j1_window_intake \

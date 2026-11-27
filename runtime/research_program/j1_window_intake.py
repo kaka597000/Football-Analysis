@@ -1,6 +1,7 @@
 """Prepare verified J1 result evidence for the original registered window."""
 
 import argparse
+from collections import defaultdict
 from datetime import datetime, timezone
 import gzip
 from hashlib import sha256
@@ -19,6 +20,29 @@ from .goal_state_study import write_new
 
 def read(path):
     return json.loads(path.read_bytes())
+
+
+def acquisitions(root, at):
+    """Read the legacy archive and any completed immutable capture batches."""
+    root = root.resolve()
+    espn, official = [], defaultdict(list)
+    for folder in [root, *sorted((root / 'captures').glob('*'))]:
+        if not folder.is_dir() or folder.is_symlink():
+            continue
+        def qualify(ref, key):
+            if folder == root or not ref.get(key):
+                return ref
+            path = evidence.file_in(folder, ref[key])
+            return dict(ref, **{key: path.relative_to(root).as_posix()})
+
+        espn_log = folder / 'espn.jsonl'
+        official_log = folder / 'official-captures.json'
+        if espn_log.is_file():
+            espn.extend((line, qualify(ref, 'path')) for line, ref in evidence.dated_log(espn_log, at)[0])
+        if official_log.is_file():
+            for mid, refs in read(official_log).items():
+                official[mid].extend(qualify(ref, 'raw_file') for ref in refs)
+    return espn, official
 
 
 def check(fixtures, bindings, espn, official, root, at):
@@ -181,10 +205,7 @@ def intake(registration, window, packet_path, root, out, issues, at, *, binding_
     binding_root = (binding_root or packet_path.parent).resolve()
     all_bindings = kickoff.bindings(packet, plan, universe, binding_root, at)
     bindings = {mid: all_bindings[mid] for mid in fixtures}
-    espn_path = root / 'espn.jsonl'
-    official_path = root / 'official-captures.json'
-    espn = evidence.dated_log(espn_path, at)[0] if espn_path.exists() else []
-    official = read(official_path) if official_path.exists() else {}
+    espn, official = acquisitions(root, at)
     report, results, starts = check(fixtures, bindings, espn, official, root, at)
     report.update(window=window, at=at.isoformat(), registration=plan['freeze_id'],
                   binding_freeze=packet['binding_record']['freeze_id'],
