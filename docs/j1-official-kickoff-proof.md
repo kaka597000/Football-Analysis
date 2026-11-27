@@ -39,4 +39,6 @@ PYTHONPATH=runtime python -B -m research_program.j1_window_intake \
   --issued PATH/EXISTING-RESEARCH-ISSUE
 ```
 
-输出目录包含主线复盘用的 `normalized-results.jsonl`、赛果原件、`actual-kickoffs.json` 和 `jleague-kickoffs.json`。后两份传给 `display_window_review` 同名选项，以输出目录作为结果及开球原件根。综合首版仍须传入原发消息及独立首送回执。尚未核实实际开球与完场的赛事保留在窗口内。研究轨以原预测冻结严格早于实际开球时刻或区间下界为准，可重复传入 `--issued` 核对已有研究。Current 和 Test 的原冻结可用同一结果目录复盘。
+输出目录包含主线复盘用的 `normalized-results.jsonl`、赛果原件、`actual-kickoffs.json` 和 `jleague-kickoffs.json`。后两份传给 `display_window_review` 同名选项，以输出目录作为结果及开球原件根。综合首版仍须传入原发消息及独立首送回执。尚未核实实际开球与完场的赛事保留在窗口内。研究轨以原预测冻结严格早于实际开球时刻或区间下界为准，可重复传入 `--issued` 核对已有研究。
+
+`display_window_review` 的 `native_pair_scores` 读取原发布回执绑定的 Current 和 Test，生成原第一比分、原三选和两模型同场净增。每对使用各自的原矩阵哈希和原版本。冻结时点须早于核实的实际开球，赛果须满足实际开球后的常规时间证据。正式综合展示成绩继续由同一报告的首版回执口径验收。

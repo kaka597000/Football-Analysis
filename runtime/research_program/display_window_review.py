@@ -32,6 +32,7 @@ from research_program.display_market import comparisons as _market_comparisons
 from research_program.display_window_contract import consecutive_windows, series_for_version
 from research_program.display_windows import prepared_batch
 from research_program.kpi_validation import _actual, quote_audit
+from research_program.j1_native_scores import review as review_native_scores
 from research_program.three_arm_review import _certify, _results
 
 REGISTRATION_TRACK = "j1-comprehensive-windows-20261125-registration"
@@ -730,6 +731,7 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
         publication = _publication(ledger_records, name, plan_record["record_sha256"], mids,
                                    prefix=plan_record["payload"]["track"] + "-")
         prepared_verified = False
+        native_pairs = {}
         if publication:
             if batch_root:
                 folder = Path(batch_root) / name
@@ -760,6 +762,7 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                         or pair.get("record_sha256") != pair_ref.get("sha256")
                         or author["payload"].get("current_test_reference", {}).get("sha256") != pair["record_sha256"]):
                     raise ValueError("published row is not bound to its original Current/Test pair: " + mid)
+                native_pairs[mid] = pair
                 expected_row = (author["payload"].get("displayed_scores"), author["payload"].get("wdl"),
                                 author["payload"].get("total_line"), author["payload"].get("total_direction"))
                 observed_row = (row.get("displayed_scores"), row.get("wdl"), row.get("total_line"), row.get("total_direction"))
@@ -773,6 +776,8 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                                               prepared_batch_verified=prepared_verified)
         if jleague_kickoffs is not None:
             report['jleague_kickoff_evidence'] = kickoff_audit
+        if publication and aware(publication["recorded_at"]) <= now:
+            report['native_pair_scores'] = review_native_scores(rich_fixtures, native_pairs, result_by_id, starts, now)
         report["same_fixture_market"] = _market_comparisons(
             report["per_match"], {mid: issues[mid] for mid in mids if mid in issues})
         paired = report["same_fixture_market"]["channel_confirmed_rows"]["paired"]
