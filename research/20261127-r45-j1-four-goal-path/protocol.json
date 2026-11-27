@@ -1,0 +1,24 @@
+{
+  "version": "R45-J1-four-or-more-goal-path-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "label": "EXPERIMENTAL / OOD",
+  "track": "research-r45-j1-four-goal-path",
+  "question": "Can calibrating the four-or-more-goal probability improve the unique first or the ordered three in J1?",
+  "motivation": "A diagnostic of the recent signed R7 panel found 115 misses in 150 fixtures. In 67 the actual total was above the largest of the three selected totals, including 51 four-or-more-goal finishes. Reuse those dates only as development evidence.",
+  "archives": {
+    "data_commit": "cd3094f71460256dc4bc3f6d5f354e3750da1e7d",
+    "r25_protocol_sha256": "b07be887dce6ea449af5f905c8d2be53337d4876af6900fafca2f175155f7eb1",
+    "forward": {
+      "path": "workspace-updates/20261127-r42-j1-fixed-first-backups",
+      "protocol.json": "03e2b0af6869f15a50e1282a3562ad6bc15ec6514ae19b9646ffd3e820e93a51",
+      "issued/receipts.json": "ffa1b5da18589b6acaba856b7ff31beabc48ba97432b51020e62a62ec774a514",
+      "registration": "ae9a7febb865d855-v000001"
+    }
+  },
+  "population": "Use the original R25-registered R5 panel, R7 fit hashes and four regular-season J1 windows. Fit on 2,291 chronological pre-2025 anchors, select on the 218 fixtures through June 2025, and evaluate the signed R7 baselines and all arms on 162 and 150 fixtures in the two later date slices. Historical first-known times remain uncertified. Keep original WDL and actual-line picks across variants and original market references on the same match IDs.",
+  "fit": "For actual draws and actual wins separately, estimate a binary logit correction for a regulation total of at least four, conditional on the original market settlement and WDL partition containing the observed score. Use the unfitted chronological R7 anchor log of high probability relative to low probability as offset. Partitions with only one supported event kind are counted but carry no information about the correction. For the contextual arm use one intercept and a slope times the chronological anchor expected total minus 2.6 goals, clipped to [-1.5,1.5]. For the static control use the intercept only. Minimize the summed negative binary log likelihood plus 8 times the squared coefficient norm, starting at zero, within [-1.25,1.25] per intercept and [-0.8,0.8] per slope. Round coefficients to six decimals. Both forms preserve all original WDL-by-actual-Asian-total partition probabilities and ratios within each below-four and four-plus subgroup by applying and normalizing the odds factor in each partition.",
+  "choices": "Compare original R7, contextual half and full offset, static full offset, and a guarded third score from the contextual full grid. For the guard keep the original first and second and require the original three to omit all four-plus scores. Require new four-plus marginal probability at least 0.30 and a cost no more than 0.015 under the contextual full distribution relative to the original third. Pick the highest-probability four-plus score from that grid, using stable original score-grid order for ties. Report probability support, cost, the changed sets and the full historical miss decomposition by total above, below, omitted total between, same total but wrong result direction, and same total and direction but wrong allocation.",
+  "selection": "On the 218 validation fixtures retain alternatives tying or exceeding both R7 score hit counts. Choose most first hits, most three hits, then order R7, guarded third, contextual half, contextual full, static full. Evaluate every fixed variant on both date slices and the union. Compare first, three, WDL and strict actual-line coverage, paired gained and lost and matchday-clustered intervals, fixed historical market coverage and full-grid four-plus calibration.",
+  "prospective": "A selected alternative enters the complete weekend research comparison if it gains a combined first or ordered-three hit without a loss in either. Reconstruct the authentic ten prematch R7 grids and anchors from the R42 issue with matched pregame identities. If at least one ordered list differs, independently freeze the selected research scores and three research seats ahead of the earliest actual kickoff. Rank by issued first-cell probability under the applied grid, then kickoff and ID. Evaluate all ten against verified 90-minute outcomes. If the screen fails, retain the development result and continue the existing independent R42 pregame verification. Formal display metrics follow the original signed first-display tracks."
+}
