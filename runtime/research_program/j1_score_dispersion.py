@@ -51,11 +51,10 @@ def choose(trials):
                                            trials[d]['score_log_loss'], d))
 
 
-def summarize(rows):
-    arms = ('candidate', 'half_dose', 'full_dose')
+def summarize(rows, arms=('candidate', 'half_dose', 'full_dose'), baselines=('r7', 'market')):
     scores = {arm: report.rates(rows, arm) for arm in rows[0]['forecast']}
     paired = {arm: {baseline: compare(rows, baseline=baseline, candidate=arm)['paired']
-                    for baseline in ('r7', 'market')} for arm in arms}
+                    for baseline in baselines if baseline != arm} for arm in arms}
     changes = {name: dict(first=sum(row['forecast'][name]['primary'] != row['forecast']['r7']['primary']
                                    for row in rows),
                           three_members=sum(set(row['forecast'][name]['top3']) != set(row['forecast']['r7']['top3'])
@@ -63,9 +62,8 @@ def summarize(rows):
     return dict(fixtures=len(rows), scores=scores, paired=paired, changed=changes)
 
 
-def replay(data, out):
-    protocol = control.read(PROTOCOL)
-    shared = control.read(r25.PROTOCOL)
+def load_inputs(data, shared):
+    """Load the regular J1 study's pin-checked panel and the signed historical R7 fit."""
     with TemporaryDirectory(prefix='j1-score-dispersion-') as directory:
         root = Path(directory)
         for name in ('r5_panel', 'r7_fit'):
@@ -75,11 +73,18 @@ def replay(data, out):
         settings = control.read(fit_dir / 'fit.json')
         if (settings['competition'] != r25.COMPETITION or settings['source_panel_sha256'] != sha(panel)
                 or settings['training_through'] >= shared['windows']['validation']['from']
-                or settings['bounds'][1] != shared['windows']['validation']['from']):
+                or settings['bounds'][1] != shared['windows']['validation']['from']
+                or settings['bounds'][2] != shared['windows'][r25.HISTORY[1]]['from']):
             raise ValueError('R7 fit differs from the registered J1 panel or historical date cut')
         games = study.check_panel(panel, r25.COMPETITION)
         signed = reference_rows(fit_dir / 'forecasts.jsonl.gz')
+    return games, signed, settings
 
+
+def replay(data, out):
+    protocol = control.read(PROTOCOL)
+    shared = control.read(r25.PROTOCOL)
+    games, signed, settings = load_inputs(data, shared)
     windows = r25.match_rows(games, shared)
     anchors, features, _ = r7.inputs(games, r25.COMPETITION)
     train = windows['train']
