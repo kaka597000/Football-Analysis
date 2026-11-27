@@ -13,12 +13,9 @@ sys.path[:0] = [str(ROOT/'runtime'), str(ROOT/'runtime/v5'), str(ROOT)]
 from automation.infer_market_snapshot import BASE, fetch as provider_fetch
 from automation.market_snapshot import fetch as board_fetch
 from research.analysis_freeze import aware
-from research_program.club_market_capture import LEAGUES, attach
+from research_program.club_market_capture import CHECKPOINTS, LEAGUES, attach
 from research_program.future_validation import read, write_new
 from research_program.market_baseline import MAXIMUM_QUOTE_AGE
-
-
-CHECKPOINTS = {'T-24h': 1440, 'T-6h': 360, 'T-60m': 60, 'T-15m': 15}
 
 
 def collect(fixtures, teams, out, *, archive_root=None, checkpoint=None):

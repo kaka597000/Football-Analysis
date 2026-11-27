@@ -12,6 +12,7 @@ from .market_baseline import MAXIMUM_QUOTE_AGE
 LEAGUES = {'eng.1': ('lg_T9268DXK','ENPL'), 'ger.1': ('lg_PGYWSDEA','GER'),
            'ita.1': ('lg_QXCSBRME','ITA'), 'esp.1': ('lg_PYBWSDEA','SPA'), 'fra.1': ('lg_CNSP3BPA','FRA'),
            'jpn.1': ('lg_VWS270YX','Jap1')}
+CHECKPOINTS = {'T-24h': 1440, 'T-6h': 360, 'T-60m': 60, 'T-15m': 15}
 
 
 def fresh_rows(raw, meta, match_id, cutoff, *, maximum_age=MAXIMUM_QUOTE_AGE):

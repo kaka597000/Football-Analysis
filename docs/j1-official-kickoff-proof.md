@@ -36,9 +36,12 @@ PYTHONPATH=runtime python -B -m research_program.j1_window_intake \
   --registration PATH/ORIGINAL-REGISTRATION.json --window nov28_29 \
   --binding PATH/kickoff-packet.json --binding-root PATH/ORIGINAL-CARDS \
   --intake PATH/LIVE-CAPTURES --out PATH/NEW-RESULT-STATE \
-  --issued PATH/EXISTING-RESEARCH-ISSUE
+  --issued PATH/EXISTING-RESEARCH-ISSUE \
+  --market-checkpoint PATH/SELF-CONTAINED-MARKET-CAPTURE
 ```
 
 输出目录包含主线复盘用的 `normalized-results.jsonl`、赛果原件、`actual-kickoffs.json` 和 `jleague-kickoffs.json`。后两份传给 `display_window_review` 同名选项，以输出目录作为结果及开球原件根。综合首版仍须传入原发消息及独立首送回执。尚未核实实际开球与完场的赛事保留在窗口内。研究轨以原预测冻结严格早于实际开球时刻或区间下界为准，可重复传入 `--issued` 核对已有研究。
 
 `display_window_review` 的 `native_pair_scores` 读取原发布回执绑定的 Current 和 Test，生成原第一比分、原三选和两模型同场净增。每对使用各自的原矩阵哈希和原版本。冻结时点须早于核实的实际开球，赛果须满足实际开球后的常规时间证据。正式综合展示成绩继续由同一报告的首版回执口径验收。
+
+`--market-checkpoint` 可重复传入。在各节点采集目录中保留该窗口原名单、接收回执、原始市场响应及 `benchmark/index.json` 引用的首次冻结。每个冻结的盘口与预测按该节点和实际签发时点复核，使用同份核实的实际开球及常规时间赛果。`review.json` 的 `market_checkpoints` 逐节点输出完整窗口、已签发场次、第一比分、三选、胜平负及原盘线大小球的五种结算。走盘在五类结算中保留，大小球全赢率的分母取非走盘。正式综合展示继续使用原首版证据。

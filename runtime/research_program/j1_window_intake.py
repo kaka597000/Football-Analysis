@@ -13,6 +13,7 @@ from research.analysis_freeze import aware, digest
 from storage_lock import exclusive_lock
 from . import display_window_review as display
 from . import goal_state_forward as ledger
+from . import j1_checkpoint_review as market_checkpoints
 from . import jleague_kickoff_proof as kickoff
 from . import nov25_first_review as evidence
 from .goal_state_study import write_new
@@ -196,7 +197,7 @@ def publish(out, root, report, results, *, window, fixtures, starts, binding_roo
             staging.rename(out)
 
 
-def intake(registration, window, packet_path, root, out, issues, at, *, binding_root=None):
+def intake(registration, window, packet_path, root, out, issues, at, *, binding_root=None, checkpoint_folders=()):
     plan, universe, slates, _ = display._registered(read(registration))
     fixtures = {mid: universe[mid] for mid in slates[window]}
     packet = read(packet_path)
@@ -210,6 +211,8 @@ def intake(registration, window, packet_path, root, out, issues, at, *, binding_
     report.update(window=window, at=at.isoformat(), registration=plan['freeze_id'],
                   binding_freeze=packet['binding_record']['freeze_id'],
                   research=review_tracks(issues, fixtures, results, starts, root.resolve()))
+    if checkpoint_folders:
+        report['market_checkpoints'] = market_checkpoints.review(checkpoint_folders, plan, fixtures, results, starts, at)
     publish(out, root.resolve(), report, results, window=window, fixtures=fixtures, starts=starts,
             binding_root=binding_root, packet=packet, captures=official, at=at)
 
@@ -221,6 +224,8 @@ if __name__ == '__main__':
     parser.add_argument('--window', required=True)
     parser.add_argument('--binding-root', type=Path, help='base for the pregame response paths in the signed binding')
     parser.add_argument('--issued', action='append', type=Path, default=[])
+    parser.add_argument('--market-checkpoint', action='append', type=Path, default=[],
+                        help='self-contained scheduled capture with a separately frozen benchmark index')
     parser.add_argument('--at')
     args = parser.parse_args()
     now = datetime.now(timezone.utc)
@@ -228,4 +233,4 @@ if __name__ == '__main__':
     if at > now:
         raise ValueError('review time cannot be in the future')
     intake(args.registration, args.window, args.binding, args.intake, args.out, args.issued, at,
-           binding_root=args.binding_root)
+           binding_root=args.binding_root, checkpoint_folders=args.market_checkpoint)
