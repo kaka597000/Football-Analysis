@@ -1,0 +1,36 @@
+{
+  "version": "R43-J1-consensus-within-first-three-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "label": "EXPERIMENTAL / OOD",
+  "track": "research-r43-j1-first-consensus",
+  "question": "When full-dose total dispersion and local exact-score residual calibration favor the same R7 backup, can promoting that backup improve the unique first exact score?",
+  "motivation": "The archived full-dose R29 picks gained one net first hit over 312 rows whereas the full-dose R41 picks lost two. The methods change different aspects of the same pregame grid. Compare their suggested first scores while controlling the three-score membership.",
+  "archives": {
+    "data_commit": "007ab84deae42311383788cfe9ad0e4c97810b12",
+    "r25_protocol_sha256": "b07be887dce6ea449af5f905c8d2be53337d4876af6900fafca2f175155f7eb1",
+    "r29": {
+      "path": "workspace-updates/20261126-r29-j1-score-dispersion",
+      "protocol.json": "b66e7e09c660cb615ec811692bb438c9ced0e81e80ca4d0e6b3b2a0477b07c14",
+      "replay/fit.json": "4d8d3c2105ad94dd2fd1517bce13df48a44e9c98d14af0f7234e5fa24834168b",
+      "replay/validation.jsonl.gz": "30dabf6db33794f8172371c2a19403a822c82a9a957a27b79a1c837ef68e106c",
+      "replay/forecasts.jsonl.gz": "25a601972acae3f5c292afe4ac845bedd300e0e05545825adbfc464e8789e197"
+    },
+    "r41": {
+      "path": "workspace-updates/20261127-r41-j1-local-score-calibration",
+      "protocol.json": "544917e232e558d2171d160609758f896b5de6fef27dbd6a2373553c36055ec0",
+      "replay/fit.json": "6f15798250406cb9fd2698e79137ea641ac139bff13d86fc7e5dcb5b797bb5d7",
+      "replay/validation.jsonl.gz": "ea74267fd9891a67b65b361a6a4a6c7811a1d5b150a97132bdd6f33f9c65bfe5",
+      "replay/forecasts.jsonl.gz": "cc7773fb9b4d49212eb2d3324bead4fd9b3839d04620594b75b8ce0cd92370fa"
+    },
+    "forward": {
+      "path": "workspace-updates/20261127-r42-j1-fixed-first-backups",
+      "protocol.json": "03e2b0af6869f15a50e1282a3562ad6bc15ec6514ae19b9646ffd3e820e93a51",
+      "issued/receipts.json": "ffa1b5da18589b6acaba856b7ff31beabc48ba97432b51020e62a62ec774a514",
+      "registration": "ae9a7febb865d855-v000001"
+    }
+  },
+  "rule": "Use each original signed R7 ordered three and the original independent WDL and totals directions. Take the full-dose first choice from each pre-existing R29 and R41 calibration. When they agree exactly on one of the two original R7 backups, move it to the front and preserve the order of the other two. Otherwise retain the three original positions. For the two fixed single-method controls, apply the same allowed-backup rule with that method alone. Keep the same three-score membership and match market in every comparison. No fitting, selection or probability threshold.",
+  "development": "Verify complete, identical fixture IDs, dates, teams, 90-minute scores, archived source hashes, lines and signed R7 and market controls in the R29 and R41 files. Report the previous 218 calibration-validation fixtures, 162 late-2025 and 150 recent evaluation fixtures separately, plus the union of the latter two. All have entered earlier project research. Report first, three, WDL and strict totals counts and coverage; first-score changes, gained and lost, complete-date paired 95% intervals and comparator availability. Count original scores covered by an alternate but not the first, as the hindsight ceiling of a reordering with this membership. Treat the ceiling as diagnostics only.",
+  "prospective": "Use all ten still-unstarted original November 28–29 J1 fixtures and the verified R42 stored R7 and R41 full-dose grids. Apply the fixed R29 calibration coefficients saved from pre-2025 training to that same original R7 grid. Rebuild all three first choices independently of outcomes. If any consensus first differs, archive the entire fresh independent R43 first issue and three research seats before the common earliest kickoff. Rank its issued first by that cell's original R7 probability, then kickoff, then fixture ID. Settle against the contemporaneous original R7 picks on the complete slate after verified 90-minute results. If no first differs, archive the pregame eligibility replay and ten coverage dispositions. The originally published comprehensive stage window uses its actual first displays and original market requirements."
+}
