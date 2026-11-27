@@ -1,0 +1,26 @@
+{
+  "version": "R42-J1-fixed-first-backup-calibration-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "track": "research-r42-j1-fixed-first-backups",
+  "label": "EXPERIMENTAL / OOD",
+  "question": "When J1 retains its signed R7 first exact score, can the two backups chosen from the locked R41 distributions cover more regulation scores?",
+  "motivation": "In both dated R41 evaluation slices together, full recalibration gained four ordered-three hits and lost two net first hits. All ten lost R7 first hits were present at R41 rank two. Test the backup rule as a separate pre-registered decision.",
+  "inputs": {
+    "data_commit": "f106a445b2c73edfa958cdac25144620e47c345c",
+    "r41_source_commit": "024c42d423cbccfc4ab7a7e56a30790d7b84c243",
+    "r41_source_protocol_sha256": "544917e232e558d2171d160609758f896b5de6fef27dbd6a2373553c36055ec0",
+    "r25_source_protocol_sha256": "b07be887dce6ea449af5f905c8d2be53337d4876af6900fafca2f175155f7eb1",
+    "r41_replay": "workspace-updates/20261127-r41-j1-local-score-calibration/replay",
+    "r41_replay_sha256": {
+      "fit.json": "6f15798250406cb9fd2698e79137ea641ac139bff13d86fc7e5dcb5b797bb5d7",
+      "validation.jsonl.gz": "ea74267fd9891a67b65b361a6a4a6c7811a1d5b150a97132bdd6f33f9c65bfe5",
+      "forecasts.jsonl.gz": "cc7773fb9b4d49212eb2d3324bead4fd9b3839d04620594b75b8ce0cd92370fa"
+    },
+    "original_registration": "99791e2c015d1473-v000001",
+    "original_publication_sha256": "2b3468d4d94314c05ffd5013b566ea25634c04fb252f6d6fd76223ee82ac2675"
+  },
+  "selection_rule": "Retain the exact signed R7 first score and both directional selections. For each fixed R41 local dose 0.5 and 1, traverse that dose's ordered three and take the first two distinct cells different from the signed first, in their original order. Three nonrepeating cells suffice to infer the two highest-ranked backups. Dose zero is the signed R7 list unchanged. Use pregame-only selections. Preserve any missing market or line.",
+  "development": "Use the R41 locked score ranks on the 218 validation fixtures and the distinct historical 162- and 150-fixture slices. All dates have been studied before. Select on validation by most ordered-three hits then smaller dose. Compare each fixed arm and the validation choice versus signed R7 and market on both evaluation slices and the union. Report score and directional hit/coverage counts, gained/lost and matchday-cluster intervals, changed sets and which scores were covered. Show the recent slice separately. Use these results to describe development only.",
+  "prospective": "Regardless of the historical choice, freeze both fixed doses once on the complete ten-match November 28–29 J1 window if at least one list changes. This tests the fixed alternatives on new results without issuing an adopted variant. Reconstruct the pregame anchor and R7 matrix from the original R5/R6 source-contract issue and exact R7 forward recipe through November 21. Verify each original R7 first record, source receipt, recipe hash, registered identity, kickoff, ordered scores, WDL, line and quality. Use the same R41 training matches prior to January 2025, projections and doses. Include the original comprehensive choices as a separate descriptive control. Lock identical research seats for each R7-based arm by original first-score probability, kickoff, then fixture ID. Freeze before the earliest scheduled kickoff and preserve receipts and forecasts. Assess all ten with the later independently verified 90-minute outcomes and per-metric coverage using the existing research settlement entry. For any continuation keep the registered arms and doses separate and retain the original first-display and market evidence requirements for stage validation."
+}
