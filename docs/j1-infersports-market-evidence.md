@@ -5,8 +5,11 @@
 ```bash
 python scripts/capture_public_club_markets.py \
   --fixtures CURRENT-FIXTURE-INPUTS.json --team-ids VERIFIED-TEAM-IDS.json \
-  --out PATH-TO-BATCH/evidence
+  --archive-root PATH-TO-BATCH/evidence \
+  --out PATH-TO-BATCH/evidence/market-dec04_06
 ```
+
+12 月两窗分别在自己的赛前截止前采集。第二窗使用同一 `--archive-root` 和新的 `--out` 子目录，例如 `market-dec12_13`。原件路径从共同的 `evidence/` 解析，两个窗口各自保存采集清单和准备好的比赛。单次批采集可仅传 `--out`，该目录同时作为原件路径的根。
 
 `prepared-fixtures.json` 保留全部输入场次。通过检查的报价携带原始赛历及赔率的 URL、文件哈希和实际接收时点。大小球采用实际盘线及大小两侧价格。同机构 1X2 按原响应核对三项价格。两类市场各自保留提供商行级 `as_of`。仅 `stale=false`、全场、开售、实际截止前一小时内来源原行可进入严格市场；缺项留在原场次中。
 

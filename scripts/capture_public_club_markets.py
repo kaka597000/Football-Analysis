@@ -17,7 +17,10 @@ from research_program.club_market_capture import LEAGUES, attach
 from research_program.future_validation import read, write_new
 
 
-def collect(fixtures, teams, out):
+def collect(fixtures, teams, out, *, archive_root=None):
+    out = Path(out).resolve()
+    root = out if archive_root is None else Path(archive_root).resolve()
+    folder = out.relative_to(root)
     out.mkdir(parents=True, exist_ok=False)
     captures, outputs, failures = {}, [], {}
     next_request = 0.
@@ -27,18 +30,19 @@ def collect(fixtures, teams, out):
         nonlocal next_request, provider_block
         if url not in captures:
             if is_board:
-                captures[url] = board_fetch(url, url, out/filename)
+                record = board_fetch(url, url, out/filename)
             else:
                 if provider_block:
                     raise RuntimeError(provider_block)
                 sleep(max(0., next_request-monotonic()))
                 next_request = monotonic()+1.
                 try:
-                    captures[url] = provider_fetch(url, out/filename)
+                    record = provider_fetch(url, out/filename)
                 except HTTPError as error:
                     if error.code in (401,403,429):
                         provider_block = f'provider HTTP {error.code}'
                     raise
+            captures[url] = dict(record, file=(folder / record['file']).as_posix())
         return captures[url]
 
     for original in fixtures:
@@ -59,7 +63,7 @@ def collect(fixtures, teams, out):
             params = {'sport':'football','league':LEAGUES[league][0],'date':day,'timezone':'UTC',
                       'status':'scheduled','limit':200}
             page = get(BASE+'/v1/events?'+urlencode(params),f'events-{league}-{day}.json')
-            events = read(out/page['file'])['data']
+            events = read(root/page['file'])['data']
             matches = [e['id'] for e in events if aware(e['scheduled_at'])==kickoff
                        and (e['home_team']['id'],e['away_team']['id'])==(home_id,away_id)]
             if len(matches) != 1:
@@ -68,7 +72,7 @@ def collect(fixtures, teams, out):
             query = urlencode({'markets':'1x2,totals','format':'decimal','period':'full_time'})
             odds = get(BASE+f'/v1/events/{event}/odds?'+query,event+'-odds.json')
             info = {'event_id':event,'espn':board,'events':page,'odds':odds}
-            f = attach(f,out,info,teams,datetime.now(timezone.utc).isoformat())
+            f = attach(f,root,info,teams,datetime.now(timezone.utc).isoformat())
         except (HTTPError, URLError, TimeoutError, KeyError, RuntimeError, ValueError) as error:
             failures[mid] = str(error)
         outputs.append(f)
@@ -82,5 +86,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('fixtures','team-ids','out'):
         parser.add_argument('--'+name,type=Path,required=True)
+    parser.add_argument('--archive-root', type=Path, help='root used by the eventual review to resolve raw files')
     args = parser.parse_args()
-    collect(read(args.fixtures),read(args.team_ids),args.out)
+    collect(read(args.fixtures),read(args.team_ids),args.out,archive_root=args.archive_root)
