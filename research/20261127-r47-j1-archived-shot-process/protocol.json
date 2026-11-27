@@ -1,0 +1,31 @@
+{
+  "version": "R47-J1-archived-shot-process-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "label": "EXPERIMENTAL / OOD",
+  "track": "research-r47-j1-archived-shot-process",
+  "question": "Do the recovered J1 shot counts improve the unique first and ordered three when earlier team shot histories are added to the signed R7 scores?",
+  "archives": {
+    "data_commit": "66c85919bf8cf32408b4b2cb1b5b3fb9f1d20f18",
+    "r25_protocol_sha256": "b07be887dce6ea449af5f905c8d2be53337d4876af6900fafca2f175155f7eb1",
+    "shots": {
+      "path": "workspace-updates/20261127-r46-j1-process-at-fixed-total/history/paired-sot.jsonl",
+      "sha256": "c65ba0de8c74f48cb372d15b0a750c83e23416e43c9c7364e05ff4df99a7efd0",
+      "records": 136
+    },
+    "forward": {
+      "path": "workspace-updates/20261127-r42-j1-fixed-first-backups",
+      "protocol.json": "03e2b0af6869f15a50e1282a3562ad6bc15ec6514ae19b9646ffd3e820e93a51",
+      "issued/receipts.json": "ffa1b5da18589b6acaba856b7ff31beabc48ba97432b51020e62a62ec774a514",
+      "registration": "ae9a7febb865d855-v000001"
+    }
+  },
+  "windows": {
+    "fit": {"from": "2025-07-01", "before": "2026-01-01", "fixtures": 162},
+    "validation": {"from": "2026-01-01", "before": "2026-10-11", "fixtures": 86},
+    "holdout": {"from": "2026-10-11", "before": "2026-11-22", "fixtures": 64}
+  },
+  "method": "Check the exact recovered source hashes, fixture IDs, team orientation, date, full regulation scores and R5 result hashes. Exclude J1 Centennial and all other competitions. Walk the signed J1 calendar and update the existing R10 decayed shot volume, conversion and covariance state only after an entire UTC fixture date has been scored. Use only recovered bilateral shots on target in this model. Fit the original R10 penalized volume and conversion slopes and residual covariance on ready fixtures in the registered 2025 fit window, with the reconstructed signed R7 grids providing offsets. A ready forecast requires both teams to have strictly earlier same-phase shot histories. Preserve exact signed R7 scores on missing history. The complete 86- and 64-game calendars are the evaluation populations irrespective of coverage or outcomes. Validate that every retained shot capture precedes each UTC holdout date. The early windows use fixture-date development with later captures; first-known timestamps and original R7 availability at the historical fixture dates are uncertified.",
+  "selection": "Compute the original R7, half blend of the R10 rate grid, full R10 rate grid, full R10 rate and covariance grid, and the full rate grid projected onto each original total-goals probability. In each arm keep the original WDL and Asian total selections and the same market reference. Select using 86 validation fixtures, requiring the original first and three hit counts as minima. Order by first hits, three hits, then prefer R7, rate_half, rate_full, rate_and_covariance, rate_fixed_total. Score all fixed arms on validation and holdout. Report same-game gains and losses, date-clustered intervals, score and market coverage, availability and fallback counts without recalculating the selected arm using holdout results.",
+  "prospective": "If the selected nonzero arm increases the 64-game first or three hit count without reducing either, evaluate the same fixed fit with the earlier-date shot state and the ten authentic frozen R42 grids and team keys. Require every source capture to precede the original R42 cutoff. Issue independent forecasts and rank three research seats by selected first-score probability descending, then kickoff and fixture ID, before the earliest actual kickoff if any ordered score list differs. Retain all ten. Settle only after actual 90-minute verified results; stage metrics follow the original first displayed formal predictions."
+}
