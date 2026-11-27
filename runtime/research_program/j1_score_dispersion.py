@@ -24,7 +24,7 @@ DOSES = {0.: 'r7', .5: 'half_dose', 1.: 'full_dose'}
 SCORE_METRICS = ('score_top1', 'score_top3')
 
 
-def record(game, prior, full, window, signed):
+def validated_reference(game, prior, window, signed):
     actual = (game['home_goals'], game['away_goals'])
     row = dict(id=game['id'], cohort=r25.COMPETITION, stage=game['stage'], date=game['date'],
                home=game['home'], away=game['away'], actual=list(actual), line=base.actual_line(game),
@@ -37,6 +37,12 @@ def record(game, prior, full, window, signed):
             not np.allclose(value, reference[key], rtol=0., atol=2e-8)
             for key, value in control.quality(prior, actual).items())):
         raise ValueError('rebuilt matrix differs from the signed R7 predictions: ' + row['id'])
+    return row, original
+
+
+def record(game, prior, full, window, signed):
+    row, original = validated_reference(game, prior, window, signed)
+    actual = tuple(row['actual'])
     matrices = {'r7': prior, 'half_dose': prior if full is prior else .5 * (prior + full), 'full_dose': full}
     picks = {name: selection(matrix, prior, original) for name, matrix in matrices.items()}
     return dict(row, forecast=dict(picks, market=signed['forecast']['market']),
