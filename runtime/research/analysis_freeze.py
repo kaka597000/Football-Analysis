@@ -100,6 +100,8 @@ def save(payload, fixture, *, stage, track, root=DEFAULT_ROOT, idempotency_key=N
                 if prior.get('idempotency_key') == idempotency_key:
                     if prior['fixture'] != fixture or prior['payload'] != payload:
                         raise ValueError('publication idempotency conflict')
+                    if deadline is not None and (prior['revision'] != 1 or aware(prior['recorded_at']) > deadline):
+                        raise ValueError('original issue does not meet the first issue deadline')
                     return {'freeze_id': prior['freeze_id'], 'recorded_at': prior['recorded_at'],
                             'path': str(path), 'sha256': prior['record_sha256'],
                             'evaluation_slot': prior['evaluation_slot']}

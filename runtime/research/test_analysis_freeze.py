@@ -97,6 +97,9 @@ class FreezeTests(unittest.TestCase):
                 save({'new': True}, fixture, **options)
             clock.now.return_value = late
             self.assertEqual(save({}, fixture, **options, idempotency_key='retained-capture'), first)
+            earlier_deadline = dict(options, first_issue_deadline=(early-timedelta(seconds=1)).isoformat())
+            with self.assertRaisesRegex(ValueError, 'does not meet the first issue deadline'):
+                save({}, fixture, **earlier_deadline, idempotency_key='retained-capture')
             self.assertEqual(len(list(Path(root).glob('*/*.json'))), 1)
 
     def test_default_cli_saves_exact_pair_before_output(self):
