@@ -52,9 +52,11 @@ def log_offsets(observed, expected):
     return np.round(np.log(ratios), 12)
 
 
-def local_offsets(queries, neighbors, observed, expected):
+def local_offsets(queries, neighbors, observed, expected, *, case_weights=None):
     distance = ((queries[:, None, :] - neighbors[None, :, :]) / SCALES) ** 2
     weights = np.exp(-.5 * distance.sum(axis=2))
+    if case_weights is not None:
+        weights *= case_weights
     return log_offsets(weights @ observed, weights @ expected), weights.sum(axis=1)
 
 

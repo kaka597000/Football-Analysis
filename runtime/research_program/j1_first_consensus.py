@@ -41,12 +41,14 @@ def score_choices(original, dispersion_first, local_first):
                 consensus=ordered_dispersion if dispersion_first == local_first else original)
 
 
-def locked_archives(data, spec):
+def locked_archives(data, spec, sources=None):
     locked = spec['archives']
     if sha(j1.PROTOCOL) != locked['r25_protocol_sha256']:
         raise ValueError('the original development populations changed')
     paths = {}
-    for key, source in (('r29', r29.PROTOCOL), ('r41', r41.PROTOCOL), ('forward', r42.PROTOCOL)):
+    if sources is None:
+        sources = (('r29', r29.PROTOCOL), ('r41', r41.PROTOCOL), ('forward', r42.PROTOCOL))
+    for key, source in sources:
         pin = locked[key]
         if sha(source) != pin['protocol.json']:
             raise ValueError('the prior recipe changed: ' + key)
