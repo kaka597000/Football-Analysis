@@ -10,7 +10,8 @@ from research.analysis_freeze import aware
 from .market_baseline import MAXIMUM_QUOTE_AGE
 
 LEAGUES = {'eng.1': ('lg_T9268DXK','ENPL'), 'ger.1': ('lg_PGYWSDEA','GER'),
-           'ita.1': ('lg_QXCSBRME','ITA'), 'esp.1': ('lg_PYBWSDEA','SPA'), 'fra.1': ('lg_CNSP3BPA','FRA')}
+           'ita.1': ('lg_QXCSBRME','ITA'), 'esp.1': ('lg_PYBWSDEA','SPA'), 'fra.1': ('lg_CNSP3BPA','FRA'),
+           'jpn.1': ('lg_VWS270YX','Jap1')}
 
 
 def fresh_rows(raw, meta, match_id, cutoff, *, maximum_age=MAXIMUM_QUOTE_AGE):
@@ -79,8 +80,8 @@ def choose_total(rows):
     return min((min(group, key=balance) for group in totals.values()), key=priority)
 
 
-def attach(fixture, root, evidence, team_ids, cutoff, *, maximum_age=MAXIMUM_QUOTE_AGE):
-    """Read and verify all three raw responses before admitting their prices."""
+def bound_odds(fixture, root, evidence, team_ids, cutoff):
+    """Read all three retained responses and verify the exact fixture and team identities."""
     league = fixture['cohort']
     board = read_evidence(root, evidence['espn'], cutoff=cutoff,
                           expected=f'https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/scoreboard')
@@ -96,14 +97,28 @@ def attach(fixture, root, evidence, team_ids, cutoff, *, maximum_age=MAXIMUM_QUO
             or target['status']['type']['state'] != 'pre' or target['status']['type']['completed'] is not False
             or not aware(cutoff) < aware(fixture['kickoff_at']) == aware(event['scheduled_at']) == aware(target['date'])):
         raise ValueError('club market competition, schedule or response identity mismatch')
+    if league == 'jpn.1' and (
+            fixture.get('competition', league) != league or fixture['stage'] != 'regular'
+            or fixture.get('score_basis') != 'regulation_90' or target['season']['slug'] != 'regular-season'):
+        raise ValueError('club market requires the original adult regular J1 fixture')
     for side in ('home','away'):
         reviewed = team_ids[league][fixture[side]]
         provider = event[side+'_team']
         if ('espn:'+teams[side]['id'] != fixture[side] or reviewed['espn_name'] != teams[side]['displayName']
                 or (provider['id'],provider['name']) != (reviewed['provider_id'],reviewed['provider_name'])):
             raise ValueError('club market home/away identity mismatch')
+    return raw
+
+
+def attach(fixture, root, evidence, team_ids, cutoff, *, maximum_age=MAXIMUM_QUOTE_AGE):
+    """Read and verify all three raw responses before admitting their prices."""
+    raw = bound_odds(fixture, root, evidence, team_ids, cutoff)
     rows = fresh_rows(raw, evidence['odds'], fixture['match_id'], aware(cutoff), maximum_age=maximum_age)
     result = dict(fixture, market_snapshots=rows, market_evidence=evidence)
+    if fixture['cohort'] == 'jpn.1':
+        reviewed = team_ids['jpn.1']
+        result['market_team_ids'] = {fixture[side]: reviewed[fixture[side]] for side in ('home', 'away')}
+        result['cutoff_at'] = aware(cutoff).isoformat()
     result.pop('total_quote', None)
     choice = choose_total(rows)
     if choice:
@@ -120,3 +135,29 @@ def attach(fixture, root, evidence, team_ids, cutoff, *, maximum_age=MAXIMUM_QUO
                                          'NO_FRESH_VERIFIED_TOTAL': 'NO_TOTAL_IN_AGE_WINDOW'}[result['market_availability']]
         result['quote_age_window_seconds'] = maximum_age.total_seconds()
     return result
+
+
+def verify_j1_quote(fixture, quote, root, h2h=None):
+    """Reproduce the same-book quote from retained raw rows at the original cutoff."""
+    source, cutoff = fixture['market_evidence'], fixture['cutoff_at']
+    if (fixture['cohort'] != 'jpn.1' or source['odds']['url'] != quote['source_url']
+            or source['odds']['sha256'] != quote['source_sha256']
+            or source['event_id'] != quote['provider_match_id']
+            or fixture['match_id'] != quote['match_id']
+            or aware(source['odds']['captured_at']) != aware(quote['query_time'])):
+        return False, 'QUOTE_SOURCE_EVENT_ENDPOINT_MISMATCH', None
+    raw = bound_odds(fixture, root, source, {'jpn.1': fixture['market_team_ids']}, cutoff)
+    if raw.get('stale') is not False:
+        return False, 'QUOTE_SOURCE_FEED_STALE', None
+    rows = fresh_rows(raw, source['odds'], fixture['match_id'], aware(cutoff))
+    originals = fixture['market_snapshots']
+    rows = [row for row in rows if row['bookmaker'] == quote['bookmaker'] and row in originals]
+    totals = [row for row in rows if row['market'] == 'totals' and row['line'] == quote['line']]
+    if len(totals) != 1:
+        return False, 'QUOTE_RAW_BOOKMAKER_MARKET_NOT_UNIQUE_OR_FRESH', None
+    total, = totals
+    if total['decimal_odds'] != dict(over=quote['over_odds'], under=quote['under_odds']):
+        return False, 'QUOTE_RAW_TOTAL_LINE_OR_PRICES_DIFFER', None
+    if h2h is not None and not any(row['market'] == '1x2' and row['decimal_odds'] == h2h for row in rows):
+        return False, 'QUOTE_RAW_1X2_PRICES_OR_CLOCK_DIFFER', None
+    return True, None, total['quoted_at']

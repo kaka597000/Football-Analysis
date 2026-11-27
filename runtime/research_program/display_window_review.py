@@ -258,6 +258,14 @@ def _quote_source(quote, fixture, archive_root, archive_cache, expected_h2h=None
     if not isinstance(quote, dict) or not quote.get("source_sha256") or not quote.get("source_url"):
         return False, "QUOTE_RAW_SOURCE_REFERENCE_MISSING", None
     url = urlsplit(quote["source_url"])
+    if url.scheme == "https" and url.netloc == "api.infersports.dev":
+        if not archive_root:
+            return False, "QUOTE_RAW_RESPONSE_NOT_IN_RETAINED_ARCHIVE", None
+        from research_program.club_market_capture import verify_j1_quote
+        try:
+            return verify_j1_quote(fixture, quote, archive_root, expected_h2h)
+        except (AttributeError, KeyError, OSError, TypeError, ValueError):
+            return False, "QUOTE_RAW_EVENT_STRUCTURE_UNVERIFIED", None
     if (url.scheme != "https" or url.hostname not in {"site.api.espn.com", "site.web.api.espn.com"}
             or not url.path.endswith("/soccer/" + fixture["cohort"] + "/summary")
             or parse_qs(url.query).get("event") != [fixture["match_id"].removeprefix("espn:")]):
