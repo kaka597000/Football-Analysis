@@ -1,0 +1,29 @@
+{
+  "version": "R44-J1-rolling-score-calibration-1",
+  "competition": "jpn.1",
+  "stage": "regular",
+  "label": "EXPERIMENTAL / OOD",
+  "track": "research-r44-j1-rolling-score-calibration",
+  "question": "Can strictly earlier and recently weighted J1 score residuals adapt the R7 prior to a changing regular-season scoring regime?",
+  "motivation": "R43 found 115 of the latest 150 regulation results outside R7's original three. R41 estimated local exact-score residuals from a fixed pre-2025 history. This study tests a rolling history with recency weighting and keeps the same outcome and market partitions.",
+  "archives": {
+    "data_commit": "a884850510c50fc4d908ed092502ae3fdd2c7fe2",
+    "r25_protocol_sha256": "b07be887dce6ea449af5f905c8d2be53337d4876af6900fafca2f175155f7eb1",
+    "r41": {
+      "path": "workspace-updates/20261127-r41-j1-local-score-calibration",
+      "protocol.json": "544917e232e558d2171d160609758f896b5de6fef27dbd6a2373553c36055ec0",
+      "replay/validation.jsonl.gz": "ea74267fd9891a67b65b361a6a4a6c7811a1d5b150a97132bdd6f33f9c65bfe5",
+      "replay/forecasts.jsonl.gz": "cc7773fb9b4d49212eb2d3324bead4fd9b3839d04620594b75b8ce0cd92370fa"
+    },
+    "forward": {
+      "path": "workspace-updates/20261127-r42-j1-fixed-first-backups",
+      "protocol.json": "03e2b0af6869f15a50e1282a3562ad6bc15ec6514ae19b9646ffd3e820e93a51",
+      "issued/receipts.json": "ffa1b5da18589b6acaba856b7ff31beabc48ba97432b51020e62a62ec774a514",
+      "registration": "ae9a7febb865d855-v000001"
+    }
+  },
+  "population": "Use the exact R25 archive hashes and four regular J1 date windows. Start with 2,291 regular results before 2025, select on the next 218 through June 2025 and evaluate the 162 and 150 fixtures in the two subsequent original development slices. At each date incorporate earlier dates only, including earlier matches from the same assessment window. Use the archived provider-calendar fixture dates and date-grouped R7 anchors. No result from the query date or later may contribute. These old development data lack certified first-known clocks.",
+  "method": "Reuse R41 score buckets and conditional observed and expected vectors, formed from the R7 chronological unfitted anchor and the labeled WDL and actual-line settlement group. Weight eligible history by 2^(-age_in_calendar_days/180). The recency-only arm uses these weights. The contextual arm additionally multiplies by the fixed R41 Gaussian weights on anchor expected goals and home-away win balance. Both arms use the R41 pseudo-counts of 8, clipping to [2/3, 3/2], rounding to 12 decimal places in log space and WDL by Asian total settlement projection. Apply to the original R7 grid and keep its directional choices. Use full recency-only and half and full contextual doses. Include the signed R7 and fixed full R41 arms on the same fixtures; the fixed R41 comparator is diagnostic only.",
+  "selection": "Admit the recency-only and contextual arms whose 218 validation first and three-score counts are each at least R7's. Choose by most first hits, most three hits, least exact-score log loss and then the order R7, contextual half, contextual full, recency-only. Keep this choice for both evaluation slices. Report every fixed arm and the validation choice, paired gains and losses over complete match dates, exact-score probability quality, changed firsts and sets, separate WDL and strict actual-line coverage, market availability and rolling history exposure. Frozen directional choices remain the same across R7-based arms.",
+  "prospective": "If a nonbaseline validation choice gains at least one combined first or three hit and loses neither metric against R7, replay it before the earliest weekend kickoff using the R42 signed pregame anchors and R7 matrices on the complete original ten-fixture slate. Use only the same archived regular J1 history through November 21 that was available to the original R7 source recipe; this keeps the source panel identical. Verify the original firsts, report any change by fixture and freeze the selected alternative once on all ten if any ordered scores change. Rank three research seats by the issued first cell's original R7 probability, then kickoff and ID. Assess prospectively against verified regulation results independent of the original first-display acceptance. If the screen fails, preserve the complete historical result and document the next existing real verification."
+}
