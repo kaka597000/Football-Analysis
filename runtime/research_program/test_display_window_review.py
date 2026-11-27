@@ -85,8 +85,13 @@ class DisplayWindowReviewTests(unittest.TestCase):
         with patch.object(review, "quote_audit", side_effect=lambda _: {"eligible": True, "reasons": []}), \
                 patch.object(review, "_quote_source", return_value=(True, None, stamp)):
             result, _, _ = review._window_report("test", spec, fixture, records, displays, None, results)
+            displays[0].pop('actual_kickoff_at')
+            displays[0]['actual_kickoff_interval'] = dict(start_inclusive='2026-12-05T06:03:00+00:00',
+                                                          end_exclusive='2026-12-05T06:04:00+00:00')
+            minute, _, _ = review._window_report("test", spec, fixture, records, displays, None, results)
         counted = result["actual_bookmaker_quote"]["five_way_settlements"]
         self.assertEqual(counted["FULL_WIN"], 1)
+        self.assertEqual(minute["actual_bookmaker_quote"]["five_way_settlements"], counted)
         self.assertEqual(result["actual_bookmaker_quote"]["observed_price_five_way_settlements"]["FULL_WIN"], 2)
 
     def test_registered_complete_population_and_original_digest_required(self):

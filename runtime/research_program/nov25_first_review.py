@@ -385,23 +385,72 @@ class _MatchCard(HTMLParser):
         return games[0]
 
 
-def official_card(body, ref, fixture):
+def _official_page(body):
+    page = _MatchCard()
+    page.feed(body.decode('utf-8'))
+    page.close()
+    return page
+
+
+def official_binding(body, ref, fixture, names):
+    """Bind a registered J1 fixture to its official, verified pregame match card."""
+    day = aware(fixture['kickoff_at']).astimezone(JST).date()
     code = ref['code']
-    eid, home, away = J1_CARDS[code]
-    url = J1_URL.format(code)
+    expected = rf'https://www\.jleague\.jp/match/j1/{day.year}/({day:%m%d}[0-9]{{2}})/'
+    route = re.fullmatch(expected, ref['url'])
+    if not route or route[1] != code or aware(ref['captured_at_utc']) >= aware(fixture['kickoff_at']):
+        raise ValueError('expected the independently paired official pregame card')
+    game = _official_page(body).game()
+    clubs = {}
+    for side in ('home', 'away'):
+        raw = game[side + 'Team']
+        if (raw['name'] != names[side] or not str(raw['teamId']).isascii() or not str(raw['teamId']).isdecimal()
+                or not re.fullmatch(r'[a-z0-9-]+', raw['code'])):
+            raise ValueError('the official team differs from the pregame schedule')
+        clubs[side] = [fixture[side].removeprefix('espn:'), str(raw['teamId']), raw['code']]
+    if clubs['home'][1] == clubs['away'][1]:
+        raise ValueError('official home and away identities coincide')
+    if not re.fullmatch(r'第[0-9]+節', game['section']):
+        raise ValueError('expected an official regular-season matchday')
+    identity = {key: fixture[key] for key in ('match_id', 'kickoff_at', 'cohort', 'stage', 'home', 'away')}
+    binding = dict(fixture=identity, url=ref['url'], code=code, section=game['section'], names=names, **clubs)
+    proof = official_card(body, ref, fixture, binding=binding)
+    kickoff = aware(fixture['kickoff_at'])
+    interval = proof['ko_interval']
+    info = proof['page_match_info']
+    clocks = {part for part in info if re.fullmatch(r'[0-9]{2}:[0-9]{2}', part)}
+    displayed = (before_official_minute(fixture['kickoff_at'], interval) == 'inside_interval_unproved' if interval
+                 else 'KICK OFF' in info and clocks == {kickoff.astimezone(JST).strftime('%H:%M')})
+    if proof['state'] != 'scheduled' or aware(proof['structured_date_utc']) != kickoff or not displayed:
+        raise ValueError('official pregame status or planned time differs')
+    return binding
+
+
+def official_card(body, ref, fixture, *, binding=None):
+    code = ref['code']
+    if binding is None:
+        eid, home, away = J1_CARDS[code]
+        url, section = J1_URL.format(code), J1_ROUND
+    else:
+        eid = fixture['match_id'].removeprefix('espn:')
+        home, away = tuple(binding['home']), tuple(binding['away'])
+        url, section = binding['url'], binding['section']
+        keys = ('match_id', 'kickoff_at', 'cohort', 'stage', 'home', 'away')
+        if (binding['fixture'] != {key: fixture[key] for key in keys} or binding['code'] != code
+                or not re.fullmatch(r'https://www\.jleague\.jp/match/j1/[0-9]{4}/[0-9]{6}/', url)
+                or not re.fullmatch(r'第[0-9]+節', section)):
+            raise ValueError('official card does not match its original fixture binding')
     if (ref['url'] != url or fixture['match_id'] != 'espn:'+eid or fixture['cohort'] != 'jpn.1'
             or fixture['stage'] not in STAGES['jpn.1'][3]
             or (fixture['home'], fixture['away']) != ('espn:'+home[0], 'espn:'+away[0])):
         raise ValueError('wrong official URL or registered ESPN identity')
-    page = _MatchCard()
-    page.feed(body.decode('utf-8'))
-    page.close()
+    page = _official_page(body)
     if page.canonical != [url] or page.og_url != [url]:
         raise ValueError('official canonical URL differs from the acquisition')
     g = page.game()
     fields = page.fields
     if (g['tournament'] != 'j1' or g['tournamentName'] != '明治安田Ｊ１リーグ'
-            or fields['section'] != [J1_ROUND] or g['section'] != J1_ROUND or page.states != [g['type']]):
+            or fields['section'] != [section] or g['section'] != section or page.states != [g['type']]):
         raise ValueError('official J1 league, round or rendered match phase differs')
     teams = {}
     for side, expected in [('home',home),('away',away)]:
@@ -460,7 +509,7 @@ def official_card(body, ref, fixture):
         else:
             qualified, reason = True, None
     return dict(source=ref, code=code, match_id=fixture['match_id'], teams=teams, league=g['tournamentName'],
-                round=J1_ROUND, calendar_jst=day.isoformat(), scheduled_utc=fixture['kickoff_at'],
+                round=section, calendar_jst=day.isoformat(), scheduled_utc=fixture['kickoff_at'],
                 header_verbatim=header, structured_date_utc=raw_date, page_type=kind, page_match_info=info,
                 live_period=live_phase.get('periodOfTime'), state=state, observed_score=score if scored else None,
                 ko_interval=interval, ko_eligible=qualified, ko_matches_schedule=schedule_overlap, ko_reference_reason=reason)
