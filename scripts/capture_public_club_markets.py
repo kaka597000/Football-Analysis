@@ -42,12 +42,13 @@ def collect(fixtures, teams, out):
         return captures[url]
 
     for original in fixtures:
-        f = {k:v for k,v in original.items() if k not in ('total_quote','market_snapshots','market_evidence')}
+        f = {k:v for k,v in original.items()
+             if k not in ('total_quote','market_snapshots','market_evidence','market_team_ids')}
         mid, league = f['match_id'], f['cohort']
         f['market_availability'] = 'NO_FRESH_VERIFIED_TOTAL'
         try:
             if league not in LEAGUES or f['stage'] != 'regular' or f['score_basis'] != 'regulation_90':
-                raise ValueError('outside five-league regular-time scope')
+                raise ValueError('outside the supported regular-time leagues')
             kickoff = aware(f['kickoff_at']).astimezone(timezone.utc)
             if kickoff <= datetime.now(timezone.utc):
                 raise ValueError('kickoff has passed')
