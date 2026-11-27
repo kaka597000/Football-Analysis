@@ -193,6 +193,29 @@ class DisplayReceiptSettlementTests(unittest.TestCase):
         self.assertEqual(rows[0]['display_issue'], 'DELIVERED_AT_OR_AFTER_PLANNED_KICKOFF')
         self.assertTrue(rows[1]['top3_hit'])
 
+    def test_complete_kickoff_minute_must_follow_delivery(self):
+        def lookup(starts):
+            def actual(fixture):
+                evidence = dict(self.starts[fixture['match_id']])
+                evidence.pop('actual_kickoff_at')
+                evidence['actual_kickoff_interval'] = dict(start_inclusive=starts.isoformat(),
+                                                           end_exclusive=(starts+timedelta(minutes=1)).isoformat())
+                return evidence
+            return actual
+
+        safe = self.sent + timedelta(minutes=1)
+        row = self.grade(lookup_actual_kickoff=lookup(safe))[0]
+        self.assertTrue(row['top1_hit'])
+        self.assertNotIn('actual_kickoff_at', row)
+        self.assertEqual(row['actual_kickoff_interval']['start_inclusive'], safe.isoformat())
+        inside = self.grade(lookup_actual_kickoff=lookup(self.sent))[0]
+        self.assertEqual(inside['display_issue'], 'DELIVERY_INSIDE_KICKOFF_MINUTE_UNPROVEN')
+        self.assertFalse(inside['top1_issued'])
+        after = self.grade(lookup_actual_kickoff=lookup(self.sent - timedelta(minutes=1)))[0]
+        self.assertEqual(after['display_issue'], 'DELIVERED_AT_OR_AFTER_KICKOFF')
+        with self.assertRaisesRegex(ValueError, 'before actual regulation'):
+            self.grade(lookup_actual_kickoff=lookup(self.now+timedelta(hours=1, minutes=30)))
+
     def test_wrong_stage_identity_registration_track_or_revision_refused(self):
         f = self.fixtures[0]
         for changes in (dict(cohort='ger.1'), dict(stage='playoffs'), dict(competition='ita.1'),

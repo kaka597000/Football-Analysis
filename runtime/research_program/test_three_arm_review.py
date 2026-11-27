@@ -61,13 +61,16 @@ class ThreeArmReviewTests(unittest.TestCase):
         rec = self.freeze('three-arm-score', self.fixture['match_id'], dict(self.fixture, **override), payload, '12:00')
         self.write(self.batch / 'freezes/espn-123.json', rec)
 
-    def add_result(self, goals=(2, 0), state='STATUS_FULL_TIME'):
+    def add_result(self, goals=(2, 0), state='STATUS_FULL_TIME', season_type=None):
         f = self.fixture
-        url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/bra.1/summary?event=123'
+        url = 'https://site.api.espn.com/apis/site/v2/sports/soccer/' + f['cohort'] + '/summary?event=123'
         comp = {'id': '123', 'date': f['kickoff_at'], 'status': {'period': 2, 'type': {'name': state, 'completed': True}},
                 'competitors': [{'homeAway': side, 'team': {'id': f[side].split(':')[1]}, 'score': str(g)}
                                 for side, g in zip(('home', 'away'), goals)]}
-        body = json.dumps({'header': {'id': '123', 'league': {'slug': 'bra.1'}, 'competitions': [comp]}}).encode()
+        header = {'id': '123', 'league': {'slug': f['cohort']}, 'competitions': [comp]}
+        if season_type is not None:
+            header['season'] = {'type': season_type}
+        body = json.dumps({'header': header}).encode()
         checksum = hashlib.sha256(body).hexdigest()
         path = 'raw/' + checksum + '.json.gz'
         (self.state / path).write_bytes(gzip.compress(body))
@@ -134,6 +137,19 @@ class ThreeArmReviewTests(unittest.TestCase):
         self.save_arms(self.forecasts, home='espn:2', away='espn:1')
         with self.assertRaisesRegex(ValueError, 'fixture identity'):
             self.review()
+
+    def test_registered_j1_accepts_normalized_stage_with_raw_regular_season(self):
+        self.fixture['cohort'] = 'jpn.1'
+        fixture = dict(self.fixture, stage='Japanese J1 League')
+        now = datetime(2020, 2, 11, tzinfo=timezone.utc)
+        row = self.add_result(season_type=14287)
+        verified = reviewer._certify(row, fixture, self.state, now)
+        self.assertEqual((verified['home'], verified['away']), (2, 0))
+        with self.assertRaisesRegex(ValueError, 'fixture identity'):
+            reviewer._certify(dict(row, stage='playoffs'), fixture, self.state, now)
+        other_phase = self.add_result(season_type=7)
+        with self.assertRaisesRegex(ValueError, 'J1 regular-season identity'):
+            reviewer._certify(other_phase, fixture, self.state, now)
 
     def test_independent_issue_scores_overrides_and_abstentions_outside_statistical_arms(self):
         self.add_result()
