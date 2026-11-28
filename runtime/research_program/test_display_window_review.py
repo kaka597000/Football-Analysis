@@ -103,6 +103,29 @@ class DisplayWindowReviewTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "checksum"):
             review._registered(altered)
 
+    def test_official_card_comparison_uses_original_registered_stage(self):
+        from research_program import jleague_kickoff_proof
+
+        plan = _plan()
+        mid = 'espn:102'
+        registered = plan['payload']['fixtures'][mid]
+        issued = dict(registered, stage='regular', cutoff_at='2026-11-26T08:00:00+00:00')
+        record = _freeze({'displayed_scores': ['1-0', '1-1', '2-0']}, issued, review.DISPLAY_TRACK,
+                         '2026-11-26T08:01:00+00:00')
+        del record['record_sha256']
+        record['freeze_id'] = 'first-score-v000001'
+        record['record_sha256'] = digest(record)
+        capture = {mid: [{}]}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'first.json').write_text(json.dumps(record), encoding='utf-8')
+            with patch.object(jleague_kickoff_proof, 'bindings', return_value={}), \
+                    patch.object(jleague_kickoff_proof, 'compare_sources', return_value=({}, {})) as check:
+                review.review(plan, ledger_root=root, result_state=root, evidence_root=root,
+                              jleague_kickoffs={'captures': capture}, at='2026-11-28T13:00:00+00:00')
+        matching_call = next(call for call in check.call_args_list if call.args[0] == capture)
+        self.assertEqual(matching_call.args[2], {mid: registered})
+
     def test_new_series_reviews_its_own_two_named_windows(self):
         old = _plan()
         payload = deepcopy(old['payload'])

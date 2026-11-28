@@ -718,8 +718,10 @@ def review(plan_record, *, ledger_root=DEFAULT_ROOT, result_state, evidence_root
                                            rich_fixtures, kickoff_root, now)
         if jleague_kickoffs is not None:
             official = {mid: jleague_kickoffs['captures'][mid] for mid in mids if mid in jleague_kickoffs['captures']}
+            # The official cards were bound to the registration, not to the forecast's stage label.
+            registered_fixtures = {mid: universe[mid] for mid in mids}
             starts, kickoff_audit = jleague_kickoff_proof.compare_sources(
-                official, official_bindings, rich_fixtures, kickoff_root, now, starts, result_by_id)
+                official, official_bindings, registered_fixtures, kickoff_root, now, starts, result_by_id)
         scopes = (approved_scopes or {}).get(name, {})
         rows = review_batch(rich_fixtures.values(), records, state=result_state, at=now,
                             staged=staged, room_id=package.get("room_id"), author_id=package.get("author_id"),
