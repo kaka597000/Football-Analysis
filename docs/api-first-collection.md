@@ -1,7 +1,7 @@
 # 默认接口优先采集流程
 
 2026-10-29起执行。先定位比赛身份、北京时间开球及赛制，再按字段列所需数据。
-先复用仍有效的历史/来源缓存，调用适用API，最后仅为真实缺项安排Luna公开网页查询。
+先复用仍有效的历史/来源缓存，调用适用API，最后为实际缺项选择适合的驱动模型查询公开网页。
 ESPN、FotMob公共JSON属于接口阶段；有apikey的接口不是唯一API。
 
 ```bash
@@ -9,7 +9,7 @@ python runtime/data_sources/cli.py --plan batch-plan.json \
   --cache-dir /workspace/WCPP/cache/api-first --out /workspace/WCPP/staging/本批次-api.json
 ```
 
-批计划由主代理或Luna在核准赛事ID后构造，不把未知ID拼成看似真实的请求。
+批计划由主代理或其选定的驱动模型在核准赛事ID后构造，不把未知ID拼成看似真实的请求。
 同一接口/参数只取一次，同日赛程、同联赛赔率按批复用；独立服务可并行，同服务串行。
 API-Football默认至少间隔10秒。2026-10-30起可在计划中显式配置quota_policies，并传--quota-ledger共享SQLite路径，启用跨进程额度锁；未配置或历史脚本未迁移时仍仅有原限速，应同批单进程运行。预算必须按实际免费权限核实，示例quota-policy.example.json不包含已实测额度。
 401/403/429或缺绑定在本批停止同服务后续请求；不重复探测已明确受阻的入口。
@@ -52,9 +52,23 @@ TTL建议：赛前首发60秒、赔率60秒；球队历史6小时并核查是否
 
 结果的`api_evidence`仅表示取得可审查证据，状态始终是API_EVIDENCE_PENDING_REVIEW。
 不自动确认官方首发、清洗入库、训练或改变模型输入。
-`web_gap_tasks`只在整个适用接口阶段结束后产生，交给gpt-6-luna按字段查询；保存原始来源、抓取时间、信息时间及未解决原因。
+
+## 网页缺项的模型路由
+
+`web_gap_tasks` 在适用接口阶段结束后生成。`assigned_model` 给出计划分派的提供方模型 ID，`status` 为 `PLANNED_NOT_RUN`，等待主代理执行。实际使用的模型以调用回执为准。负责查询的模型保存原始来源、抓取时间、信息时间及未解决原因。
+
+1. 字段上的 `web_gap_model` 优先。可填写提供方模型 ID，例如 `gpt-6-luna`。显式填写 `null` 时按该字段的有效难度自动路由。空白字符串会报错。
+2. 字段省略 `web_gap_model` 且明确填写 `web_gap_difficulty` 为 `hard`、`breakthrough` 或 `routine` 时，按字段难度自动路由并覆盖批量模型。
+3. 字段省略 `web_gap_model` 且难度省略或为 `null` 时，继承计划顶层的 `web_gap_model`。顶层的模型省略或为 `null` 时使用自动路由。
+
+有效难度优先取字段上的 `web_gap_difficulty`，省略时继承批量难度。字段难度为 `null` 时清除继承的难度。自动路由将 `hard`、`breakthrough` 分派给 `gpt-6.2-astra`，将 `routine`、`null` 和旧计划缺省分派给 `gpt-6.2-sol`。接口缺项本身按现有难度处理。标记 `hard` 或 `breakthrough` 时在批次记录中说明具体难点。
+
+显式指定或继承 `web_gap_model` 为 `gpt-6.2-astra` 时，该字段的有效难度须为 `hard` 或 `breakthrough`。冲突在联网前报出对应的字段下标。最终分派为 `gpt-6.2-sol` 时，`reasoning_effort` 为 `max`。Astra 和其他模型的 `reasoning_effort` 为 `null`，执行调用时省略该参数。
+
+例如，批计划设置 `"web_gap_model": "gpt-6.2-sol"`，单个困难字段只需设置 `"web_gap_difficulty": "hard"` 即可自动分派 Astra。该字段也可同时显式指定 `"web_gap_model": "gpt-6.2-astra"`。
+
 若字段API不存在/不覆盖，应把已知失败入口和覆盖证据记入本批，不虚构请求以通过程序。
-本入口要求至少一个适用API候选；确无候选的字段由主代理另记NO_APPLICABLE_API后交Luna，禁止编造候选。
+本入口要求至少一个适用API候选；确无候选的字段由主代理另记NO_APPLICABLE_API后安排公开来源查询，禁止编造候选。
 缺项查不到就如实保留，不无限搜索、不猜阵容或盘口；禁止中国体彩及镜像，澳客允许。
 
 此修改提供默认批采集入口和执行规范，不会自动迁移散落在历史报告里的临时脚本。
