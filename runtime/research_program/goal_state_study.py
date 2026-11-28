@@ -10,9 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from research.analysis_freeze import digest
-from . import goal_state_process as model
 from .paired_kpi_inference import compare
-from .prior_team_strength import selections
 
 FIVE = ('eng.1', 'esp.1', 'ger.1', 'ita.1', 'fra.1')
 PANELS = {'selection': (FIVE, '2425'), 'known': (FIVE, '2526'),
@@ -56,6 +54,9 @@ def prices(row):
 
 
 def forecast_row(row, artifact, names, *, retained_quote=False):
+    from . import goal_state_process as model
+    from .prior_team_strength import selections
+
     h, a = row['home_goals'], row['away_goals']
     if row['score_basis'] != 'regulation_90' or type(h) != int or type(a) != int or min(h, a) < 0:
         raise ValueError('only finished regulation fixtures accepted in historical replay')
@@ -108,6 +109,8 @@ def diagnostics(rows, name):
 
 
 def run_panel(path, archive, panel, out, names, policy=None):
+    from . import goal_state_process as model
+
     recent = panel == 'recent'
     leagues, season = (FIVE, '2627') if recent else PANELS[panel]
     rows = []
@@ -140,6 +143,8 @@ def run_panel(path, archive, panel, out, names, policy=None):
 
 
 def select_heads(result, rows, names):
+    from . import goal_state_process as model
+
     def hits(name, metric):
         comparison = next(iter(result['comparisons'].values())) if name == 'market' else result['comparisons'][name]
         return comparison['tracks'][name]['metrics'][metric]['hits']
@@ -154,6 +159,8 @@ def select_heads(result, rows, names):
 
 
 def command(args):
+    from . import goal_state_process as model
+
     out = args.out
     out.mkdir(exist_ok=True, parents=True)
     if args.phase == 'fit':

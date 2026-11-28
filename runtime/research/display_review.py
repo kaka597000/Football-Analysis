@@ -49,19 +49,32 @@ def _settle(fixture, record, result, issues, first, actual_start, approved_scope
         return dict(row, display_issue='UNVERIFIED_ACTUAL_KICKOFF')
     if any(start[k] != fixture[k] for k in ('match_id', 'competition', 'home', 'away')):
         raise ValueError('actual kickoff report belongs to a different fixture')
-    kickoff = start['actual_kickoff_at']
-    started = aware(kickoff)
-    if started > at:
+    kickoff = start.get('actual_kickoff_at')
+    interval = start.get('actual_kickoff_interval')
+    if (kickoff is None) == (interval is None):
+        raise ValueError('expected one exact kickoff or one verified kickoff minute')
+    if interval is None:
+        earliest = latest = aware(kickoff)
+        proof = dict(actual_kickoff_at=kickoff)
+    else:
+        earliest = aware(interval['start_inclusive'])
+        latest = aware(interval['end_exclusive'])
+        if latest - earliest != timedelta(minutes=1) or earliest.second or earliest.microsecond:
+            raise ValueError('expected one complete minute for official kickoff evidence')
+        proof = dict(actual_kickoff_interval=interval)
+    if latest > at:
         return dict(row, display_issue='UNVERIFIED_ACTUAL_KICKOFF')
-    if sent >= started:
+    if sent >= latest:
         return dict(row, display_issue='DELIVERED_AT_OR_AFTER_KICKOFF')
-    if result is not None and aware(result['source']['captured_at']) < started + timedelta(minutes=90):
+    if sent >= earliest:
+        return dict(row, display_issue='DELIVERY_INSIDE_KICKOFF_MINUTE_UNPROVEN')
+    if result is not None and aware(result['source']['captured_at']) < latest + timedelta(minutes=90):
         raise ValueError('result observed before actual regulation could finish')
 
     display = payload['authored_display']
     row.update(display_status=display['status'], freeze_sha256=record['record_sha256'],
                message_id=confirmation['message_id'], delivered_at=confirmation['delivered_at'],
-               original_body_sha256=confirmation['original_body_sha256'], actual_kickoff_at=kickoff)
+               original_body_sha256=confirmation['original_body_sha256'], **proof)
     if display['status'] == 'ISSUED':
         row.update(top1_issued=True, top3_issued=True)
         if result is not None:
