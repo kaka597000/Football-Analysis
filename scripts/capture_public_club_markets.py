@@ -13,7 +13,7 @@ sys.path[:0] = [str(ROOT/'runtime'), str(ROOT/'runtime/v5'), str(ROOT)]
 from automation.infer_market_snapshot import BASE, fetch as provider_fetch
 from automation.market_snapshot import fetch as board_fetch
 from research.analysis_freeze import aware
-from research_program.club_market_capture import CHECKPOINTS, LEAGUES, attach
+from research_program.club_market_capture import CHECKPOINTS, LEAGUES, attach, require_market_scope, require_provider_event
 from research_program.future_validation import read, write_new
 from research_program.market_baseline import MAXIMUM_QUOTE_AGE
 
@@ -53,8 +53,7 @@ def collect(fixtures, teams, out, *, archive_root=None, checkpoint=None):
         mid, league = f['match_id'], f['cohort']
         f['market_availability'] = 'NO_FRESH_VERIFIED_TOTAL'
         try:
-            if league not in LEAGUES or f['stage'] != 'regular' or f['score_basis'] != 'regulation_90':
-                raise ValueError('outside the supported regular-time leagues')
+            require_market_scope(f)
             kickoff = aware(f['kickoff_at']).astimezone(timezone.utc)
             now = datetime.now(timezone.utc)
             if kickoff <= now:
@@ -80,6 +79,7 @@ def collect(fixtures, teams, out, *, archive_root=None, checkpoint=None):
             if len(matches) != 1:
                 raise ValueError('unique scheduled provider event not found')
             event, = matches
+            require_provider_event(f, event)
             query = urlencode({'markets':'1x2,totals','format':'decimal','period':'full_time'})
             odds = get(BASE+f'/v1/events/{event}/odds?'+query,event+'-odds.json')
             info = {'event_id':event,'espn':board,'events':page,'odds':odds}

@@ -188,6 +188,21 @@ class MarketSnapshotTests(unittest.TestCase):
                     fetch(url, public, Path(folder) / 'odds.json')
             create.assert_not_called()
 
+    def test_european_league_phase_scoreboards_are_public_collection_endpoints(self):
+        with tempfile.TemporaryDirectory() as folder:
+            opener = MagicMock()
+            opener.open.return_value.__enter__.return_value.read.return_value = b'{"events":[]}'
+            with patch(fetch.__module__ + '.build_opener', return_value=opener):
+                for league in ('uefa.europa', 'uefa.europa.conf'):
+                    with self.subTest(league=league):
+                        url = ESPN.replace('/uefa.nations/', f'/{league}/') + '?dates=20261210'
+                        target = Path(folder) / (league + '.json')
+                        meta = fetch(url, url, target)
+                        self.assertEqual(meta['url'], url)
+                        self.assertEqual(target.read_bytes(), b'{"events":[]}')
+                        with self.assertRaises(ValueError):
+                            fetch(url + '&apiKey=SYNTHETIC_ONLY', url, target)
+
     def test_unsafe_or_oversized_response_is_not_saved(self):
         bodies = [b'[{"message":"SYNTHETIC_ONLY"}]',
                   b'[{"message":"\\u0053YNTHETIC_ONLY"}]',

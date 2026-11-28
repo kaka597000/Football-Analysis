@@ -3,6 +3,7 @@
 from collections import defaultdict
 from datetime import timedelta
 from math import isfinite, log
+import re
 
 from automation.infer_market_snapshot import BASE, BOOKMAKERS, read_evidence
 from automation.market_identity import scheduled_competition
@@ -11,8 +12,34 @@ from .market_baseline import MAXIMUM_QUOTE_AGE
 
 LEAGUES = {'eng.1': ('lg_T9268DXK','ENPL'), 'ger.1': ('lg_PGYWSDEA','GER'),
            'ita.1': ('lg_QXCSBRME','ITA'), 'esp.1': ('lg_PYBWSDEA','SPA'), 'fra.1': ('lg_CNSP3BPA','FRA'),
-           'jpn.1': ('lg_VWS270YX','Jap1')}
+           'jpn.1': ('lg_VWS270YX','Jap1'), 'uefa.europa': ('lg_NW0GJ4SZ', 'UEL'),
+           'uefa.europa.conf': ('lg_PVTBWSDE', 'UECL')}
+LEAGUE_PHASE_STAGES = {
+    'uefa.europa': 'UEFA Europa League, League Phase',
+    'uefa.europa.conf': 'UEFA Conference League, League Phase',
+}
 CHECKPOINTS = {'T-24h': 1440, 'T-6h': 360, 'T-60m': 60, 'T-15m': 15}
+
+
+def require_market_scope(fixture):
+    league = fixture['cohort']
+    if (league not in LEAGUES or fixture['stage'] != LEAGUE_PHASE_STAGES.get(league, 'regular')
+            or fixture['score_basis'] != 'regulation_90'):
+        raise ValueError('outside the supported club regulation-time scope')
+    if league in LEAGUE_PHASE_STAGES:
+        season = fixture.get('provider_season', {})
+        event = fixture.get('market_provider_event_id')
+        if (fixture.get('competition', league) != league or not isinstance(season, dict)
+                or season.get('slug') != 'league-phase'
+                or type(season.get('year')) is not int or type(season.get('type')) is not int
+                or not isinstance(event, str) or not re.fullmatch(r'evt_[A-Za-z0-9]+', event)):
+            raise ValueError('European league-phase market requires the reviewed season and provider event')
+
+
+def require_provider_event(fixture, event_id):
+    if (fixture['cohort'] in LEAGUE_PHASE_STAGES
+            and event_id != fixture['market_provider_event_id']):
+        raise ValueError('provider event differs from the reviewed European fixture')
 
 
 def fresh_rows(raw, meta, match_id, cutoff, *, maximum_age=MAXIMUM_QUOTE_AGE):
@@ -84,10 +111,13 @@ def choose_total(rows):
 def bound_odds(fixture, root, evidence, team_ids, cutoff):
     """Read all three retained responses and verify the exact fixture and team identities."""
     league = fixture['cohort']
+    event_id = evidence['event_id']
+    if league in LEAGUE_PHASE_STAGES:
+        require_market_scope(fixture)
+        require_provider_event(fixture, event_id)
     board = read_evidence(root, evidence['espn'], cutoff=cutoff,
                           expected=f'https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/scoreboard')
     page = read_evidence(root, evidence['events'], cutoff=cutoff, expected=BASE+'/v1/events')
-    event_id = evidence['event_id']
     raw = read_evidence(root, evidence['odds'], cutoff=cutoff, expected=BASE+'/v1/events/'+event_id+'/odds')
     target, = (e for e in board['events'] if 'espn:'+e['id'] == fixture['match_id'])
     _, teams = scheduled_competition(target)
@@ -102,6 +132,11 @@ def bound_odds(fixture, root, evidence, team_ids, cutoff):
             fixture.get('competition', league) != league or fixture['stage'] != 'regular'
             or fixture.get('score_basis') != 'regulation_90' or target['season']['slug'] != 'regular-season'):
         raise ValueError('club market requires the original adult regular J1 fixture')
+    if league in LEAGUE_PHASE_STAGES:
+        observed = target.get('season')
+        expected = fixture['provider_season']
+        if not isinstance(observed, dict) or any(observed.get(key) != expected[key] for key in ('year', 'type', 'slug')):
+            raise ValueError('ESPN event differs from the reviewed European league-phase season')
     for side in ('home','away'):
         reviewed = team_ids[league][fixture[side]]
         provider = event[side+'_team']
@@ -116,8 +151,9 @@ def attach(fixture, root, evidence, team_ids, cutoff, *, maximum_age=MAXIMUM_QUO
     raw = bound_odds(fixture, root, evidence, team_ids, cutoff)
     rows = fresh_rows(raw, evidence['odds'], fixture['match_id'], aware(cutoff), maximum_age=maximum_age)
     result = dict(fixture, market_snapshots=rows, market_evidence=evidence)
-    if fixture['cohort'] == 'jpn.1':
-        reviewed = team_ids['jpn.1']
+    league = fixture['cohort']
+    if league == 'jpn.1' or league in LEAGUE_PHASE_STAGES:
+        reviewed = team_ids[league]
         result['market_team_ids'] = {fixture[side]: reviewed[fixture[side]] for side in ('home', 'away')}
         result['cutoff_at'] = aware(cutoff).isoformat()
     result.pop('total_quote', None)

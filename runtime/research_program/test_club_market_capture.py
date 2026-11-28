@@ -5,7 +5,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 
-from research_program.club_market_capture import attach, choose_total, fresh_rows
+from research_program.club_market_capture import LEAGUE_PHASE_STAGES, LEAGUES, attach, choose_total, fresh_rows
 from research_program.display_window_review import _market_clock_match, _quote_source
 
 
@@ -108,3 +108,52 @@ class ClubMarketTests(unittest.TestCase):
             self.assertNotIn('total_quote', stale)
             forged = dict(quote, source_sha256=evidence['odds']['sha256'])
             self.assertEqual(_quote_source(forged, stale, root, {}, h2h['prices'])[1], 'QUOTE_SOURCE_FEED_STALE')
+
+    def test_european_league_phase_requires_original_event_and_espn_season(self):
+        start = '2026-11-23T08:00:00Z'
+        sides = [dict(homeAway='home', team={'id': '11', 'displayName': 'Home FC'}),
+                 dict(homeAway='away', team={'id': '22', 'displayName': 'Away FC'})]
+        for league, season_type in (('uefa.europa', 14540), ('uefa.europa.conf', 14546)):
+            with self.subTest(league=league), TemporaryDirectory() as folder:
+                root = Path(folder)
+                season = {'year': 2026, 'type': season_type, 'slug': 'league-phase'}
+                fixture = {'match_id': 'espn:1', 'cohort': league, 'competition': league,
+                           'home': 'espn:11', 'away': 'espn:22', 'stage': LEAGUE_PHASE_STAGES[league],
+                           'score_basis': 'regulation_90', 'kickoff_at': start,
+                           'provider_season': season, 'market_provider_event_id': 'evt_ABC'}
+                crosswalk = {league: {
+                    'espn:11': {'espn_name': 'Home FC', 'provider_name': 'Home', 'provider_id': 'tm_H'},
+                    'espn:22': {'espn_name': 'Away FC', 'provider_name': 'Away', 'provider_id': 'tm_A'},
+                }}
+                target = {'id': '1', 'date': start, 'season': dict(season, label='League Phase'),
+                          'status': {'type': {'state': 'pre', 'completed': False}},
+                          'competitions': [{'id': '1', 'date': start, 'competitors': sides}]}
+                provider_league, provider_name = LEAGUES[league]
+                provider_event = {'id': 'evt_ABC', 'sport': 'football', 'status': 'scheduled',
+                                  'scheduled_at': start, 'league': {'id': provider_league, 'name': provider_name},
+                                  'home_team': {'id': 'tm_H', 'name': 'Home'},
+                                  'away_team': {'id': 'tm_A', 'name': 'Away'}}
+
+                def retain(name, value, url):
+                    body = json.dumps(value).encode()
+                    (root / name).write_bytes(body)
+                    return dict(self.meta, file=name, url=url, sha256=sha256(body).hexdigest())
+
+                board_url = f'https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/scoreboard'
+                evidence = {'event_id': 'evt_ABC',
+                            'espn': retain('board.json', {'leagues': [{'slug': league}], 'events': [target]}, board_url),
+                            'events': retain('events.json', {'data': [provider_event]}, 'https://api.infersports.dev/v1/events'),
+                            'odds': retain('odds.json', {'event_id': 'evt_ABC', 'stale': False,
+                                                       'odds': [self.row('1x2'), self.row('totals', line=2.5)]},
+                                           'https://api.infersports.dev/v1/events/evt_ABC/odds')}
+                replay = attach(fixture, root, evidence, crosswalk, self.now.isoformat())
+                self.assertEqual(replay['market_availability'], 'FRESH_SAME_BOOK_PAIR')
+                self.assertEqual(replay['total_quote']['quoted_at'], self.quote_time)
+                with self.assertRaisesRegex(ValueError, 'reviewed European fixture'):
+                    attach(dict(fixture, market_provider_event_id='evt_other'), root, evidence, crosswalk,
+                           self.now.isoformat())
+                with self.assertRaisesRegex(ValueError, 'supported club regulation-time scope'):
+                    attach(dict(fixture, stage='regular'), root, evidence, crosswalk, self.now.isoformat())
+                wrong_season = dict(fixture, provider_season=dict(season, type=season_type + 1))
+                with self.assertRaisesRegex(ValueError, 'reviewed European league-phase season'):
+                    attach(wrong_season, root, evidence, crosswalk, self.now.isoformat())
