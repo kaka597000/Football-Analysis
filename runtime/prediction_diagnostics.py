@@ -54,6 +54,8 @@ def attach(output, fixture, artifact_path, test_artifact_path):
     output['market_movement'] = analyze_market(fixture)
     from research_program.market_baseline import predict as predict_market_baseline
     output['market_baseline'] = predict_market_baseline(fixture)
+    from research_program.sharp_consensus_kernel import predict as predict_sharp_consensus
+    output['sharp_consensus_reference'] = predict_sharp_consensus(fixture)
     from research.match_analysis import build as build_match_analysis
     test_artifact = (json.loads(test_artifact_path.read_text()) if test_artifact_path
                      and output['test_model'].get('status') != 'ABSTAIN_TEST_EXECUTION_FAILED' else {})
