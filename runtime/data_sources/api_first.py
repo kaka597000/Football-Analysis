@@ -18,6 +18,10 @@ except ImportError:
     from clients import fetch, PROVIDERS, PRIVATE, service_blocked
 
 
+_SOL_MODEL = 'gpt-6.2-sol'
+_ASTRA_MODEL = 'gpt-6.2-astra'
+
+
 def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False,
                                     allow_nan=False).encode()).hexdigest()
@@ -52,12 +56,35 @@ def pointer(value, path):
         return None
 
 
+def _web_gap_model(plan, field, field_index):
+    difficulty = field.get('web_gap_difficulty', plan.get('web_gap_difficulty'))
+    if difficulty not in (None, 'routine', 'hard', 'breakthrough'):
+        raise ValueError('web_gap_difficulty must be routine, hard, breakthrough, or null')
+    astra_allowed = difficulty in ('hard', 'breakthrough')
+    # A named field difficulty replaces the inherited model with automatic routing.
+    inherited_model = plan.get('web_gap_model') if field.get('web_gap_difficulty') is None else None
+    model = field.get('web_gap_model', inherited_model)
+    if model is None:
+        return _ASTRA_MODEL if astra_allowed else _SOL_MODEL
+    if not isinstance(model, str) or not model.strip():
+        raise ValueError('web_gap_model must be a nonempty model ID or null')
+    model = model.strip()
+    if model == _ASTRA_MODEL and not astra_allowed:
+        raise ValueError(
+            f'fields[{field_index}] selects {_ASTRA_MODEL} via web_gap_model and requires '
+            "an effective web_gap_difficulty of 'hard' or 'breakthrough'. "
+            'Set the field difficulty when warranted or choose a different web_gap_model.'
+        )
+    return model
+
+
 def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep, quota_ledger=None):
     now = clock or (lambda: datetime.now(timezone.utc))
     cache = Path(cache_dir)
     cache.mkdir(parents=True, exist_ok=True)
     requests = plan['requests']
     fields = plan['fields']
+    drivers = [_web_gap_model(plan, field, index) for index, field in enumerate(fields)]
     # Reject secret-bearing plans before saving or making any request.
     def safe_keys(value):
         if isinstance(value, dict):
@@ -208,14 +235,15 @@ def run(plan, cache_dir, fetcher=fetch, clock=None, sleeper=time.sleep, quota_le
             for future in futures:
                 results.update(future.result())
     evidence, gaps = [], []
-    for field in fields:
+    for field, driver in zip(fields, drivers, strict=True):
         selected = next((c for c in field['candidates'] if available(field, c)), None)
         base = {'match_id': field['match_id'], 'field': field['field']}
         if selected:
             evidence.append(dict(base, status='API_EVIDENCE_PENDING_REVIEW',
                                  request_id=selected['request_id'], pointer=selected['pointer']))
         else:
-            gaps.append(dict(base, assigned_model='gpt-6-luna',
+            gaps.append(dict(base, status='PLANNED_NOT_RUN', assigned_model=driver,
+                             reasoning_effort='max' if driver == _SOL_MODEL else None,
                              candidate_checks=field['candidates'],
                              reason='APPLICABLE_APIS_EXHAUSTED_OR_EVIDENCE_INVALID',
                              constraints='仅查此缺项；保存来源与时间；禁止中国体彩及镜像'))
