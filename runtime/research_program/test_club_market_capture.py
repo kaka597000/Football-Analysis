@@ -1,7 +1,12 @@
 from datetime import datetime, timedelta, timezone
+from hashlib import sha256
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 
-from research_program.club_market_capture import choose_total, fresh_rows
+from research_program.club_market_capture import LEAGUE_PHASE_STAGES, LEAGUES, attach, choose_total, fresh_rows
+from research_program.display_window_review import _market_clock_match, _quote_source
 
 
 class ClubMarketTests(unittest.TestCase):
@@ -50,3 +55,105 @@ class ClubMarketTests(unittest.TestCase):
         conflict = dict(main,prices={'over':2.,'under':1.9})
         self.assertEqual(choose_total(self.rows(main,conflict,other))['bookmaker'],'sbobet')
         self.assertIsNone(choose_total(self.rows(self.row('1x2'))))
+
+    def test_j1_preparation_and_display_review_reproduce_both_timed_markets(self):
+        day, start = '2026-11-23', '2026-11-23T08:00:00Z'
+        home, away = 'espn:11', 'espn:22'
+        fixture = dict(match_id='espn:1', cohort='jpn.1', competition='jpn.1', home=home, away=away,
+                       stage='regular', score_basis='regulation_90', kickoff_at=start,
+                       cutoff_at=day + 'T03:00:00Z')
+        teams = {'jpn.1': {home: dict(espn_name='Home FC', provider_name='Home FC', provider_id='tm_H'),
+                          away: dict(espn_name='Away FC', provider_name='Away FC', provider_id='tm_A')}}
+        sides = [dict(homeAway='home', team=dict(id='11', displayName='Home FC')),
+                 dict(homeAway='away', team=dict(id='22', displayName='Away FC'))]
+        scheduled = dict(id='1', date=start, competitions=[dict(id='1', date=start, competitors=sides)],
+                         status={'type': {'state': 'pre', 'completed': False}},
+                         season={'slug': 'regular-season'})
+        event = dict(id='evt_J1', sport='football', status='scheduled', scheduled_at=start,
+                     league={'id': 'lg_VWS270YX', 'name': 'Jap1'},
+                     home_team={'id': 'tm_H', 'name': 'Home FC'}, away_team={'id': 'tm_A', 'name': 'Away FC'})
+        h2h = self.row('1x2', as_of=day + 'T03:02:00Z')
+        raw = dict(event_id='evt_J1', stale=False, odds=[h2h, self.row('totals', line=2.5)])
+
+        with TemporaryDirectory() as folder:
+            root = Path(folder)
+
+            def retain(name, obj, url):
+                body = json.dumps(obj).encode()
+                (root / name).write_bytes(body)
+                return dict(file=name, url=url, captured_at=self.meta['captured_at'],
+                            sha256=sha256(body).hexdigest())
+
+            odds_url = 'https://api.infersports.dev/v1/events/evt_J1/odds?markets=1x2%2Ctotals'
+            evidence = dict(event_id='evt_J1',
+                            espn=retain('board.json', {'leagues': [{'slug': 'jpn.1'}], 'events': [scheduled]},
+                                        'https://site.api.espn.com/apis/site/v2/sports/soccer/jpn.1/scoreboard'),
+                            events=retain('events.json', {'data': [event]}, 'https://api.infersports.dev/v1/events'),
+                            odds=retain('odds.json', raw, odds_url))
+            prepared = attach(fixture, root, evidence, teams, self.now.isoformat())
+            quote = prepared['total_quote']
+            ok, reason, clock = _quote_source(quote, prepared, root, {}, h2h['prices'])
+            self.assertTrue(ok, reason)
+            self.assertEqual(_market_clock_match(quote, clock), (True, None))
+            self.assertEqual(prepared['market_availability'], 'FRESH_SAME_BOOK_PAIR')
+
+            wrong = [dict(row, quoted_at=quote['quoted_at']) if row['market'] == '1x2' else row
+                     for row in prepared['market_snapshots']]
+            self.assertEqual(_quote_source(quote, dict(prepared, market_snapshots=wrong), root, {},
+                                           h2h['prices'])[1], 'QUOTE_RAW_1X2_PRICES_OR_CLOCK_DIFFER')
+            self.assertFalse(_quote_source(quote, dict(prepared, stage='cup'), root, {}, h2h['prices'])[0])
+
+            evidence['odds'] = retain('stale.json', dict(raw, stale=True), odds_url)
+            stale = attach(fixture, root, evidence, teams, self.now.isoformat())
+            self.assertNotIn('total_quote', stale)
+            forged = dict(quote, source_sha256=evidence['odds']['sha256'])
+            self.assertEqual(_quote_source(forged, stale, root, {}, h2h['prices'])[1], 'QUOTE_SOURCE_FEED_STALE')
+
+    def test_european_league_phase_requires_original_event_and_espn_season(self):
+        start = '2026-11-23T08:00:00Z'
+        sides = [dict(homeAway='home', team={'id': '11', 'displayName': 'Home FC'}),
+                 dict(homeAway='away', team={'id': '22', 'displayName': 'Away FC'})]
+        for league, season_type in (('uefa.europa', 14540), ('uefa.europa.conf', 14546)):
+            with self.subTest(league=league), TemporaryDirectory() as folder:
+                root = Path(folder)
+                season = {'year': 2026, 'type': season_type, 'slug': 'league-phase'}
+                fixture = {'match_id': 'espn:1', 'cohort': league, 'competition': league,
+                           'home': 'espn:11', 'away': 'espn:22', 'stage': LEAGUE_PHASE_STAGES[league],
+                           'score_basis': 'regulation_90', 'kickoff_at': start,
+                           'provider_season': season, 'market_provider_event_id': 'evt_ABC'}
+                crosswalk = {league: {
+                    'espn:11': {'espn_name': 'Home FC', 'provider_name': 'Home', 'provider_id': 'tm_H'},
+                    'espn:22': {'espn_name': 'Away FC', 'provider_name': 'Away', 'provider_id': 'tm_A'},
+                }}
+                target = {'id': '1', 'date': start, 'season': dict(season, label='League Phase'),
+                          'status': {'type': {'state': 'pre', 'completed': False}},
+                          'competitions': [{'id': '1', 'date': start, 'competitors': sides}]}
+                provider_league, provider_name = LEAGUES[league]
+                provider_event = {'id': 'evt_ABC', 'sport': 'football', 'status': 'scheduled',
+                                  'scheduled_at': start, 'league': {'id': provider_league, 'name': provider_name},
+                                  'home_team': {'id': 'tm_H', 'name': 'Home'},
+                                  'away_team': {'id': 'tm_A', 'name': 'Away'}}
+
+                def retain(name, value, url):
+                    body = json.dumps(value).encode()
+                    (root / name).write_bytes(body)
+                    return dict(self.meta, file=name, url=url, sha256=sha256(body).hexdigest())
+
+                board_url = f'https://site.api.espn.com/apis/site/v2/sports/soccer/{league}/scoreboard'
+                evidence = {'event_id': 'evt_ABC',
+                            'espn': retain('board.json', {'leagues': [{'slug': league}], 'events': [target]}, board_url),
+                            'events': retain('events.json', {'data': [provider_event]}, 'https://api.infersports.dev/v1/events'),
+                            'odds': retain('odds.json', {'event_id': 'evt_ABC', 'stale': False,
+                                                       'odds': [self.row('1x2'), self.row('totals', line=2.5)]},
+                                           'https://api.infersports.dev/v1/events/evt_ABC/odds')}
+                replay = attach(fixture, root, evidence, crosswalk, self.now.isoformat())
+                self.assertEqual(replay['market_availability'], 'FRESH_SAME_BOOK_PAIR')
+                self.assertEqual(replay['total_quote']['quoted_at'], self.quote_time)
+                with self.assertRaisesRegex(ValueError, 'reviewed European fixture'):
+                    attach(dict(fixture, market_provider_event_id='evt_other'), root, evidence, crosswalk,
+                           self.now.isoformat())
+                with self.assertRaisesRegex(ValueError, 'supported club regulation-time scope'):
+                    attach(dict(fixture, stage='regular'), root, evidence, crosswalk, self.now.isoformat())
+                wrong_season = dict(fixture, provider_season=dict(season, type=season_type + 1))
+                with self.assertRaisesRegex(ValueError, 'reviewed European league-phase season'):
+                    attach(wrong_season, root, evidence, crosswalk, self.now.isoformat())

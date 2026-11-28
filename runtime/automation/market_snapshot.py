@@ -307,7 +307,8 @@ def fetch(url, public_url, path):
     public, requested_url = urlsplit(public_url), urlsplit(url)
     endpoint = public.scheme + '://' + public.netloc + public.path
     odds_endpoints = {ODDS.replace('soccer_uefa_nations_league', scope[0]) for scope in SCOPES.values()}
-    board_endpoints = {ESPN.replace('/uefa.nations/', '/' + scope + '/') for scope in SCOPES}
+    board_scopes = (*SCOPES, 'jpn.1', 'uefa.europa', 'uefa.europa.conf')
+    board_endpoints = {ESPN.replace('/uefa.nations/', '/' + scope + '/') for scope in board_scopes}
     if (endpoint not in odds_endpoints | board_endpoints
             or requested_url._replace(query='') != public._replace(query='')):
         raise ValueError('unapproved collection endpoint')
