@@ -1,8 +1,8 @@
-# 当前状态（2026-11-11）
+# 当前状态（2026-11-28）
 
 本页统一维护当前入口；项目目标和执行规范分别以 [project-goals.json](project-goals.json)、[AGENTS.md](AGENTS.md) 为准。
 
-- 默认预测入口：`runtime/predict_active.py`；当前/test独立，综合判断另轨追加冻结。
+- 默认预测入口：`runtime/predict_active.py`；当前/test独立，综合判断另轨追加冻结。诊断层现已附带多机构 Power-Devig 尖端共识与保边际结构核参照（`sharp_consensus_reference`，见[说明](docs/sharp-consensus-score-kernel-20261128.md)）及四分之一盘严格全赢率选边对照。
 - 本次现场注册表：`/workspace/WCPP/runtime/active-model.json`，版本 `WCPP-DUAL-4`，19个历史路由。注册表登记不保证每个模型当前可加载或通过验收；其他环境的21路由快照不代表本环境。
 - 新分析范围：配置 [analysis-scope.json](configs/analysis-scope.json) 中20项赛事。范围准入、注册表路由、研究候选和正式验收是不同状态，不用单个“支持数量”替代。
 - 日职联：加载与依赖问题见[专项核查](docs/j1-nations-model-readiness-20261111.md)；不能把注册表有条目等同于可用。

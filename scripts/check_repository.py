@@ -35,7 +35,7 @@ def main():
                 or path.stat().st_size > 10_000_000):
             problems.append((name, 0, 'runtime_asset_or_secret_file'))
         try:
-            lines = path.read_text().splitlines()
+            lines = path.read_text(encoding='utf-8').splitlines()
         except UnicodeError:
             problems.append((name, 0, 'unexpected_binary'))
             continue
